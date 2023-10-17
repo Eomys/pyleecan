@@ -67,13 +67,14 @@ def plot(
     for surf in surf_list:
         color, legend = get_color_legend_from_surface(surf, is_lam_only)
 
-        patches.extend(
-            surf.get_patches(
-                color=color,
-                is_edge_only=is_edge_only,
-                edgecolor=edgecolor,
+        if color is not None:
+            patches.extend(
+                surf.get_patches(
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
+                )
             )
-        )
         if not is_edge_only and legend is not None and legend not in label_leg:
             label_leg.append(legend)
             patch_leg.append(Patch(color=color))
