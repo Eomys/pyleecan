@@ -70,43 +70,19 @@ class PMSlot11(Gen_PMSlot11, QWidget):
 
         # Notch setup
         if self.is_notch:
-            # Hide magnet related widget
-            wid_list = [self.in_W1, self.lf_W1, self.c_W1_unit]
-            wid_list += [self.in_H1, self.lf_H1, self.unit_H1]
-            wid_list += [self.txt_constraint]  # Constraint W1 < W0
-
-            # Selecting the right image
-            if not self.lamination.is_internal:
-                # Use schematics on the external without magnet
-                self.img_slot.setPixmap(
-                    QPixmap(pixmap_dict["SlotM11_empty_ext_stator"])
-                )
-
-            if self.notch_obj.key_mat is not None:
-                for wid in wid_list:
-                    wid.setEnabled(True)
-            else:
-                self.slot.W1 = 0  # For check
-                self.slot.H1 = 0  # For check
+            self.w_mag.hide()  # Hide magnet widgets
+            self.g_key.show()  # Setup key widgets
+            self.g_key.setChecked(self.notch_obj.key_mat is not None)
+            if self.notch_obj.key_mat is None:
+                self.slot.W1 = 0  # Clear for check
+                self.slot.H1 = 0  # Clear for check
                 self.lf_W1.setValue(None)
                 self.lf_H1.setValue(None)
-                for wid in wid_list:
-                    wid.setEnabled(False)
 
-            self.g_key.toggled.connect(self.set_key)
-
-            # Key setup
-            self.g_key.show()
-            self.g_key.setChecked(self.notch_obj.key_mat is not None)
-
+            # Material setup
             self.w_key_mat.setText("Key Material")
-            if self.notch_obj.key_mat is None:
-                self.notch_obj.key_mat = None
-            else:
-                self.w_key_mat.def_mat = "Steel1"
+            self.w_key_mat.def_mat = "Steel1"
             self.set_key()
-            # Hide magnet widgets
-            self.w_mag.hide()
         else:
             # Setup the widgets according to current values
             self.w_mag.update(lamination, self.material_dict)
@@ -127,6 +103,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lf_W1.editingFinished.connect(self.set_W1)
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.c_W1_unit.currentIndexChanged.connect(self.set_W1)
+        self.g_key.toggled.connect(self.set_key)
 
     def set_key(self):
         """Setup the slot key according to the GUI"""
@@ -141,7 +118,12 @@ class PMSlot11(Gen_PMSlot11, QWidget):
 
         else:
             self.notch_obj.key_mat = None
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_ext_stator"]))
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_int_rotor"]))
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotM11_empty_ext_stator"])
+                )
             is_enabled = False
 
         for widget in widget_list:

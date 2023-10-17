@@ -73,44 +73,20 @@ class PMSlot10(Gen_PMSlot10, QWidget):
 
         # Notch setup
         if self.is_notch:
-            # Hide magnet related widget
-            wid_list = [self.in_W1, self.lf_W1, self.unit_W1]
-            wid_list += [self.in_H1, self.lf_H1, self.unit_H1]
-
-            # Selecting the right image
-            if not self.lamination.is_internal:
-                # Use schematics on the external without magnet
-                self.img_slot.setPixmap(
-                    QPixmap(pixmap_dict["SlotM10_empty_ext_stator"])
-                )
-
-            # Key setup
-            self.g_key.show()
+            self.w_mag.hide()  # Hide magnet widgets
+            self.g_key.show()  # Setup key widgets
             self.g_key.setChecked(self.notch_obj.key_mat is not None)
 
-            if self.notch_obj.key_mat is not None:
-                for wid in wid_list:
-                    wid.setEnabled(True)
-
-            else:
-                self.slot.W1 = 0  # For check
-                self.slot.H1 = 0  # For check
+            if self.notch_obj.key_mat is None:
+                self.slot.W1 = 0  # Clear for check
+                self.slot.H1 = 0  # Clear for check
                 self.lf_W1.setValue(None)
                 self.lf_H1.setValue(None)
-                for wid in wid_list:
-                    wid.setEnabled(False)
-
-            self.g_key.toggled.connect(self.set_key)
 
             # Material setup
             self.w_key_mat.setText("Key Material")
-            if self.notch_obj.key_mat is None:
-                self.notch_obj.key_mat = None
-            else:
-                self.w_key_mat.def_mat = "Steel1"
+            self.w_key_mat.def_mat = "Steel1"
             self.set_key()
-            # Hide magnet widgets
-            self.w_mag.hide()
 
         else:  # magnet case
             # Setup the widgets according to current values
@@ -128,7 +104,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_W1.editingFinished.connect(self.set_W1)
         self.lf_H1.editingFinished.connect(self.set_H1)
-
+        self.g_key.toggled.connect(self.set_key)
         self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_key(self):
@@ -141,10 +117,14 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
             is_enabled = True
-
         else:
             self.notch_obj.key_mat = None
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_ext_stator"]))
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_int_rotor"]))
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotM10_empty_ext_stator"])
+                )
             is_enabled = False
 
         for widget in widget_list:
