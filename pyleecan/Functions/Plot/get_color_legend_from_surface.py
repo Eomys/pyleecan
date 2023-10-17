@@ -34,19 +34,21 @@ MINUS_HATCH = ".."
 
 
 def get_color_legend_from_surface(surf, is_lam_only=False):
-    """Return the color to use for a patch in plot machine
+    """Return the color and legend to use for plot the surface
 
     Parameters
     ----------
-    label : str
-        Label of the surface to color
-    label_dict : dict
-        To avoid decoding label twice
+    surf : Surface
+        Surfaces on which we want the color and legend
+    is_lam_only : bool
+        True to plot only the lamination (remove the Winding)
 
     Returns
     -------
-    patch : str
+    color : str
         Color to use on the patch
+    legend : str
+        Legend to display for the surface
     """
     label_dict = decode_label(surf.label)
 
@@ -55,19 +57,27 @@ def get_color_legend_from_surface(surf, is_lam_only=False):
 
     elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
         return ROTOR_COLOR, "Rotor"
+
     elif VENT_LAB in label_dict["surf_type"]:
         return VENT_COLOR, None
+
     elif HOLEV_LAB in label_dict["surf_type"]:
         return VENT_COLOR, None
+
     elif is_lam_only:
         return None, None
+
     elif HOLEM_LAB in label_dict["surf_type"] or MAG_LAB in label_dict["surf_type"]:
         return MAGNET_COLOR, "Magnet"
+
     elif WEDGE_LAB in label_dict["surf_type"]:
         return WEDGE_COLOR, "Wedge"
+
     elif KEY_LAB in label_dict["surf_type"]:
         return KEY_COLOR, "Key"
+
     elif BAR_LAB in label_dict["surf_type"]:
         return BAR_COLOR, f"{label_dict['lam_type']} Bar"
+
     else:
         raise Exception(f"Unknown label for plot {surf.label}")
