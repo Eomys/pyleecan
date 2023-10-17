@@ -7,7 +7,11 @@ import pytest
 from numpy import array_equal
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
-from pyleecan.Functions.Load.retrocompatibility import is_before_version
+from pyleecan.Functions.Load.retrocompatibility import (
+    is_before_version,
+    convert_Wmag_Hmag,
+    is_Wmag_Hmag,
+)
 from Tests import TEST_DATA_DIR
 
 # 4: OP_matrix convertion (ndarray to object)
@@ -126,8 +130,10 @@ wind_list.append(  # WindingDW1L
 Hmag_Wmag_list = list()
 Hmag_Wmag_list.append(  # WindingCW1L
     {
-        "ref": join(DATA_DIR, "Machine", "SPMSM_002.json"),
-        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Winding", "SPMSM_002.json"),
+        "ref": join(DATA_DIR, "Machine", "Benchmark.json"),
+        "old": join(
+            TEST_DATA_DIR, "Retrocompatibility", "WmagHmag", "Benchmark_old.json"
+        ),
     }
 )
 
@@ -249,8 +255,58 @@ def test_load_Hmag_Wmag(file_dict):
     old = load(file_dict["old"])
 
     # Check old file is converted to current version
-    msg = "Error for " + ref.name + ": Hmag_Wmag is not converted into H1_W1"
-    assert ref.name == old.name, msg
+    assert ref.rotor.slot.W1 == old.rotor.slot.W1
+    assert ref.rotor.slot.H1 == old.rotor.slot.H1
+
+
+def test_fct_Hmag_Wmag():
+    """Check that Hmag/Wmag update works for all slots"""
+
+    for ii in range(7):
+        test_dict = {
+            "H0": 0.1,
+            "Hmag": 0.2,
+            "W0": 0.3,
+            "Wmag": 0.4,
+            "Zs": 10,
+            "__class__": "SlotM1" + str(ii),
+            "is_bore": True,
+            "wedge_mat": None,
+        }
+        assert is_Wmag_Hmag(test_dict)
+        updated_dict = convert_Wmag_Hmag(test_dict)
+        assert "Hmag" not in updated_dict
+        assert "Wmag" not in updated_dict
+        assert updated_dict["H1"] == 0.2
+        assert updated_dict["W1"] == 0.4
+
+    # SlotM18 case
+    test_dict = {
+        "Hmag": 0.2,
+        "Zs": 10,
+        "__class__": "SlotM18",
+        "is_bore": True,
+        "wedge_mat": None,
+    }
+    assert is_Wmag_Hmag(test_dict)
+    updated_dict = convert_Wmag_Hmag(test_dict)
+    assert "Hmag" not in updated_dict
+    assert updated_dict["H0"] == 0.2
+
+    # SlotM19 case
+    test_dict = {
+        "Hmag": 0.2,
+        "W0": 0.3,
+        "W1": 0.4,
+        "Zs": 10,
+        "__class__": "SlotM19",
+        "is_bore": True,
+        "wedge_mat": None,
+    }
+    assert is_Wmag_Hmag(test_dict)
+    updated_dict = convert_Wmag_Hmag(test_dict)
+    assert "Hmag" not in updated_dict
+    assert updated_dict["H0"] == 0.2
 
 
 def test_before_version():
