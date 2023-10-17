@@ -447,21 +447,26 @@ def is_Wmag_Hmag(obj_dict):
 
 
 def convert_Wmag_Hmag(Wmag_Hmag_dict):
-    """Update the old Wmag_Hmag_dict to the new Wmag_Hmag_dict"""
+    """Update the old Wmag_Hmag_dict to the new W1_H1_dict"""
     getLogger(GUI_LOG_NAME).info("Old machine version detected, Updating Wmag_Hmag")
     # Copy dict to keep original version
-    Wmag_Hmag_dict = Wmag_Hmag_dict.copy()
-    if "SlotM18" in Wmag_Hmag_dict.keys() or "SlotM19" in Wmag_Hmag_dict.keys():
-        if "Hmag" in Wmag_Hmag_dict.keys():
-            Wmag_Hmag_dict["H0"] = Wmag_Hmag_dict.pop("Hmag")
+    Wmag_Hmag_dict_news = Wmag_Hmag_dict.copy()
+
+    if (
+        Wmag_Hmag_dict_news["__class__"] == "SlotM18"
+        or Wmag_Hmag_dict_news["__class__"] == "SlotM19"
+    ):
+        if "Hmag" in Wmag_Hmag_dict_news.keys():
+            Wmag_Hmag_dict_news["H0"] = Wmag_Hmag_dict_news.pop("Hmag")
+
     else:
-        if "Hmag" in Wmag_Hmag_dict.keys():
-            Wmag_Hmag_dict["H1"] = Wmag_Hmag_dict.pop("Hmag")
+        if "Hmag" in Wmag_Hmag_dict_news.keys():
+            Wmag_Hmag_dict_news["H1"] = Wmag_Hmag_dict_news.pop("Hmag")
 
         if "Wmag" in Wmag_Hmag_dict.keys():
-            Wmag_Hmag_dict["W1"] = Wmag_Hmag_dict.pop("Wmag")
+            Wmag_Hmag_dict_news["W1"] = Wmag_Hmag_dict_news.pop("Wmag")
 
-    return Wmag_Hmag_dict
+    return Wmag_Hmag_dict_news
 
 
 def is_before_version(ref_version, check_version):

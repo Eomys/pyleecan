@@ -137,7 +137,6 @@ Hmag_Wmag_list.append(  # WindingCW1L
     }
 )
 
-
 def test_save_OPM_None_retro():
     """Check that the OP_matrix convertion works with None"""
     simu = load(
@@ -334,4 +333,5 @@ if __name__ == "__main__":
     #     test_save_load_wind_retro(file_dict)
     for file_dict in Hmag_Wmag_list:
         test_load_Hmag_Wmag(file_dict)
+
     print("Done")
