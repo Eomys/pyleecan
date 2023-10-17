@@ -124,10 +124,17 @@ wind_list.append(  # WindingDW1L
 )
 
 Hmag_Wmag_list = list()
-Hmag_Wmag_list.append(  # WindingCW1L
+Hmag_Wmag_list.append(  # Hmag_Wmag
     {
         "ref": join(DATA_DIR, "Machine", "SPMSM_002.json"),
-        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Winding", "SPMSM_002.json"),
+        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Hmag_Wmag", "SPMSM_002.json"),
+    }
+)
+
+Hmag_Wmag_list.append(  # Hmag_Wmag
+    {
+        "ref": join(DATA_DIR, "Machine", "SPMSM_015.json"),
+        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Hmag_Wmag", "SPMSM_015.json"),
     }
 )
 
@@ -278,4 +285,5 @@ if __name__ == "__main__":
     #     test_save_load_wind_retro(file_dict)
     for file_dict in Hmag_Wmag_list:
         test_load_Hmag_Wmag(file_dict)
+
     print("Done")
