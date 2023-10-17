@@ -61,11 +61,13 @@ def get_color_legend_from_surface(surf, is_lam_only=False):
     elif VENT_LAB in label_dict["surf_type"]:
         return VENT_COLOR, None
 
-    elif HOLEV_LAB in label_dict["surf_type"]:
-        return VENT_COLOR, None
-
+    # Before will always be ploted
     elif is_lam_only:
         return None, None
+
+    # After will be ploted only if we do not want the lamination only.
+    elif HOLEV_LAB in label_dict["surf_type"]:
+        return VENT_COLOR, None
 
     elif HOLEM_LAB in label_dict["surf_type"] or MAG_LAB in label_dict["surf_type"]:
         return MAGNET_COLOR, "Magnet"
