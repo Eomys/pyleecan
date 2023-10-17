@@ -5,7 +5,7 @@ from matplotlib.pyplot import legend
 
 from ....definitions import config_dict
 from ....Functions.init_fig import init_fig
-from ....Functions.labels import decode_label, HOLEM_LAB, LAM_LAB
+from ....Functions.labels import decode_label, HOLEM_LAB, HOLEV_LAB
 from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
@@ -84,7 +84,9 @@ def plot(
     patches = list()
     for surf in surf_list:
         label_dict = decode_label(surf.label)
-        if HOLEM_LAB in label_dict["surf_type"] and is_lam_only:
+        if (
+            HOLEM_LAB in label_dict["surf_type"] or HOLEV_LAB in label_dict["surf_type"]
+        ) and is_lam_only:
             pass
         else:
             color = get_path_color_from_label(surf.label, label_dict=label_dict)
