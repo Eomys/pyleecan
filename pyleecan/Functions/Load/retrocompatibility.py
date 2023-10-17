@@ -451,12 +451,15 @@ def convert_Wmag_Hmag(Wmag_Hmag_dict):
     getLogger(GUI_LOG_NAME).info("Old machine version detected, Updating Wmag_Hmag")
     # Copy dict to keep original version
     Wmag_Hmag_dict = Wmag_Hmag_dict.copy()
+    if "SlotM18" in Wmag_Hmag_dict.keys() or "SlotM19" in Wmag_Hmag_dict.keys():
+        if "Hmag" in Wmag_Hmag_dict.keys():
+            Wmag_Hmag_dict["H0"] = Wmag_Hmag_dict.pop("Hmag")
+    else:
+        if "Hmag" in Wmag_Hmag_dict.keys():
+            Wmag_Hmag_dict["H1"] = Wmag_Hmag_dict.pop("Hmag")
 
-    if "Hmag" in Wmag_Hmag_dict.keys():
-        Wmag_Hmag_dict["H1"] = Wmag_Hmag_dict.pop("Hmag")
-
-    if "Wmag" in Wmag_Hmag_dict.keys():
-        Wmag_Hmag_dict["W1"] = Wmag_Hmag_dict.pop("Wmag")
+        if "Wmag" in Wmag_Hmag_dict.keys():
+            Wmag_Hmag_dict["W1"] = Wmag_Hmag_dict.pop("Wmag")
 
     return Wmag_Hmag_dict
 
