@@ -115,7 +115,10 @@ class PMSlot10(Gen_PMSlot10, QWidget):
 
         if self.g_key.isChecked():
             self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_int_rotor"]))
+            else:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
             is_enabled = True
         else:
             self.notch_obj.key_mat = None
