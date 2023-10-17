@@ -139,4 +139,10 @@ pixmap_dict = {
     "SlotM19_mag_int_rotor": ":/images/images/MachineSetup/WMSlot/SlotM19_mag_int_rotor.png",
     "SlotM19_empty_int_rotor": ":/images/images/MachineSetup/WMSlot/SlotM19_empty_int_rotor.png",
     "SlotM19_empty_ext_stator": ":/images/images/MachineSetup/WMSlot/SlotM19_empty_ext_stator.png",
+    "CircVentDuct": ":/images/images/MachineSetup/LamParam/CircVentDuct.png",
+    "VentilationCirc_empty_int_rotor": ":/images/images/MachineSetup/LamParam/VentilationCirc_empty_int_rotor.png",
+    "VentilationPolar_empty_int_rotor": ":/images/images/MachineSetup/LamParam/VentilationPolar_empty_int_rotor.png",
+    "VentilationTrap_empty_int_rotor": ":/images/images/MachineSetup/LamParam/VentilationTrap_empty_int_rotor.png",
+    "BoreFlower": ":/images/images/MachineSetup/LamParam/BoreFlower.png",
+    "BoreSinePole": ":/images/images/MachineSetup/LamParam/BoreSinePole.png",
 }
