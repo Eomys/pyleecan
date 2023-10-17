@@ -52,29 +52,19 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
         self.lf_W1.unit = "m"
+        self.lf_H0.unit = "m"
 
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_W0,
             self.unit_W1,
+            self.unit_H0,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Notch setup
         if self.is_notch:
-            # Hide magnet related widget
-            wid_list = [self.in_H0, self.lf_H0, self.unit_H0]
-            for wid in wid_list:
-                wid.hide()
-            # Set values for check
-            self.slot.H0 = 0
-
-            self.lf_H0.unit = "m"
-
-            # Set unit name (m ou mm)
-            self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
-
             # Selecting the right image
             if self.lamination.is_internal:
                 self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_empty_int_rotor"]))
@@ -83,30 +73,18 @@ class PMSlot19(Gen_PMSlot19, QWidget):
                 self.img_slot.setPixmap(
                     QPixmap(pixmap_dict["SlotM19_empty_ext_stator"])
                 )
-
-            self.lf_H0.editingFinished.connect(self.set_H0)
             # Hide magnet widgets
             self.w_mag.hide()
         else:
-            self.lf_H0.unit = "m"
-
-            # Set unit name (m ou mm)
-            self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
-
             # Setup the widgets according to current values
             self.w_mag.update(lamination, self.material_dict)
-
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
-            self.lf_H0.hide()
-            self.unit_H0.hide()
-            self.in_H0.hide()
-            self.lf_H0.setValue(self.slot.H0)
-            self.lf_H0.editingFinished.connect(self.set_H0)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_W1.setValue(self.slot.W1)
+        self.lf_H0.setValue(self.slot.H0)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
@@ -114,6 +92,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_W1.editingFinished.connect(self.set_W1)
+        self.lf_H0.editingFinished.connect(self.set_H0)
         self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
@@ -138,19 +117,6 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             A PMSlot19 object
         """
         self.slot.W1 = self.lf_W1.value()
-        self.w_out.comp_output()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_H0(self):
-        """Signal to update the value of H0 according to the line edit
-
-        Parameters
-        ----------
-        self : PMSlot19
-            A PMSlot19 object
-        """
-        self.slot.H0 = self.lf_H0.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
