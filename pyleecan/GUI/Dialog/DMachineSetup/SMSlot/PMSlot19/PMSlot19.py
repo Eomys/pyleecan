@@ -76,8 +76,10 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
 
             # Selecting the right image
-            if not self.lamination.is_internal:
-                # Use schematics on the external without magnet
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_empty_int_rotor"]))
+            else:
+                # Use schematics on the external without magnet.
                 self.img_slot.setPixmap(
                     QPixmap(pixmap_dict["SlotM19_empty_ext_stator"])
                 )
