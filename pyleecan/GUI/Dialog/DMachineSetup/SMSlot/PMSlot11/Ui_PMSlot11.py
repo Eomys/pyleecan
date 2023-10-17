@@ -173,9 +173,14 @@ class Ui_PMSlot11(object):
 
         self.horizontalLayout.addWidget(self.scrollArea)
 
-        QWidget.setTabOrder(self.lf_W0, self.lf_W1)
+        QWidget.setTabOrder(self.g_key, self.lf_W0)
+        QWidget.setTabOrder(self.lf_W0, self.lf_H0)
+        QWidget.setTabOrder(self.lf_H0, self.lf_W1)
         QWidget.setTabOrder(self.lf_W1, self.lf_H1)
-        QWidget.setTabOrder(self.lf_H1, self.txt_constraint)
+        QWidget.setTabOrder(self.lf_H1, self.c_W0_unit)
+        QWidget.setTabOrder(self.c_W0_unit, self.c_W1_unit)
+        QWidget.setTabOrder(self.c_W1_unit, self.txt_constraint)
+        QWidget.setTabOrder(self.txt_constraint, self.scrollArea)
 
         self.retranslateUi(PMSlot11)
 
