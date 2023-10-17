@@ -56,7 +56,7 @@ def test_save_load_machine():
     test_obj.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj.stator.winding = Winding(qs=5, Nlayer=1, p=3)
     test_obj.rotor = LamSlotMag(L1=0.55)
-    test_obj.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
+    test_obj.rotor.slot = SlotM11(W0=pi / 4, W1=pi / 4, H1=3)
     test_obj.shaft = Shaft(Lshaft=0.65)
     test_obj.frame = None
 
@@ -93,8 +93,8 @@ def test_save_load_machine():
     assert type(result.rotor.slot) is SlotM11
     assert result.rotor.slot.W0 == pi / 4
 
-    assert result.rotor.slot.Wmag == pi / 4
-    assert result.rotor.slot.Hmag == 3
+    assert result.rotor.slot.W1 == pi / 4
+    assert result.rotor.slot.H1 == 3
 
     assert type(result.shaft) is Shaft
     assert result.shaft.Lshaft == 0.65
@@ -312,7 +312,7 @@ def test_save_load_list():
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj_1.stator.winding = Winding(qs=5, p=3, Nlayer=1)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
+    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, W1=pi / 4, H1=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
     test_obj_1.frame = None
 
@@ -352,7 +352,7 @@ def test_save_load_dict():
     test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
     test_obj_1.stator.winding = Winding(qs=5, p=3)
     test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, Wmag=pi / 4, Hmag=3)
+    test_obj_1.rotor.slot = SlotM11(W0=pi / 4, W1=pi / 4, H1=3)
     test_obj_1.shaft = Shaft(Lshaft=0.65)
     test_obj_1.frame = None
 

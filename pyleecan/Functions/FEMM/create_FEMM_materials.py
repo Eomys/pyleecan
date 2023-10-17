@@ -265,6 +265,7 @@ def create_FEMM_materials(
     FEMM_dict["circuits"] = circuits
     return prop_dict, FEMM_dict
 
+
 def add_BH_curve(femm, BH, mat_name):
     """Add the BH curve of a lamination on femm
 

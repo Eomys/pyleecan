@@ -33,10 +33,10 @@ def test_LamHole_notch():
 
 def test_LamHole_2_notch(is_show_fig=False):
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    slot1 = SlotM10(H0=0.005, Hmag=0, W0=0.004, Wmag=0, Zs=12)
+    slot1 = SlotM10(H0=0.005, H1=0, W0=0.004, W1=0, Zs=12)
     # alpha=2*pi/Zs == alpha=0
     notch1 = NotchEvenDist(alpha=2 * pi / 12, notch_shape=slot1)
-    slot2 = SlotM10(H0=0.007, Hmag=0, W0=0.004, Wmag=0, Zs=12)
+    slot2 = SlotM10(H0=0.007, H1=0, W0=0.004, W1=0, Zs=12)
     # Offset -1 slot pitch
     notch2 = NotchEvenDist(alpha=-2 * pi / 48, notch_shape=slot2)
     Toyota_Prius.stator.notch = [notch1, notch2]

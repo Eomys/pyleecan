@@ -41,7 +41,7 @@ def test_FEMM_NotchKey_Airgap():
     Steel2.mag.mur_lin /= 2
     B.name = "Benchmark_NotchKey_Airgap_FEMM"
     # Reduce magnet width
-    B.rotor.slot.Wmag /= 2
+    B.rotor.slot.W1 /= 2
     B.rotor.slot.W0 /= 2
     # Add notches with keys
     B.rotor.notch = [
@@ -49,9 +49,9 @@ def test_FEMM_NotchKey_Airgap():
             alpha=0,
             key_mat=Steel,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 1.2,
+                H1=B.rotor.slot.H1 * 1.2,
                 H0=0,
-                Wmag=B.rotor.slot.Wmag,
+                W1=B.rotor.slot.W1,
                 W0=B.rotor.slot.W0,
                 Zs=B.rotor.slot.Zs,
                 is_bore=True,
@@ -63,9 +63,9 @@ def test_FEMM_NotchKey_Airgap():
             alpha=0,
             key_mat=Steel2,
             notch_shape=SlotM10(
-                Hmag=4e-3,
+                H1=4e-3,
                 H0=3e-3,
-                Wmag=5e-3,
+                W1=5e-3,
                 W0=5e-3,
                 Zs=B.stator.slot.Zs,
                 is_bore=True,
@@ -169,7 +169,7 @@ def test_FEMM_NotchKey_inner():
     Steel = load(join(DATA_DIR, "Material", "Steel1.json"))
     B.name = "Benchmark_NotchKey_inner_FEMM"
     # Reduce magnet width
-    B.rotor.slot.Wmag /= 2
+    B.rotor.slot.W1 /= 2
     B.rotor.slot.W0 /= 2
     # Add notches with keys
     B.rotor.notch = [
@@ -177,9 +177,9 @@ def test_FEMM_NotchKey_inner():
             alpha=0,
             key_mat=Steel,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 0.8,
-                H0=B.rotor.slot.Hmag,
-                Wmag=B.rotor.slot.Wmag,
+                H1=B.rotor.slot.H1 * 0.8,
+                H0=B.rotor.slot.H1,
+                W1=B.rotor.slot.W1,
                 W0=B.rotor.slot.W0,
                 Zs=B.rotor.slot.Zs,
                 is_bore=True,
@@ -191,9 +191,9 @@ def test_FEMM_NotchKey_inner():
             alpha=0,
             key_mat=Steel,
             notch_shape=SlotM10(
-                Hmag=2e-3,
+                H1=2e-3,
                 H0=3e-3,
-                Wmag=5e-3,
+                W1=5e-3,
                 W0=5e-3,
                 Zs=B.stator.slot.Zs,
                 is_bore=True,
@@ -298,7 +298,7 @@ def test_FEMM_NotchKey_2():
     M270 = load(join(DATA_DIR, "Material", "M270-35A.json"))
     B.name = "Benchmark_NotchKey_FEMM_2"
     # Reduce magnet width
-    B.rotor.slot.Wmag /= 2
+    B.rotor.slot.W1 /= 2
     B.rotor.slot.W0 /= 2
     # Add notches with keys
     B.rotor.notch = [
@@ -306,9 +306,9 @@ def test_FEMM_NotchKey_2():
             alpha=0,
             key_mat=M270,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 0.8,
+                H1=B.rotor.slot.H1 * 0.8,
                 H0=0,
-                Wmag=B.rotor.slot.Wmag,
+                W1=B.rotor.slot.W1,
                 W0=B.rotor.slot.W0,
                 Zs=B.rotor.slot.Zs // 2,
                 is_bore=True,
@@ -318,9 +318,9 @@ def test_FEMM_NotchKey_2():
             alpha=2 * pi / B.rotor.slot.Zs,
             key_mat=M400,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 1.2,
+                H1=B.rotor.slot.H1 * 1.2,
                 H0=0,
-                Wmag=B.rotor.slot.Wmag,
+                W1=B.rotor.slot.W1,
                 W0=B.rotor.slot.W0,
                 Zs=B.rotor.slot.Zs // 2,
                 is_bore=True,
@@ -387,7 +387,7 @@ def test_FEMM_NotchKey_NoCut():
     M270 = load(join(DATA_DIR, "Material", "M270-35A.json"))
     B.name = "Benchmark_NotchKey_FEMM_NoCut"
     # Reduce magnet width
-    B.rotor.slot.Wmag /= 2
+    B.rotor.slot.W1 /= 2
     B.rotor.slot.W0 /= 2
     # Add notches with keys
     B.rotor.notch = [
@@ -395,9 +395,9 @@ def test_FEMM_NotchKey_NoCut():
             alpha=0,
             key_mat=None,  # No key on Ox, but a notch
             notch_shape=SlotM11(
-                Hmag=0,
-                H0=B.rotor.slot.Hmag * 0.5,
-                Wmag=0,
+                H1=0,
+                H0=B.rotor.slot.H1 * 0.5,
+                W1=0,
                 W0=B.rotor.slot.W0,
                 Zs=2,
                 is_bore=True,
@@ -407,9 +407,9 @@ def test_FEMM_NotchKey_NoCut():
             alpha=2 * pi / B.rotor.slot.Zs,
             key_mat=M400,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 1.2,
+                H1=B.rotor.slot.H1 * 1.2,
                 H0=0,
-                Wmag=B.rotor.slot.Wmag,
+                W1=B.rotor.slot.W1,
                 W0=B.rotor.slot.W0,
                 Zs=2,
                 is_bore=True,
@@ -422,9 +422,9 @@ def test_FEMM_NotchKey_NoCut():
             alpha=2 * pi / B.stator.slot.Zs,
             key_mat=M400,
             notch_shape=SlotM10(
-                Hmag=4e-3,
+                H1=4e-3,
                 H0=3e-3,
-                Wmag=5e-3,
+                W1=5e-3,
                 W0=5e-3,
                 Zs=B.stator.slot.Zs // 2,
                 is_bore=True,

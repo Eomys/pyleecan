@@ -17,4 +17,4 @@ def is_full_pitch_active(self):
         True if the active surface angular width matches the slot pitch
     """
 
-    return self.Wmag == 2 * pi / self.Zs
+    return self.W1 == 2 * pi / self.Zs

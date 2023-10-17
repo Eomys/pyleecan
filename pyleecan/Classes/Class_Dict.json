@@ -5935,7 +5935,7 @@
         "mother": "LamSlotM",
         "name": "LamSlotMag",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/.csv",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -13193,7 +13193,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13203,27 +13203,27 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             }
         ]
     },
@@ -13268,7 +13268,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13278,27 +13278,27 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet angular width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "rad",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             }
         ]
     },
@@ -13359,7 +13359,7 @@
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
@@ -13369,7 +13369,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13433,7 +13433,7 @@
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
@@ -13443,7 +13443,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13518,7 +13518,7 @@
                 "desc": "Magnet angular width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "rad",
                 "value": 0.0122
@@ -13528,7 +13528,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13602,7 +13602,7 @@
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
@@ -13612,7 +13612,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13773,7 +13773,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H0",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13819,7 +13819,7 @@
                 "desc": "Height of the magnet near the bore",
                 "max": "",
                 "min": "0",
-                "name": "Hmag_bore",
+                "name": "H0_bore",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13829,7 +13829,7 @@
                 "desc": "Height of the magnet near the airgap",
                 "max": "",
                 "min": "0",
-                "name": "Hmag_gap",
+                "name": "H0_gap",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13875,7 +13875,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.03
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13885,17 +13885,17 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.02
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.00175
+                "value": 0
             }
         ]
     },

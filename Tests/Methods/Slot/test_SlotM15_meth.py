@@ -14,7 +14,7 @@ Mag15_test = list()
 # Internal Slot inset magnet with same top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=110 * mm, is_internal=True)
 lam.slot = SlotM15(
-    Zs=4, W0=80 * pi / 180, H0=10 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=100 * mm
+    Zs=4, W0=80 * pi / 180, H0=10 * mm, H1=20 * mm, W1=100 * mm, Rtopm=100 * mm
 )
 Mag15_test.append(
     {
@@ -31,7 +31,7 @@ Mag15_test.append(
 # Internal Slot inset magnet with same top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=110 * mm, is_internal=True)
 lam.slot = SlotM15(
-    Zs=4, W0=80 * pi / 180, H0=20 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=100 * mm
+    Zs=4, W0=80 * pi / 180, H0=20 * mm, H1=20 * mm, W1=100 * mm, Rtopm=100 * mm
 )
 Mag15_test.append(
     {
@@ -48,7 +48,7 @@ Mag15_test.append(
 # Internal slot surface magnet with same top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=100 * mm, is_internal=True)
 lam.slot = SlotM15(
-    Zs=4, W0=80 * pi / 180, H0=0 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=100 * mm
+    Zs=4, W0=80 * pi / 180, H0=0 * mm, H1=20 * mm, W1=100 * mm, Rtopm=100 * mm
 )
 Mag15_test.append(
     {
@@ -65,7 +65,7 @@ Mag15_test.append(
 # Internal slot surface magnet with different top and bottom radius
 lam = LamSlotMag(Rint=40 * mm, Rext=100 * mm, is_internal=True)
 lam.slot = SlotM15(
-    Zs=4, W0=80 * pi / 180, H0=0 * mm, Hmag=20 * mm, Wmag=100 * mm, Rtopm=65 * mm
+    Zs=4, W0=80 * pi / 180, H0=0 * mm, H1=20 * mm, W1=100 * mm, Rtopm=65 * mm
 )
 Mag15_test.append(
     {
@@ -192,8 +192,8 @@ class Test_Magnet_Type_15_meth(object):
         ZM4 = point_dict["ZM4"]
         W0 = test_obj.slot.W0
         H0 = test_obj.slot.H0
-        Wmag = test_obj.slot.Wmag
-        Hmag = test_obj.slot.Hmag
+        W1 = test_obj.slot.W1
+        H1 = test_obj.slot.H1
         Rbo = test_obj.get_Rbo()
 
         # Polar Slot
@@ -216,10 +216,10 @@ class Test_Magnet_Type_15_meth(object):
         # Parallel side
         assert ZM1.imag == pytest.approx(ZM2.imag, rel=DELTA)
         assert ZM3.imag == pytest.approx(ZM4.imag, rel=DELTA)
-        assert ZM1.imag == pytest.approx(-Wmag / 2, rel=DELTA)
-        assert ZM3.imag == pytest.approx(Wmag / 2, rel=DELTA)
-        # Hmag def
+        assert ZM1.imag == pytest.approx(-W1 / 2, rel=DELTA)
+        assert ZM3.imag == pytest.approx(W1 / 2, rel=DELTA)
+        # H1 def
         if test_obj.is_internal:
-            assert ZM0 == pytest.approx(abs(Z2) + Hmag, rel=DELTA)
+            assert ZM0 == pytest.approx(abs(Z2) + H1, rel=DELTA)
         else:
-            assert ZM0 == pytest.approx(abs(Z2) - Hmag, rel=DELTA)
+            assert ZM0 == pytest.approx(abs(Z2) - H1, rel=DELTA)

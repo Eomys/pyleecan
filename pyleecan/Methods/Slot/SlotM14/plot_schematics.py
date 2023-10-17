@@ -79,7 +79,7 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(
-            Zs=4, W0=pi / 8, H0=0.02, Hmag=0.02, Wmag=pi / 8 * 0.75, Rtopm=0.06
+            Zs=4, W0=pi / 8, H0=0.02, H1=0.02, W1=pi / 8 * 0.75, Rtopm=0.06
         )
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
@@ -145,11 +145,11 @@ def plot_schematics(
                 + 1j * point_dict["ZM4"].imag * 0.3,
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
-            R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.5)
+            # W1
+            R = self.get_Rbo() + sign * (self.H0 - self.H1 * 1.5)
             line = Arc1(
-                begin=R * exp(-1j * self.Wmag / 2),
-                end=R * exp(1j * self.Wmag / 2),
+                begin=R * exp(-1j * self.W1 / 2),
+                end=R * exp(1j * self.W1 / 2),
                 radius=R,
                 is_trigo_direction=True,
             )
@@ -158,7 +158,7 @@ def plot_schematics(
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                label="Wmag",
+                label="W1",
                 offset_label=-1 * sign * self.H0 * 0.2,
                 fontsize=SC_FONT_SIZE,
             )
@@ -174,14 +174,14 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Hmag
+            # H1
             line = Segment(point_dict["ZM3"], point_dict["ZM4"])
             line.plot(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                label="Hmag",
+                label="H1",
                 offset_label=1j * point_dict["Z4"].imag * 0.2,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
@@ -229,7 +229,7 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             # ZM1 Line
-            line = Segment(0, Rbo * 2 * exp(-1j * self.Wmag / 2))
+            line = Segment(0, Rbo * 2 * exp(-1j * self.W1 / 2))
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -238,7 +238,7 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             # ZM2 Line
-            line = Segment(0, Rbo * 2 * exp(1j * self.Wmag / 2))
+            line = Segment(0, Rbo * 2 * exp(1j * self.W1 / 2))
             line.plot(
                 fig=fig,
                 ax=ax,

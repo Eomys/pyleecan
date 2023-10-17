@@ -618,10 +618,10 @@
     "skew": null,
     "slot": {
       "H0": 0.0,
-      "Hmag": 0.0036,
+      "H1": 0.0036,
       "Rtopm": 0.0089,
       "W0": 0.0095,
-      "Wmag": 0.0095,
+      "W1": 0.0095,
       "Zs": 4,
       "__class__": "SlotM13",
       "is_bore": true,
@@ -1089,7 +1089,7 @@
     "notch": [],
     "skew": null,
     "slot": {
-      "Hmag": 0.002,
+      "H0": 0.002,
       "Zs": 12,
       "__class__": "SlotM18",
       "is_bore": true,

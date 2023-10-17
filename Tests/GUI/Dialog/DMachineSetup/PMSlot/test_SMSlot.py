@@ -39,14 +39,12 @@ class TestSMSlot(object):
         # For comp_output compatibility
         test_obj.stator = LamSlotWind(Rint=0.95, Rext=0.99)
         test_obj.rotor = LamSlotMagNS(Rint=0.1, Rext=0.9)
-        test_obj.rotor.slot = SlotM11(
-            Zs=8, W0=pi / 24, H0=5e-3, Wmag=pi / 24, Hmag=3e-3
-        )
+        test_obj.rotor.slot = SlotM11(Zs=8, W0=pi / 24, H0=5e-3, W1=pi / 24, H1=3e-3)
         test_obj.rotor.slot_south = SlotM12(
             W0=0.0122,
             H0=0.001,
-            Wmag=0.0122,
-            Hmag=0.001,
+            W1=0.0122,
+            H1=0.001,
             Zs=36,
         )
         test_obj.rotor.magnet_north.mat_type.name = "test3"

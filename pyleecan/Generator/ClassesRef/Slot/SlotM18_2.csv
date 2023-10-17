@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-Hmag_bore,m,Height of the magnet near the bore,0,float,1.00E-03,0,,
-Hmag_gap,m,Height of the magnet near the airgap,0,float,1.00E-03,0,,
+H0_bore,m,Height of the magnet near the bore,0,float,1.00E-03,0,,
+H0_gap,m,Height of the magnet near the airgap,0,float,1.00E-03,0,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Slot,Slot,_comp_point_coordinate,VERSION,1,Double Polar Ring magnet,,,

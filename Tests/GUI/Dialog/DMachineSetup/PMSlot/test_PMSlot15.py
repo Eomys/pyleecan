@@ -21,7 +21,7 @@ class TestPMSlot15(object):
 
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
-        self.test_obj.slot = SlotM15(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15, Rtopm=0.16)
+        self.test_obj.slot = SlotM15(H0=0.10, W0=0.13, W1=0.14, H1=0.15, Rtopm=0.16)
 
         material_dict = {LIB_KEY: list(), MACH_KEY: list()}
         material_dict[LIB_KEY] = [
@@ -55,9 +55,9 @@ class TestPMSlot15(object):
         """Check that the Widget spinbox initialise to the lamination value"""
 
         assert self.widget.lf_H0.value() == 0.10
-        assert self.widget.lf_Hmag.value() == 0.15
+        assert self.widget.lf_H1.value() == 0.15
         assert self.widget.lf_W0.value() == 0.13
-        assert self.widget.lf_Wmag.value() == 0.14
+        assert self.widget.lf_W1.value() == 0.14
         assert self.widget.lf_Rtopm.value() == 0.16
 
     def test_set_W0(self):
@@ -72,17 +72,17 @@ class TestPMSlot15(object):
         assert self.widget.slot.W0 == 0.31
         assert self.test_obj.slot.W0 == 0.31
 
-    def test_set_Wmag(self):
-        """Check that the Widget allow to update Wmag"""
+    def test_set_W1(self):
+        """Check that the Widget allow to update W1"""
         # Check Unit
-        assert self.widget.unit_Wmag.text() == "[m]"
+        assert self.widget.unit_W1.text() == "[m]"
         # Change value in GUI
-        self.widget.lf_Wmag.clear()
-        QTest.keyClicks(self.widget.lf_Wmag, "0.33")
-        self.widget.lf_Wmag.editingFinished.emit()  # To trigger the slot
+        self.widget.lf_W1.clear()
+        QTest.keyClicks(self.widget.lf_W1, "0.33")
+        self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.Wmag == 0.33
-        assert self.test_obj.slot.Wmag == 0.33
+        assert self.widget.slot.W1 == 0.33
+        assert self.test_obj.slot.W1 == 0.33
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -96,17 +96,17 @@ class TestPMSlot15(object):
         assert self.widget.slot.H0 == 0.34
         assert self.test_obj.slot.H0 == 0.34
 
-    def test_set_Hmag(self):
-        """Check that the Widget allow to update Hmag"""
+    def test_set_H1(self):
+        """Check that the Widget allow to update H1"""
         # Check Unit
-        assert self.widget.unit_Hmag.text() == "[m]"
+        assert self.widget.unit_H1.text() == "[m]"
         # Change value in GUI
-        self.widget.lf_Hmag.clear()
-        QTest.keyClicks(self.widget.lf_Hmag, "0.36")
-        self.widget.lf_Hmag.editingFinished.emit()  # To trigger the slot
+        self.widget.lf_H1.clear()
+        QTest.keyClicks(self.widget.lf_H1, "0.36")
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.slot.Hmag == pytest.approx(0.36)
-        assert self.test_obj.slot.Hmag == pytest.approx(0.36)
+        assert self.widget.slot.H1 == pytest.approx(0.36)
+        assert self.test_obj.slot.H1 == pytest.approx(0.36)
 
     def test_set_Rtopm(self):
         """Check that the Widget allow to update Rtopm"""
@@ -122,9 +122,7 @@ class TestPMSlot15(object):
 
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
-        self.test_obj.slot = SlotM15(
-            H0=0.005, Hmag=0.005, W0=0.01, Wmag=0.01, Rtopm=0.02
-        )
+        self.test_obj.slot = SlotM15(H0=0.005, H1=0.005, W0=0.01, W1=0.01, Rtopm=0.02)
         self.widget = PMSlot15(self.test_obj, self.material_dict)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005 [m]"
 
@@ -132,20 +130,20 @@ class TestPMSlot15(object):
         """Check that the check is working correctly"""
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         # H0
-        self.test_obj.slot = SlotM15(H0=None, Hmag=0.10, W0=0.10, Wmag=0.10, Rtopm=0.1)
+        self.test_obj.slot = SlotM15(H0=None, H1=0.10, W0=0.10, W1=0.10, Rtopm=0.1)
         self.widget = PMSlot15(self.test_obj, self.material_dict)
         assert self.widget.check(self.test_obj) == "You must set H0 !"
-        # Hmag
-        self.test_obj.slot = SlotM15(H0=0.10, Hmag=None, W0=0.10, Wmag=0.10, Rtopm=0.1)
-        assert self.widget.check(self.test_obj) == "You must set Hmag !"
+        # H1
+        self.test_obj.slot = SlotM15(H0=0.10, H1=None, W0=0.10, W1=0.10, Rtopm=0.1)
+        assert self.widget.check(self.test_obj) == "You must set H1 !"
         # W0
-        self.test_obj.slot = SlotM15(H0=0.10, Hmag=0.10, W0=None, Wmag=0.10, Rtopm=0.1)
+        self.test_obj.slot = SlotM15(H0=0.10, H1=0.10, W0=None, W1=0.10, Rtopm=0.1)
         assert self.widget.check(self.test_obj) == "You must set W0 !"
-        # Wmag
-        self.test_obj.slot = SlotM15(H0=0.10, Hmag=0.10, W0=0.10, Wmag=None, Rtopm=0.1)
-        assert self.widget.check(self.test_obj) == "You must set Wmag !"
+        # W1
+        self.test_obj.slot = SlotM15(H0=0.10, H1=0.10, W0=0.10, W1=None, Rtopm=0.1)
+        assert self.widget.check(self.test_obj) == "You must set W1 !"
         # Rtopm
-        self.test_obj.slot = SlotM15(H0=0.10, Hmag=0.10, W0=0.10, Wmag=0.1, Rtopm=None)
+        self.test_obj.slot = SlotM15(H0=0.10, H1=0.10, W0=0.10, W1=0.1, Rtopm=None)
         assert self.widget.check(self.test_obj) == "You must set Rtopm !"
 
     def test_set_material(self):
