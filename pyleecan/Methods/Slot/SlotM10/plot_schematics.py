@@ -156,39 +156,14 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
 
-            if type_add_active == 5:
-                # WKey
-                plot_quote(
-                    Z1=point_dict["ZM2"],
-                    Zlim1=point_dict["ZM2"] - sign * 0.2 * self.H1,
-                    Zlim2=point_dict["ZM3"] - sign * 0.2 * self.H1,
-                    Z2=point_dict["ZM3"],
-                    offset_label=-0.55 * self.H1,
-                    fig=fig,
-                    ax=ax,
-                    label="W1",
-                )
-                # HKey
-                line = Segment(point_dict["ZM3"], point_dict["ZM4"])
-                line.plot(
-                    fig=fig,
-                    ax=ax,
-                    color=ARROW_COLOR,
-                    linewidth=ARROW_WIDTH,
-                    label="H1",
-                    offset_label=1j * 0.05 * self.W0 - 0.2 * self.H1,
-                    is_arrow=True,
-                    fontsize=SC_FONT_SIZE,
-                )
-
-            elif type_add_active != 0:
+            if type_add_active != 0:
                 # W1
                 plot_quote(
                     Z1=point_dict["ZM2"],
                     Zlim1=point_dict["ZM2"] - sign * 0.2 * self.H1,
                     Zlim2=point_dict["ZM3"] - sign * 0.2 * self.H1,
                     Z2=point_dict["ZM3"],
-                    offset_label=0.25 * self.H1,
+                    offset_label=-sign * 0.4 * self.H1,
                     fig=fig,
                     ax=ax,
                     label="W1",
