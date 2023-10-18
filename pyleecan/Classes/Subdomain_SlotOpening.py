@@ -24,6 +24,13 @@ try:
 except ImportError as error:
     comp_flux_density = error
 
+try:
+    from ..Methods.Simulation.Subdomain_SlotOpening.get_constants_number import (
+        get_constants_number,
+    )
+except ImportError as error:
+    get_constants_number = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -35,6 +42,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Subdomain_SlotOpening.comp_flux_density
     if isinstance(comp_flux_density, ImportError):
         comp_flux_density = property(
@@ -47,6 +55,18 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         )
     else:
         comp_flux_density = comp_flux_density
+    # cf Methods.Simulation.Subdomain_SlotOpening.get_constants_number
+    if isinstance(get_constants_number, ImportError):
+        get_constants_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_SlotOpening method get_constants_number: "
+                    + str(get_constants_number)
+                )
+            )
+        )
+    else:
+        get_constants_number = get_constants_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -69,6 +89,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         Jik=None,
         Ryoke=None,
         Rbore=None,
+        number_per_a=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -120,6 +141,8 @@ class Subdomain_SlotOpening(Subdomain_Slot):
                 Ryoke = init_dict["Ryoke"]
             if "Rbore" in list(init_dict.keys()):
                 Rbore = init_dict["Rbore"]
+            if "number_per_a" in list(init_dict.keys()):
+                number_per_a = init_dict["number_per_a"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -144,6 +167,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             Jik=Jik,
             Ryoke=Ryoke,
             Rbore=Rbore,
+            number_per_a=number_per_a,
             k=k,
             number=number,
             permeability_relative=permeability_relative,
@@ -444,6 +468,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             Jik_val = self.Jik.copy()
         Ryoke_val = self.Ryoke
         Rbore_val = self.Rbore
+        number_per_a_val = self.number_per_a
         if self.k is None:
             k_val = None
         else:
@@ -467,6 +492,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             Jik=Jik_val,
             Ryoke=Ryoke_val,
             Rbore=Rbore_val,
+            number_per_a=number_per_a_val,
             k=k_val,
             number=number_val,
             permeability_relative=permeability_relative_val,

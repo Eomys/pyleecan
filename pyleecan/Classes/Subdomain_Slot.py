@@ -43,6 +43,13 @@ try:
 except ImportError as error:
     comp_interface_airgap = error
 
+try:
+    from ..Methods.Simulation.Subdomain_Slot.get_constants_number import (
+        get_constants_number,
+    )
+except ImportError as error:
+    get_constants_number = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -103,6 +110,18 @@ class Subdomain_Slot(Subdomain):
         )
     else:
         comp_interface_airgap = comp_interface_airgap
+    # cf Methods.Simulation.Subdomain_Slot.get_constants_number
+    if isinstance(get_constants_number, ImportError):
+        get_constants_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Slot method get_constants_number: "
+                    + str(get_constants_number)
+                )
+            )
+        )
+    else:
+        get_constants_number = get_constants_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -118,6 +137,7 @@ class Subdomain_Slot(Subdomain):
         Jik=None,
         Ryoke=None,
         Rbore=None,
+        number_per_a=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -155,6 +175,8 @@ class Subdomain_Slot(Subdomain):
                 Ryoke = init_dict["Ryoke"]
             if "Rbore" in list(init_dict.keys()):
                 Rbore = init_dict["Rbore"]
+            if "number_per_a" in list(init_dict.keys()):
+                number_per_a = init_dict["number_per_a"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -170,6 +192,7 @@ class Subdomain_Slot(Subdomain):
         self.Jik = Jik
         self.Ryoke = Ryoke
         self.Rbore = Rbore
+        self.number_per_a = number_per_a
         # Call Subdomain init
         super(Subdomain_Slot, self).__init__(
             k=k, number=number, permeability_relative=permeability_relative
@@ -221,6 +244,7 @@ class Subdomain_Slot(Subdomain):
         )
         Subdomain_Slot_str += "Ryoke = " + str(self.Ryoke) + linesep
         Subdomain_Slot_str += "Rbore = " + str(self.Rbore) + linesep
+        Subdomain_Slot_str += "number_per_a = " + str(self.number_per_a) + linesep
         return Subdomain_Slot_str
 
     def __eq__(self, other):
@@ -247,6 +271,8 @@ class Subdomain_Slot(Subdomain):
         if other.Ryoke != self.Ryoke:
             return False
         if other.Rbore != self.Rbore:
+            return False
+        if other.number_per_a != self.number_per_a:
             return False
         return True
 
@@ -324,6 +350,18 @@ class Subdomain_Slot(Subdomain):
                 diff_list.append(name + ".Rbore" + val_str)
             else:
                 diff_list.append(name + ".Rbore")
+        if other._number_per_a != self._number_per_a:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._number_per_a)
+                    + ", other="
+                    + str(other._number_per_a)
+                    + ")"
+                )
+                diff_list.append(name + ".number_per_a" + val_str)
+            else:
+                diff_list.append(name + ".number_per_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -343,6 +381,7 @@ class Subdomain_Slot(Subdomain):
         S += getsizeof(self.Jik)
         S += getsizeof(self.Ryoke)
         S += getsizeof(self.Rbore)
+        S += getsizeof(self.number_per_a)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -430,6 +469,7 @@ class Subdomain_Slot(Subdomain):
                 )
         Subdomain_Slot_dict["Ryoke"] = self.Ryoke
         Subdomain_Slot_dict["Rbore"] = self.Rbore
+        Subdomain_Slot_dict["number_per_a"] = self.number_per_a
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_Slot_dict["__class__"] = "Subdomain_Slot"
@@ -462,6 +502,7 @@ class Subdomain_Slot(Subdomain):
             Jik_val = self.Jik.copy()
         Ryoke_val = self.Ryoke
         Rbore_val = self.Rbore
+        number_per_a_val = self.number_per_a
         if self.k is None:
             k_val = None
         else:
@@ -478,6 +519,7 @@ class Subdomain_Slot(Subdomain):
             Jik=Jik_val,
             Ryoke=Ryoke_val,
             Rbore=Rbore_val,
+            number_per_a=number_per_a_val,
             k=k_val,
             number=number_val,
             permeability_relative=permeability_relative_val,
@@ -495,6 +537,7 @@ class Subdomain_Slot(Subdomain):
         self.Jik = None
         self.Ryoke = None
         self.Rbore = None
+        self.number_per_a = None
         # Set to None the properties inherited from Subdomain
         super(Subdomain_Slot, self)._set_None()
 
@@ -677,5 +720,24 @@ class Subdomain_Slot(Subdomain):
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_number_per_a(self):
+        """getter of number_per_a"""
+        return self._number_per_a
+
+    def _set_number_per_a(self, value):
+        """setter of number_per_a"""
+        check_var("number_per_a", value, "int", Vmin=1)
+        self._number_per_a = value
+
+    number_per_a = property(
+        fget=_get_number_per_a,
+        fset=_set_number_per_a,
+        doc=u"""Number of subdomains accounting for spatial (anti-)periodicity
+
+        :Type: int
+        :min: 1
         """,
     )

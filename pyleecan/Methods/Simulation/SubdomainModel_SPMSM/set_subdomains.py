@@ -6,7 +6,7 @@ from ....Classes.Subdomain_Slot import Subdomain_Slot
 from ....Classes.Subdomain_SlotOpening import Subdomain_SlotOpening
 
 
-def set_subdomains(self, Nharm_coeff=1):
+def set_subdomains(self, Nharm_coeff=1, Is_val=None):
     """Method to calcul
 
     Parameters
@@ -37,7 +37,7 @@ def set_subdomains(self, Nharm_coeff=1):
     self.airgap = Subdomain_Airgap(
         Rrbo=Rrbo,
         Rsbo=Rsbo,
-        k=arange(per_a, antiper_a * per_a, Nhag),
+        k=arange(per_a, Nhag, antiper_a * per_a, dtype=int),
     )
 
     # Define rotor surface magnets subdomain
@@ -49,6 +49,8 @@ def set_subdomains(self, Nharm_coeff=1):
         k=self.airgap.k,
     )
 
+    self.rotor_magnet_surface.comp_magnet_source(polar_eq.rotor, sign_rot)
+
     # Define stator slots subdomains
     slotS = polar_eq.stator.slot
     if slotS.H0 > 0:
@@ -58,14 +60,17 @@ def set_subdomains(self, Nharm_coeff=1):
     Nhss = max([floor(slotS.W2 * Nhag / pi), 2])
     theta_i0 = 0
     self.stator_slot.number = Zs
+    self.stator_slot.number_per_a = Zs0
     self.stator_slot.center_angle = 2 * pi / Zs * arange(0, Zs0) + theta_i0
     self.stator_slot.slot_width = slotS.W2
     self.stator_slot.Rbore = Rsbo
     self.stator_slot.Ryoke = Rsbo + sign_rot * (slotS.H0 + slotS.H2)
-    self.stator_slot.k = arange(1, Nhss)
+    self.stator_slot.k = arange(1, Nhss, dtype=int)
     if slotS.H0 > 0:
         # Define stator slots opening subdomains
         Nhso = max([floor(slotS.W0 * Nhag / pi), 2])
         self.stator_slot.Ropening = Rsbo + sign_rot * slotS.H0
         self.stator_slot.opening_width = slotS.W0
-        self.stator_slot.v = arange(1, Nhso)
+        self.stator_slot.v = arange(1, Nhso, dtype=int)
+
+    self.stator_slot.comp_current_source(Is_val, polar_eq.stator)

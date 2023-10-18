@@ -6,13 +6,9 @@ def comp_current_source(self, I_val, lam):
 
     Parameters
     ----------
-    self: Subdomain_SlotCW
-        a Subdomain_SlotCW object
+    self: Subdomain_Slot
+        a Subdomain_Slot object
 
-    Returns
-    ----------
-    var: type
-        var description
     """
 
     wind_mat = lam.winding.comp_connection_mat()

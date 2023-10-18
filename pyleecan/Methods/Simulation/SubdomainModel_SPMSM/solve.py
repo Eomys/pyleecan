@@ -15,9 +15,11 @@ def solve(self, angle_rotor):
         var description
     """
 
-    mat = np.zeros()
+    Nmat = 
 
-    vect = np.zeros()
+    mat = np.zeros((Nmat, Nmat))
+
+    vect = np.zeros((Nmat, angle_rotor.size))
 
     self.rotor_magnet_surface.comp_interface_airgap_magnet(mat, vect)
 

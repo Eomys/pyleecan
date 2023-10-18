@@ -24,6 +24,13 @@ try:
 except ImportError as error:
     comp_flux_density = error
 
+try:
+    from ..Methods.Simulation.Subdomain_Airgap.get_constants_number import (
+        get_constants_number,
+    )
+except ImportError as error:
+    get_constants_number = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -35,6 +42,7 @@ class Subdomain_Airgap(Subdomain):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Subdomain_Airgap.comp_flux_density
     if isinstance(comp_flux_density, ImportError):
         comp_flux_density = property(
@@ -47,6 +55,18 @@ class Subdomain_Airgap(Subdomain):
         )
     else:
         comp_flux_density = comp_flux_density
+    # cf Methods.Simulation.Subdomain_Airgap.get_constants_number
+    if isinstance(get_constants_number, ImportError):
+        get_constants_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Airgap method get_constants_number: "
+                    + str(get_constants_number)
+                )
+            )
+        )
+    else:
+        get_constants_number = get_constants_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

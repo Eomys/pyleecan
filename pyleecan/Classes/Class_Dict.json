@@ -16232,7 +16232,8 @@
         "desc": "Subdomain class for airgap region",
         "is_internal": false,
         "methods": [
-            "comp_flux_density"
+            "comp_flux_density",
+            "get_constants_number"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Airgap",
@@ -16315,7 +16316,8 @@
             "comp_flux_density",
             "comp_interface_airgap",
             "comp_magnet_solution",
-            "comp_magnet_source"
+            "comp_magnet_source",
+            "get_constants_number"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_MagnetSurface",
@@ -16401,6 +16403,26 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourier series of radial magnetization",
+                "max": "",
+                "min": "",
+                "name": "Mrn",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourier series of circumferential magnetization",
+                "max": "",
+                "min": "",
+                "name": "Mtn",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -16420,7 +16442,8 @@
             "comp_current_solution",
             "comp_current_source",
             "comp_flux_density",
-            "comp_interface_airgap"
+            "comp_interface_airgap",
+            "get_constants_number"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Slot",
@@ -16506,6 +16529,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Number of subdomains accounting for spatial (anti-)periodicity",
+                "max": "",
+                "min": "1",
+                "name": "number_per_a",
+                "type": "int",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -16520,7 +16553,8 @@
         "desc": "Subdomain class for slots regions",
         "is_internal": false,
         "methods": [
-            "comp_flux_density"
+            "comp_flux_density",
+            "get_constants_number"
         ],
         "mother": "Subdomain_Slot",
         "name": "Subdomain_SlotOpening",

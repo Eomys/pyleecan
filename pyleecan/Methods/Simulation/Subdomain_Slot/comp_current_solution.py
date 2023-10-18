@@ -8,8 +8,8 @@ def comp_current_solution(self, r):
 
     Parameters
     ----------
-    self: Subdomain_SlotCW
-        a Subdomain_SlotCW object
+    self: Subdomain_Slot
+        a Subdomain_Slot object
     r : float/ndarray
         Radius at which solution is calculated
 

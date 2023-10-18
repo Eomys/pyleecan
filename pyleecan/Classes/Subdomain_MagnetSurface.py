@@ -45,6 +45,13 @@ try:
 except ImportError as error:
     comp_magnet_source = error
 
+try:
+    from ..Methods.Simulation.Subdomain_MagnetSurface.get_constants_number import (
+        get_constants_number,
+    )
+except ImportError as error:
+    get_constants_number = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -105,6 +112,18 @@ class Subdomain_MagnetSurface(Subdomain):
         )
     else:
         comp_magnet_source = comp_magnet_source
+    # cf Methods.Simulation.Subdomain_MagnetSurface.get_constants_number
+    if isinstance(get_constants_number, ImportError):
+        get_constants_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_MagnetSurface method get_constants_number: "
+                    + str(get_constants_number)
+                )
+            )
+        )
+    else:
+        get_constants_number = get_constants_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -120,6 +139,8 @@ class Subdomain_MagnetSurface(Subdomain):
         C=None,
         D=None,
         Rbore=None,
+        Mrn=None,
+        Mtn=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -157,6 +178,10 @@ class Subdomain_MagnetSurface(Subdomain):
                 D = init_dict["D"]
             if "Rbore" in list(init_dict.keys()):
                 Rbore = init_dict["Rbore"]
+            if "Mrn" in list(init_dict.keys()):
+                Mrn = init_dict["Mrn"]
+            if "Mtn" in list(init_dict.keys()):
+                Mtn = init_dict["Mtn"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -172,6 +197,8 @@ class Subdomain_MagnetSurface(Subdomain):
         self.C = C
         self.D = D
         self.Rbore = Rbore
+        self.Mrn = Mrn
+        self.Mtn = Mtn
         # Call Subdomain init
         super(Subdomain_MagnetSurface, self).__init__(
             k=k, number=number, permeability_relative=permeability_relative
@@ -221,6 +248,20 @@ class Subdomain_MagnetSurface(Subdomain):
             + linesep
         )
         Subdomain_MagnetSurface_str += "Rbore = " + str(self.Rbore) + linesep
+        Subdomain_MagnetSurface_str += (
+            "Mrn = "
+            + linesep
+            + str(self.Mrn).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        Subdomain_MagnetSurface_str += (
+            "Mtn = "
+            + linesep
+            + str(self.Mtn).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return Subdomain_MagnetSurface_str
 
     def __eq__(self, other):
@@ -247,6 +288,10 @@ class Subdomain_MagnetSurface(Subdomain):
         if not array_equal(other.D, self.D):
             return False
         if other.Rbore != self.Rbore:
+            return False
+        if not array_equal(other.Mrn, self.Mrn):
+            return False
+        if not array_equal(other.Mtn, self.Mtn):
             return False
         return True
 
@@ -334,6 +379,10 @@ class Subdomain_MagnetSurface(Subdomain):
                 diff_list.append(name + ".Rbore" + val_str)
             else:
                 diff_list.append(name + ".Rbore")
+        if not array_equal(other.Mrn, self.Mrn):
+            diff_list.append(name + ".Mrn")
+        if not array_equal(other.Mtn, self.Mtn):
+            diff_list.append(name + ".Mtn")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -353,6 +402,8 @@ class Subdomain_MagnetSurface(Subdomain):
         S += getsizeof(self.C)
         S += getsizeof(self.D)
         S += getsizeof(self.Rbore)
+        S += getsizeof(self.Mrn)
+        S += getsizeof(self.Mtn)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -428,6 +479,32 @@ class Subdomain_MagnetSurface(Subdomain):
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         Subdomain_MagnetSurface_dict["Rbore"] = self.Rbore
+        if self.Mrn is None:
+            Subdomain_MagnetSurface_dict["Mrn"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_MagnetSurface_dict["Mrn"] = self.Mrn.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_MagnetSurface_dict["Mrn"] = self.Mrn.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_MagnetSurface_dict["Mrn"] = self.Mrn
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
+        if self.Mtn is None:
+            Subdomain_MagnetSurface_dict["Mtn"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_MagnetSurface_dict["Mtn"] = self.Mtn.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_MagnetSurface_dict["Mtn"] = self.Mtn.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_MagnetSurface_dict["Mtn"] = self.Mtn
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_MagnetSurface_dict["__class__"] = "Subdomain_MagnetSurface"
@@ -457,6 +534,14 @@ class Subdomain_MagnetSurface(Subdomain):
         else:
             D_val = self.D.copy()
         Rbore_val = self.Rbore
+        if self.Mrn is None:
+            Mrn_val = None
+        else:
+            Mrn_val = self.Mrn.copy()
+        if self.Mtn is None:
+            Mtn_val = None
+        else:
+            Mtn_val = self.Mtn.copy()
         if self.k is None:
             k_val = None
         else:
@@ -473,6 +558,8 @@ class Subdomain_MagnetSurface(Subdomain):
             C=C_val,
             D=D_val,
             Rbore=Rbore_val,
+            Mrn=Mrn_val,
+            Mtn=Mtn_val,
             k=k_val,
             number=number_val,
             permeability_relative=permeability_relative_val,
@@ -490,6 +577,8 @@ class Subdomain_MagnetSurface(Subdomain):
         self.C = None
         self.D = None
         self.Rbore = None
+        self.Mrn = None
+        self.Mtn = None
         # Set to None the properties inherited from Subdomain
         super(Subdomain_MagnetSurface, self)._set_None()
 
@@ -667,5 +756,55 @@ class Subdomain_MagnetSurface(Subdomain):
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_Mrn(self):
+        """getter of Mrn"""
+        return self._Mrn
+
+    def _set_Mrn(self, value):
+        """setter of Mrn"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Mrn", value, "ndarray")
+        self._Mrn = value
+
+    Mrn = property(
+        fget=_get_Mrn,
+        fset=_set_Mrn,
+        doc=u"""Fourier series of radial magnetization
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_Mtn(self):
+        """getter of Mtn"""
+        return self._Mtn
+
+    def _set_Mtn(self, value):
+        """setter of Mtn"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Mtn", value, "ndarray")
+        self._Mtn = value
+
+    Mtn = property(
+        fget=_get_Mtn,
+        fset=_set_Mtn,
+        doc=u"""Fourier series of circumferential magnetization
+
+        :Type: ndarray
         """,
     )
