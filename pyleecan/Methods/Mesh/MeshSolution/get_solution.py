@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
 
-def get_solution(self, label=None, index=None):
-    """Return the solution corresponding to label or an index.
+def get_solution(self, label=None):
+    """Return the solution corresponding to label or the first solution by default.
 
     Parameters
     ----------
     self : MeshSolution
         an MeshSolution object
     label : str
-        a label
-    index : int
-        an index
+        solution label
 
     Returns
     -------
@@ -20,10 +18,14 @@ def get_solution(self, label=None, index=None):
 
     """
 
-    if index is None:
-        index = 0
-        if label is not None:
-            for i, solution in enumerate(self.solution):
-                if solution.label == label:
-                    index = i
-    return self.solution[index]
+    # Search for the desired solution
+    for solution in self.solution:
+        if solution.label == label:
+            return solution
+
+    if label is not None:
+        raise ValueError(
+            f"Wrong solution label {label}, please use one of the following values: {[sol.label for sol in self.solution]}."
+        )
+
+    return self.solution[0]

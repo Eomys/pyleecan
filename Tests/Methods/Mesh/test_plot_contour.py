@@ -33,7 +33,7 @@ def test_plot_contour_1group():
     solution.type_element = "triangle"
     solution.label = "B"
 
-    MSol = MeshSolution(mesh=[mesh], solution=[solution])
+    MSol = MeshSolution(mesh=mesh, solution=[solution])
     MSol.group = {"stator core": np.array([11, 12])}
 
     MSol.plot_contour(is_show_fig=False, save_path=save_path + "/plot_mesh.png")
@@ -79,7 +79,7 @@ def test_plot_contour_2group():
     solution.label = "B"
 
     meshsol = MeshSolution()
-    meshsol.mesh = [mesh]
+    meshsol.mesh = mesh
     meshsol.solution = [solution]
     meshsol.group = dict()
     meshsol.group["stator"] = np.array([11])

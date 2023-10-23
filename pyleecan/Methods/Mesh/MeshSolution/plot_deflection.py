@@ -24,7 +24,6 @@ def plot_deflection(
     self,
     *args,
     label=None,
-    index=None,
     indices=None,
     clim=None,
     factor=None,
@@ -48,9 +47,7 @@ def plot_deflection(
     self : MeshSolution
         a MeshSolution object
     label : str
-        a label
-    index : int
-        an index
+        solution label
     indices : list
         list of the points to extract (optional)
     clim : list
@@ -74,7 +71,6 @@ def plot_deflection(
         meshsol_grp.plot_deflection(
             *args,
             label=label,
-            index=index,
             indices=indices,
             clim=clim,
             factor=factor,
@@ -109,7 +105,6 @@ def plot_deflection(
         vect_field, field_normal_amp, field_name, mesh_pv = self.get_deflection(
             *args,
             label=label,
-            index=index,
             indices=indices,
             field_name=field_name,
         )

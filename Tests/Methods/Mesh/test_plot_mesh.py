@@ -26,7 +26,7 @@ def test_plot_mesh():
     mesh.add_element([1, 2, 3], "triangle")
     mesh.add_element([2, 3, 4], "triangle")
 
-    MSol = MeshSolution(mesh=[mesh])
+    MSol = MeshSolution(mesh=mesh)
 
     MSol.plot_mesh(is_show_fig=False, save_path=save_path + "/plot_mesh.png")
 

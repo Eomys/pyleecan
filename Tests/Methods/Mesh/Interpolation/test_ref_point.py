@@ -40,8 +40,7 @@ class unittest_ref_nodes(TestCase):
         c_line = mesh.element_dict["line"]
 
         meshsol = MeshSolution()
-        meshsol.mesh = [mesh]
-        meshsol.plot_mesh()
+        meshsol.mesh = mesh
 
         vert = mesh.get_element_coordinate(0)["line"]
         solution = np.array([0, 0])
@@ -105,7 +104,7 @@ class unittest_ref_nodes(TestCase):
         c_line = mesh.element_dict["triangle"]
 
         meshsol = MeshSolution()
-        meshsol.mesh = [mesh]
+        meshsol.mesh = mesh
 
         vert = mesh.get_element_coordinate(0)["triangle"]
         solution = np.array([0.5, 0])

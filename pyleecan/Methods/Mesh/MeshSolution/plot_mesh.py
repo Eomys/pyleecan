@@ -7,7 +7,6 @@ def plot_mesh(
     self,
     p=None,
     label=None,
-    index=None,
     indices=None,
     save_path=None,
     group_names=None,
@@ -26,8 +25,6 @@ def plot_mesh(
         a pyvista object which will be used for the plot
     label : str
         Label of the mesh to plot
-    index : int
-        Index of the mesh to plot
     indices : list
         list of the nodes to extract (optional)
     save_path : str
@@ -51,7 +48,6 @@ def plot_mesh(
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_mesh(
             label=label,
-            index=index,
             indices=indices,
             save_path=save_path,
             group_names=None,
@@ -84,7 +80,7 @@ def plot_mesh(
         else:
             is_show_fig = False
         # Get the mesh
-        mesh_obj = self.get_mesh(label=label, index=index)
+        mesh_obj = self.mesh
         if isinstance(mesh_obj, MeshMat):
             new_mesh = mesh_obj.copy()
             new_mesh.renum()

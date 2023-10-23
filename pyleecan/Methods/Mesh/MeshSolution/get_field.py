@@ -23,7 +23,6 @@ def get_field(
     self,
     *args_list,
     label=None,
-    index=None,
     indices=None,
     is_rthetaz=False,
     is_pol2cart=False,
@@ -34,7 +33,7 @@ def get_field(
     is_surf=False,
     is_squeeze=True,
 ):
-    """Return the solution corresponding to label or an index.
+    """Return the solution corresponding to a label.
 
     Parameters
     ----------
@@ -43,9 +42,7 @@ def get_field(
     *args_list: list of strings
         List of axes requested by the user, their units and values (optional)
     label : str
-        a label
-    index : int
-        an index
+        label of the solution
     indices : list
         list of indices to extract from mesh and field
     is_rthetaz : bool
@@ -73,7 +70,7 @@ def get_field(
     #     args_list = args_list[0]  # if called from another script with *arg_list
 
     # Get field
-    solution = self.get_solution(label=label, index=index)
+    solution = self.get_solution(label=label)
 
     axes_list = solution.get_axes_list(*args_list)
     ax_names = axes_list[0]
@@ -84,7 +81,7 @@ def get_field(
 
     if (
         isinstance(solution, SolutionVector)
-        and not "comp_x" in solution.field.components
+        and "comp_x" not in solution.field.components
     ):
         is_pol2cart = True
 
@@ -166,10 +163,9 @@ def get_field(
     if is_center or is_normal or is_rthetaz or is_surf or is_pol2cart:
         is_recursive = True
         # Get the mesh
-        mesh = self.get_mesh(label=label, index=indices_normals)
+        mesh = self.mesh
         mesh_pv = mesh.get_mesh_pv(indices=indices_normals)
         if isinstance(mesh, MeshMat):
-            mesh_pv = mesh.get_mesh_pv(indices=indices_normals)
             mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
     else:
         mesh, mesh_pv = None, None

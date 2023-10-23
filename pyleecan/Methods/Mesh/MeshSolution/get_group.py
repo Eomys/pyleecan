@@ -60,7 +60,7 @@ def get_group(self, group_names):
     sep_list.append(np.sort(group_indices))
 
     # 2) extract the corresponding connectivity and create a new mesh
-    mesh_init = self.get_mesh()
+    mesh_init = self.mesh
     node_init = mesh_init.get_node_coordinate()
     mesh_list = list()
     for sep in sep_list:
@@ -127,7 +127,7 @@ def get_group(self, group_names):
 
     meshsol_grp = self.copy()
     meshsol_grp.label = label
-    meshsol_grp.mesh = [mesh]
+    meshsol_grp.mesh = mesh
     meshsol_grp.is_same_mesh = is_same_mesh
     meshsol_grp.solution = sol_list
     meshsol_grp.dimension = dimension

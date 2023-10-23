@@ -41,7 +41,7 @@ class unittest_scalar_product(TestCase):
         c_line = mesh.element_dict["line"]
 
         meshsol = MeshSolution()
-        meshsol.mesh = [mesh]
+        meshsol.mesh = mesh
 
         # Ref element line
         vert = mesh.get_element_coordinate(0)["line"]

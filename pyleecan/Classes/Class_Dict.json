@@ -8689,7 +8689,6 @@
         "desc": "Abstract class to associate a mesh with one or several solutions",
         "is_internal": false,
         "methods": [
-            "get_mesh",
             "get_solution",
             "get_field",
             "get_group",
@@ -8719,11 +8718,11 @@
             },
             {
                 "as_dict": "",
-                "desc": "A list of Mesh objects. ",
+                "desc": "A Mesh object. ",
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "[Mesh]",
+                "type": "Mesh",
                 "unit": "",
                 "value": ""
             },

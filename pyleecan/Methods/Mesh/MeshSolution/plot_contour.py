@@ -30,7 +30,6 @@ def plot_contour(
     self,
     *args,
     label=None,
-    index=None,
     indices=None,
     is_surf=False,
     is_radial=False,
@@ -58,8 +57,6 @@ def plot_contour(
         List of axes requested by the user, their units and values (optional)
     label : str
         a label
-    index : int
-        an index
     indices : list
         list of the points to extract (optional)
     is_surf : bool
@@ -88,7 +85,7 @@ def plot_contour(
         True to animate magnetic flux density
     title : str
         Name of the figure
-    p : ?
+    p : pyvista.Plotter | pyvistaqt.BackgroundPlotter
         Pyvista plotter
     colormap : str
         Name of the colormap to use (default is from config_dict)
@@ -102,7 +99,6 @@ def plot_contour(
         meshsol_grp.plot_contour(
             *args,
             label=label,
-            index=index,
             indices=indices,
             is_surf=is_surf,
             is_radial=is_radial,
@@ -138,7 +134,6 @@ def plot_contour(
         mesh_pv, field, field_name = self.get_mesh_field_pv(
             *args,
             label=label,
-            index=index,
             indices=indices,
             is_surf=is_surf,
             is_radial=is_radial,

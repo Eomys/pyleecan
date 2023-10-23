@@ -39,7 +39,7 @@ class unittest_real_nodes(TestCase):
         c_line = mesh.element_dict["line"]
 
         meshsol = MeshSolution()
-        meshsol.mesh = [mesh]
+        meshsol.mesh = mesh
 
         vert = mesh.get_element_coordinate(0)["line"]
         test = np.array([0, 0])

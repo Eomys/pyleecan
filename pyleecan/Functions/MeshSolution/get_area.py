@@ -26,6 +26,6 @@ def get_area(meshsolution, group_names=None, indices=None):
     else:
         meshsol = meshsolution
 
-    msh = meshsol.get_mesh()
+    msh = meshsol.mesh
 
     return msh.get_element_area(indices=indices).sum()

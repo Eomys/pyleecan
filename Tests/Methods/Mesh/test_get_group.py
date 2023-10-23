@@ -29,13 +29,13 @@ def test_MeshMat_1group():
     mesh.add_element(np.array([4, 2, 3]), "triangle")
 
     meshsol = MeshSolution()
-    meshsol.mesh = [mesh]
+    meshsol.mesh = mesh
     meshsol.group = dict()
     meshsol.group["stator"] = np.array([0, 1])
     meshsol.group["rotor"] = np.array([2])
 
     MS_grp = meshsol.get_group("stator")
-    elements_grp, nb_element, indices = MS_grp.get_mesh().get_element()
+    elements_grp, nb_element, indices = MS_grp.mesh.get_element()
     solution = np.array([[0, 1, 2], [1, 2, 3]])
     result_tgl = elements_grp["triangle"]
     testA = np.sum(abs(solution - result_tgl))
@@ -43,10 +43,10 @@ def test_MeshMat_1group():
     assert testA == pytest.approx(0, rel=DELTA), msg
 
     MS_grp = meshsol.get_group("rotor")
-    elements_grp, nb_element, indices = MS_grp.get_mesh().get_element()
+    elements_grp, nb_element, indices = MS_grp.mesh.get_element()
     solution = np.array([[3, 3], [1, 2], [2, 3]])
     results = elements_grp["triangle"]  # The node indices have changed !
-    nodes = MS_grp.get_mesh().get_node_coordinate(results)
+    nodes = MS_grp.mesh.get_node_coordinate(results)
     testA = np.sum(abs(solution - nodes))
     msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
     assert testA == pytest.approx(0, rel=DELTA), msg
@@ -89,14 +89,14 @@ def test_MeshMat_2group():
     solution.label = "B"
 
     meshsol = MeshSolution()
-    meshsol.mesh = [mesh]
+    meshsol.mesh = mesh
     meshsol.solution = [solution]
     meshsol.group = dict()
     meshsol.group["stator"] = [11, 12]
     meshsol.group["rotor"] = [98, 100, 101]
 
     MS_grp = meshsol.get_group(["stator", "rotor"])
-    elements_grp, nb_element, indices = MS_grp.get_mesh().get_element()
+    elements_grp, nb_element, indices = MS_grp.mesh.get_element()
     solution = np.array([[0, 1, 2], [1, 2, 3], [0, 5, 6], [5, 6, 7], [8, 6, 7]])
     result_tgl = elements_grp["triangle"]
     testA = np.sum(abs(solution - result_tgl))

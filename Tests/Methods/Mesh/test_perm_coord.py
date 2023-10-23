@@ -63,7 +63,7 @@ def test_perm_coord():
 
     # Generate MeshSolution
     MSol = MeshSolution(
-        mesh=[mesh_vtk],
+        mesh=mesh_vtk,
         solution=[solution],
         dimension=3,
     )

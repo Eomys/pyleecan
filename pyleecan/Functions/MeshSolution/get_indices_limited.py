@@ -35,7 +35,7 @@ def get_indices_limited(
 
     """
     grp = meshsolution.get_group(group_names=group_names)
-    msh = grp.get_mesh()
+    msh = grp.mesh
 
     indices = msh.element_dict["triangle"].indice
 

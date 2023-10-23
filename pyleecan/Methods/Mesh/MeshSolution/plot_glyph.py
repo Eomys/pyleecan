@@ -20,7 +20,6 @@ def plot_glyph(
     self,
     *args,
     label=None,
-    index=None,
     indices=None,
     clim=None,
     factor=None,
@@ -46,9 +45,7 @@ def plot_glyph(
     *args: list of strings
         List of axes requested by the user, their units and values (optional)
     label : str
-        a label
-    index : int
-        an index
+        label of the solution to plot
     indices : list
         list of the points to extract (optional)
     clim : list
@@ -77,7 +74,6 @@ def plot_glyph(
         meshsol_grp.plot_glyph(
             *args,
             label=label,
-            index=index,
             indices=indices,
             clim=clim,
             factor=factor,
@@ -110,7 +106,6 @@ def plot_glyph(
         vect_field, field_name, mesh_pv, is_2D = self.get_glyph(
             *args,
             label=label,
-            index=index,
             indices=indices,
             field_name=field_name,
         )
