@@ -18,7 +18,7 @@ def comp_magnet_solution(self, r):
     """
 
     Ry = self.Ryoke
-    Rag = self.Rrbo
+    Rag = self.Rbore
 
     n = self.k
 

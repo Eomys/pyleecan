@@ -6,7 +6,7 @@ from ....Classes.Subdomain_Slot import Subdomain_Slot
 from ....Classes.Subdomain_SlotOpening import Subdomain_SlotOpening
 
 
-def set_subdomains(self, Nharm_coeff=1, Is_val=None):
+def set_subdomains(self, Nharm_coeff=1, Is_val=None, is_mmfr=True):
     """Method to calcul
 
     Parameters
@@ -16,6 +16,9 @@ def set_subdomains(self, Nharm_coeff=1, Is_val=None):
 
 
     """
+
+    # Init constants list
+    self.csts_number = list()
 
     per_a = self.per_a
     antiper_a = 2 if self.is_antiper_a else 1
@@ -39,6 +42,7 @@ def set_subdomains(self, Nharm_coeff=1, Is_val=None):
         Rsbo=Rsbo,
         k=arange(per_a, Nhag, antiper_a * per_a, dtype=int),
     )
+    self.airgap.add_constants_numbers(self.csts_number)
 
     # Define rotor surface magnets subdomain
     self.rotor_magnet_surface = Subdomain_MagnetSurface(
@@ -48,8 +52,10 @@ def set_subdomains(self, Nharm_coeff=1, Is_val=None):
         Ryoke=Rrbo - sign_rot * polar_eq.rotor.slot.Hmag,
         k=self.airgap.k,
     )
-
     self.rotor_magnet_surface.comp_magnet_source(polar_eq.rotor, sign_rot)
+    if not is_mmfr:
+        self.rotor_magnet_surface.Mrn *= 0
+        self.rotor_magnet_surface.Mtn *= 0
 
     # Define stator slots subdomains
     slotS = polar_eq.stator.slot
@@ -74,3 +80,10 @@ def set_subdomains(self, Nharm_coeff=1, Is_val=None):
         self.stator_slot.v = arange(1, Nhso, dtype=int)
 
     self.stator_slot.comp_current_source(Is_val, polar_eq.stator)
+    self.stator_slot.add_constants_numbers(self.csts_number)
+
+    # Calculate slice position of each constant in topological matrix and source vector
+    cp = [sum(self.csts_number[0:x:1]) for x in range(0, len(self.csts_number) + 1)]
+    self.csts_position = [
+        slice(cp[x], cp[x + 1]) for x in range(0, len(self.csts_number))
+    ]

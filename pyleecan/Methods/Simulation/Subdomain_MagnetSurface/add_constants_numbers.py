@@ -1,4 +1,4 @@
-def get_constants_number(self):
+def add_constants_numbers(self, csts_number):
     """Return the number of integration constants in magnet surface subdomain
 
     Parameters
@@ -12,4 +12,4 @@ def get_constants_number(self):
         Number of integration constants in magnet surface subdomain
     """
 
-    return 0
+    pass

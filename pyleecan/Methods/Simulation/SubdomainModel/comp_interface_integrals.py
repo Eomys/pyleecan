@@ -1,4 +1,4 @@
-from numpy import pi, sin, cos, abs as np_abs, where
+from numpy import pi, sin, cos, abs as np_abs, any as np_any
 
 
 def comp_interface_integrals(self):
@@ -23,10 +23,10 @@ def I_cni(a, ni, theta_in, per_a=1, is_antiper_a=False):
 
     if is_antiper_a:
         val_a = val - I_cni(a, ni, theta_in + pi / per_a)
-        return val, val_a
+        return val, val_a.T
 
     else:
-        return val, val
+        return val, val.T
 
 
 def I_sni(a, ni, theta_in, per_a=1, is_antiper_a=False):
@@ -34,10 +34,10 @@ def I_sni(a, ni, theta_in, per_a=1, is_antiper_a=False):
 
     if is_antiper_a:
         val_a = val - I_sni(a, ni, theta_in + pi / per_a)
-        return val, val_a
+        return val, val_a.T
 
     else:
-        return val, val
+        return val, val.T
 
 
 def I_ckni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
@@ -51,9 +51,9 @@ def I_ckni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
         / (a**2 * nik**2 - pi**2 * kni**2)
     )
 
-    ind0 = where((np_abs(nik - kni * pi / a) < 1e-5))[0]
+    ind0 = np_abs(nik - kni * pi / a) < 1e-5
 
-    if ind0.size > 0:
+    if np_any(ind0):
         niv1 = nik[ind0]
         theta_ikn1 = theta_ikn[ind0]
 
@@ -65,10 +65,10 @@ def I_ckni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
 
     if is_antiper_a:
         val_a = val - I_ckni(a, nik, kni, theta_ikn + pi / per_a)
-        return val, val_a
+        return val.T, val_a
 
     else:
-        return val, val
+        return val.T, val
 
 
 def I_skni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
@@ -82,9 +82,9 @@ def I_skni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
         / (a**2 * nik**2 - pi**2 * kni**2)
     )
 
-    ind0 = where((np_abs(nik - kni * pi / a) < 1e-5))[0]
+    ind0 = np_abs(nik - kni * pi / a) < 1e-5
 
-    if ind0.size > 0:
+    if np_any(ind0):
         niv1 = nik[ind0]
         theta_ikn1 = theta_ikn[ind0]
 
@@ -96,7 +96,7 @@ def I_skni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
 
     if is_antiper_a:
         val_a = val - I_skni(a, nik, kni, theta_ikn + pi / per_a)
-        return val, val_a
+        return val.T, val_a
 
     else:
-        return val, val
+        return val.T, val

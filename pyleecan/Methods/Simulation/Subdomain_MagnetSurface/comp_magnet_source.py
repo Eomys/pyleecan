@@ -12,7 +12,7 @@ def comp_magnet_source(self, rotor, sign_rot):
 
     """
 
-    self.permeability_relative = rotor.magnet.mat_type.mag.get_mur()
+    self.permeability_relative = rotor.magnet.mat_type.mag.mur_lin
     Brm = rotor.magnet.mat_type.mag.get_Brm()
     p = rotor.get_pole_pair_number()
     taum = self.magnet_width / (pi / p)

@@ -99,27 +99,26 @@ theta_rot = np.linspace(0, 2 * np.pi, 100)
 Csts = np.zeros((100, 4 * N + K * Z_r))
 
 for ii, a0 in enumerate(theta_rot):
-
     theta_i = 2 * np.pi / Z_r * (i - 1) + theta_i0 + a0
     theta_ikn = 2 * np.pi / Z_r * (ikn - 1) + theta_i0 * np.ones(ikn.shape) + a0
 
     I_coskcosni = (
-        beta ** 2
+        beta**2
         * nik
         * (
             (-1) ** kni * np.sin(nik * (beta + 2 * theta_ikn) / 2)
             + np.sin(nik * (beta - 2 * theta_ikn) / 2)
         )
-        / (beta ** 2 * nik ** 2 - np.pi ** 2 * kni ** 2)
+        / (beta**2 * nik**2 - np.pi**2 * kni**2)
     )
     I_cosksinni = (
-        beta ** 2
+        beta**2
         * nik
         * (
             -((-1) ** kni) * np.cos(nik * (beta + 2 * theta_ikn) / 2)
             + np.cos(nik * (beta - 2 * theta_ikn) / 2)
         )
-        / (beta ** 2 * nik ** 2 - np.pi ** 2 * kni ** 2)
+        / (beta**2 * nik**2 - np.pi**2 * kni**2)
     )
 
     P_nik_R2_R3 = (R_3 / R_2) ** nik + (R_2 / R_3) ** nik

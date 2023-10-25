@@ -16167,6 +16167,46 @@
                 "type": "bool",
                 "unit": "",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Topological matrix",
+                "max": "",
+                "min": "",
+                "name": "mat",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Source vector",
+                "max": "",
+                "min": "",
+                "name": "vect",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "List of constants number",
+                "max": "",
+                "min": "",
+                "name": "csts_number",
+                "type": "list",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "List of constants positions in topoligical matrix",
+                "max": "",
+                "min": "",
+                "name": "csts_position",
+                "type": "list",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -16232,8 +16272,8 @@
         "desc": "Subdomain class for airgap region",
         "is_internal": false,
         "methods": [
-            "comp_flux_density",
-            "get_constants_number"
+            "add_constants_numbers",
+            "comp_flux_density"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Airgap",
@@ -16313,11 +16353,11 @@
         "desc": "Subdomain class for surface permanent magnet region",
         "is_internal": false,
         "methods": [
+            "add_constants_numbers",
             "comp_flux_density",
             "comp_interface_airgap",
             "comp_magnet_solution",
-            "comp_magnet_source",
-            "get_constants_number"
+            "comp_magnet_source"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_MagnetSurface",
@@ -16439,11 +16479,11 @@
         "desc": "Subdomain class for slots regions without openings and with windings",
         "is_internal": false,
         "methods": [
+            "add_constants_numbers",
             "comp_current_solution",
             "comp_current_source",
             "comp_flux_density",
-            "comp_interface_airgap",
-            "get_constants_number"
+            "comp_interface_airgap"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Slot",
@@ -16553,8 +16593,8 @@
         "desc": "Subdomain class for slots regions",
         "is_internal": false,
         "methods": [
-            "comp_flux_density",
-            "get_constants_number"
+            "add_constants_numbers",
+            "comp_flux_density"
         ],
         "mother": "Subdomain_Slot",
         "name": "Subdomain_SlotOpening",

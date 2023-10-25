@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.load import load_init_dict
@@ -15,6 +15,7 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import array, array_equal
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -35,6 +36,10 @@ class SubdomainModel(FrozenClass):
         per_a=None,
         machine_polar_eq=None,
         is_antiper_a=None,
+        mat=None,
+        vect=None,
+        csts_number=None,
+        csts_position=None,
         init_dict=None,
         init_str=None,
     ):
@@ -61,12 +66,24 @@ class SubdomainModel(FrozenClass):
                 machine_polar_eq = init_dict["machine_polar_eq"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
+            if "mat" in list(init_dict.keys()):
+                mat = init_dict["mat"]
+            if "vect" in list(init_dict.keys()):
+                vect = init_dict["vect"]
+            if "csts_number" in list(init_dict.keys()):
+                csts_number = init_dict["csts_number"]
+            if "csts_position" in list(init_dict.keys()):
+                csts_position = init_dict["csts_position"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.airgap = airgap
         self.per_a = per_a
         self.machine_polar_eq = machine_polar_eq
         self.is_antiper_a = is_antiper_a
+        self.mat = mat
+        self.vect = vect
+        self.csts_number = csts_number
+        self.csts_position = csts_position
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -97,6 +114,32 @@ class SubdomainModel(FrozenClass):
         else:
             SubdomainModel_str += "machine_polar_eq = None" + linesep + linesep
         SubdomainModel_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        SubdomainModel_str += (
+            "mat = "
+            + linesep
+            + str(self.mat).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        SubdomainModel_str += (
+            "vect = "
+            + linesep
+            + str(self.vect).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        SubdomainModel_str += (
+            "csts_number = "
+            + linesep
+            + str(self.csts_number).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        SubdomainModel_str += (
+            "csts_position = "
+            + linesep
+            + str(self.csts_position).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return SubdomainModel_str
 
     def __eq__(self, other):
@@ -111,6 +154,14 @@ class SubdomainModel(FrozenClass):
         if other.machine_polar_eq != self.machine_polar_eq:
             return False
         if other.is_antiper_a != self.is_antiper_a:
+            return False
+        if not array_equal(other.mat, self.mat):
+            return False
+        if not array_equal(other.vect, self.vect):
+            return False
+        if other.csts_number != self.csts_number:
+            return False
+        if other.csts_position != self.csts_position:
             return False
         return True
 
@@ -168,6 +219,34 @@ class SubdomainModel(FrozenClass):
                 diff_list.append(name + ".is_antiper_a" + val_str)
             else:
                 diff_list.append(name + ".is_antiper_a")
+        if not array_equal(other.mat, self.mat):
+            diff_list.append(name + ".mat")
+        if not array_equal(other.vect, self.vect):
+            diff_list.append(name + ".vect")
+        if other._csts_number != self._csts_number:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._csts_number)
+                    + ", other="
+                    + str(other._csts_number)
+                    + ")"
+                )
+                diff_list.append(name + ".csts_number" + val_str)
+            else:
+                diff_list.append(name + ".csts_number")
+        if other._csts_position != self._csts_position:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._csts_position)
+                    + ", other="
+                    + str(other._csts_position)
+                    + ")"
+                )
+                diff_list.append(name + ".csts_position" + val_str)
+            else:
+                diff_list.append(name + ".csts_position")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -180,6 +259,14 @@ class SubdomainModel(FrozenClass):
         S += getsizeof(self.per_a)
         S += getsizeof(self.machine_polar_eq)
         S += getsizeof(self.is_antiper_a)
+        S += getsizeof(self.mat)
+        S += getsizeof(self.vect)
+        if self.csts_number is not None:
+            for value in self.csts_number:
+                S += getsizeof(value)
+        if self.csts_position is not None:
+            for value in self.csts_position:
+                S += getsizeof(value)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -212,6 +299,38 @@ class SubdomainModel(FrozenClass):
                 **kwargs
             )
         SubdomainModel_dict["is_antiper_a"] = self.is_antiper_a
+        if self.mat is None:
+            SubdomainModel_dict["mat"] = None
+        else:
+            if type_handle_ndarray == 0:
+                SubdomainModel_dict["mat"] = self.mat.tolist()
+            elif type_handle_ndarray == 1:
+                SubdomainModel_dict["mat"] = self.mat.copy()
+            elif type_handle_ndarray == 2:
+                SubdomainModel_dict["mat"] = self.mat
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
+        if self.vect is None:
+            SubdomainModel_dict["vect"] = None
+        else:
+            if type_handle_ndarray == 0:
+                SubdomainModel_dict["vect"] = self.vect.tolist()
+            elif type_handle_ndarray == 1:
+                SubdomainModel_dict["vect"] = self.vect.copy()
+            elif type_handle_ndarray == 2:
+                SubdomainModel_dict["vect"] = self.vect
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
+        SubdomainModel_dict["csts_number"] = (
+            self.csts_number.copy() if self.csts_number is not None else None
+        )
+        SubdomainModel_dict["csts_position"] = (
+            self.csts_position.copy() if self.csts_position is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         SubdomainModel_dict["__class__"] = "SubdomainModel"
         return SubdomainModel_dict
@@ -230,12 +349,32 @@ class SubdomainModel(FrozenClass):
         else:
             machine_polar_eq_val = self.machine_polar_eq.copy()
         is_antiper_a_val = self.is_antiper_a
+        if self.mat is None:
+            mat_val = None
+        else:
+            mat_val = self.mat.copy()
+        if self.vect is None:
+            vect_val = None
+        else:
+            vect_val = self.vect.copy()
+        if self.csts_number is None:
+            csts_number_val = None
+        else:
+            csts_number_val = self.csts_number.copy()
+        if self.csts_position is None:
+            csts_position_val = None
+        else:
+            csts_position_val = self.csts_position.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             airgap=airgap_val,
             per_a=per_a_val,
             machine_polar_eq=machine_polar_eq_val,
             is_antiper_a=is_antiper_a_val,
+            mat=mat_val,
+            vect=vect_val,
+            csts_number=csts_number_val,
+            csts_position=csts_position_val,
         )
         return obj_copy
 
@@ -248,6 +387,10 @@ class SubdomainModel(FrozenClass):
         if self.machine_polar_eq is not None:
             self.machine_polar_eq._set_None()
         self.is_antiper_a = None
+        self.mat = None
+        self.vect = None
+        self.csts_number = None
+        self.csts_position = None
 
     def _get_airgap(self):
         """getter of airgap"""
@@ -359,5 +502,95 @@ class SubdomainModel(FrozenClass):
         doc=u"""True if there is spatial anti-periodicity
 
         :Type: bool
+        """,
+    )
+
+    def _get_mat(self):
+        """getter of mat"""
+        return self._mat
+
+    def _set_mat(self, value):
+        """setter of mat"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("mat", value, "ndarray")
+        self._mat = value
+
+    mat = property(
+        fget=_get_mat,
+        fset=_set_mat,
+        doc=u"""Topological matrix
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_vect(self):
+        """getter of vect"""
+        return self._vect
+
+    def _set_vect(self, value):
+        """setter of vect"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("vect", value, "ndarray")
+        self._vect = value
+
+    vect = property(
+        fget=_get_vect,
+        fset=_set_vect,
+        doc=u"""Source vector
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_csts_number(self):
+        """getter of csts_number"""
+        return self._csts_number
+
+    def _set_csts_number(self, value):
+        """setter of csts_number"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("csts_number", value, "list")
+        self._csts_number = value
+
+    csts_number = property(
+        fget=_get_csts_number,
+        fset=_set_csts_number,
+        doc=u"""List of constants number
+
+        :Type: list
+        """,
+    )
+
+    def _get_csts_position(self):
+        """getter of csts_position"""
+        return self._csts_position
+
+    def _set_csts_position(self, value):
+        """setter of csts_position"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("csts_position", value, "list")
+        self._csts_position = value
+
+    csts_position = property(
+        fget=_get_csts_position,
+        fset=_set_csts_position,
+        doc=u"""List of constants positions in topoligical matrix
+
+        :Type: list
         """,
     )

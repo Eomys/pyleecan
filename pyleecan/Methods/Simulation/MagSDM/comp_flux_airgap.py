@@ -68,6 +68,6 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     self.subdomain_model.is_antiper_a = is_antiper_a
     self.subdomain_model.machine_polar_eq = output.simu.machine.get_polar_eq()
 
-    self.subdomain_model.set_subdomains(self.Nharm_coeff, Is_val)
+    self.subdomain_model.set_subdomains(self.Nharm_coeff, Is_val, self.is_mmfr)
 
-    self.subdomain_model.solve(angle_rotor)
+    self.subdomain_model.solve(angle, angle_rotor)

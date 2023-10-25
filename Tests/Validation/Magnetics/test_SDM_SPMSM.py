@@ -24,7 +24,7 @@ from SciDataTool.Functions.Plot.plot_3D import plot_3D
 @pytest.mark.periodicity
 @pytest.mark.SIPMSM
 @pytest.mark.SingleOP
-def test_SDM_SPMSM_single_OP():
+def test_SDM_SPMSM_single_OP(is_periodicity_a=True):
     """Test to compute the Flux in SDM for the SPMSM 12s8p in"""
 
     SPMSM_001 = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
@@ -35,16 +35,18 @@ def test_SDM_SPMSM_single_OP():
         Ir=None,
         Na_tot=1024,
         Nt_tot=8 * 2,
-        is_periodicity_a=True,
+        is_periodicity_a=is_periodicity_a,
         is_periodicity_t=True,
     )
 
     simu.mag = MagSDM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_periodicity_a=True,
+        is_periodicity_a=is_periodicity_a,
         is_periodicity_t=True,
         subdomain_model=SubdomainModel_SPMSM(),
+        Nharm_coeff=2,
+        is_mmfr=False,
     )
 
     out = simu.run()

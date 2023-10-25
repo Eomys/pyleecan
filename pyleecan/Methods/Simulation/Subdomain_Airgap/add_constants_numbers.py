@@ -1,4 +1,4 @@
-def get_constants_number(self):
+def set_constants(self, csts_number):
     """Return the number of integration constants in airgap subdomain
 
     Parameters
@@ -12,4 +12,4 @@ def get_constants_number(self):
         Number of integration constants in airgap subdomain
     """
 
-    return 4 * self.k.size
+    csts_number.extend([self.k.size, self.k.size, self.k.size, self.k.size])

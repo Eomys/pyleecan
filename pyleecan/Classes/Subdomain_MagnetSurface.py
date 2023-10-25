@@ -18,6 +18,13 @@ from .Subdomain import Subdomain
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Simulation.Subdomain_MagnetSurface.add_constants_numbers import (
+        add_constants_numbers,
+    )
+except ImportError as error:
+    add_constants_numbers = error
+
+try:
     from ..Methods.Simulation.Subdomain_MagnetSurface.comp_flux_density import (
         comp_flux_density,
     )
@@ -45,13 +52,6 @@ try:
 except ImportError as error:
     comp_magnet_source = error
 
-try:
-    from ..Methods.Simulation.Subdomain_MagnetSurface.get_constants_number import (
-        get_constants_number,
-    )
-except ImportError as error:
-    get_constants_number = error
-
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -64,6 +64,18 @@ class Subdomain_MagnetSurface(Subdomain):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.Subdomain_MagnetSurface.add_constants_numbers
+    if isinstance(add_constants_numbers, ImportError):
+        add_constants_numbers = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_MagnetSurface method add_constants_numbers: "
+                    + str(add_constants_numbers)
+                )
+            )
+        )
+    else:
+        add_constants_numbers = add_constants_numbers
     # cf Methods.Simulation.Subdomain_MagnetSurface.comp_flux_density
     if isinstance(comp_flux_density, ImportError):
         comp_flux_density = property(
@@ -112,18 +124,6 @@ class Subdomain_MagnetSurface(Subdomain):
         )
     else:
         comp_magnet_source = comp_magnet_source
-    # cf Methods.Simulation.Subdomain_MagnetSurface.get_constants_number
-    if isinstance(get_constants_number, ImportError):
-        get_constants_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Subdomain_MagnetSurface method get_constants_number: "
-                    + str(get_constants_number)
-                )
-            )
-        )
-    else:
-        get_constants_number = get_constants_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

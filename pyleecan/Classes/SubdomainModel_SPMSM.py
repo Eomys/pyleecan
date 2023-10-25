@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.load import load_init_dict
@@ -28,6 +28,7 @@ except ImportError as error:
     solve = error
 
 
+from numpy import array, array_equal
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -75,6 +76,10 @@ class SubdomainModel_SPMSM(SubdomainModel):
         per_a=None,
         machine_polar_eq=None,
         is_antiper_a=None,
+        mat=None,
+        vect=None,
+        csts_number=None,
+        csts_position=None,
         init_dict=None,
         init_str=None,
     ):
@@ -107,6 +112,14 @@ class SubdomainModel_SPMSM(SubdomainModel):
                 machine_polar_eq = init_dict["machine_polar_eq"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
+            if "mat" in list(init_dict.keys()):
+                mat = init_dict["mat"]
+            if "vect" in list(init_dict.keys()):
+                vect = init_dict["vect"]
+            if "csts_number" in list(init_dict.keys()):
+                csts_number = init_dict["csts_number"]
+            if "csts_position" in list(init_dict.keys()):
+                csts_position = init_dict["csts_position"]
         # Set the properties (value check and convertion are done in setter)
         self.stator_slot = stator_slot
         self.rotor_magnet_surface = rotor_magnet_surface
@@ -117,6 +130,10 @@ class SubdomainModel_SPMSM(SubdomainModel):
             per_a=per_a,
             machine_polar_eq=machine_polar_eq,
             is_antiper_a=is_antiper_a,
+            mat=mat,
+            vect=vect,
+            csts_number=csts_number,
+            csts_position=csts_position,
         )
         # The class is frozen (in SubdomainModel init), for now it's impossible to
         # add new properties
@@ -317,6 +334,22 @@ class SubdomainModel_SPMSM(SubdomainModel):
         else:
             machine_polar_eq_val = self.machine_polar_eq.copy()
         is_antiper_a_val = self.is_antiper_a
+        if self.mat is None:
+            mat_val = None
+        else:
+            mat_val = self.mat.copy()
+        if self.vect is None:
+            vect_val = None
+        else:
+            vect_val = self.vect.copy()
+        if self.csts_number is None:
+            csts_number_val = None
+        else:
+            csts_number_val = self.csts_number.copy()
+        if self.csts_position is None:
+            csts_position_val = None
+        else:
+            csts_position_val = self.csts_position.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             stator_slot=stator_slot_val,
@@ -326,6 +359,10 @@ class SubdomainModel_SPMSM(SubdomainModel):
             per_a=per_a_val,
             machine_polar_eq=machine_polar_eq_val,
             is_antiper_a=is_antiper_a_val,
+            mat=mat_val,
+            vect=vect_val,
+            csts_number=csts_number_val,
+            csts_position=csts_position_val,
         )
         return obj_copy
 
