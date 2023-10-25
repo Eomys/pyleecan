@@ -18,10 +18,10 @@ def comp_interface_integrals(self):
     return
 
 
-def I_cni(a, ni, theta_in, is_antisyma=False, per_a=1):
+def I_cni(a, ni, theta_in, per_a=1, is_antiper_a=False):
     val = 2 * sin(a * ni / 2) * cos(theta_in * ni) / ni
 
-    if is_antisyma:
+    if is_antiper_a:
         val_a = val - I_cni(a, ni, theta_in + pi / per_a)
         return val, val_a
 
@@ -29,10 +29,10 @@ def I_cni(a, ni, theta_in, is_antisyma=False, per_a=1):
         return val, val
 
 
-def I_sni(a, ni, theta_in, is_antisyma=False, per_a=1):
+def I_sni(a, ni, theta_in, per_a=1, is_antiper_a=False):
     val = 2 * sin(a * ni / 2) * sin(theta_in * ni) / ni
 
-    if is_antisyma:
+    if is_antiper_a:
         val_a = val - I_sni(a, ni, theta_in + pi / per_a)
         return val, val_a
 
@@ -40,7 +40,7 @@ def I_sni(a, ni, theta_in, is_antisyma=False, per_a=1):
         return val, val
 
 
-def I_ckni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
+def I_ckni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
     val = (
         a**2
         * nik
@@ -52,16 +52,18 @@ def I_ckni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
     )
 
     ind0 = where((np_abs(nik - kni * pi / a) < 1e-5))[0]
-    niv1 = nik[ind0]
-    theta_ikn1 = theta_ikn[ind0]
 
-    val[ind0] = (
-        2 * a * niv1 * cos(a * niv1 / 2 - niv1 * theta_ikn1)
-        + sin(niv1 * (a / 2 - theta_ikn1))
-        + sin(3 * a * niv1 / 2 + niv1 * theta_ikn1)
-    ) / (4 * niv1)
+    if ind0.size > 0:
+        niv1 = nik[ind0]
+        theta_ikn1 = theta_ikn[ind0]
 
-    if is_antisyma:
+        val[ind0] = (
+            2 * a * niv1 * cos(a * niv1 / 2 - niv1 * theta_ikn1)
+            + sin(niv1 * (a / 2 - theta_ikn1))
+            + sin(3 * a * niv1 / 2 + niv1 * theta_ikn1)
+        ) / (4 * niv1)
+
+    if is_antiper_a:
         val_a = val - I_ckni(a, nik, kni, theta_ikn + pi / per_a)
         return val, val_a
 
@@ -69,7 +71,7 @@ def I_ckni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
         return val, val
 
 
-def I_skni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
+def I_skni(a, nik, kni, theta_ikn, per_a=1, is_antiper_a=False):
     val = (
         a**2
         * nik
@@ -81,16 +83,18 @@ def I_skni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
     )
 
     ind0 = where((np_abs(nik - kni * pi / a) < 1e-5))[0]
-    niv1 = nik[ind0]
-    theta_ikn1 = theta_ikn[ind0]
 
-    val[ind0] = (
-        -2 * a * niv1 * sin(a * niv1 / 2 - niv1 * theta_ikn1)
-        + cos(niv1 * (a / 2 - theta_ikn1))
-        - cos(3 * a * niv1 / 2 + niv1 * theta_ikn1)
-    ) / (4 * niv1)
+    if ind0.size > 0:
+        niv1 = nik[ind0]
+        theta_ikn1 = theta_ikn[ind0]
 
-    if is_antisyma:
+        val[ind0] = (
+            -2 * a * niv1 * sin(a * niv1 / 2 - niv1 * theta_ikn1)
+            + cos(niv1 * (a / 2 - theta_ikn1))
+            - cos(3 * a * niv1 / 2 + niv1 * theta_ikn1)
+        ) / (4 * niv1)
+
+    if is_antiper_a:
         val_a = val - I_skni(a, nik, kni, theta_ikn + pi / per_a)
         return val, val_a
 

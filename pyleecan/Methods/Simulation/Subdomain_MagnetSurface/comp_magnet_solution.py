@@ -22,17 +22,24 @@ def comp_magnet_solution(self, r):
 
     n = self.k
 
-    P_n_rmin_Rmax = P(n, Ry, Rag)
+    f_n_Rag = f(n, Rag)
+    df_n_Ry = df(n, Ry)
+    E_n_r_Rag = E(n, r, Rag)
+    P_n_Ry_Rag = P(n, Ry, Rag)
+    P_n_r_Rag = P(n, r, Rag)
 
     # Resolution in potential
-    X_n_r = (
-        Ry * g(n, Ry) * E(n, r, Rag) + n * f(n, Rag) * P(n, Ry, r)
-    ) / P_n_rmin_Rmax - n * f(n, r)
-    Y_n_r = (X_n_r + Ry * E(n, r, Rag) / P(n, Ry, Rag)) / n
-    dX_n_r = n * (Ry * g(n, Ry) * P(n, r, Rag) - n * f(n, Rag) * E(n, Ry, r)) / (
-        r * P_n_rmin_Rmax
-    ) - n * g(n, r)
-    dY_n_r = dX_n_r / n + Ry * P(n, r, Rag) / (r * P(n, Ry, Rag))
+    X_n_r = (Ry * df_n_Ry * E_n_r_Rag + n * f_n_Rag * P(n, Ry, r)) / P_n_Ry_Rag - n * f(
+        n, r
+    )
+
+    Y_n_r = (X_n_r + Ry * E_n_r_Rag / P_n_Ry_Rag) / n
+
+    dX_n_r = n * (Ry * df_n_Ry * P_n_r_Rag - n * f_n_Rag * E(n, Ry, r)) / (
+        r * P_n_Ry_Rag
+    ) - n * df(n, r)
+
+    dY_n_r = dX_n_r / n + Ry * P_n_r_Rag / (r * P_n_Ry_Rag)
 
     return X_n_r, Y_n_r, dX_n_r, dY_n_r
 
@@ -50,7 +57,7 @@ def f(n, r):
     return result
 
 
-def g(n, r):
+def df(n, r):
     result = 1 / (n**2 - 1)
 
     is_n1 = n == 1

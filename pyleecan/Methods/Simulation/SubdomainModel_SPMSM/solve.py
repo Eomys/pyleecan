@@ -15,12 +15,19 @@ def solve(self, angle_rotor):
         var description
     """
 
-    Nmat = 
+    Nmat = (
+        self.stator_slot.get_constants_number()
+        + self.airgap.get_constants_number()
+        + self.magnet_surface.get_constants_number()
+    )
 
     mat = np.zeros((Nmat, Nmat))
 
     vect = np.zeros((Nmat, angle_rotor.size))
 
-    self.rotor_magnet_surface.comp_interface_airgap_magnet(mat, vect)
+    self.rotor_magnet_surface.comp_interface_airgap(self.airgap, mat, vect, angle_rotor)
 
-    self.stator_slot.comp_interface_airgap_slot(mat, vect)
+    per_a = self.per_a
+    is_antiper_a = self.is_antiper_a
+
+    self.stator_slot.comp_interface_airgap(self.airgap, mat, vect, per_a, is_antiper_a)
