@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+param_other,-,dict other parameters,0,dict,None,,,
+param_pyleecan,-,dict pyleecan parameters,0,dict,None,,,
+unit_type,-,unit,0,str,m,,,
+scaling_to_P,-,conversion paramter to pyleecan,0,str,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,Rules,add_rules_equation,VERSION,1,simple rules,,,

@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+other,-,parameter ,0,str,None,,,
+pyleecan,-,path pyleecan parameter in object machine ,0,str,None,,,
+unit_type,-,unit,0,str,m,,,
+scaling_to_P,-,conversion paramter to pyleecan,0,int,1,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,Rules,add_rules_simple,VERSION,1,simple rules,,,
