@@ -121,6 +121,7 @@ from ..Classes.MachineSyRM import MachineSyRM
 from ..Classes.MachineSync import MachineSync
 from ..Classes.MachineUD import MachineUD
 from ..Classes.MachineWRSM import MachineWRSM
+from ..Classes.Machine_type_mot import Machine_type_mot
 from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
 from ..Classes.Magnet import Magnet
@@ -189,6 +190,7 @@ from ..Classes.RefQuad9 import RefQuad9
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
 from ..Classes.RefTriangle6 import RefTriangle6
+from ..Classes.Rules_selections import Rules_selections
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
 from ..Classes.Section import Section
