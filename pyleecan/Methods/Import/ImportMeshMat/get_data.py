@@ -4,7 +4,7 @@ from os.path import splitext
 
 from pyleecan.Classes.ImportMeshUnv import ImportMeshUnv
 from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 
 
@@ -45,12 +45,12 @@ def get_data(self):
         indice=nodes[:, 0],
     )
 
-    # Define CellMat objects
+    # Define ElementMat objects
     for elt_type, elt in elements.items():
-        mesh.cell[elt_type] = CellMat(
+        mesh.element[elt_type] = ElementMat(
             connectivity=elt[:, 1:],
-            nb_cell=elt.shape[0],
-            nb_node_per_cell=elt.shape[1] - 1,
+            nb_element=elt.shape[0],
+            nb_node_per_element=elt.shape[1] - 1,
             indice=elt[:, 0],
         )
 

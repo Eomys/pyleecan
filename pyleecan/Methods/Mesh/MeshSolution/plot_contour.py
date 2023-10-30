@@ -67,7 +67,7 @@ def plot_contour(
     is_radial : bool
         radial component only
     is_center : bool
-        field at cell-centers
+        field at element-centers
     clim : list
         a list of 2 elements for the limits of the colorbar
     field_name : str

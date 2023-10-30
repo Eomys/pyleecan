@@ -4,14 +4,14 @@ import numpy as np
 
 
 def get_ref_point(self, vertice, point):
-    """Return the coordinate of the equivalent point in the ref cell
+    """Return the coordinate of the equivalent point in the ref element
 
     Parameters
     ----------
     self : RefSegmentP1
         a RefSegmentP1 object
     vertice : ndarray
-        vertice of the cell
+        vertice of the element
     point : ndarray
         coordinates of a point
 

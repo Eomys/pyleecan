@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-def get_cell_area(self, indices=None):
-    """Return the area of the cells on the outer surface.
+def get_element_area(self, indices=None):
+    """Return the area of the elements on the outer surface.
 
     Parameters
     ----------
@@ -14,9 +14,9 @@ def get_cell_area(self, indices=None):
     Returns
     -------
     areas: ndarray
-        Area of the cells
+        Area of the elements
     """
 
     surf = self.get_surf(indices=indices)
 
-    return surf.compute_cell_sizes(area=True)["Area"]
+    return surf.compute_element_sizes(area=True)["Area"]

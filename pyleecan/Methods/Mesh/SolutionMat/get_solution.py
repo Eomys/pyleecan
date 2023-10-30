@@ -52,7 +52,7 @@ def get_solution(self, indice=None):
 
     solution = type(self)(
         label=self.label,
-        type_cell=self.type_cell,
+        type_element=self.type_element,
         field=new_field_sol,
         indice=indice,
         axis_name=axis_name,

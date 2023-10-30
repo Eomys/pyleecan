@@ -677,7 +677,7 @@ class MeshSolution(FrozenClass):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Dict sorted by groups name with list of cells indices. 
+        doc=u"""Dict sorted by groups name with list of elements indices. 
 
         :Type: dict
         """,

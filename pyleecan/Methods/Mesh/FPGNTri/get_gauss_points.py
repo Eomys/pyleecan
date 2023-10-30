@@ -2,7 +2,7 @@
 
 
 def get_gauss_points(self):
-    """Return the gauss points and weights for Triangle3 cell"""
+    """Return the gauss points and weights for Triangle3 element"""
 
     raise Exception(
         "Quadpy is not possible to use anymore, need to rewrite this method"

@@ -86,7 +86,7 @@ class SolutionMat(Solution):
         indice=None,
         axis_name=None,
         axis_size=None,
-        type_cell="triangle",
+        type_element="triangle",
         label=None,
         dimension=2,
         unit="",
@@ -116,8 +116,8 @@ class SolutionMat(Solution):
                 axis_name = init_dict["axis_name"]
             if "axis_size" in list(init_dict.keys()):
                 axis_size = init_dict["axis_size"]
-            if "type_cell" in list(init_dict.keys()):
-                type_cell = init_dict["type_cell"]
+            if "type_element" in list(init_dict.keys()):
+                type_element = init_dict["type_element"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -131,7 +131,7 @@ class SolutionMat(Solution):
         self.axis_size = axis_size
         # Call Solution init
         super(SolutionMat, self).__init__(
-            type_cell=type_cell, label=label, dimension=dimension, unit=unit
+            type_element=type_element, label=label, dimension=dimension, unit=unit
         )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
@@ -327,7 +327,7 @@ class SolutionMat(Solution):
             axis_size_val = None
         else:
             axis_size_val = self.axis_size.copy()
-        type_cell_val = self.type_cell
+        type_element_val = self.type_element
         label_val = self.label
         dimension_val = self.dimension
         unit_val = self.unit
@@ -337,7 +337,7 @@ class SolutionMat(Solution):
             indice=indice_val,
             axis_name=axis_name_val,
             axis_size=axis_size_val,
-            type_cell=type_cell_val,
+            type_element=type_element_val,
             label=label_val,
             dimension=dimension_val,
             unit=unit_val,
@@ -398,7 +398,7 @@ class SolutionMat(Solution):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Indices of loaded cells. Set to None if all cells are loaded
+        doc=u"""Indices of loaded elements. Set to None if all elements are loaded
 
         :Type: ndarray
         """,

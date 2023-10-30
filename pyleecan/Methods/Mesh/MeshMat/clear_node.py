@@ -2,12 +2,12 @@
 import numpy as np
 import copy
 
-from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 
 
 def clear_node(self):
-    """Remove non-used nodes based on cells connectivity.
+    """Remove non-used nodes based on elements connectivity.
 
     Parameters
     ----------
@@ -21,7 +21,7 @@ def clear_node(self):
 
     coord_init = self.get_node()
     node_indice_init = self.get_node_indice()
-    connect_dict, nb_cell, indices = self.get_cell()
+    connect_dict, nb_element, indices = self.get_element()
 
     node_indice = list()
     for key in connect_dict:

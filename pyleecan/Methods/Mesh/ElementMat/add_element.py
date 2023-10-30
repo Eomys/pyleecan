@@ -3,17 +3,17 @@
 import numpy as np
 
 
-def add_cell(self, node_indices, new_index):
-    """Add a new cell defined by node indices
+def add_element(self, node_indices, new_index):
+    """Add a new element defined by node indices
 
     Parameters
     ----------
-    self : CellMat
-        a CellMat object
+    self : ElementMat
+        a ElementMat object
     node_indices : ndarray or list of int
-        a ndarray of nodes indices (length must match self.nb_node_per_cell)
+        a ndarray of nodes indices (length must match self.nb_node_per_element)
     new_index : int
-        Index of the new cell to use
+        Index of the new element to use
 
     Returns
     -------
@@ -22,21 +22,21 @@ def add_cell(self, node_indices, new_index):
     """
 
     # Check that there is the correct number of nodes
-    if len(np.unique(node_indices)) != self.nb_node_per_cell:
+    if len(np.unique(node_indices)) != self.nb_node_per_element:
         return False
 
-    # Check if the Cell with these nodes already exist (The order of nodes indices does not matter)
+    # Check if the Element with these nodes already exist (The order of nodes indices does not matter)
     if self.is_exist(node_indices):
         return False
 
-    # Create/Add the new cell
-    if self.nb_cell == 0:  # First cell
+    # Create/Add the new element
+    if self.nb_element == 0:  # First element
         self.connectivity = node_indices
         self.indice = np.array([new_index])
     else:
         self.connectivity = np.vstack([self.connectivity, node_indices])
         self.indice = np.concatenate([self.indice, np.array([new_index])])
 
-    self.nb_cell = self.nb_cell + 1
+    self.nb_element += 1
 
     return True

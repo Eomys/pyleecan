@@ -32,7 +32,7 @@ def get_mesh_field_pv(
     is_radial : bool
         radial component only
     is_center : bool
-        field at cell centers
+        field at element centers
     field_name : str
         label of the field to return
     itimefreq : int

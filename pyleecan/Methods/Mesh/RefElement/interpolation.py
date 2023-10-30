@@ -4,7 +4,7 @@ import numpy as np
 
 
 def interpolation(self, point, vertice, field):
-    """Return interpolated value of the field in a cell
+    """Return interpolated value of the field in a element
 
     Parameters
     ----------
@@ -15,7 +15,7 @@ def interpolation(self, point, vertice, field):
     nb_pt : int
         nb of evaluation points
     vertice : ndarray
-        vertices of the cell
+        vertices of the element
     field : ndarray
         field to interpolate
 

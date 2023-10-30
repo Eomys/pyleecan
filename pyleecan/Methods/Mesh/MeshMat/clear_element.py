@@ -2,12 +2,12 @@
 import numpy as np
 import copy
 
-from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 
 
-def clear_cell(self):
-    """Remove non-used cells based on node indices.
+def clear_element(self):
+    """Remove non-used elements based on node indices.
 
     Parameters
     ----------

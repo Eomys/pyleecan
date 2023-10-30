@@ -2,8 +2,8 @@
 from numpy import abs, newaxis, array
 
 
-def get_cell_area(self, vertices):
-    """Return the area of the cells.
+def get_element_area(self, vertices):
+    """Return the area of the elements.
     https://en.wikipedia.org/wiki/Shoelace_formula
 
     Parameters
@@ -11,12 +11,12 @@ def get_cell_area(self, vertices):
     self : RefTriangle3
         a RefTriangle3 object
     vertices : list or array
-        the cells vertices
+        the elements vertices
 
     Returns
     -------
     area: array
-        area of the cells
+        area of the elements
     """
     if isinstance(vertices, list):
         vertices = array(vertices)

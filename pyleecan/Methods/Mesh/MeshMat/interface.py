@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from ....Classes.NodeMat import NodeMat
-from ....Classes.CellMat import CellMat
+from ....Classes.ElementMat import ElementMat
 from ....Classes.Interpolation import Interpolation
 from ....Classes.FPGNSeg import FPGNSeg
 from ....Classes.ScalarProductL2 import ScalarProductL2
@@ -31,20 +31,22 @@ def interface(self, other_mesh):
     new_mesh._is_renum = True
 
     # new_mesh.node = NodeMat()
-    new_mesh.cell = dict()
+    new_mesh.element = dict()
 
-    for key in self.cell:
-        # Developer info: IDK if this code works with other than triangle cells. To be checked.
-        if self.cell[key].nb_node_per_cell == 3:  # Triangle case
-            new_mesh.cell["line"] = CellMat(nb_node_per_cell=2)
+    for key in self.element:
+
+        # Developer info: IDK if this code works with other than triangle elements. To be checked.
+        if self.element[key].nb_node_per_element == 3:  # Triangle case
+
+            new_mesh.element["line"] = ElementMat(nb_node_per_element=2)
             interp = Interpolation()
             interp.gauss_point = FPGNSeg()
-            interp.ref_cell = RefSegmentP1()
+            interp.ref_element = RefSegmentP1()
             interp.scalar_product = ScalarProductL2()
-            new_mesh.cell["line"].interpolation = interp
+            new_mesh.element["line"].interpolation = interp
 
-            connect = self.cell[key].get_connectivity()
-            connect2 = other_mesh.cell[key].get_connectivity()
+            connect = self.element[key].get_connectivity()
+            connect2 = other_mesh.element[key].get_connectivity()
 
             nodes_tags = np.unique(connect)
             other_nodes_tags = np.unique(connect2)
@@ -53,7 +55,7 @@ def interface(self, other_mesh):
             interface_nodes_tags = np.intersect1d(nodes_tags, other_nodes_tags)
             nb_interf_nodes = len(interface_nodes_tags)
 
-            comb = combinations(range(self.cell[key].nb_node_per_cell), 2)
+            comb = combinations(range(self.element[key].nb_node_per_element), 2)
 
             for duo in list(comb):
                 col1i = np.mod(duo[0], 3)
@@ -73,7 +75,9 @@ def interface(self, other_mesh):
                 # Position in vector where 2 nodes of the same element are on the interface (potential line element)
                 I_target = np.where(col1_bin + col2_bin == 2)[0]
 
-                comb2 = combinations(range(other_mesh.cell[key].nb_node_per_cell), 2)
+                comb2 = combinations(
+                    range(other_mesh.element[key].nb_node_per_element), 2
+                )
                 for duo2 in list(comb2):
                     col1j = np.mod(duo2[0], 3)
                     col2j = np.mod(duo2[1], 3)
@@ -100,6 +104,6 @@ def interface(self, other_mesh):
                             | ((col2[I_target] == e_tag1) & (col1[I_target] == e_tag2))
                         )[0]
                         if Iline.size != 0:
-                            new_mesh.add_cell([e_tag1, e_tag2], "line")
+                            new_mesh.add_element([e_tag1, e_tag2], "line")
 
     return new_mesh

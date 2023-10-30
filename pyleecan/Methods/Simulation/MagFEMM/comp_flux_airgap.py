@@ -194,12 +194,12 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         Time = Time.copy()
         meshFEMM[0].sym = sym
         meshFEMM[0].is_antiper_a = is_antiper_a
-        indices_cell = meshFEMM[0].cell["triangle"].indice
-        Indices_Cell = Data1D(
-            name="indice", values=indices_cell, is_components=True, is_overlay=False
+        indices_element = meshFEMM[0].element["triangle"].indice
+        Indices_Element = Data1D(
+            name="indice", values=indices_element, is_components=True, is_overlay=False
         )
         # Slice = axes_dict["z"]
-        axis_list = [Time, Indices_Cell]
+        axis_list = [Time, Indices_Element]
 
         B_sol = build_solution_vector(
             field=B_elem[:, :, None, :],  # quick fix for slice issue
@@ -241,7 +241,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             symbol="A_z",
             unit="Wb/m",
         )
-        An_sol.type_cell = "node"
+        An_sol.type_element = "node"
 
         list_solution = [B_sol, H_sol, mu_sol, An_sol, Ae_sol]
 

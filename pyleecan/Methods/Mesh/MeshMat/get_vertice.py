@@ -10,7 +10,7 @@ def get_vertice(self, indices=None):
     ----------
     self : MeshMat
         an MeshMat object
-    cell_type : str
+    element_type : str
         a key corresponding to an element type
     group : ndarray
         One or several group numbers to be returned
@@ -22,15 +22,15 @@ def get_vertice(self, indices=None):
 
     """
 
-    cells, nb_cell, indices = self.get_cell(indices=indices)
+    elements, nb_element, indices = self.get_element(indices=indices)
     vertices = dict()
-    for key in cells:
-        if len(cells[key].shape) > 1:
+    for key in elements:
+        if len(elements[key].shape) > 1:
             vertices[key] = list()
-            for ii in range(cells[key].shape[0]):
-                vertices[key].append(self.get_node(cells[key][ii, :]))
+            for ii in range(elements[key].shape[0]):
+                vertices[key].append(self.get_node(elements[key][ii, :]))
             vertices[key] = array(vertices[key])
         else:
-            vertices[key] = self.get_node(cells[key])
+            vertices[key] = self.get_node(elements[key])
 
     return vertices

@@ -2,10 +2,10 @@
 from numpy import abs, newaxis, array
 
 
-def get_cell_area(self, indices=None):
+def get_element_area(self, indices=None):
     """
-    Return the area of the cells on the outer surface.
-    #TODO address multiple cell type issue, i.e. distracted indices
+    Return the area of the elements on the outer surface.
+    #TODO address multiple element type issue, i.e. distracted indices
     Parameters
     ----------
     self : MeshMat
@@ -15,7 +15,7 @@ def get_cell_area(self, indices=None):
     Returns
     -------
     areas: ndarray
-        Area of the cells
+        Area of the elements
     """
     logger = self.get_logger()
     area = []
@@ -25,11 +25,13 @@ def get_cell_area(self, indices=None):
     for key, vertices in vertices_dict.items():
         if len(vertices) != 0:
             try:
-                A = self.cell[key].interpolation.ref_cell.get_cell_area(vertices)
+                A = self.element[key].interpolation.ref_element.get_element_area(
+                    vertices
+                )
                 A = A.tolist()
             except:
                 logger.warning(
-                    f'MeshMat: Reference Cell for "{key}" not found. '
+                    f'MeshMat: Reference element for "{key}" not found. '
                     + "Respective area set to zero."
                 )
                 A = [0 for i in range(vertices.shape[0])]

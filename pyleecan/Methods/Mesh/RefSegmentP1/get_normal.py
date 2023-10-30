@@ -11,7 +11,7 @@ def get_normal(self, vertice):
     self : RefSegmentP1
         a RefSegmentP1 object
     vertice : ndarray
-        vertice of the cell
+        vertice of the element
 
     Returns
     -------

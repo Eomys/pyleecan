@@ -81,7 +81,7 @@ def comp_loss(self):
     Igrp = meshsol.group[self.group]
 
     # Get element surface associated to group
-    Se = meshsol.mesh[0].get_cell_area()[Igrp]
+    Se = meshsol.mesh[0].get_element_area()[Igrp]
 
     Bvect = meshsol.solution[ind].field
     axes_list = Bvect.get_axes()

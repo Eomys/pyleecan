@@ -28,4 +28,4 @@ def get_area(meshsolution, group_names=None, indices=None):
 
     msh = meshsol.get_mesh()
 
-    return msh.get_cell_area(indices=indices).sum()
+    return msh.get_element_area(indices=indices).sum()

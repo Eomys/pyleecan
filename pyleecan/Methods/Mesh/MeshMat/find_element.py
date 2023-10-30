@@ -3,8 +3,8 @@
 import numpy as np
 
 
-def find_cell(self, points, nb_pt, normal_t=None):
-    """Return the cells containing the target point(s)
+def find_element(self, points, nb_pt, normal_t=None):
+    """Return the elements containing the target point(s)
 
     Parameters
     ----------
@@ -17,13 +17,13 @@ def find_cell(self, points, nb_pt, normal_t=None):
 
     Returns
     -------
-    cell_list: list
-        A list of  of selected cells
+    element_list: list
+        A list of selected elements
 
     """
     # nmax_search = 3
-    cells_list = list()
-    cell_prop = list()
+    elements_list = list()
+    element_prop = list()
 
     nodes = self.node
     point_coord = nodes.coordinate
@@ -34,11 +34,11 @@ def find_cell(self, points, nb_pt, normal_t=None):
             pt = points
         else:
             pt = points[ii, :]
-        for key in self.cell:
-            cells = self.cell[key]
-            ref_cell = cells.interpolation.ref_cell
-            connect = cells.connectivity
-            nb_node_per_cell = cells.nb_node_per_cell
+        for key in self.element:
+            elements = self.element[key]
+            ref_element = elements.interpolation.ref_element
+            connect = elements.connectivity
+            nb_node_per_element = elements.nb_node_per_element
             # vertice0 = point_coord[connect[0]]
             # dist_ref = np.sqrt(
             #     np.square(vertice0[0, 0] - vertice0[1, 0])
@@ -76,30 +76,33 @@ def find_cell(self, points, nb_pt, normal_t=None):
 
             # while inode < nmax_search and inode < nb_tot_pt and dontstop:
 
-            # get cells that contain the closest node and test if point is inside
-            closest_cells = np.where(connect == Imin_node[inode])[0]
-            nb_closest_elem = len(closest_cells)
+            # get elements that contain the closest node and test if point is inside
+            closest_elements = np.where(connect == Imin_node[inode])[0]
+            nb_closest_elem = len(closest_elements)
             a, b = np.zeros(nb_closest_elem), np.zeros(nb_closest_elem)
-            cell_prop = list()
+            element_prop = list()
             for ielt in range(nb_closest_elem):
-                vert = self.get_vertice(closest_cells[ielt])[key]
-                (is_inside, a[ielt], b[ielt]) = ref_cell.is_inside(vert, pt, normal_t)
+                vert = self.get_vertice(closest_elements[ielt])[key]
+                (is_inside, a[ielt], b[ielt]) = ref_element.is_inside(
+                    vert, pt, normal_t
+                )
                 if is_inside:
                     # dontstop = False
-                    cell_prop.append(key)
-                    cell_prop.append(closest_cells[ielt])
+                    element_prop.append(key)
+                    element_prop.append(closest_elements[ielt])
 
                 # inode = inode + 1
                 # break
 
-            # if no cell was found, give it a second try
+            # if no element was found, give it a second try
             # TODO first check if outside mesh
-            if len(cell_prop) == 0:
-                # test all cells (sorted by center, i.e. mean of vertices)
+            if len(element_prop) == 0:
+                # test all elements (sorted by center, i.e. mean of vertices)
                 vert_cent = np.zeros(pt.shape)
-                for icell in range(nb_node_per_cell):
+                for ielement in range(nb_node_per_element):
                     vert_cent = (
-                        vert_cent + point_coord[connect[:, icell]] / nb_node_per_cell
+                        vert_cent
+                        + point_coord[connect[:, ielement]] / nb_node_per_element
                     )
 
                 if self.dimension == 3:
@@ -109,7 +112,7 @@ def find_cell(self, points, nb_pt, normal_t=None):
                             + (vert_cent[:, 1] - pt[1]) ** 2
                             + (vert_cent[:, 2] - pt[2]) ** 2
                         ),
-                        (cells.nb_cell, 1),
+                        (elements.nb_element, 1),
                     )
                 else:
                     dist_vert_cent = np.reshape(
@@ -117,29 +120,29 @@ def find_cell(self, points, nb_pt, normal_t=None):
                             (vert_cent[:, 0] - pt[0]) ** 2
                             + (vert_cent[:, 1] - pt[1]) ** 2
                         ),
-                        (cells.nb_cell, 1),
+                        (elements.nb_element, 1),
                     )
 
                 Imin_vert_cent = np.argsort(dist_vert_cent, axis=0)[:, 0]
                 i = 0
                 is_inside = False
-                while i < cells.nb_cell and not is_inside:
+                while i < elements.nb_element and not is_inside:
                     vert = self.get_vertice(Imin_vert_cent[i])[key]
-                    (is_inside, a, b) = ref_cell.is_inside(vert, pt, normal_t)
+                    (is_inside, a, b) = ref_element.is_inside(vert, pt, normal_t)
                     if is_inside:
                         # dontstop = False
-                        cell_prop = [key, Imin_vert_cent[i]]
+                        element_prop = [key, Imin_vert_cent[i]]
                     i += 1
 
-            # No cell contain the point atleast (only possible if point is outside mesh)
-            if len(cell_prop) == 0:
-                cells_list.append(None)
-            # one cell found
-            elif len(cell_prop) == 2:
-                cells_list.append(cell_prop)
-            # more than one cells found
-            elif len(cell_prop) > 2:
+            # No element contain the point atleast (only possible if point is outside mesh)
+            if len(element_prop) == 0:
+                elements_list.append(None)
+            # one element found
+            elif len(element_prop) == 2:
+                elements_list.append(element_prop)
+            # more than one elements found
+            elif len(element_prop) > 2:
                 ind = np.where(np.min(a) == a)[0][0]
-                cells_list.append(cell_prop[2 * ind : 2 * ind + 2])
+                elements_list.append(element_prop[2 * ind : 2 * ind + 2])
 
-    return cells_list
+    return elements_list

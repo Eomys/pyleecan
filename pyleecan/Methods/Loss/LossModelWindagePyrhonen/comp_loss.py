@@ -82,9 +82,9 @@ def comp_loss(self):
     if output.geo.is_antiper_a:
         per_a *= 2
 
-    # Get surface cells for windings
+    # Get surface elements for windings
     ms = output.mag.meshsolution
-    Se = ms.mesh[0].get_cell_area()[ms.group["rotor core"]]
+    Se = ms.mesh[0].get_element_area()[ms.group["rotor core"]]
 
     # Constant component and twice the electrical frequency have same joule density values
     freqs = array([felec])

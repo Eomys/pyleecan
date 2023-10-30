@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ....Classes.MeshMat import MeshMat
 from ....Classes.NodeMat import NodeMat
-from ....Classes.CellMat import CellMat
+from ....Classes.ElementMat import ElementMat
 from ....Classes.Interpolation import Interpolation
 from ....Classes.FPGNSeg import FPGNSeg
 from ....Classes.FPGNTri import FPGNTri
@@ -37,7 +37,7 @@ def convert(self, meshtype, scale):
     elif meshtype == "MeshMat":
         new_mesh = MeshMat(dimension=self.dimension)
 
-        connect_all = self.get_cell()[0]
+        connect_all = self.get_element()[0]
         nodes = array(self.get_node())
         nb_node = nodes.shape[0]
 
@@ -50,57 +50,59 @@ def convert(self, meshtype, scale):
         min_indice = 0
         for key in connect_all:
             connect = connect_all[key]
-            nb_cell = connect.shape[0]
-            indices = linspace(min_indice, min_indice + nb_cell - 1, nb_cell, dtype=int)
-            min_indice = min_indice + nb_cell
+            nb_element = connect.shape[0]
+            indices = linspace(
+                min_indice, min_indice + nb_element - 1, nb_element, dtype=int
+            )
+            min_indice = min_indice + nb_element
 
             if key == "line":
-                new_mesh.cell["line"] = CellMat(
-                    nb_node_per_cell=2,
+                new_mesh.element["line"] = ElementMat(
+                    nb_node_per_element=2,
                     connectivity=connect,
-                    nb_cell=nb_cell,
+                    nb_element=nb_element,
                     indice=indices,
                 )
                 interp = Interpolation()
                 interp.gauss_point = FPGNSeg()
-                interp.ref_cell = RefSegmentP1()
+                interp.ref_element = RefSegmentP1()
                 interp.scalar_product = ScalarProductL2()
-                new_mesh.cell["line"].interpolation = interp
+                new_mesh.element["line"].interpolation = interp
             elif key == "line3":
-                new_mesh.cell["line3"] = CellMat(
-                    nb_node_per_cell=3,
+                new_mesh.element["line3"] = ElementMat(
+                    nb_node_per_element=3,
                     connectivity=connect,
-                    nb_cell=nb_cell,
+                    nb_element=nb_element,
                     indice=indices,
                 )
                 interp = Interpolation()
                 interp.gauss_point = None  # TODO
-                interp.ref_cell = None  # TODO
+                interp.ref_element = None  # TODO
                 interp.scalar_product = None  # TODO
-                new_mesh.cell["line3"].interpolation = interp
+                new_mesh.element["line3"].interpolation = interp
             elif key == "triangle3":
-                new_mesh.cell["triangle"] = CellMat(
-                    nb_node_per_cell=3,
+                new_mesh.element["triangle"] = ElementMat(
+                    nb_node_per_element=3,
                     connectivity=connect,
-                    nb_cell=nb_cell,
+                    nb_element=nb_element,
                     indice=indices,
                 )
                 interp = Interpolation()
                 interp.gauss_point = FPGNTri()
-                interp.ref_cell = RefTriangle3()
+                interp.ref_element = RefTriangle3()
                 interp.scalar_product = ScalarProductL2()
-                new_mesh.cell["triangle"].interpolation = interp
+                new_mesh.element["triangle"].interpolation = interp
             elif key == "quad9":
-                new_mesh.cell["quad9"] = CellMat(
-                    nb_node_per_cell=9,
+                new_mesh.element["quad9"] = ElementMat(
+                    nb_node_per_element=9,
                     connectivity=connect,
-                    nb_cell=nb_cell,
+                    nb_element=nb_element,
                     indice=indices,
                 )
                 interp = Interpolation()
                 interp.gauss_point = None  # TODO
-                interp.ref_cell = None  # TODO
+                interp.ref_element = None  # TODO
                 interp.scalar_product = None  # TODO
-                new_mesh.cell["quad9"].interpolation = interp
+                new_mesh.element["quad9"].interpolation = interp
 
     return new_mesh

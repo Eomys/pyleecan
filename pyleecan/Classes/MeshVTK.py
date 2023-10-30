@@ -28,9 +28,9 @@ except ImportError as error:
     get_node = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_cell import get_cell
+    from ..Methods.Mesh.MeshVTK.get_element import get_element
 except ImportError as error:
-    get_cell = error
+    get_element = error
 
 try:
     from ..Methods.Mesh.MeshVTK.get_normals import get_normals
@@ -43,9 +43,9 @@ except ImportError as error:
     get_surf = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_cell_area import get_cell_area
+    from ..Methods.Mesh.MeshVTK.get_element_area import get_element_area
 except ImportError as error:
-    get_cell_area = error
+    get_element_area = error
 
 try:
     from ..Methods.Mesh.MeshVTK.convert import convert
@@ -106,15 +106,15 @@ class MeshVTK(Mesh):
         )
     else:
         get_node = get_node
-    # cf Methods.Mesh.MeshVTK.get_cell
-    if isinstance(get_cell, ImportError):
-        get_cell = property(
+    # cf Methods.Mesh.MeshVTK.get_element
+    if isinstance(get_element, ImportError):
+        get_element = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method get_cell: " + str(get_cell))
+                ImportError("Can't use MeshVTK method get_element: " + str(get_element))
             )
         )
     else:
-        get_cell = get_cell
+        get_element = get_element
     # cf Methods.Mesh.MeshVTK.get_normals
     if isinstance(get_normals, ImportError):
         get_normals = property(
@@ -133,17 +133,18 @@ class MeshVTK(Mesh):
         )
     else:
         get_surf = get_surf
-    # cf Methods.Mesh.MeshVTK.get_cell_area
-    if isinstance(get_cell_area, ImportError):
-        get_cell_area = property(
+    # cf Methods.Mesh.MeshVTK.get_element_area
+    if isinstance(get_element_area, ImportError):
+        get_element_area = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshVTK method get_cell_area: " + str(get_cell_area)
+                    "Can't use MeshVTK method get_element_area: "
+                    + str(get_element_area)
                 )
             )
         )
     else:
-        get_cell_area = get_cell_area
+        get_element_area = get_element_area
     # cf Methods.Mesh.MeshVTK.convert
     if isinstance(convert, ImportError):
         convert = property(
@@ -712,7 +713,7 @@ class MeshVTK(Mesh):
     node_normals = property(
         fget=_get_node_normals,
         fset=_set_node_normals,
-        doc=u"""Array of normals to nodes (cell vertices)
+        doc=u"""Array of normals to nodes (element vertices)
 
         :Type: ndarray
         """,

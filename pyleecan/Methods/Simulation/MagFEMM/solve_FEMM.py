@@ -272,7 +272,7 @@ def solve_FEMM(
             if ii == start_t:
                 meshFEMM = [meshFEMMi]
                 groups = groupsi
-                Nelem = meshFEMM[0].cell["triangle"].nb_cell
+                Nelem = meshFEMM[0].element["triangle"].nb_element
                 Nnode = meshFEMM[0].node.nb_node
                 Nt0 = end_t - start_t
                 B_elem = zeros([Nt0, Nelem, 3])

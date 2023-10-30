@@ -9,7 +9,7 @@ def shape_function(self, g_point, nb_gpt):
     Parameters
     ----------
     self : RefSegmentP1
-         an RefCell object
+         an RefElement object
     point : ndarray
         ref point
 

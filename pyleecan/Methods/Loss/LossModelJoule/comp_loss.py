@@ -60,9 +60,9 @@ def comp_loss(self):
 
     Lst = lam.L1
 
-    # Get surface cells for windings
+    # Get surface elements for windings
     ms = output.mag.meshsolution
-    Se = ms.mesh[0].get_cell_area()[ms.group[self.group]]
+    Se = ms.mesh[0].get_element_area()[ms.group[self.group]]
 
     # Constant component and twice the electrical frequency have same joule density values
     freqs = array([felec])

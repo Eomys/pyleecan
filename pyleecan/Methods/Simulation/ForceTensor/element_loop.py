@@ -38,22 +38,25 @@ def element_loop(
     f : (nb_nodes*dim*Nt_tot) array
         nodal forces
 
-    connect : (nb_element*nb_node_per_cell) array
+    connect : (nb_element*nb_node_per_element) array
         table of mesh connectivity
 
     """
 
     # For every type of element (now only Triangle3, TO BE extended)
-    for key in mesh.cell:
-        # mesh.cell[key].interpolation = Interpolation()
-        # mesh.cell[key].interpolation.init_key(key=key, nb_gauss=1)
+    for key in mesh.element:
 
-        nb_node_per_cell = mesh.cell[
+        # mesh.element[key].interpolation = Interpolation()
+        # mesh.element[key].interpolation.init_key(key=key, nb_gauss=1)
+
+        nb_node_per_element = mesh.element[
             key
-        ].nb_node_per_cell  # Number of nodes per element
+        ].nb_node_per_element  # Number of nodes per element
 
-        mesh_cell_key = mesh.cell[key]
-        connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
+        mesh_element_key = mesh.element[key]
+        connect = mesh.element[
+            key
+        ].get_connectivity()  # Each row of connect is an element
 
         nb_elem = len(connect)
 
@@ -62,18 +65,19 @@ def element_loop(
         # Nodal forces init
         f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
 
-        # ref_cell = mesh.cell[key].interpolation.ref_cell // pas besoin d'interpoler car tout est cst
+        # ref_element = mesh.element[key].interpolation.ref_element // pas besoin d'interpoler car tout est cst
 
         # Gauss nodes
-        # pts_gauss, poidsGauss, nb_gauss = mesh.cell[
+        # pts_gauss, poidsGauss, nb_gauss = mesh.element[
         #     key
         # ].interpolation.gauss_point.get_gauss_points()
 
-        # indice_elem = mesh.cell[key].indice
+        # indice_elem = mesh.element[key].indice
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-            node_number = mesh_cell_key.get_connectivity(
+
+            node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
             vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
@@ -104,17 +108,19 @@ def element_loop(
             )
 
             # Loop on edges
-            for n in range(nb_node_per_cell):
+            for n in range(nb_node_per_element):
+
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
                 node_indice = np.where(mesh.node.indice == node_number[n])[0][0]
 
                 next_node_indice = np.where(
-                    mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
+                    mesh.node.indice == node_number[(n + 1) % nb_node_per_element]
                 )[0][0]
 
                 # Edge cooordinates
                 edge_vector = (
-                    vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
+                    vertice[(n + 1) % nb_node_per_element]
+                    - vertice[n % nb_node_per_element]
                 )  # coordonées du vecteur nn+1
 
                 # Volume ratio (Green Ostrogradski)

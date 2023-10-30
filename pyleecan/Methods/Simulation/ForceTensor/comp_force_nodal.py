@@ -121,7 +121,7 @@ def comp_force_nodal(self, output, axes_dict):
     components["comp_y"] = fy_data
 
     vec_force = VectorField(name="Nodal forces", symbol="F", components=components)
-    solforce = SolutionVector(field=vec_force, type_cell="node", label="F")
+    solforce = SolutionVector(field=vec_force, type_element="node", label="F")
     meshsolution.solution.append(solforce)
 
     out_dict = dict()

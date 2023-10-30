@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from unittest import TestCase
 
-from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.ElementMat import ElementMat
 
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
@@ -24,7 +24,7 @@ class unittest_scalar_product(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat()
-        mesh.cell["line"] = CellMat(nb_node_per_cell=2)
+        mesh.element["line"] = ElementMat(nb_node_per_element=2)
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([-1, 0]))
         mesh.node.add_node(np.array([1, 0]))
@@ -32,21 +32,21 @@ class unittest_scalar_product(TestCase):
         mesh.node.add_node(np.array([2, 3]))
         mesh.node.add_node(np.array([3, 3]))
 
-        mesh.add_cell(np.array([0, 1]), "line")
-        mesh.add_cell(np.array([0, 2]), "line")
-        mesh.add_cell(np.array([1, 2]), "line")
+        mesh.add_element(np.array([0, 1]), "line")
+        mesh.add_element(np.array([0, 2]), "line")
+        mesh.add_element(np.array([1, 2]), "line")
 
-        c_line = mesh.cell["line"]
+        c_line = mesh.element["line"]
 
         c_line.interpolation = Interpolation()
-        c_line.interpolation.ref_cell = RefSegmentP1()
+        c_line.interpolation.ref_element = RefSegmentP1()
         c_line.interpolation.scalar_product = ScalarProductL2()
         c_line.interpolation.gauss_point = FPGNSeg(nb_gauss_point=4)
 
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
-        # Ref cell line
+        # Ref element line
         vert = mesh.get_vertice(0)["line"]
         sol = [2 / 3, 1 / 3]
 
@@ -55,13 +55,16 @@ class unittest_scalar_product(TestCase):
             weights,
             nb_gauss_points,
         ] = c_line.interpolation.gauss_point.get_gauss_points()
-        [func_ref, nb_func_per_cell] = c_line.interpolation.ref_cell.shape_function(
+        [
+            func_ref,
+            nb_func_per_element,
+        ] = c_line.interpolation.ref_element.shape_function(
             gauss_points, nb_gauss_points
         )
         jacob = np.zeros((nb_gauss_points, 2, 2))
         detJ = np.zeros((nb_gauss_points))
         for ig in range(nb_gauss_points):
-            [jacob[ig, :], detJ[ig]] = c_line.interpolation.ref_cell.jacobian(
+            [jacob[ig, :], detJ[ig]] = c_line.interpolation.ref_element.jacobian(
                 gauss_points[ig, :], vert
             )
 
@@ -76,7 +79,7 @@ class unittest_scalar_product(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        # Vertical cell line
+        # Vertical element line
         vert = mesh.get_vertice(1)["line"]
         sol = [1 / 3, 1 / 6]
 
@@ -85,13 +88,16 @@ class unittest_scalar_product(TestCase):
             weights,
             nb_gauss_points,
         ] = c_line.interpolation.gauss_point.get_gauss_points()
-        [func_ref, nb_func_per_cell] = c_line.interpolation.ref_cell.shape_function(
+        [
+            func_ref,
+            nb_func_per_element,
+        ] = c_line.interpolation.ref_element.shape_function(
             gauss_points, nb_gauss_points
         )
         jacob = np.zeros((nb_gauss_points, 2, 2))
         detJ = np.zeros((nb_gauss_points))
         for ig in range(nb_gauss_points):
-            [jacob[ig, :], detJ[ig]] = c_line.interpolation.ref_cell.jacobian(
+            [jacob[ig, :], detJ[ig]] = c_line.interpolation.ref_element.jacobian(
                 gauss_points[ig, :], vert
             )
 

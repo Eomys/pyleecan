@@ -98,7 +98,7 @@ def build_meshsolution(self):
                 sol_list.append(
                     SolutionData(
                         field=field,
-                        type_cell="point",
+                        type_element="point",
                         label=self.store_dict[key]["symbol"],
                     )
                 )
@@ -114,7 +114,7 @@ def build_meshsolution(self):
                 sol_list.append(
                     SolutionVector(
                         field=field,
-                        type_cell="point",
+                        type_element="point",
                         label=self.store_dict[key]["symbol"],
                     )
                 )

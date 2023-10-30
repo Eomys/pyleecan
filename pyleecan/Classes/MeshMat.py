@@ -28,9 +28,9 @@ except ImportError as error:
     get_node_indice = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_cell import get_cell
+    from ..Methods.Mesh.MeshMat.get_element import get_element
 except ImportError as error:
-    get_cell = error
+    get_element = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_mesh_pv import get_mesh_pv
@@ -38,9 +38,9 @@ except ImportError as error:
     get_mesh_pv = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_cell_area import get_cell_area
+    from ..Methods.Mesh.MeshMat.get_element_area import get_element_area
 except ImportError as error:
-    get_cell_area = error
+    get_element_area = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_vertice import get_vertice
@@ -48,14 +48,14 @@ except ImportError as error:
     get_vertice = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_node2cell import get_node2cell
+    from ..Methods.Mesh.MeshMat.get_node2element import get_node2element
 except ImportError as error:
-    get_node2cell = error
+    get_node2element = error
 
 try:
-    from ..Methods.Mesh.MeshMat.add_cell import add_cell
+    from ..Methods.Mesh.MeshMat.add_element import add_element
 except ImportError as error:
-    add_cell = error
+    add_element = error
 
 try:
     from ..Methods.Mesh.MeshMat.renum import renum
@@ -63,9 +63,9 @@ except ImportError as error:
     renum = error
 
 try:
-    from ..Methods.Mesh.MeshMat.find_cell import find_cell
+    from ..Methods.Mesh.MeshMat.find_element import find_element
 except ImportError as error:
-    find_cell = error
+    find_element = error
 
 try:
     from ..Methods.Mesh.MeshMat.interface import interface
@@ -78,14 +78,14 @@ except ImportError as error:
     clear_node = error
 
 try:
-    from ..Methods.Mesh.MeshMat.clear_cell import clear_cell
+    from ..Methods.Mesh.MeshMat.clear_element import clear_element
 except ImportError as error:
-    clear_cell = error
+    clear_element = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_cell_nb import get_cell_nb
+    from ..Methods.Mesh.MeshMat.get_element_nb import get_element_nb
 except ImportError as error:
-    get_cell_nb = error
+    get_element_nb = error
 
 
 from numpy import isnan
@@ -118,15 +118,15 @@ class MeshMat(Mesh):
         )
     else:
         get_node_indice = get_node_indice
-    # cf Methods.Mesh.MeshMat.get_cell
-    if isinstance(get_cell, ImportError):
-        get_cell = property(
+    # cf Methods.Mesh.MeshMat.get_element
+    if isinstance(get_element, ImportError):
+        get_element = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_cell: " + str(get_cell))
+                ImportError("Can't use MeshMat method get_element: " + str(get_element))
             )
         )
     else:
-        get_cell = get_cell
+        get_element = get_element
     # cf Methods.Mesh.MeshMat.get_mesh_pv
     if isinstance(get_mesh_pv, ImportError):
         get_mesh_pv = property(
@@ -136,17 +136,18 @@ class MeshMat(Mesh):
         )
     else:
         get_mesh_pv = get_mesh_pv
-    # cf Methods.Mesh.MeshMat.get_cell_area
-    if isinstance(get_cell_area, ImportError):
-        get_cell_area = property(
+    # cf Methods.Mesh.MeshMat.get_element_area
+    if isinstance(get_element_area, ImportError):
+        get_element_area = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshMat method get_cell_area: " + str(get_cell_area)
+                    "Can't use MeshMat method get_element_area: "
+                    + str(get_element_area)
                 )
             )
         )
     else:
-        get_cell_area = get_cell_area
+        get_element_area = get_element_area
     # cf Methods.Mesh.MeshMat.get_vertice
     if isinstance(get_vertice, ImportError):
         get_vertice = property(
@@ -156,26 +157,27 @@ class MeshMat(Mesh):
         )
     else:
         get_vertice = get_vertice
-    # cf Methods.Mesh.MeshMat.get_node2cell
-    if isinstance(get_node2cell, ImportError):
-        get_node2cell = property(
+    # cf Methods.Mesh.MeshMat.get_node2element
+    if isinstance(get_node2element, ImportError):
+        get_node2element = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshMat method get_node2cell: " + str(get_node2cell)
+                    "Can't use MeshMat method get_node2element: "
+                    + str(get_node2element)
                 )
             )
         )
     else:
-        get_node2cell = get_node2cell
-    # cf Methods.Mesh.MeshMat.add_cell
-    if isinstance(add_cell, ImportError):
-        add_cell = property(
+        get_node2element = get_node2element
+    # cf Methods.Mesh.MeshMat.add_element
+    if isinstance(add_element, ImportError):
+        add_element = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method add_cell: " + str(add_cell))
+                ImportError("Can't use MeshMat method add_element: " + str(add_element))
             )
         )
     else:
-        add_cell = add_cell
+        add_element = add_element
     # cf Methods.Mesh.MeshMat.renum
     if isinstance(renum, ImportError):
         renum = property(
@@ -185,15 +187,17 @@ class MeshMat(Mesh):
         )
     else:
         renum = renum
-    # cf Methods.Mesh.MeshMat.find_cell
-    if isinstance(find_cell, ImportError):
-        find_cell = property(
+    # cf Methods.Mesh.MeshMat.find_element
+    if isinstance(find_element, ImportError):
+        find_element = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method find_cell: " + str(find_cell))
+                ImportError(
+                    "Can't use MeshMat method find_element: " + str(find_element)
+                )
             )
         )
     else:
-        find_cell = find_cell
+        find_element = find_element
     # cf Methods.Mesh.MeshMat.interface
     if isinstance(interface, ImportError):
         interface = property(
@@ -212,24 +216,28 @@ class MeshMat(Mesh):
         )
     else:
         clear_node = clear_node
-    # cf Methods.Mesh.MeshMat.clear_cell
-    if isinstance(clear_cell, ImportError):
-        clear_cell = property(
+    # cf Methods.Mesh.MeshMat.clear_element
+    if isinstance(clear_element, ImportError):
+        clear_element = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method clear_cell: " + str(clear_cell))
+                ImportError(
+                    "Can't use MeshMat method clear_element: " + str(clear_element)
+                )
             )
         )
     else:
-        clear_cell = clear_cell
-    # cf Methods.Mesh.MeshMat.get_cell_nb
-    if isinstance(get_cell_nb, ImportError):
-        get_cell_nb = property(
+        clear_element = clear_element
+    # cf Methods.Mesh.MeshMat.get_element_nb
+    if isinstance(get_element_nb, ImportError):
+        get_element_nb = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_cell_nb: " + str(get_cell_nb))
+                ImportError(
+                    "Can't use MeshMat method get_element_nb: " + str(get_element_nb)
+                )
             )
         )
     else:
-        get_cell_nb = get_cell_nb
+        get_element_nb = get_element_nb
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -237,7 +245,7 @@ class MeshMat(Mesh):
 
     def __init__(
         self,
-        cell=-1,
+        element=-1,
         node=-1,
         _is_renum=False,
         sym=1,
@@ -262,8 +270,8 @@ class MeshMat(Mesh):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "cell" in list(init_dict.keys()):
-                cell = init_dict["cell"]
+            if "element" in list(init_dict.keys()):
+                element = init_dict["element"]
             if "node" in list(init_dict.keys()):
                 node = init_dict["node"]
             if "_is_renum" in list(init_dict.keys()):
@@ -277,7 +285,7 @@ class MeshMat(Mesh):
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
         # Set the properties (value check and convertion are done in setter)
-        self.cell = cell
+        self.element = element
         self.node = node
         self._is_renum = _is_renum
         self.sym = sym
@@ -293,11 +301,11 @@ class MeshMat(Mesh):
         MeshMat_str = ""
         # Get the properties inherited from Mesh
         MeshMat_str += super(MeshMat, self).__str__()
-        if len(self.cell) == 0:
-            MeshMat_str += "cell = dict()" + linesep
-        for key, obj in self.cell.items():
-            tmp = self.cell[key].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshMat_str += "cell[" + key + "] =" + tmp + linesep + linesep
+        if len(self.element) == 0:
+            MeshMat_str += "element = dict()" + linesep
+        for key, obj in self.element.items():
+            tmp = self.element[key].__str__().replace(linesep, linesep + "\t") + linesep
+            MeshMat_str += "element[" + key + "] =" + tmp + linesep + linesep
         if self.node is not None:
             tmp = self.node.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             MeshMat_str += "node = " + tmp
@@ -317,7 +325,7 @@ class MeshMat(Mesh):
         # Check the properties inherited from Mesh
         if not super(MeshMat, self).__eq__(other):
             return False
-        if other.cell != self.cell:
+        if other.element != self.element:
             return False
         if other.node != self.node:
             return False
@@ -344,20 +352,20 @@ class MeshMat(Mesh):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if (other.cell is None and self.cell is not None) or (
-            other.cell is not None and self.cell is None
+        if (other.element is None and self.element is not None) or (
+            other.element is not None and self.element is None
         ):
-            diff_list.append(name + ".cell None mismatch")
-        elif self.cell is None:
+            diff_list.append(name + ".element None mismatch")
+        elif self.element is None:
             pass
-        elif len(other.cell) != len(self.cell):
-            diff_list.append("len(" + name + "cell)")
+        elif len(other.element) != len(self.element):
+            diff_list.append("len(" + name + "element)")
         else:
-            for key in self.cell:
+            for key in self.element:
                 diff_list.extend(
-                    self.cell[key].compare(
-                        other.cell[key],
-                        name=name + ".cell[" + str(key) + "]",
+                    self.element[key].compare(
+                        other.element[key],
+                        name=name + ".element[" + str(key) + "]",
                         ignore_list=ignore_list,
                         is_add_value=is_add_value,
                     )
@@ -418,8 +426,8 @@ class MeshMat(Mesh):
 
         # Get size of the properties inherited from Mesh
         S += super(MeshMat, self).__sizeof__()
-        if self.cell is not None:
-            for key, value in self.cell.items():
+        if self.element is not None:
+            for key, value in self.element.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.node)
         S += getsizeof(self._is_renum)
@@ -444,19 +452,19 @@ class MeshMat(Mesh):
             keep_function=keep_function,
             **kwargs
         )
-        if self.cell is None:
-            MeshMat_dict["cell"] = None
+        if self.element is None:
+            MeshMat_dict["element"] = None
         else:
-            MeshMat_dict["cell"] = dict()
-            for key, obj in self.cell.items():
+            MeshMat_dict["element"] = dict()
+            for key, obj in self.element.items():
                 if obj is not None:
-                    MeshMat_dict["cell"][key] = obj.as_dict(
+                    MeshMat_dict["element"][key] = obj.as_dict(
                         type_handle_ndarray=type_handle_ndarray,
                         keep_function=keep_function,
                         **kwargs
                     )
                 else:
-                    MeshMat_dict["cell"][key] = None
+                    MeshMat_dict["element"][key] = None
         if self.node is None:
             MeshMat_dict["node"] = None
         else:
@@ -477,12 +485,12 @@ class MeshMat(Mesh):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.cell is None:
-            cell_val = None
+        if self.element is None:
+            element_val = None
         else:
-            cell_val = dict()
-            for key, obj in self.cell.items():
-                cell_val[key] = obj.copy()
+            element_val = dict()
+            for key, obj in self.element.items():
+                element_val[key] = obj.copy()
         if self.node is None:
             node_val = None
         else:
@@ -494,7 +502,7 @@ class MeshMat(Mesh):
         dimension_val = self.dimension
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            cell=cell_val,
+            element=element_val,
             node=node_val,
             _is_renum=_is_renum_val,
             sym=sym_val,
@@ -507,7 +515,7 @@ class MeshMat(Mesh):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.cell = None
+        self.element = None
         if self.node is not None:
             self.node._set_None()
         self._is_renum = None
@@ -516,16 +524,16 @@ class MeshMat(Mesh):
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
-    def _get_cell(self):
-        """getter of cell"""
-        if self._cell is not None:
-            for key, obj in self._cell.items():
+    def _get_element(self):
+        """getter of element"""
+        if self._element is not None:
+            for key, obj in self._element.items():
                 if obj is not None:
                     obj.parent = self
-        return self._cell
+        return self._element
 
-    def _set_cell(self, value):
-        """setter of cell"""
+    def _set_element(self, value):
+        """setter of element"""
         if type(value) is dict:
             for key, obj in value.items():
                 if isinstance(obj, str):  # Load from file
@@ -539,20 +547,20 @@ class MeshMat(Mesh):
                         value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "cell"
+                        "pyleecan.Classes", obj.get("__class__"), "element"
                     )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("cell", value, "{CellMat}")
-        self._cell = value
+        check_var("element", value, "{ElementMat}")
+        self._element = value
 
-    cell = property(
-        fget=_get_cell,
-        fset=_set_cell,
+    element = property(
+        fget=_get_element,
+        fset=_set_element,
         doc=u"""Storing connectivity
 
-        :Type: {CellMat}
+        :Type: {ElementMat}
         """,
     )
 
@@ -603,7 +611,7 @@ class MeshMat(Mesh):
     _is_renum = property(
         fget=_get__is_renum,
         fset=_set__is_renum,
-        doc=u"""True if renumering the nodes and cells is useful when renum method is called (saving calculation time)
+        doc=u"""True if renumering the nodes and elements is useful when renum method is called (saving calculation time)
 
         :Type: bool
         """,

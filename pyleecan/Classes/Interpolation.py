@@ -31,7 +31,7 @@ class Interpolation(FrozenClass):
 
     def __init__(
         self,
-        ref_cell=None,
+        ref_element=None,
         gauss_point=None,
         scalar_product=None,
         init_dict=None,
@@ -52,15 +52,15 @@ class Interpolation(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "ref_cell" in list(init_dict.keys()):
-                ref_cell = init_dict["ref_cell"]
+            if "ref_element" in list(init_dict.keys()):
+                ref_element = init_dict["ref_element"]
             if "gauss_point" in list(init_dict.keys()):
                 gauss_point = init_dict["gauss_point"]
             if "scalar_product" in list(init_dict.keys()):
                 scalar_product = init_dict["scalar_product"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.ref_cell = ref_cell
+        self.ref_element = ref_element
         self.gauss_point = gauss_point
         self.scalar_product = scalar_product
 
@@ -77,11 +77,13 @@ class Interpolation(FrozenClass):
             Interpolation_str += (
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
-        if self.ref_cell is not None:
-            tmp = self.ref_cell.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Interpolation_str += "ref_cell = " + tmp
+        if self.ref_element is not None:
+            tmp = (
+                self.ref_element.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            Interpolation_str += "ref_element = " + tmp
         else:
-            Interpolation_str += "ref_cell = None" + linesep + linesep
+            Interpolation_str += "ref_element = None" + linesep + linesep
         if self.gauss_point is not None:
             tmp = (
                 self.gauss_point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
@@ -105,7 +107,7 @@ class Interpolation(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.ref_cell != self.ref_cell:
+        if other.ref_element != self.ref_element:
             return False
         if other.gauss_point != self.gauss_point:
             return False
@@ -121,15 +123,15 @@ class Interpolation(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if (other.ref_cell is None and self.ref_cell is not None) or (
-            other.ref_cell is not None and self.ref_cell is None
+        if (other.ref_element is None and self.ref_element is not None) or (
+            other.ref_element is not None and self.ref_element is None
         ):
-            diff_list.append(name + ".ref_cell None mismatch")
-        elif self.ref_cell is not None:
+            diff_list.append(name + ".ref_element None mismatch")
+        elif self.ref_element is not None:
             diff_list.extend(
-                self.ref_cell.compare(
-                    other.ref_cell,
-                    name=name + ".ref_cell",
+                self.ref_element.compare(
+                    other.ref_element,
+                    name=name + ".ref_element",
                     ignore_list=ignore_list,
                     is_add_value=is_add_value,
                 )
@@ -168,7 +170,7 @@ class Interpolation(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.ref_cell)
+        S += getsizeof(self.ref_element)
         S += getsizeof(self.gauss_point)
         S += getsizeof(self.scalar_product)
         return S
@@ -185,10 +187,10 @@ class Interpolation(FrozenClass):
         """
 
         Interpolation_dict = dict()
-        if self.ref_cell is None:
-            Interpolation_dict["ref_cell"] = None
+        if self.ref_element is None:
+            Interpolation_dict["ref_element"] = None
         else:
-            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict(
+            Interpolation_dict["ref_element"] = self.ref_element.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
@@ -217,10 +219,10 @@ class Interpolation(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.ref_cell is None:
-            ref_cell_val = None
+        if self.ref_element is None:
+            ref_element_val = None
         else:
-            ref_cell_val = self.ref_cell.copy()
+            ref_element_val = self.ref_element.copy()
         if self.gauss_point is None:
             gauss_point_val = None
         else:
@@ -231,7 +233,7 @@ class Interpolation(FrozenClass):
             scalar_product_val = self.scalar_product.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            ref_cell=ref_cell_val,
+            ref_element=ref_element_val,
             gauss_point=gauss_point_val,
             scalar_product=scalar_product_val,
         )
@@ -240,19 +242,19 @@ class Interpolation(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.ref_cell is not None:
-            self.ref_cell._set_None()
+        if self.ref_element is not None:
+            self.ref_element._set_None()
         if self.gauss_point is not None:
             self.gauss_point._set_None()
         if self.scalar_product is not None:
             self.scalar_product._set_None()
 
-    def _get_ref_cell(self):
-        """getter of ref_cell"""
-        return self._ref_cell
+    def _get_ref_element(self):
+        """getter of ref_element"""
+        return self._ref_element
 
-    def _set_ref_cell(self, value):
-        """setter of ref_cell"""
+    def _set_ref_element(self, value):
+        """setter of ref_element"""
         if isinstance(value, str):  # Load from file
             try:
                 value = load_init_dict(value)[1]
@@ -263,24 +265,24 @@ class Interpolation(FrozenClass):
                 value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "ref_cell"
+                "pyleecan.Classes", value.get("__class__"), "ref_element"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            RefCell = import_class("pyleecan.Classes", "RefCell", "ref_cell")
-            value = RefCell()
-        check_var("ref_cell", value, "RefCell")
-        self._ref_cell = value
+            RefElement = import_class("pyleecan.Classes", "RefElement", "ref_element")
+            value = RefElement()
+        check_var("ref_element", value, "RefElement")
+        self._ref_element = value
 
-        if self._ref_cell is not None:
-            self._ref_cell.parent = self
+        if self._ref_element is not None:
+            self._ref_element.parent = self
 
-    ref_cell = property(
-        fget=_get_ref_cell,
-        fset=_set_ref_cell,
+    ref_element = property(
+        fget=_get_ref_element,
+        fset=_set_ref_element,
         doc=u"""
 
-        :Type: RefCell
+        :Type: RefElement
         """,
     )
 

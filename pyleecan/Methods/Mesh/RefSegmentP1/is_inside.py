@@ -4,23 +4,23 @@ import numpy as np
 
 
 def is_inside(self, vertice, point, normal_t=None):
-    """Check if a point is inside the cell.
+    """Check if a point is inside the element.
 
     Parameters
     ----------
     self : RefSegmentP1
         a RefSegmentP1 object
     vertice : ndarray
-        vertice of the cell
+        vertice of the element
     point : ndarray
         coordinates of a point
     normal : ndarray
-        normal of another cell. Additional facultative criterion.
+        normal of another element. Additional facultative criterion.
 
         Returns
     -------
     is_inside : bool
-        true if the point is inside the cell
+        true if the point is inside the element
     """
 
     epsilon = self.epsilon

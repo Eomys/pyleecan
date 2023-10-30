@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
@@ -10,8 +10,8 @@ import numpy as np
 def test_MeshMat():
     """unittest with Meshmat object"""
     mesh = MeshMat()
-    mesh.cell["triangle"] = CellMat(nb_node_per_cell=3)
-    mesh.cell["segment"] = CellMat(nb_node_per_cell=2)
+    mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
+    mesh.element["segment"] = ElementMat(nb_node_per_element=2)
     mesh.node = NodeMat()
     mesh.node.add_node(np.array([0, 0]))
     mesh.node.add_node(np.array([1, 0]))
@@ -19,10 +19,10 @@ def test_MeshMat():
     mesh.node.add_node(np.array([2, 3]))
     mesh.node.add_node(np.array([3, 3]))
 
-    mesh.add_cell(np.array([0, 1, 2]), "triangle")
-    mesh.add_cell(np.array([1, 2, 3]), "triangle")
-    mesh.add_cell(np.array([4, 2, 3]), "triangle")
-    mesh.add_cell(np.array([4, 2]), "segment")
+    mesh.add_element(np.array([0, 1, 2]), "triangle")
+    mesh.add_element(np.array([1, 2, 3]), "triangle")
+    mesh.add_element(np.array([4, 2, 3]), "triangle")
+    mesh.add_element(np.array([4, 2]), "segment")
     DELTA = 1e-10
 
     solution = np.array([[3, 3], [1, 2], [2, 3]])
