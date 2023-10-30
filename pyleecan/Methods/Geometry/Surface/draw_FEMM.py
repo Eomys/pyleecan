@@ -85,11 +85,9 @@ def draw_FEMM(
 
         # Get or create the Boundary Condition (if any)
         if line.prop_dict is not None and BOUNDARY_PROP_LAB in line.prop_dict:
-
             is_yoke_BC = LAM_LAB + YOKE_LAB in line.prop_dict[BOUNDARY_PROP_LAB]
 
             if type_set_BC == 0 or (type_set_BC == 1 and is_yoke_BC):
-
                 propname = get_FEMM_BC_propname(
                     femm=femm,
                     line_label=line.prop_dict[BOUNDARY_PROP_LAB],

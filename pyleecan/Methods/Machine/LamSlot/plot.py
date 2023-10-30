@@ -2,6 +2,7 @@ from matplotlib.patches import Patch
 
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
+from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
 
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
@@ -64,26 +65,19 @@ def plot(
         Axis containing the plot
     """
 
-    if self.is_stator:
-        lam_color = STATOR_COLOR
-    else:
-        lam_color = ROTOR_COLOR
-
     (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if "Lamination" in surf.label:
-            patches.extend(
-                surf.get_patches(
-                    color=lam_color, is_edge_only=is_edge_only, edgecolor=edgecolor
-                )
+        color = get_path_color_from_label(surf.label)
+        patches.extend(
+            surf.get_patches(
+                color=color,
+                is_edge_only=is_edge_only,
+                edgecolor=edgecolor,
             )
-        else:
-            patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
-            )
+        )
     # Display the result
     if is_display:
         ax.set_xlabel("(m)")

@@ -93,7 +93,7 @@ def get_bore_line(self, prop_dict=None):
 
 
 def _get_phi_max(obj):
-    """"Internal method to get max. pole angle."""
+    """ "Internal method to get max. pole angle."""
     phi_max = fmin(lambda x: -obj.get_pole_shape(x).imag, 0, disp=False)[0]
     return min(pi / 2, phi_max)
 

@@ -20,16 +20,16 @@ class Gen_PMSlot15(Ui_PMSlot15):
         self.lf_W0.setWhatsThis(txt)
         self.lf_W0.setToolTip(txt)
 
-        # Setup of in_Wmag
+        # Setup of in_W1
         txt = self.tr(u"""Magnet width""")
-        self.in_Wmag.setWhatsThis(txt)
-        self.in_Wmag.setToolTip(txt)
+        self.in_W1.setWhatsThis(txt)
+        self.in_W1.setToolTip(txt)
 
-        # Setup of lf_Wmag
-        self.lf_Wmag.validator().setBottom(0)
+        # Setup of lf_W1
+        self.lf_W1.validator().setBottom(0)
         txt = self.tr(u"""Magnet width""")
-        self.lf_Wmag.setWhatsThis(txt)
-        self.lf_Wmag.setToolTip(txt)
+        self.lf_W1.setWhatsThis(txt)
+        self.lf_W1.setToolTip(txt)
 
         # Setup of in_H0
         txt = self.tr(u"""Slot isthmus height.""")
@@ -42,13 +42,13 @@ class Gen_PMSlot15(Ui_PMSlot15):
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)
 
-        # Setup of in_Hmag
+        # Setup of in_H1
         txt = self.tr(u"""Magnet Height""")
-        self.in_Hmag.setWhatsThis(txt)
-        self.in_Hmag.setToolTip(txt)
+        self.in_H1.setWhatsThis(txt)
+        self.in_H1.setToolTip(txt)
 
-        # Setup of lf_Hmag
-        self.lf_Hmag.validator().setBottom(0)
+        # Setup of lf_H1
+        self.lf_H1.validator().setBottom(0)
         txt = self.tr(u"""Magnet Height""")
-        self.lf_Hmag.setWhatsThis(txt)
-        self.lf_Hmag.setToolTip(txt)
+        self.lf_H1.setWhatsThis(txt)
+        self.lf_H1.setToolTip(txt)

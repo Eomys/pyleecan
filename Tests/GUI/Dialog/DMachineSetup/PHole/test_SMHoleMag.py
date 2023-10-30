@@ -20,6 +20,10 @@ from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
+from pyleecan.Classes.HoleM60 import HoleM60
+from pyleecan.Classes.HoleM61 import HoleM61
+from pyleecan.Classes.HoleM62 import HoleM62
+from pyleecan.Classes.HoleM63 import HoleM63
 from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
@@ -93,7 +97,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 50"
         )
-        assert self.widget.tab_hole.widget(0).c_hole_type.count() == 8
+        assert self.widget.tab_hole.widget(0).c_hole_type.count() == 12
 
         self.test_obj2 = MachineSyRM(type_machine=5)
         self.test_obj2.stator = LamSlotWind()
@@ -136,7 +140,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget2.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 54"
         )
-        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 9
+        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 13
 
     def test_init_SyRM_51(self):
         """Check that the Widget initialize to the correct hole"""
@@ -173,7 +177,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget2.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 51"
         )
-        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 9
+        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 13
 
         assert self.widget2.tab_hole.widget(0).w_hole.lf_W0.text() == "0.11"
         assert self.widget2.tab_hole.widget(0).w_hole.lf_W1.text() == "0.12"
@@ -295,6 +299,78 @@ class TestSMHoleMag(object):
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 58"
         )
 
+    def test_init_60(self):
+        """Check that you can edit a hole 60"""
+        self.test_obj.rotor.hole[0] = HoleM60(Zh=18)
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj,
+            material_dict=self.material_dict,
+            is_stator=False,
+        )
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 20 [°] = 0.3491 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 7
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 60"
+        )
+
+    def test_init_61(self):
+        """Check that you can edit a hole 61"""
+        self.test_obj.rotor.hole[0] = HoleM61(Zh=18)
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj,
+            material_dict=self.material_dict,
+            is_stator=False,
+        )
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 20 [°] = 0.3491 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 8
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 61"
+        )
+
+    def test_init_62(self):
+        """Check that you can edit a hole 62"""
+        self.test_obj.rotor.hole[0] = HoleM62(Zh=18)
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj,
+            material_dict=self.material_dict,
+            is_stator=False,
+        )
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 20 [°] = 0.3491 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 9
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 62"
+        )
+
+    def test_init_63(self):
+        """Check that you can edit a hole 63"""
+        self.test_obj.rotor.hole[0] = HoleM63(Zh=18)
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj,
+            material_dict=self.material_dict,
+            is_stator=False,
+        )
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 20 [°] = 0.3491 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 10
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 63"
+        )
+
     def test_init_UD(self):
         """Check that you can edit a hole UD"""
         self.test_obj.rotor.hole[0] = HoleUD(Zh=20)
@@ -309,7 +385,7 @@ class TestSMHoleMag(object):
             self.widget.out_hole_pitch.text()
             == "Slot pitch: 360 / 2p = 18 [°] = 0.3142 [rad]"
         )
-        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 7
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 11
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText()
             == "Import from DXF"
@@ -397,6 +473,62 @@ class TestSMHoleMag(object):
         assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 6
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 58"
+        )
+
+    def test_set_type_60(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(7)
+
+        assert type(self.test_obj.rotor.hole[0]) == HoleM60
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 45 [°] = 0.7854 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 7
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 60"
+        )
+
+    def test_set_type_61(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(8)
+
+        assert type(self.test_obj.rotor.hole[0]) == HoleM61
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 45 [°] = 0.7854 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 8
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 61"
+        )
+
+    def test_set_type_62(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(9)
+
+        assert type(self.test_obj.rotor.hole[0]) == HoleM62
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 45 [°] = 0.7854 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 9
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 62"
+        )
+
+    def test_set_type_63(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(10)
+
+        assert type(self.test_obj.rotor.hole[0]) == HoleM63
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 45 [°] = 0.7854 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 10
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 63"
         )
 
     def test_SyRM_set_type_54_51_54(self):

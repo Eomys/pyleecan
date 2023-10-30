@@ -27,6 +27,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
@@ -44,6 +45,8 @@ def plot_schematics(
         A SlotM15 object
     is_default : bool
         True: plot default schematics, else use current slot values
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -67,28 +70,32 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(
-            Zs=2, W0=60 * pi / 180, H0=0.03, Hmag=0.02, Wmag=0.05, Rtopm=0.05
-        )
+        slot = type(self)(Zs=2, W0=60 * pi / 180, H0=0.03, H1=0.02, W1=0.05, Rtopm=0.05)
         lam = LamSlot(
             Rint=40e-3, Rext=0.11, is_internal=True, is_stator=False, slot=slot
         )
-
-        return slot.plot_schematics(
-            is_default=False,
-            is_add_point_label=is_add_point_label,
-            is_add_schematics=is_add_schematics,
-            is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
-            save_path=save_path,
-            is_show_fig=is_show_fig,
-            fig=fig,
-            ax=ax,
-        )
+        if is_return_default:
+            return lam
+        else:
+            return slot.plot_schematics(
+                is_default=False,
+                is_return_default=False,
+                is_add_point_label=is_add_point_label,
+                is_add_schematics=is_add_schematics,
+                is_add_main_line=is_add_main_line,
+                type_add_active=type_add_active,
+                save_path=save_path,
+                is_show_fig=is_show_fig,
+                fig=fig,
+                ax=ax,
+            )
     else:
         # Getting the main plot
         if self.parent is None:
@@ -134,16 +141,16 @@ def plot_schematics(
                 offset_label=point_dict["Z3"] - line.get_middle(),
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
+            # W1
             plot_quote(
                 Z1=point_dict["ZM2"],
-                Zlim1=point_dict["ZM2"] - sign * self.Hmag,
-                Zlim2=point_dict["ZM3"] - sign * self.Hmag,
+                Zlim1=point_dict["ZM2"] - sign * self.H1,
+                Zlim2=point_dict["ZM3"] - sign * self.H1,
                 Z2=point_dict["ZM3"],
-                offset_label=0.25 * self.Hmag,
+                offset_label=0.25 * self.H1,
                 fig=fig,
                 ax=ax,
-                label="Wmag",
+                label="W1",
             )
             # H0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
@@ -157,16 +164,16 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Hmag
+            # H1
             plot_quote(
                 Z1=point_dict["ZM0"],
-                Zlim1=point_dict["ZM0"] - 1j * 0.5 * self.Wmag,
-                Zlim2=point_dict["ZM0"] + sign * self.Hmag - 1j * 0.5 * self.Wmag,
-                Z2=point_dict["ZM0"] + sign * self.Hmag,
-                offset_label=-1j * 0.2 * self.Wmag,
+                Zlim1=point_dict["ZM0"] - 1j * 0.5 * self.W1,
+                Zlim2=point_dict["ZM0"] + sign * self.H1 - 1j * 0.5 * self.W1,
+                Z2=point_dict["ZM0"] + sign * self.H1,
+                offset_label=-1j * 0.2 * self.W1,
                 fig=fig,
                 ax=ax,
-                label="Hmag",
+                label="H1",
             )
             # Rtopm
             line = Segment(point_dict["Zc"], point_dict["ZM0"])
@@ -262,6 +269,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

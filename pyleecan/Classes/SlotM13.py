@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotM13.is_airgap_active import is_airgap_active
+except ImportError as error:
+    is_airgap_active = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -190,6 +195,18 @@ class SlotM13(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotM13.is_airgap_active
+    if isinstance(is_airgap_active, ImportError):
+        is_airgap_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotM13 method is_airgap_active: "
+                    + str(is_airgap_active)
+                )
+            )
+        )
+    else:
+        is_airgap_active = is_airgap_active
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -199,8 +216,8 @@ class SlotM13(Slot):
         self,
         W0=0.0122,
         H0=0.001,
-        Wmag=0.0122,
-        Hmag=0.001,
+        W1=0.0122,
+        H1=0.001,
         Rtopm=0.001,
         Zs=36,
         wedge_mat=None,
@@ -227,10 +244,10 @@ class SlotM13(Slot):
                 W0 = init_dict["W0"]
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
-            if "Wmag" in list(init_dict.keys()):
-                Wmag = init_dict["Wmag"]
-            if "Hmag" in list(init_dict.keys()):
-                Hmag = init_dict["Hmag"]
+            if "W1" in list(init_dict.keys()):
+                W1 = init_dict["W1"]
+            if "H1" in list(init_dict.keys()):
+                H1 = init_dict["H1"]
             if "Rtopm" in list(init_dict.keys()):
                 Rtopm = init_dict["Rtopm"]
             if "Zs" in list(init_dict.keys()):
@@ -242,8 +259,8 @@ class SlotM13(Slot):
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
-        self.Wmag = Wmag
-        self.Hmag = Hmag
+        self.W1 = W1
+        self.H1 = H1
         self.Rtopm = Rtopm
         # Call Slot init
         super(SlotM13, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
@@ -258,8 +275,8 @@ class SlotM13(Slot):
         SlotM13_str += super(SlotM13, self).__str__()
         SlotM13_str += "W0 = " + str(self.W0) + linesep
         SlotM13_str += "H0 = " + str(self.H0) + linesep
-        SlotM13_str += "Wmag = " + str(self.Wmag) + linesep
-        SlotM13_str += "Hmag = " + str(self.Hmag) + linesep
+        SlotM13_str += "W1 = " + str(self.W1) + linesep
+        SlotM13_str += "H1 = " + str(self.H1) + linesep
         SlotM13_str += "Rtopm = " + str(self.Rtopm) + linesep
         return SlotM13_str
 
@@ -276,9 +293,9 @@ class SlotM13(Slot):
             return False
         if other.H0 != self.H0:
             return False
-        if other.Wmag != self.Wmag:
+        if other.W1 != self.W1:
             return False
-        if other.Hmag != self.Hmag:
+        if other.H1 != self.H1:
             return False
         if other.Rtopm != self.Rtopm:
             return False
@@ -326,35 +343,31 @@ class SlotM13(Slot):
             else:
                 diff_list.append(name + ".H0")
         if (
-            other._Wmag is not None
-            and self._Wmag is not None
-            and isnan(other._Wmag)
-            and isnan(self._Wmag)
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
         ):
             pass
-        elif other._Wmag != self._Wmag:
+        elif other._W1 != self._W1:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Wmag) + ", other=" + str(other._Wmag) + ")"
-                )
-                diff_list.append(name + ".Wmag" + val_str)
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
             else:
-                diff_list.append(name + ".Wmag")
+                diff_list.append(name + ".W1")
         if (
-            other._Hmag is not None
-            and self._Hmag is not None
-            and isnan(other._Hmag)
-            and isnan(self._Hmag)
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
         ):
             pass
-        elif other._Hmag != self._Hmag:
+        elif other._H1 != self._H1:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Hmag) + ", other=" + str(other._Hmag) + ")"
-                )
-                diff_list.append(name + ".Hmag" + val_str)
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
             else:
-                diff_list.append(name + ".Hmag")
+                diff_list.append(name + ".H1")
         if (
             other._Rtopm is not None
             and self._Rtopm is not None
@@ -383,8 +396,8 @@ class SlotM13(Slot):
         S += super(SlotM13, self).__sizeof__()
         S += getsizeof(self.W0)
         S += getsizeof(self.H0)
-        S += getsizeof(self.Wmag)
-        S += getsizeof(self.Hmag)
+        S += getsizeof(self.W1)
+        S += getsizeof(self.H1)
         S += getsizeof(self.Rtopm)
         return S
 
@@ -407,8 +420,8 @@ class SlotM13(Slot):
         )
         SlotM13_dict["W0"] = self.W0
         SlotM13_dict["H0"] = self.H0
-        SlotM13_dict["Wmag"] = self.Wmag
-        SlotM13_dict["Hmag"] = self.Hmag
+        SlotM13_dict["W1"] = self.W1
+        SlotM13_dict["H1"] = self.H1
         SlotM13_dict["Rtopm"] = self.Rtopm
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -421,8 +434,8 @@ class SlotM13(Slot):
         # Handle deepcopy of all the properties
         W0_val = self.W0
         H0_val = self.H0
-        Wmag_val = self.Wmag
-        Hmag_val = self.Hmag
+        W1_val = self.W1
+        H1_val = self.H1
         Rtopm_val = self.Rtopm
         Zs_val = self.Zs
         if self.wedge_mat is None:
@@ -434,8 +447,8 @@ class SlotM13(Slot):
         obj_copy = type(self)(
             W0=W0_val,
             H0=H0_val,
-            Wmag=Wmag_val,
-            Hmag=Hmag_val,
+            W1=W1_val,
+            H1=H1_val,
             Rtopm=Rtopm_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
@@ -448,8 +461,8 @@ class SlotM13(Slot):
 
         self.W0 = None
         self.H0 = None
-        self.Wmag = None
-        self.Hmag = None
+        self.W1 = None
+        self.H1 = None
         self.Rtopm = None
         # Set to None the properties inherited from Slot
         super(SlotM13, self)._set_None()
@@ -492,18 +505,18 @@ class SlotM13(Slot):
         """,
     )
 
-    def _get_Wmag(self):
-        """getter of Wmag"""
-        return self._Wmag
+    def _get_W1(self):
+        """getter of W1"""
+        return self._W1
 
-    def _set_Wmag(self, value):
-        """setter of Wmag"""
-        check_var("Wmag", value, "float", Vmin=0)
-        self._Wmag = value
+    def _set_W1(self, value):
+        """setter of W1"""
+        check_var("W1", value, "float", Vmin=0)
+        self._W1 = value
 
-    Wmag = property(
-        fget=_get_Wmag,
-        fset=_set_Wmag,
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
         doc=u"""Magnet width
 
         :Type: float
@@ -511,18 +524,18 @@ class SlotM13(Slot):
         """,
     )
 
-    def _get_Hmag(self):
-        """getter of Hmag"""
-        return self._Hmag
+    def _get_H1(self):
+        """getter of H1"""
+        return self._H1
 
-    def _set_Hmag(self, value):
-        """setter of Hmag"""
-        check_var("Hmag", value, "float", Vmin=0)
-        self._Hmag = value
+    def _set_H1(self, value):
+        """setter of H1"""
+        check_var("H1", value, "float", Vmin=0)
+        self._H1 = value
 
-    Hmag = property(
-        fget=_get_Hmag,
-        fset=_set_Hmag,
+    H1 = property(
+        fget=_get_H1,
+        fset=_set_H1,
         doc=u"""Magnet Height
 
         :Type: float

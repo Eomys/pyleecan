@@ -6,13 +6,13 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM12 import SlotM12
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods import ParentMissingError
-
+import matplotlib.pyplot as plt
 from numpy import exp
 
 Mag12_test = list()
 # Internal Slot
 lam = LamSlotMag(is_internal=True, Rext=0.1325)
-lam.slot = SlotM12(H0=5e-3, W0=10e-3, Zs=12, Hmag=5e-3, Wmag=10e-3)
+lam.slot = SlotM12(H0=5e-3, W0=10e-3, Zs=12, H1=5e-3, W1=10e-3)
 Mag12_test.append(
     {
         "test_obj": lam,
@@ -27,7 +27,7 @@ Mag12_test.append(
 
 # Outward Slot
 lam = LamSlotMag(is_internal=False, Rint=0.1325)
-lam.slot = SlotM12(H0=5e-3, W0=10e-3, Zs=12, Hmag=5e-3, Wmag=10e-3)
+lam.slot = SlotM12(H0=5e-3, W0=10e-3, Zs=12, H1=5e-3, W1=10e-3)
 Mag12_test.append(
     {
         "test_obj": lam,
@@ -153,8 +153,8 @@ class Test_Magnet_Type_12_meth(object):
         ZM4 = point_dict["ZM4"]
         W0 = test_obj.slot.W0
         H0 = test_obj.slot.H0
-        Wmag = test_obj.slot.Wmag
-        Hmag = test_obj.slot.Hmag
+        W1 = test_obj.slot.W1
+        H1 = test_obj.slot.H1
 
         assert abs(Z1 - Z4) == pytest.approx(W0, rel=DELTA)
         assert abs(Z2 - Z3) == pytest.approx(W0, rel=DELTA)
@@ -162,12 +162,19 @@ class Test_Magnet_Type_12_meth(object):
         assert abs(Z3 - Z4) == pytest.approx(H0, rel=DELTA)
 
         if test_obj.is_internal:
-            assert ZM0 == pytest.approx(Z1.real + Hmag - H0, rel=DELTA)
+            assert ZM0 == pytest.approx(Z1.real + H1 - H0, rel=DELTA)
         else:
-            assert ZM0 == pytest.approx(Z1.real - Hmag + H0, rel=DELTA)
-        assert abs(ZM1 - ZM4) == pytest.approx(Wmag, rel=DELTA)
-        assert abs(ZM2 - ZM3) == pytest.approx(Wmag, rel=DELTA)
-        assert abs(ZM0 - (Z2 + Z3) / 2) == pytest.approx(Hmag, rel=DELTA)
+            assert ZM0 == pytest.approx(Z1.real - H1 + H0, rel=DELTA)
+        assert abs(ZM1 - ZM4) == pytest.approx(W1, rel=DELTA)
+        assert abs(ZM2 - ZM3) == pytest.approx(W1, rel=DELTA)
+        assert abs(ZM0 - (Z2 + Z3) / 2) == pytest.approx(H1, rel=DELTA)
 
         assert abs(ZM2) == pytest.approx(abs(ZM0), rel=DELTA)
         assert abs(ZM3) == pytest.approx(abs(ZM0), rel=DELTA)
+
+
+if __name__ == "__main__":
+    a = Test_Magnet_Type_12_meth()
+    for test_dict in Mag12_test:
+        a.test_comp_mec_radius(test_dict)
+    print("Done")

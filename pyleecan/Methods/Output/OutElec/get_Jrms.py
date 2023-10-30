@@ -16,7 +16,6 @@ def get_Jrms(self):
     """
 
     if self.Jrms is None:
-
         output = self.parent
         machine = output.simu.machine
 

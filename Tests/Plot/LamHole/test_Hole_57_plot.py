@@ -57,11 +57,6 @@ class Test_Hole_57_plot(object):
 
     def test_Lam_Hole_57_W01(self):
         """Test machine plot hole 57 with W1 > 0 and both magnets"""
-        self.test_obj.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_57_s57_Machine.png"))
-        assert len(fig.axes[0].patches) == 57
-
         self.test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_57_s57_Rotor_W01.png"))

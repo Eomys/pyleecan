@@ -47,10 +47,16 @@ class Test_Slot_15_plot(object):
         test_obj.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s15.png"))
-        # 2 for lam + Zs*4 for wind
-        assert len(fig.axes[0].patches) == 28
+        # 2 for lam + 6*4 for wind
+        assert len(fig.axes[0].patches) == 26
 
         tooth = test_obj.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s15_Tooth_out.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_15_plot()
+    a.test_Lam_Wind_15_wind_22()
+    print("Done")

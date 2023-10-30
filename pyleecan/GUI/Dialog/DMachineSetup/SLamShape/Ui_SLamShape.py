@@ -223,17 +223,13 @@ class Ui_SLamShape(object):
         SLamShape.setWindowTitle(QCoreApplication.translate("SLamShape", u"Form", None))
         # if QT_CONFIG(tooltip)
         self.in_L1.setToolTip(
-            QCoreApplication.translate(
-                "SLamShape", u"<qt><nobr>Stator external radius</nobr></qt>", None
-            )
+            QCoreApplication.translate("SLamShape", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
         self.in_L1.setText(QCoreApplication.translate("SLamShape", u"L1:", None))
         # if QT_CONFIG(tooltip)
         self.lf_L1.setToolTip(
-            QCoreApplication.translate(
-                "SLamShape", u"<qt><nobr>Stator external radius</nobr></qt>", None
-            )
+            QCoreApplication.translate("SLamShape", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
         self.unit_L1.setText(QCoreApplication.translate("SLamShape", u"m", None))
@@ -259,7 +255,7 @@ class Ui_SLamShape(object):
             )
         )
         self.g_notches.setTitle(
-            QCoreApplication.translate("SLamShape", u"Notches", None)
+            QCoreApplication.translate("SLamShape", u"Notches and Keys", None)
         )
         self.out_notch.setText(
             QCoreApplication.translate("SLamShape", u"0 set (0 notches)", None)

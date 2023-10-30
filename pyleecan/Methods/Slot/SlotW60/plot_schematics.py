@@ -30,6 +30,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
@@ -47,6 +48,8 @@ def plot_schematics(
         A SlotW60 object
     is_default : bool
         True: plot default schematics, else use current slot values
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -70,6 +73,9 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
@@ -88,18 +94,21 @@ def plot_schematics(
         lam = LamSlot(
             Rint=0.135, Rext=0.3, is_internal=True, is_stator=False, slot=slot
         )
-
-        return slot.plot_schematics(
-            is_default=False,
-            is_add_point_label=is_add_point_label,
-            is_add_schematics=is_add_schematics,
-            is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
-            save_path=save_path,
-            is_show_fig=is_show_fig,
-            fig=fig,
-            ax=ax,
-        )
+        if is_return_default:
+            return lam
+        else:
+            return slot.plot_schematics(
+                is_default=False,
+                is_return_default=False,
+                is_add_point_label=is_add_point_label,
+                is_add_schematics=is_add_schematics,
+                is_add_main_line=is_add_main_line,
+                type_add_active=type_add_active,
+                save_path=save_path,
+                is_show_fig=is_show_fig,
+                fig=fig,
+                ax=ax,
+            )
     else:
         # Getting the main plot
         if self.parent is None:
@@ -230,51 +239,52 @@ def plot_schematics(
                 ax=ax,
                 label=None,
             )
-            # H3
-            line = Segment(
-                ((point_dict["Z3d"] + point_dict["Z4d"]) / 2) + (0.008 + 0j),
-                ((point_dict["Zw4d"] + point_dict["Zw1d"]) / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H3",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=(-0.2j * self.W1 * 0.1) - (0.020 + 0j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H4
-            line = Segment(
-                ((point_dict["Z5d"] + point_dict["Zw5d"]) / 2) + (0.008 + 0j),
-                ((point_dict["Zw2d"] + point_dict["Zw3d"]) / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H4",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=(-0.2j * self.W1 * 0.1) - (0.020 + 0j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # W3
-            line = Segment(
-                ((point_dict["Zw5"] + point_dict["Z3"]) / 2),
-                ((point_dict["Zw4"] + point_dict["Zw3"]) / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="W3",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=(-1.8j * self.W1 * 0.1) - (0.007 + 0j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            if type_add_active != 0:
+                # H3
+                line = Segment(
+                    ((point_dict["Z3d"] + point_dict["Z4d"]) / 2) + (0.008 + 0j),
+                    ((point_dict["Zw4d"] + point_dict["Zw1d"]) / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    label="H3",
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    offset_label=(-0.2j * self.W1 * 0.1) - (0.020 + 0j),
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # H4
+                line = Segment(
+                    ((point_dict["Z5d"] + point_dict["Zw5d"]) / 2) + (0.008 + 0j),
+                    ((point_dict["Zw2d"] + point_dict["Zw3d"]) / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    label="H4",
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    offset_label=(-0.2j * self.W1 * 0.1) - (0.020 + 0j),
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # W3
+                line = Segment(
+                    ((point_dict["Zw5"] + point_dict["Z3"]) / 2),
+                    ((point_dict["Zw4"] + point_dict["Zw3"]) / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    label="W3",
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    offset_label=(-1.8j * self.W1 * 0.1) - (0.007 + 0j),
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
 
         if is_add_main_line:
             # Ox axis
@@ -353,6 +363,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

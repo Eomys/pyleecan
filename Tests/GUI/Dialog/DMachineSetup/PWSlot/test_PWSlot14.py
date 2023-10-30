@@ -12,6 +12,7 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW14 import SlotW14
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot14.PWSlot14 import PWSlot14
+from pyleecan.GUI.Resources import pixmap_dict
 
 
 class TestPWSlot14(object):
@@ -47,7 +48,14 @@ class TestPWSlot14(object):
             self.mat4,
         ]
         self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2, mat_type=self.mat3)
-        self.test_obj.slot = SlotW14(H0=0.10, H1=0.11, H3=0.12, W0=0.13, W3=0.14)
+        self.test_obj.slot = SlotW14(
+            H0=0.10,
+            H1=0.11,
+            H3=0.12,
+            W0=0.13,
+            W3=0.14,
+            wedge_type=1,
+        )
         self.widget = PWSlot14(self.test_obj, self.material_dict)
 
     def test_init(self):
@@ -59,6 +67,7 @@ class TestPWSlot14(object):
         assert self.widget.lf_W0.value() == 0.13
         assert self.widget.lf_W3.value() == 0.14
         assert not self.widget.g_wedge.isChecked()
+        assert self.widget.c_wedge_type.currentIndex() == 1
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -155,6 +164,11 @@ class TestPWSlot14(object):
         assert self.test_obj.slot.wedge_mat is not None
         assert self.test_obj.slot.wedge_mat.name == "M400-50A"
 
+        # Add new type wedge
+        self.widget.c_wedge_type.setCurrentIndex(1)
+        assert str(self.widget.c_wedge_type.currentText()) == "Standard"
+        assert self.test_obj.slot.wedge_type == 1
+
 
 if __name__ == "__main__":
     a = TestPWSlot14()
@@ -162,4 +176,5 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_set_wedge()
     print("Done")

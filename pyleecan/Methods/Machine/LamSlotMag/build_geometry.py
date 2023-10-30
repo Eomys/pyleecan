@@ -1,9 +1,17 @@
-# -*- coding: utf-8 -*-
 from numpy import pi
 
 from ....Classes.LamSlot import LamSlot
-from ....Classes.SlotM18 import SlotM18
-from ....Functions.labels import BOUNDARY_PROP_LAB, MAG_LAB, YSMR_LAB, YSML_LAB
+from ....Functions.labels import update_RTS_index
+from ....Functions.labels import (
+    BOUNDARY_PROP_LAB,
+    COND_BOUNDARY_PROP_LAB,
+    MAG_LAB,
+    YSMR_LAB,
+    YSML_LAB,
+    LAM_LAB,
+    YOKE_LAB,
+    decode_label,
+)
 
 
 def build_geometry(
@@ -45,7 +53,7 @@ def build_geometry(
     )
     # getting the LamSlot surface
     surf_list = LamSlot.build_geometry(
-        self, sym=sym, is_circular_radius=is_circular_radius
+        self, sym=sym, alpha=alpha, delta=delta, is_circular_radius=is_circular_radius
     )
 
     Zs = self.slot.Zs
@@ -53,28 +61,83 @@ def build_geometry(
 
     # Add the magnet surface(s)
     if is_magnet and self.magnet is not None:
-        mag_surf_list = list()
-        # for each magnet to draw
-        for ii in range(Zs // sym):
-            mag_surf = self.slot.get_surface_active(
-                alpha=slot_pitch * ii + slot_pitch * 0.5
-            )
-            mag_surf_list.append(mag_surf)
-            # Adapt the label
-            mag_surf_list[-1].label = st + "_" + MAG_LAB + "_R0-T0-S" + str(ii)
-        # Update the magnets BC (if magnet side matches sym lines SlotM18 only)
-        if isinstance(self.slot, SlotM18) and sym > 1:
-            mag_surf_list[0].line_list[0].prop_dict.update(
-                {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB}
-            )
-            mag_surf_list[-1].line_list[2].prop_dict.update(
-                {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB}
-            )
-        surf_list.extend(mag_surf_list)
+        # Get the active surface to copy rotate
+        Nrad, Ntan = self.get_dim_active()
+        mag_layer_surf = self.slot.build_geometry_active(
+            Nrad=Nrad,
+            Ntan=Ntan,
+            alpha=alpha,
+            delta=delta,
+        )
 
-    # Apply the transformations
-    for surf in surf_list:
-        surf.rotate(alpha)
-        surf.translate(delta)
+        # for each magnet to draw
+        mag_surf_list = list()
+        for ii in range(Zs // sym):
+            for surf in mag_layer_surf:
+                mag_surf = surf.copy()
+                # changing the slot reference number
+                mag_surf.label = update_RTS_index(
+                    label=surf.label, S_id=ii, surf_type_label=MAG_LAB
+                )
+                mag_surf.rotate(ii * slot_pitch)
+                mag_surf_list.append(mag_surf)
+        # Update the magnets BC (if magnet side matches sym lines ex: SlotM18)
+        if self.slot.is_full_pitch_active() and sym > 1:
+            for surf in mag_surf_list:
+                label_dict = decode_label(surf.label)
+                # Set BC on Right side / Ox
+                if label_dict["S_id"] == 0:
+                    # Find the lines to add the BC
+                    for line in surf.get_lines():
+                        if (
+                            line.prop_dict is not None
+                            and COND_BOUNDARY_PROP_LAB in line.prop_dict
+                            and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSMR_LAB
+                        ):
+                            line.prop_dict.update(
+                                {
+                                    BOUNDARY_PROP_LAB: st
+                                    + "_"
+                                    + YSMR_LAB
+                                    + "-"
+                                    + str(label_dict["R_id"])
+                                }
+                            )
+                # Set BC on Left side / last active surface
+                if label_dict["S_id"] == Zs // sym - 1:
+                    # Find the lines to add the BC
+                    for line in surf.get_lines():
+                        if (
+                            line.prop_dict is not None
+                            and COND_BOUNDARY_PROP_LAB in line.prop_dict
+                            and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSML_LAB
+                        ):
+                            line.prop_dict.update(
+                                {
+                                    BOUNDARY_PROP_LAB: st
+                                    + "_"
+                                    + YSML_LAB
+                                    + "-"
+                                    + str(label_dict["R_id"])
+                                }
+                            )
+        # Update Magnets BC when no lamination
+        if self.Rint == self.Rext and self.Rint != 0:
+            label_yoke = self.get_label() + "_" + LAM_LAB + YOKE_LAB
+            for surf in mag_surf_list:
+                label_dict = decode_label(surf.label)
+                if label_dict["R_id"] == 0:
+                    for line in surf.get_lines():
+                        if (
+                            line.prop_dict is not None
+                            and COND_BOUNDARY_PROP_LAB in line.prop_dict
+                            and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YOKE_LAB
+                        ):
+                            line.prop_dict.update({BOUNDARY_PROP_LAB: label_yoke})
+
+        # Shift to have a tooth center on Ox
+        for surf in mag_surf_list:
+            surf.rotate(pi / Zs)
+        surf_list.extend(mag_surf_list)
 
     return surf_list

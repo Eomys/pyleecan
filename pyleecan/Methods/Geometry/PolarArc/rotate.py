@@ -16,6 +16,8 @@ def rotate(self, angle):
     -------
     None
     """
+    if angle == 0:
+        return  # Nothing to do
     # check if the PolarArc is correct
     self.check()
     self.point_ref = self.point_ref * exp(1j * angle)

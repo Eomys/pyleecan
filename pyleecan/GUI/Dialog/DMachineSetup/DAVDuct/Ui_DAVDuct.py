@@ -9,7 +9,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from pyleecan.GUI.Tools.HelpButton import HelpButton
+from .....GUI.Tools.HelpButton import HelpButton
 
 from pyleecan.GUI.Resources import pyleecan_rc
 

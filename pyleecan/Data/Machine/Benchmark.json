@@ -612,9 +612,9 @@
     "skew": null,
     "slot": {
       "H0": 0.0,
-      "Hmag": 0.005,
+      "H1": 0.005,
       "W0": 0.6048,
-      "Wmag": 0.6048,
+      "W1": 0.6048,
       "Zs": 10,
       "__class__": "SlotM11",
       "is_bore": true,
@@ -624,7 +624,7 @@
   },
   "shaft": {
     "Drsh": 0.019,
-    "Lshaft": null,
+    "Lshaft": 0.14,
     "__class__": "Shaft",
     "mat_type": {
       "HT": {

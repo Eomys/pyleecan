@@ -317,9 +317,9 @@ class MachineSIPMSM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            LamSlotMag = import_class("pyleecan.Classes", "LamSlotMag", "rotor")
-            value = LamSlotMag()
-        check_var("rotor", value, "LamSlotMag")
+            LamSlotM = import_class("pyleecan.Classes", "LamSlotM", "rotor")
+            value = LamSlotM()
+        check_var("rotor", value, "LamSlotM")
         self._rotor = value
 
         if self._rotor is not None:
@@ -330,7 +330,7 @@ class MachineSIPMSM(MachineSync):
         fset=_set_rotor,
         doc=u"""Machine's Rotor
 
-        :Type: LamSlotMag
+        :Type: LamSlotM
         """,
     )
 

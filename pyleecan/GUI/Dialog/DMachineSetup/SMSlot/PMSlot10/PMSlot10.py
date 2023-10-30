@@ -9,6 +9,8 @@ from ......Classes.SlotM10 import SlotM10
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.Gen_PMSlot10 import Gen_PMSlot10
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
+from PySide2.QtWidgets import QMessageBox, QWidget, QListView
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -23,7 +25,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
     notch_name = "Rectangular"
     slot_type = SlotM10
 
-    def __init__(self, lamination=None, is_notch=False):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -32,73 +34,107 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             A PMSlot10 widget
         lamination : Lamination
             current lamination to edit
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
+
         self.lamination = lamination
         self.slot = lamination.slot
-        self.is_notch = is_notch
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
-        self.lf_Wmag.unit = "m"
         self.lf_H0.unit = "m"
-        self.lf_Hmag.unit = "m"
+        self.lf_W1.unit = "m"
+        self.lf_H1.unit = "m"
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_W0,
-            self.unit_Wmag,
             self.unit_H0,
-            self.unit_Hmag,
+            self.unit_W1,
+            self.unit_H1,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
-        # Notch setup
-        if is_notch:
-            # Hide magnet related widget
-            wid_list = [self.in_Wmag, self.lf_Wmag, self.unit_Wmag]
-            wid_list += [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]
-            wid_list += [self.txt_constraint]  # Constraint Wmag < W0
-            for wid in wid_list:
-                wid.hide()
-            # Set values for check
-            self.slot.Hmag = 0
-            self.slot.Wmag = 0
-            # Selecting the right image
-            if not self.lamination.is_internal:
-                # Use schematics on the external without magnet
-                self.img_slot.setPixmap(
-                    QPixmap(
-                        u":/images/images/MachineSetup/WMSlot/SlotM10_empty_ext_sta.png"
-                    )
-                )
-            else:
-                # Use schematics on the inner without magnet
-                self.img_slot.setPixmap(
-                    QPixmap(
-                        u":/images/images/MachineSetup/WMSlot/SlotM10_empty_int_rot.png"
-                    )
-                )
-
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
-        self.lf_Wmag.setValue(self.slot.Wmag)
         self.lf_H0.setValue(self.slot.H0)
-        self.lf_Hmag.setValue(self.slot.Hmag)
+        self.lf_W1.setValue(self.slot.W1)
+        self.lf_H1.setValue(self.slot.H1)
+
+        # Notch setup
+        if self.is_notch:
+            self.w_mag.hide()  # Hide magnet widgets
+            self.g_key.show()  # Setup key widgets
+            self.g_key.setChecked(self.notch_obj.key_mat is not None)
+
+            if self.notch_obj.key_mat is None:
+                self.slot.W1 = 0  # Clear for check
+                self.slot.H1 = 0  # Clear for check
+                self.lf_W1.setValue(None)
+                self.lf_H1.setValue(None)
+
+            # Material setup
+            self.w_key_mat.setText("Key Material")
+            self.w_key_mat.def_mat = "Steel1"
+            self.set_key()
+
+        else:  # magnet case
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
+
+            # Use schematics on the inner without magnet
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_mag_int_rotor"]))
+            self.g_key.hide()
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
-        self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
-        self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+        self.lf_W1.editingFinished.connect(self.set_W1)
+        self.lf_H1.editingFinished.connect(self.set_H1)
+        self.g_key.toggled.connect(self.set_key)
+        self.w_mag.saveNeeded.connect(self.emit_save)
+
+    def set_key(self):
+        """Setup the slot key according to the GUI"""
+        widget_list = [self.lf_W1, self.unit_W1, self.in_W1]
+        widget_list += [self.lf_H1, self.unit_H1, self.in_H1]
+        widget_list += [self.w_key_mat]
+
+        if self.g_key.isChecked():
+            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_int_rotor"]))
+            else:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
+            is_enabled = True
+        else:
+            self.notch_obj.key_mat = None
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_int_rotor"]))
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotM10_empty_ext_stator"])
+                )
+            is_enabled = False
+
+        for widget in widget_list:
+            widget.setEnabled(is_enabled)
+
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -113,15 +149,15 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wmag(self):
-        """Signal to update the value of Wmag according to the line edit
+    def set_W1(self):
+        """Signal to update the value of W1 according to the line edit
 
         Parameters
         ----------
         self : PMSlot10
             A PMSlot10 object
         """
-        self.slot.Wmag = self.lf_Wmag.value()
+        self.slot.W1 = self.lf_W1.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -139,17 +175,21 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Hmag(self):
-        """Signal to update the value of Hmag according to the line edit
+    def set_H1(self):
+        """Signal to update the value of H1 according to the line edit
 
         Parameters
         ----------
         self : PMSlot10
             A PMSlot10 object
         """
-        self.slot.Hmag = self.lf_Hmag.value()
+        self.slot.H1 = self.lf_H1.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod
@@ -170,12 +210,12 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Check that everything is set
         if lam.slot.W0 is None:
             return "You must set W0 !"
-        elif lam.slot.Wmag is None:
-            return "You must set Wmag !"
         elif lam.slot.H0 is None:
             return "You must set H0 !"
-        elif lam.slot.Hmag is None:
-            return "You must set Hmag !"
+        elif lam.slot.W1 is None:
+            return "You must set W1 !"
+        elif lam.slot.H1 is None:
+            return "You must set H1 !"
 
         # Constraints
         try:

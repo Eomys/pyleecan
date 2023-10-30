@@ -78,6 +78,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
             vent_surf_list.extend(surf)
     surf_list.extend(vent_surf_list)
 
+    # Add keys if any
+    if self.notch is not None:
+        for ii, notch in enumerate(self.notch):
+            if notch.has_key():
+                surf_list.extend(notch.build_geometry_key(index=ii, sym=sym))
+
     # Add the closing surfaces if requested
     if is_circular_radius:
         surf_list.extend(self.get_surfaces_closing(sym=sym))
@@ -99,10 +105,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
             )
         elif self.Rint == 0 and len(ext_line) > 0:
             surf_list.insert(0, ext_surf)  # First in list for plot
-        else:
-            pass  # No surface to draw (SlotM17)
-
-    elif sym != 1 and len(ext_line) > 0:  # Part of the lamination by symmetry
+        elif self.Rint == self.Rext:  # No lamination
+            pass  # No surface to draw
+        elif len(ext_line) == 0:  # (SlotM17)
+            pass  # No surface to draw / No lamination
+    # Part of the lamination by symmetry
+    elif sym != 1 and len(ext_line) > 0 and self.Rint != self.Rext:
         # Get limit point of the yoke side
         if self.is_internal:
             ZTR = ext_line[0].get_begin()  # Top Right

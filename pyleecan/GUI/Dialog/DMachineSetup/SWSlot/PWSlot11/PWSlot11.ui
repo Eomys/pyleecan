@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1282</width>
-    <height>470</height>
+    <width>924</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -27,7 +27,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLabel" name="img_slot">
        <property name="sizePolicy">
@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW11_wind.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW11_wind_ext_stator.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -73,14 +73,17 @@
        <property name="verticalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
+       <property name="undoRedoEnabled">
+        <bool>true</bool>
+       </property>
        <property name="html">
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; text-decoration: underline;&quot;&gt;Constraints :&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;W0 ≤ W1&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;2 × R1 ≤ W2&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;W0 ≤ W1&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;R1 ≤ H2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="textInteractionFlags">
@@ -113,28 +116,44 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>446</height>
+        <height>491</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QCheckBox" name="is_cst_tooth">
+         <property name="text">
+          <string>Constant Tooth Width</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="in_W0">
+         <property name="spacing">
+          <number>7</number>
+         </property>
+         <item row="5" column="1">
+          <widget class="FloatEdit" name="lf_H1"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="in_H1">
            <property name="text">
-            <string>W0</string>
+            <string>H1</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_W0"/>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="unit_W0">
-           <property name="text">
-            <string>m</string>
+         <item row="5" column="4">
+          <widget class="QComboBox" name="c_H1_unit">
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+           <property name="currentText">
+            <string>[m]</string>
            </property>
           </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="FloatEdit" name="lf_H0"/>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="in_W1">
@@ -143,13 +162,17 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_W1"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="unit_W1">
+         <item row="3" column="0">
+          <widget class="QLabel" name="in_W3">
            <property name="text">
-            <string>m</string>
+            <string>W3</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="in_H2">
+           <property name="text">
+            <string>H2</string>
            </property>
           </widget>
          </item>
@@ -160,90 +183,88 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_W0"/>
+         </item>
          <item row="2" column="1">
           <widget class="FloatEdit" name="lf_W2"/>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="unit_W2">
+         <item row="1" column="4">
+          <widget class="QLabel" name="unit_W1">
            <property name="text">
             <string>m</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_W1"/>
+         </item>
+         <item row="4" column="0">
           <widget class="QLabel" name="in_H0">
            <property name="text">
             <string>H0</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="FloatEdit" name="lf_H0"/>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="unit_H0">
-           <property name="text">
-            <string>m</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="in_H1">
-           <property name="text">
-            <string>H1</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="FloatEdit" name="lf_H1"/>
-         </item>
-         <item row="4" column="2">
-          <widget class="QComboBox" name="c_H1_unit">
-           <item>
-            <property name="text">
-             <string>[m]</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>[rad]</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>[°]</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="in_H2">
-           <property name="text">
-            <string>H2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="FloatEdit" name="lf_H2"/>
-         </item>
-         <item row="5" column="2">
+         <item row="6" column="4">
           <widget class="QLabel" name="unit_H2">
            <property name="text">
             <string>m</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_W0">
+           <property name="text">
+            <string>W0</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_W3"/>
+         </item>
+         <item row="0" column="4">
+          <widget class="QLabel" name="unit_W0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="4">
+          <widget class="QLabel" name="unit_W2">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="4">
+          <widget class="QLabel" name="unit_H0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="FloatEdit" name="lf_H2"/>
+         </item>
+         <item row="3" column="4">
+          <widget class="QLabel" name="unit_W3">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
           <widget class="QLabel" name="in_R1">
            <property name="text">
             <string>R1</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="7" column="1">
           <widget class="FloatEdit" name="lf_R1"/>
          </item>
-         <item row="6" column="2">
+         <item row="7" column="4">
           <widget class="QLabel" name="unit_R1">
            <property name="text">
             <string>m</string>
@@ -322,11 +343,15 @@ p, li { white-space: pre-wrap; }
   <tabstop>lf_W0</tabstop>
   <tabstop>lf_W1</tabstop>
   <tabstop>lf_W2</tabstop>
+  <tabstop>lf_W3</tabstop>
   <tabstop>lf_H0</tabstop>
   <tabstop>lf_H1</tabstop>
-  <tabstop>c_H1_unit</tabstop>
   <tabstop>lf_H2</tabstop>
   <tabstop>lf_R1</tabstop>
+  <tabstop>g_wedge</tabstop>
+  <tabstop>c_H1_unit</tabstop>
+  <tabstop>is_cst_tooth</tabstop>
+  <tabstop>scrollArea</tabstop>
   <tabstop>txt_constraint</tabstop>
  </tabstops>
  <resources>

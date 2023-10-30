@@ -46,7 +46,6 @@ mesh_dict = {
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 def test_ipm_Elmer():
-
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
     simu = Simu1(name="test_ipm_Elmer", machine=Toyota_Prius)
@@ -121,9 +120,9 @@ def test_ipm_Elmer():
 def test_spm_Elmer():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
-    PMSM_A.rotor.slot = SlotM10(Wmag=15e-3, Hmag=3e-3, H0=0.0, W0=15e-3, Zs=8)
+    PMSM_A.rotor.slot = SlotM10(W1=15e-3, H1=3e-3, H0=0.0, W0=15e-3, Zs=8)
     # PMSM_A.rotor.slot = SlotMFlat(H0=0.0, W0=15e-3, Zs=8)
-    # PMSM_A.rotor.slot.magnet = [MagnetType10(Wmag=15e-3, Hmag=3e-3)]
+    # PMSM_A.rotor.slot.magnet = [MagnetType10(W1=15e-3, H1=3e-3)]
     mesh_dict["Lamination_Rotor_Bore_Radius_Ext"] = 20
 
     # Create the Simulation

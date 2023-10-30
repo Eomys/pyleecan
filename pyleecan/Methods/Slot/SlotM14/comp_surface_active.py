@@ -24,8 +24,8 @@ def comp_surface_active(self):
     R1 = abs(ZM1)
     R2 = abs(ZM2)
 
-    S1 = pi * R1 ** 2 * (self.Wmag / (2 * pi))
-    S2 = pi * R2 ** 2 * (self.Wmag / (2 * pi))
+    S1 = pi * R1 ** 2 * (self.W1 / (2 * pi))
+    S2 = pi * R2 ** 2 * (self.W1 / (2 * pi))
 
     # Arc (Zm1,0,Zm2)
     alpha = -2 * angle(ZM2)

@@ -67,6 +67,16 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotM18.is_airgap_active import is_airgap_active
+except ImportError as error:
+    is_airgap_active = error
+
+try:
+    from ..Methods.Slot.SlotM18.is_full_pitch_active import is_full_pitch_active
+except ImportError as error:
+    is_full_pitch_active = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -190,6 +200,30 @@ class SlotM18(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotM18.is_airgap_active
+    if isinstance(is_airgap_active, ImportError):
+        is_airgap_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotM18 method is_airgap_active: "
+                    + str(is_airgap_active)
+                )
+            )
+        )
+    else:
+        is_airgap_active = is_airgap_active
+    # cf Methods.Slot.SlotM18.is_full_pitch_active
+    if isinstance(is_full_pitch_active, ImportError):
+        is_full_pitch_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotM18 method is_full_pitch_active: "
+                    + str(is_full_pitch_active)
+                )
+            )
+        )
+    else:
+        is_full_pitch_active = is_full_pitch_active
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -197,7 +231,7 @@ class SlotM18(Slot):
 
     def __init__(
         self,
-        Hmag=0.001,
+        H0=0.001,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
@@ -219,8 +253,8 @@ class SlotM18(Slot):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Hmag" in list(init_dict.keys()):
-                Hmag = init_dict["Hmag"]
+            if "H0" in list(init_dict.keys()):
+                H0 = init_dict["H0"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
@@ -228,7 +262,7 @@ class SlotM18(Slot):
             if "is_bore" in list(init_dict.keys()):
                 is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
-        self.Hmag = Hmag
+        self.H0 = H0
         # Call Slot init
         super(SlotM18, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -240,7 +274,7 @@ class SlotM18(Slot):
         SlotM18_str = ""
         # Get the properties inherited from Slot
         SlotM18_str += super(SlotM18, self).__str__()
-        SlotM18_str += "Hmag = " + str(self.Hmag) + linesep
+        SlotM18_str += "H0 = " + str(self.H0) + linesep
         return SlotM18_str
 
     def __eq__(self, other):
@@ -252,7 +286,7 @@ class SlotM18(Slot):
         # Check the properties inherited from Slot
         if not super(SlotM18, self).__eq__(other):
             return False
-        if other.Hmag != self.Hmag:
+        if other.H0 != self.H0:
             return False
         return True
 
@@ -272,20 +306,18 @@ class SlotM18(Slot):
             )
         )
         if (
-            other._Hmag is not None
-            and self._Hmag is not None
-            and isnan(other._Hmag)
-            and isnan(self._Hmag)
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
         ):
             pass
-        elif other._Hmag != self._Hmag:
+        elif other._H0 != self._H0:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Hmag) + ", other=" + str(other._Hmag) + ")"
-                )
-                diff_list.append(name + ".Hmag" + val_str)
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
             else:
-                diff_list.append(name + ".Hmag")
+                diff_list.append(name + ".H0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -297,7 +329,7 @@ class SlotM18(Slot):
 
         # Get size of the properties inherited from Slot
         S += super(SlotM18, self).__sizeof__()
-        S += getsizeof(self.Hmag)
+        S += getsizeof(self.H0)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -317,7 +349,7 @@ class SlotM18(Slot):
             keep_function=keep_function,
             **kwargs
         )
-        SlotM18_dict["Hmag"] = self.Hmag
+        SlotM18_dict["H0"] = self.H0
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotM18_dict["__class__"] = "SlotM18"
@@ -327,7 +359,7 @@ class SlotM18(Slot):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        Hmag_val = self.Hmag
+        H0_val = self.H0
         Zs_val = self.Zs
         if self.wedge_mat is None:
             wedge_mat_val = None
@@ -336,29 +368,29 @@ class SlotM18(Slot):
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            Hmag=Hmag_val, Zs=Zs_val, wedge_mat=wedge_mat_val, is_bore=is_bore_val
+            H0=H0_val, Zs=Zs_val, wedge_mat=wedge_mat_val, is_bore=is_bore_val
         )
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Hmag = None
+        self.H0 = None
         # Set to None the properties inherited from Slot
         super(SlotM18, self)._set_None()
 
-    def _get_Hmag(self):
-        """getter of Hmag"""
-        return self._Hmag
+    def _get_H0(self):
+        """getter of H0"""
+        return self._H0
 
-    def _set_Hmag(self, value):
-        """setter of Hmag"""
-        check_var("Hmag", value, "float", Vmin=0)
-        self._Hmag = value
+    def _set_H0(self, value):
+        """setter of H0"""
+        check_var("H0", value, "float", Vmin=0)
+        self._H0 = value
 
-    Hmag = property(
-        fget=_get_Hmag,
-        fset=_set_Hmag,
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
         doc=u"""Magnet Height
 
         :Type: float

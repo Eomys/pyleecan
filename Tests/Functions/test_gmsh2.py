@@ -91,7 +91,7 @@ def test_gmsh_spm():
 
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
-    PMSM_A.rotor.slot = SlotM10(Wmag=15e-3, Hmag=3e-3, H0=0.0, W0=15e-3, Zs=8)
+    PMSM_A.rotor.slot = SlotM10(W1=15e-3, H1=3e-3, H0=0.0, W0=15e-3, Zs=8)
 
     # PMSM_A.plot()
     save_path = join(save_plot_path, "GMSH")

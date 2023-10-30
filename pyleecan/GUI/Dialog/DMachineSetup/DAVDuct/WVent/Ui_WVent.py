@@ -33,11 +33,6 @@ class Ui_WVent(object):
 
         self.horizontalLayout.addWidget(self.c_vent_type)
 
-        self.b_viewall = HelpButton(WVent)
-        self.b_viewall.setObjectName(u"b_viewall")
-
-        self.horizontalLayout.addWidget(self.b_viewall)
-
         self.in_Alpha0 = QLabel(WVent)
         self.in_Alpha0.setObjectName(u"in_Alpha0")
 
@@ -81,7 +76,6 @@ class Ui_WVent(object):
         self.in_vent_type.setText(
             QCoreApplication.translate("WVent", u"Cooling Duct Shape:", None)
         )
-        self.b_viewall.setText("")
         self.in_Alpha0.setText(QCoreApplication.translate("WVent", u"Alpha0 :", None))
         self.c_Alpha0_unit.setItemText(
             0, QCoreApplication.translate("WVent", u"[rad]", None)

@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
+from ......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag import WWSlotMag
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -35,7 +36,7 @@ class Ui_PMSlot18(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM18.png")
+            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM18_mag_int_rotor.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -51,25 +52,30 @@ class Ui_PMSlot18(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 450))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.w_mag = WWSlotMag(self.scrollAreaWidgetContents)
+        self.w_mag.setObjectName(u"w_mag")
+
+        self.verticalLayout.addWidget(self.w_mag)
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.unit_Hmag = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Hmag.setObjectName(u"unit_Hmag")
+        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_H0.setObjectName(u"unit_H0")
 
-        self.gridLayout.addWidget(self.unit_Hmag, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_H0, 0, 2, 1, 1)
 
-        self.lf_Hmag = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Hmag.setObjectName(u"lf_Hmag")
+        self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_H0.setObjectName(u"lf_H0")
 
-        self.gridLayout.addWidget(self.lf_Hmag, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_H0, 0, 1, 1, 1)
 
-        self.in_Hmag = QLabel(self.scrollAreaWidgetContents)
-        self.in_Hmag.setObjectName(u"in_Hmag")
+        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.in_H0.setObjectName(u"in_H0")
 
-        self.gridLayout.addWidget(self.in_Hmag, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_H0, 0, 0, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
 
@@ -97,7 +103,7 @@ class Ui_PMSlot18(object):
     def retranslateUi(self, PMSlot18):
         PMSlot18.setWindowTitle(QCoreApplication.translate("PMSlot18", u"Form", None))
         self.img_slot.setText("")
-        self.unit_Hmag.setText(QCoreApplication.translate("PMSlot18", u"[m]", None))
-        self.in_Hmag.setText(QCoreApplication.translate("PMSlot18", u"Hmag", None))
+        self.unit_H0.setText(QCoreApplication.translate("PMSlot18", u"[m]", None))
+        self.in_H0.setText(QCoreApplication.translate("PMSlot18", u"H0", None))
 
     # retranslateUi

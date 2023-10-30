@@ -62,6 +62,16 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotM17.is_airgap_active import is_airgap_active
+except ImportError as error:
+    is_airgap_active = error
+
+try:
+    from ..Methods.Slot.SlotM17.is_full_pitch_active import is_full_pitch_active
+except ImportError as error:
+    is_full_pitch_active = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -173,6 +183,30 @@ class SlotM17(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotM17.is_airgap_active
+    if isinstance(is_airgap_active, ImportError):
+        is_airgap_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotM17 method is_airgap_active: "
+                    + str(is_airgap_active)
+                )
+            )
+        )
+    else:
+        is_airgap_active = is_airgap_active
+    # cf Methods.Slot.SlotM17.is_full_pitch_active
+    if isinstance(is_full_pitch_active, ImportError):
+        is_full_pitch_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotM17 method is_full_pitch_active: "
+                    + str(is_full_pitch_active)
+                )
+            )
+        )
+    else:
+        is_full_pitch_active = is_full_pitch_active
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

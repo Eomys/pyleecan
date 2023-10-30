@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotM18.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotM18_mag_int_rotor.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -81,26 +81,29 @@
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>446</height>
+        <height>450</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
+        <widget class="WWSlotMag" name="w_mag" native="true"/>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="2">
-          <widget class="QLabel" name="unit_Hmag">
+          <widget class="QLabel" name="unit_H0">
            <property name="text">
             <string>[m]</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_Hmag"/>
+          <widget class="FloatEdit" name="lf_H0"/>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="in_Hmag">
+          <widget class="QLabel" name="in_H0">
            <property name="text">
-            <string>Hmag</string>
+            <string>H0</string>
            </property>
           </widget>
          </item>
@@ -140,9 +143,15 @@
    <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>WWSlotMag</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>lf_Hmag</tabstop>
+  <tabstop>lf_H0</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

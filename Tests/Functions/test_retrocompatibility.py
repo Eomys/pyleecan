@@ -7,7 +7,11 @@ import pytest
 from numpy import array_equal
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
-from pyleecan.Functions.Load.retrocompatibility import is_before_version
+from pyleecan.Functions.Load.retrocompatibility import (
+    is_before_version,
+    convert_Wmag_Hmag,
+    is_Wmag_Hmag,
+)
 from Tests import TEST_DATA_DIR
 
 # 4: OP_matrix convertion (ndarray to object)
@@ -123,6 +127,16 @@ wind_list.append(  # WindingDW1L
     }
 )
 
+Hmag_Wmag_list = list()
+Hmag_Wmag_list.append(  # WindingCW1L
+    {
+        "ref": join(DATA_DIR, "Machine", "Benchmark.json"),
+        "old": join(
+            TEST_DATA_DIR, "Retrocompatibility", "WmagHmag", "Benchmark_old.json"
+        ),
+    }
+)
+
 
 def test_save_OPM_None_retro():
     """Check that the OP_matrix convertion works with None"""
@@ -234,6 +248,67 @@ def test_load_opti(file_dict):
         assert isinstance(designvar, type(ref.problem.design_var[ii])), msg
 
 
+@pytest.mark.parametrize("file_dict", Hmag_Wmag_list)
+def test_load_Hmag_Wmag(file_dict):
+    """Check that the Hmag_Wmag into Hmag_Wmag convertion works"""
+    ref = load(file_dict["ref"])
+    old = load(file_dict["old"])
+
+    # Check old file is converted to current version
+    assert ref.rotor.slot.W1 == old.rotor.slot.W1
+    assert ref.rotor.slot.H1 == old.rotor.slot.H1
+
+
+def test_fct_Hmag_Wmag():
+    """Check that Hmag/Wmag update works for all slots"""
+
+    for ii in range(7):
+        test_dict = {
+            "H0": 0.1,
+            "Hmag": 0.2,
+            "W0": 0.3,
+            "Wmag": 0.4,
+            "Zs": 10,
+            "__class__": "SlotM1" + str(ii),
+            "is_bore": True,
+            "wedge_mat": None,
+        }
+        assert is_Wmag_Hmag(test_dict)
+        updated_dict = convert_Wmag_Hmag(test_dict)
+        assert "Hmag" not in updated_dict
+        assert "Wmag" not in updated_dict
+        assert updated_dict["H1"] == 0.2
+        assert updated_dict["W1"] == 0.4
+
+    # SlotM18 case
+    test_dict = {
+        "Hmag": 0.2,
+        "Zs": 10,
+        "__class__": "SlotM18",
+        "is_bore": True,
+        "wedge_mat": None,
+    }
+    assert is_Wmag_Hmag(test_dict)
+    updated_dict = convert_Wmag_Hmag(test_dict)
+    assert "Hmag" not in updated_dict
+    assert updated_dict["H0"] == 0.2
+
+    # SlotM19 case
+    test_dict = {
+        "Hmag": 0.2,
+        "W0": 0.3,
+        "W1": 0.4,
+        "Zs": 10,
+        "__class__": "SlotM19",
+        "is_bore": True,
+        "wedge_mat": None,
+    }
+    assert is_Wmag_Hmag(test_dict)
+    updated_dict = convert_Wmag_Hmag(test_dict)
+    assert "Hmag" not in updated_dict
+    assert updated_dict["H0"] == 0.2
+
+
 def test_before_version():
     """Check that we can detect previous version"""
     assert is_before_version("1.2.3", "1.2.1")
@@ -249,12 +324,15 @@ def test_before_version():
 
 if __name__ == "__main__":
     test_save_OPM_None_retro()
-    for file_dict in OPM_list:
-        test_save_OPM_retro(file_dict)
+    # for file_dict in OPM_list:
+    #    test_save_OPM_retro(file_dict)
 
     # for file_dict in hole_list:
     #     test_save_load_hole_retro(file_dict)
 
     # for file_dict in wind_list:
     #     test_save_load_wind_retro(file_dict)
+    for file_dict in Hmag_Wmag_list:
+        test_load_Hmag_Wmag(file_dict)
+
     print("Done")

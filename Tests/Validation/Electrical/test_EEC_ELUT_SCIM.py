@@ -248,7 +248,7 @@ def test_EEC_ELUT_SCIM_Audi_eTron(param_dict, is_run=True, is_linear=False):
 
     if is_run:
         # Run simulation
-        #%%
+        # %%
         out = simu.run()
 
         eec = out.elec.eec
@@ -272,7 +272,6 @@ def test_EEC_ELUT_SCIM_Audi_eTron(param_dict, is_run=True, is_linear=False):
 
 
 if __name__ == "__main__":
-
     test_EEC_ELUT_Railway_Traction()
     test_EEC_ELUT_SCIM_Audi_eTron(param_dict=param_list_Audi_eTron[0])
     test_EEC_ELUT_SCIM_Audi_eTron(param_dict=param_list_Audi_eTron[1])

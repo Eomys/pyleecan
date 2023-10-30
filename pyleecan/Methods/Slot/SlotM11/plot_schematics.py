@@ -23,11 +23,13 @@ from ....Functions.Plot import (
 from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+KEY_COLOR = config_dict["PLOT"]["COLOR_DICT"]["KEY_COLOR"]
 
 
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
@@ -45,6 +47,8 @@ def plot_schematics(
         A SlotM11 object
     is_default : int
         0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -68,21 +72,29 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, Hmag=15e-3, Wmag=pi / 8 * 0.75)
+        slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, H1=15e-3, W1=pi / 8 * 0.75)
         if is_default == 1:  # Internal Rotor schematics
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
             )
+            if is_return_default:
+                return lam
         else:  # External Stator schematics
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
             )
+            if is_return_default:
+                return lam
         return slot.plot_schematics(
             is_default=False,
+            is_return_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
@@ -149,12 +161,13 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
+
             if type_add_active != 0:
-                # Wmag
-                R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
+                # W1
+                R = self.get_Rbo() + sign * (self.H0 - self.H1 * 1.1)
                 line = Arc1(
-                    begin=R * exp(-1j * self.Wmag / 2),
-                    end=R * exp(1j * self.Wmag / 2),
+                    begin=R * exp(-1j * self.W1 / 2),
+                    end=R * exp(1j * self.W1 / 2),
                     radius=R,
                     is_trigo_direction=True,
                 )
@@ -163,18 +176,18 @@ def plot_schematics(
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Wmag",
-                    offset_label=-1 * sign * self.H0 * 0.2,
+                    label="W1",
+                    offset_label=-1 * sign * self.H0 * 0.3,
                     fontsize=SC_FONT_SIZE,
                 )
-                # Hmag
+                # H1
                 line = Segment(point_dict["ZM3"], point_dict["ZM4"])
                 line.plot(
                     fig=fig,
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Hmag",
+                    label="H1",
                     offset_label=1j * point_dict["Z4"].imag * 0.2,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,
@@ -210,7 +223,7 @@ def plot_schematics(
             )
             if type_add_active != 0:
                 # ZM1 Line
-                line = Segment(0, Rbo * 2 * exp(-1j * self.Wmag / 2))
+                line = Segment(0, Rbo * 2 * exp(-1j * self.W1 / 2))
                 line.plot(
                     fig=fig,
                     ax=ax,
@@ -219,7 +232,7 @@ def plot_schematics(
                     linewidth=MAIN_LINE_WIDTH,
                 )
                 # ZM2 Line
-                line = Segment(0, Rbo * 2 * exp(1j * self.Wmag / 2))
+                line = Segment(0, Rbo * 2 * exp(1j * self.W1 / 2))
                 line.plot(
                     fig=fig,
                     ax=ax,
@@ -248,6 +261,10 @@ def plot_schematics(
             self.plot_active(
                 fig=fig, ax=ax, is_show_fig=False, enforced_default_color=MAGNET_COLOR
             )
+        elif type_add_active == 5:
+            self.plot_active(
+                fig=fig, ax=ax, is_show_fig=False, enforced_default_color=KEY_COLOR
+            )
 
         # Zooming and cleaning
         if self.is_outwards():
@@ -265,6 +282,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

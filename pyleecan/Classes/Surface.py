@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     is_inside = error
 
+try:
+    from ..Methods.Geometry.Surface.intersect_line import intersect_line
+except ImportError as error:
+    intersect_line = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -100,6 +105,17 @@ class Surface(FrozenClass):
         )
     else:
         is_inside = is_inside
+    # cf Methods.Geometry.Surface.intersect_line
+    if isinstance(intersect_line, ImportError):
+        intersect_line = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Surface method intersect_line: " + str(intersect_line)
+                )
+            )
+        )
+    else:
+        intersect_line = intersect_line
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

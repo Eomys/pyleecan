@@ -62,7 +62,6 @@ def test_EEC_PWM(param_dict):
     Us_PWM = np.zeros((M_I_val.size, PWM_orders.shape[0]))
     Is_PWM = np.zeros((M_I_val.size, PWM_orders.shape[0]))
     for ii, M_I in enumerate(M_I_val):
-
         simu_M_I = simu.copy()
 
         U0 = M_I * Vdc1 / (2 * np.sqrt(2))
@@ -106,7 +105,6 @@ def test_EEC_PWM(param_dict):
     assert_array_less(2 * Us_PWM[:, 3:5] / Vdc1, param_dict["val2"])
 
     if is_show_fig:
-
         plot_2D(
             [M_I_val],
             [2 * Us_PWM[:, ii] / Vdc1 for ii in range(Us_PWM.shape[1])],
@@ -133,7 +131,6 @@ def test_EEC_PWM(param_dict):
 
 
 if __name__ == "__main__":
-
     for param_dict in param_list:
         test_EEC_PWM(param_dict)
 

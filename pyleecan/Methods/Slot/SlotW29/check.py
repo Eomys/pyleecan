@@ -20,12 +20,7 @@ def check(self):
     -------
     S29_W01CheckError
         You must have W0 < W1
-    S29_W12CheckError
-        You must have W1 < W2
 
     """
     if self.W1 <= self.W0:
         raise S29_W01CheckError("You must have W0 < W1")
-
-    if self.W2 <= self.W1:
-        raise S29_W12CheckError("You must have W1 < W2")

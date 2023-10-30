@@ -34,6 +34,16 @@ try:
 except ImportError as error:
     get_notch_desc_list = error
 
+try:
+    from ..Methods.Machine.NotchEvenDist.build_geometry_key import build_geometry_key
+except ImportError as error:
+    build_geometry_key = error
+
+try:
+    from ..Methods.Machine.NotchEvenDist.get_key_Ox_radius import get_key_Ox_radius
+except ImportError as error:
+    get_key_Ox_radius = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -80,12 +90,38 @@ class NotchEvenDist(Notch):
         )
     else:
         get_notch_desc_list = get_notch_desc_list
+    # cf Methods.Machine.NotchEvenDist.build_geometry_key
+    if isinstance(build_geometry_key, ImportError):
+        build_geometry_key = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method build_geometry_key: "
+                    + str(build_geometry_key)
+                )
+            )
+        )
+    else:
+        build_geometry_key = build_geometry_key
+    # cf Methods.Machine.NotchEvenDist.get_key_Ox_radius
+    if isinstance(get_key_Ox_radius, ImportError):
+        get_key_Ox_radius = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method get_key_Ox_radius: "
+                    + str(get_key_Ox_radius)
+                )
+            )
+        )
+    else:
+        get_key_Ox_radius = get_key_Ox_radius
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, alpha=0, notch_shape=-1, init_dict=None, init_str=None):
+    def __init__(
+        self, alpha=0, notch_shape=-1, key_mat=None, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -105,11 +141,13 @@ class NotchEvenDist(Notch):
                 alpha = init_dict["alpha"]
             if "notch_shape" in list(init_dict.keys()):
                 notch_shape = init_dict["notch_shape"]
+            if "key_mat" in list(init_dict.keys()):
+                key_mat = init_dict["key_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.alpha = alpha
         self.notch_shape = notch_shape
         # Call Notch init
-        super(NotchEvenDist, self).__init__()
+        super(NotchEvenDist, self).__init__(key_mat=key_mat)
         # The class is frozen (in Notch init), for now it's impossible to
         # add new properties
 
@@ -242,8 +280,14 @@ class NotchEvenDist(Notch):
             notch_shape_val = None
         else:
             notch_shape_val = self.notch_shape.copy()
+        if self.key_mat is None:
+            key_mat_val = None
+        else:
+            key_mat_val = self.key_mat.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(alpha=alpha_val, notch_shape=notch_shape_val)
+        obj_copy = type(self)(
+            alpha=alpha_val, notch_shape=notch_shape_val, key_mat=key_mat_val
+        )
         return obj_copy
 
     def _set_None(self):

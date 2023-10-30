@@ -52,9 +52,7 @@ def comp_angle(self):
 
     # Continuous skew
     if is_step:
-
         if type_skew in TYPE_SKEW_LIST and type_skew != "user-defined":
-
             if Nstep in [None, 0, 1]:
                 raise Exception(
                     "Number of steps= "
@@ -66,11 +64,9 @@ def comp_angle(self):
             z_list = linspace(-0.5, 0.5, Nstep + 1)
 
             if type_skew == "linear" or Nstep == 2:
-
                 angle_list = linspace(-angle_overall / 2, angle_overall / 2, Nstep)
 
             elif type_skew == "vshape":
-
                 Nhalf = int(floor((Nstep + 1) / 2))
 
                 angles_half = linspace(-angle_overall, 0, Nhalf)
@@ -81,7 +77,6 @@ def comp_angle(self):
                     angle_list = concatenate((angles_half[:-1], flip(angles_half)))
 
             elif type_skew == "zig-zag":
-
                 angle_list = 0.5 * angle_overall * (-1) ** arange(Nstep)
 
             elif type_skew == "function":
@@ -96,7 +91,6 @@ def comp_angle(self):
             angle_list = list(array(angle_list) - np_mean(angle_list))
 
         elif type_skew == "user-defined":
-
             if angle_list is None:
                 raise Exception("angle_list not provided for user-defined stepped skew")
 
@@ -107,7 +101,6 @@ def comp_angle(self):
                 z_list = linspace(-0.5, 0.5, Nstep + 1)
 
             else:
-
                 if len(angle_list) != len(z_list) - 1:
                     raise Exception(
                         "angle_list must have one element less than z_list for user-defined stepped skew"
@@ -127,7 +120,6 @@ def comp_angle(self):
             raise Exception("Unknown stepped-skew type: " + self.type_skew)
 
     else:
-
         if type_skew == "linear":
             Nstep = 2
             z_list = linspace(-0.5, 0.5, Nstep)

@@ -215,7 +215,6 @@ class PWSlot60(Gen_PWSlot60, QWidget):
         )
         self.out_tooth_width.hide()
         if self.check(self.lamination) is None:
-
             # Compute all the needed output as string
             w_surf = format(
                 gui_option.unit.get_m2(self.slot.comp_surface_active()), ".4g"

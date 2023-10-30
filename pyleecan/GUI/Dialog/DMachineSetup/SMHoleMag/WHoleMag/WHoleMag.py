@@ -12,6 +12,10 @@ from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.PHoleM53 import PHoleM53
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.PHoleM57 import PHoleM57
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.PHoleM58 import PHoleM58
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM60.PHoleM60 import PHoleM60
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM61.PHoleM61 import PHoleM61
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM62.PHoleM62 import PHoleM62
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM63.PHoleM63 import PHoleM63
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.PHoleMUD import PHoleMUD
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.Ui_WHoleMag import Ui_WHoleMag
 
@@ -60,6 +64,10 @@ class WHoleMag(Ui_WHoleMag, QWidget):
                 PHoleM53,
                 PHoleM57,
                 PHoleM58,
+                PHoleM60,
+                PHoleM61,
+                PHoleM62,
+                PHoleM63,
                 PHoleMUD,
             ]
         else:  # SyRM
@@ -72,6 +80,10 @@ class WHoleMag(Ui_WHoleMag, QWidget):
                 PHoleM54,
                 PHoleM57,
                 PHoleM58,
+                PHoleM60,
+                PHoleM61,
+                PHoleM62,
+                PHoleM63,
                 PHoleMUD,
             ]
         self.type_list = [wid.hole_type for wid in self.wid_list]

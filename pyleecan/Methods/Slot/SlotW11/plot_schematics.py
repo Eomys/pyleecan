@@ -27,6 +27,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
@@ -44,6 +45,8 @@ def plot_schematics(
         A SlotW11 object
     is_default : bool
         True: plot default schematics, else use current slot values
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -66,6 +69,9 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
@@ -76,17 +82,21 @@ def plot_schematics(
         lam = LamSlot(
             Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
         )
-        return slot.plot_schematics(
-            is_default=False,
-            is_add_point_label=is_add_point_label,
-            is_add_schematics=is_add_schematics,
-            is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
-            save_path=save_path,
-            is_show_fig=is_show_fig,
-            fig=fig,
-            ax=ax,
-        )
+        if is_return_default:
+            return lam
+        else:
+            return slot.plot_schematics(
+                is_default=False,
+                is_return_default=False,
+                is_add_point_label=is_add_point_label,
+                is_add_schematics=is_add_schematics,
+                is_add_main_line=is_add_main_line,
+                type_add_active=type_add_active,
+                save_path=save_path,
+                is_show_fig=is_show_fig,
+                fig=fig,
+                ax=ax,
+            )
     else:
         # Getting the main plot
         if self.parent is None:
@@ -162,16 +172,35 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # H1
+            # H1 [m]
             line = Segment(point_dict["Z2"].real, point_dict["Z3"].real)
             line.plot(
                 fig=fig,
                 ax=ax,
-                label="H1",
+                label="H1 [m]",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.15,
+                offset_label=1j * self.W0 * 0.15 - self.get_H1() / 2,
                 is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # H1 [rad]
+            line = Arc1(
+                begin=(point_dict["Z2"] + point_dict["Z3"]) / 2
+                - self.get_H1() / 2
+                - 0.007j,
+                end=(((point_dict["Z2"] + point_dict["Z3"]) / 2) + point_dict["Z3"])
+                / 2,
+                radius=(self.get_H1() / 2),
+                is_trigo_direction=True,
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="H1 [rad]",
+                offset_label=-1j * sign * self.get_H1() * 0.5,
                 fontsize=SC_FONT_SIZE,
             )
             # H2
@@ -293,6 +322,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

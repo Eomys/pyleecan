@@ -11,6 +11,7 @@ from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.Gen_WSlotCirc import Gen_WS
 from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
+from ......GUI.Resources import pixmap_dict
 
 
 class WSlotCirc(Gen_WSlotCirc, QWidget):
@@ -23,7 +24,7 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
     notch_name = "Circular"
     slot_type = SlotCirc
 
-    def __init__(self, lamination=None, is_notch=True):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -32,8 +33,10 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
             A SlotCirc widget
         lamination : Lamination
             current lamination to edit
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -41,6 +44,9 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -62,7 +68,7 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
             self.c_H0_bore.setCurrentIndex(0)
         else:
             self.c_H0_bore.setCurrentIndex(1)
-        self.set_correct_schematics()
+
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
@@ -70,21 +76,31 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.c_H0_bore.currentIndexChanged.connect(self.set_H0_bore)
+        self.set_correct_schematics()
 
     def set_correct_schematics(self):
         """Update the schematics according to the current lamination/slot"""
         # Selecting the right image
         if not self.lamination.is_internal:
             # Use schematics on the external without magnet
-            path = u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta"
+            if not self.slot.is_H0_bore:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_ext_sta_old"])
+                )
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_ext_stator"])
+                )
         else:
             # Use schematics on the inner without magnet
-            path = u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot"
-        # Old/New schematics
-        if not self.slot.is_H0_bore:
-            path += "_old"
-
-        self.img_slot.setPixmap(QPixmap(path + ".png"))
+            if not self.slot.is_H0_bore:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_int_rot_old"])
+                )
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_int_rotor"])
+                )
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

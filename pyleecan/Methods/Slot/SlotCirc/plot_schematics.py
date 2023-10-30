@@ -26,6 +26,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_enforce_default_H0_bore=None,
     is_add_point_label=False,
     is_add_schematics=True,
@@ -44,6 +45,8 @@ def plot_schematics(
         A SlotCirc object
     is_default : int
         0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_enforce_default_H0_bore : bool
         To enforce is_H0_bore on default slot (is_default=True only), None use default value
     is_add_point_label : bool
@@ -69,6 +72,9 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
@@ -80,12 +86,17 @@ def plot_schematics(
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
             )
+            if is_return_default:
+                return lam
         else:  # External stator schematics
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
             )
+            if is_return_default:
+                return lam
         return slot.plot_schematics(
             is_default=False,
+            is_return_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
@@ -176,6 +187,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:
