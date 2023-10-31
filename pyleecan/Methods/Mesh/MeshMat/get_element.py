@@ -4,45 +4,70 @@ from collections import Iterable
 import numpy as np
 
 
-def get_element(self, indices=None):
+def _check_element_name(element_mat_dict, element_name):
+    if isinstance(element_name, str):
+        element_name = [element_name]
+    elif len(element_name) == 0:
+        element_name = element_mat_dict.keys()
+    else:
+        all_element_names = [*element_mat_dict.keys()]
+        for elem_name in element_name:
+            if elem_name not in all_element_names:
+                raise ValueError(
+                    f'Wrong element_name value, "{elem_name}" not in {all_element_names}'
+                )
+    return element_name
+
+
+def get_element(self, element_indices=None, element_name=[]):
     """Return the connectivity for one selected element
 
     Parameters
     ----------
     self : MeshMat
         an MeshMat object
-    indices : list
-        list of indice. If None, return all.
+    element_indices: list
+        list of element index. If None, return all.
+    element_name : list
+        list of element names to extract the connectivity. If None, return every element_names
 
     Returns
     -------
-    dict_element: dict
-        Dict of connectivities
+    dict_connectivity: dict[str, ndarray]
+        Dict of connectivity with element names as keys
     nb_element: int
         Number of element in the connectivity
     dict_index: dict
-        Dict of the element indices for each ElementMat
+        Dict of the element element_indices for each ElementMat
     """
 
-    if not isinstance(indices, Iterable) and indices is not None:
-        indices = (indices,)
+    if not isinstance(element_indices, Iterable) and element_indices is not None:
+        element_indices = (element_indices,)
 
-    dict_element = {}
+    element_name = _check_element_name(
+        element_mat_dict=self.element, element_name=element_name
+    )
+
+    dict_connectivity = {}
     dict_index = {}
     nb_element = 0
-    # Extract full connectivity matrix and element indices
-    if indices is None:
-        for key, element in self.element.items():
-            dict_element[key] = element.get_connectivity()
+    # Extract full connectivity matrix and element element_indices
+    if element_indices is None:
+        for key in element_name:
+            element = self.element[key]
+            dict_connectivity[key] = element.get_connectivity()
             dict_index[key] = element.indice
             nb_element += element.nb_element
 
     # Extract element connectivity and index for each element
     else:
-        for key, element in self.element.items():
-            list_connectivity = [element.get_connectivity(index) for index in indices]
+        for key in element_name:
+            element = self.element[key]
+            list_connectivity = [
+                element.get_connectivity(index) for index in element_indices
+            ]
             # Extract connectivity if the element index is present
-            dict_element[key] = np.array(
+            dict_connectivity[key] = np.array(
                 [
                     connectivity
                     for connectivity in list_connectivity
@@ -53,8 +78,8 @@ def get_element(self, indices=None):
             # Extract index if the element index is present
             dict_index[key] = [
                 index
-                for index, connectivity in zip(indices, list_connectivity)
+                for index, connectivity in zip(element_indices, list_connectivity)
                 if connectivity is not None
             ]
 
-    return dict_element, nb_element, dict_index
+    return dict_connectivity, nb_element, dict_index

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from numpy import abs, newaxis, array
 from itertools import repeat
+from .get_element import _check_element_name
 
 
-def get_element_area(self, indices=None):
+def get_element_area(self, element_indices=None, element_name=[]):
     """
     Return the area of the elements on the outer surface.
     #TODO address multiple element type issue, i.e. distracted indices
@@ -11,8 +12,10 @@ def get_element_area(self, indices=None):
     ----------
     self : MeshMat
         a MeshMat object
-    indices : list
-        list of the points to extract (optional)
+    element_indices : list
+        list of the element indices to extract (optional)
+    element_name : list | str
+        Name(s) of the element to extract
     Returns
     -------
     areas: ndarray
@@ -21,18 +24,24 @@ def get_element_area(self, indices=None):
     logger = self.get_logger()
     area = []
 
-    vertices_dict = self.get_vertice(indices=indices)
+    element_name = _check_element_name(
+        element_mat_dict=self.element, element_name=element_name
+    )
 
-    for key, vertices in vertices_dict.items():
+    vertices_dict = self.get_vertice(
+        element_indices=element_indices, element_name=element_name
+    )
+
+    for element_name, vertices in vertices_dict.items():
         if len(vertices) != 0:
             try:
-                A = self.element[key].interpolation.ref_element.get_element_area(
-                    vertices
-                )
+                A = self.element[
+                    element_name
+                ].interpolation.ref_element.get_element_area(vertices)
 
-            except:
+            except (AttributeError, NotImplementedError):
                 logger.warning(
-                    f'MeshMat: Reference element for "{key}" not found. '
+                    f'MeshMat: Reference element for "{element_name}" of type "{type(self.element[element_name])}" not found. '
                     + "Respective area set to zero."
                 )
                 A = list(repeat(0, vertices.shape[0]))
