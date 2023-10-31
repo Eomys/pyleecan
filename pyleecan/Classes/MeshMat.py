@@ -87,6 +87,11 @@ try:
 except ImportError as error:
     get_element_nb = error
 
+try:
+    from ..Methods.Mesh.MeshMat.convert import convert
+except ImportError as error:
+    convert = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -241,6 +246,15 @@ class MeshMat(Mesh):
         )
     else:
         get_element_nb = get_element_nb
+    # cf Methods.Mesh.MeshMat.convert
+    if isinstance(convert, ImportError):
+        convert = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method convert: " + str(convert))
+            )
+        )
+    else:
+        convert = convert
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

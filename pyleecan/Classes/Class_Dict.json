@@ -8645,7 +8645,8 @@
             "interface",
             "clear_node",
             "clear_element",
-            "get_element_nb"
+            "get_element_nb",
+            "convert"
         ],
         "mother": "Mesh",
         "name": "MeshMat",

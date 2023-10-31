@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
-from ....Classes.MeshMat import MeshMat
-from ....Classes.NodeMat import NodeMat
+from typing import Literal
+
+from numpy import arange, array
+
 from ....Classes.ElementMat import ElementMat
-from ....Classes.Interpolation import Interpolation
 from ....Classes.FPGNSeg import FPGNSeg
 from ....Classes.FPGNTri import FPGNTri
-
-from ....Classes.ScalarProductL2 import ScalarProductL2
+from ....Classes.Interpolation import Interpolation
+from ....Classes.Mesh import Mesh
+from ....Classes.MeshMat import MeshMat
+from ....Classes.NodeMat import NodeMat
+from ....Classes.RefLine3 import RefLine3
+from ....Classes.RefQuad9 import RefQuad9
 from ....Classes.RefSegmentP1 import RefSegmentP1
 from ....Classes.RefTriangle3 import RefTriangle3
+from ....Classes.ScalarProductL2 import ScalarProductL2
 
 
-from numpy import array, linspace
-
-
-def convert(self, meshtype, scale):
+def convert(
+    self,
+    meshtype: Literal["MeshVTK", "MeshMat"] = "MeshMat",
+    scale: float = 1.0,
+) -> Mesh:
     """Convert this object to another type of Mesh object.
 
     Parameters
@@ -34,6 +41,7 @@ def convert(self, meshtype, scale):
 
     if meshtype == "MeshVTK":
         new_mesh = self.copy()
+        new_mesh.node.coordinate *= scale
     elif meshtype == "MeshMat":
         new_mesh = MeshMat(dimension=self.dimension)
 
@@ -44,17 +52,15 @@ def convert(self, meshtype, scale):
         new_mesh.node = NodeMat(
             coordinate=scale * nodes,
             nb_node=nb_node,
-            indice=linspace(0, nb_node - 1, nb_node),
+            indice=arange(nb_node),
         )
 
         min_indice = 0
         for key in connect_all:
             connect = connect_all[key]
             nb_element = connect.shape[0]
-            indices = linspace(
-                min_indice, min_indice + nb_element - 1, nb_element, dtype=int
-            )
-            min_indice = min_indice + nb_element
+            indices = arange(min_indice, min_indice + nb_element)
+            min_indice += nb_element
 
             if key == "line":
                 new_mesh.element["line"] = ElementMat(
@@ -77,7 +83,7 @@ def convert(self, meshtype, scale):
                 )
                 interp = Interpolation()
                 interp.gauss_point = None  # TODO
-                interp.ref_element = None  # TODO
+                interp.ref_element = RefLine3()  # TODO
                 interp.scalar_product = None  # TODO
                 new_mesh.element["line3"].interpolation = interp
             elif key == "triangle3":
@@ -101,7 +107,7 @@ def convert(self, meshtype, scale):
                 )
                 interp = Interpolation()
                 interp.gauss_point = None  # TODO
-                interp.ref_element = None  # TODO
+                interp.ref_element = RefQuad9()  # TODO
                 interp.scalar_product = None  # TODO
                 new_mesh.element["quad9"].interpolation = interp
     else:
