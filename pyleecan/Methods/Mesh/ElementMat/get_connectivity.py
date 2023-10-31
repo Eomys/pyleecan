@@ -1,41 +1,40 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from typing import Optional
+from typing import Union
 
 
-def get_connectivity(self, element_indice=None):
-    """Return the connectivity of one element.
+def get_connectivity(
+    self, element_index: Optional[int] = None
+) -> Union[np.ndarray, None]:
+    """_summary_
 
     Parameters
     ----------
     self : ElementMat
         an ElementMat object
-    element_indice : int
-        the indice of a element. If None, return all elements.
+    element_index : Optional[int], optional
+       the indice of a element, by default None. If None, return all elements.
 
     Returns
     -------
-    connect_select: ndarray
-        Selected element connectivity. Return None if the tag does not exist
-
+    Union[np.ndarray, None]
+        Selected element connectivity. Return None if the index does not exist
     """
 
-    connect = self.connectivity
-    ind = self.indice
+    connectivity = self.connectivity
+    indices = self.indice
     nb_element = self.nb_element
 
-    if element_indice is None:  # Return all elements
-        return connect
-    elif nb_element == 0:  # No element
+    if element_index is None:  # Return all elements
+        return connectivity
+
+    if nb_element == 0:  # No element
         return None
-    elif nb_element == 1:  # Only one element
-        if ind[0] == element_indice:
-            return connect
-        else:
-            return None
+
+    connectivity_index = (indices == element_index).nonzero()[0]
+    if connectivity_index.size > 0:
+        return connectivity[connectivity_index[0], :]
     else:
-        Ipos_select = np.where(ind == element_indice)[0]
-        if Ipos_select.size > 0:
-            return connect[Ipos_select[0], :]
-        else:
-            return None
+        return None

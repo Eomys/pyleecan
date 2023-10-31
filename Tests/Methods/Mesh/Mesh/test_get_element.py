@@ -31,7 +31,7 @@ class Test_get_element_MeshMat(object):
         """unittest MeshMat return all elements"""
         solution = dict()
         solution["triangle3"] = np.array([[2, 1, 0], [1, 2, 3], [3, 1, 4]])
-        solution["segment2"] = np.array([0, 1])
+        solution["segment2"] = np.array([[0, 1]])
         result, nb, ind = self.mesh.get_element()
 
         for key in result:

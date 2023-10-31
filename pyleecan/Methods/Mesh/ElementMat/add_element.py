@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from typing import Union
+from numpy.typing import ArrayLike
 
 
-def add_element(self, node_indices, new_index):
+def add_element(self, node_indices: Union[ArrayLike, int], new_index: int) -> bool:
     """Add a new element defined by node indices
 
     Parameters
@@ -31,7 +33,13 @@ def add_element(self, node_indices, new_index):
 
     # Create/Add the new element
     if self.nb_element == 0:  # First element
-        self.connectivity = node_indices
+
+        # Force connectivity to have shape nb_element × nb_node_per_element
+        if isinstance(node_indices, int):
+            self.connectivity = np.array([[node_indices]])
+        else:
+            self.connectivity = np.array([node_indices])
+
         self.indice = np.array([new_index])
     else:
         self.connectivity = np.vstack([self.connectivity, node_indices])

@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def is_exist(self, connectivity):
+def is_exist(self, connectivity: np.ndarray) -> bool:
     """Check the existence of a element defined by a connectivity (vector of points indices).
     The order of points indices does not matter.
 
@@ -30,7 +30,7 @@ def is_exist(self, connectivity):
     )
 
     # Count how many nodes of each element are present in the connectivity
-    unique, unique_counts = np.unique(node_element, return_counts=True)
+    _, unique_counts = np.unique(node_element, return_counts=True)
 
     # The element already exist if all its node are present in the given connectivity
     result = np.any(unique_counts == self.nb_node_per_element)

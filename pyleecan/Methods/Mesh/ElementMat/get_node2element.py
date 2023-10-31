@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def get_node2element(self, node_indice):
+def get_node2element(self, node_indice: int) -> np.ndarray:
     """Return all indices of elements containing a node.
 
     Parameters
@@ -26,13 +26,11 @@ def get_node2element(self, node_indice):
     if connect is None:
         return node_to_element
 
-    ind = self.indice
-
     if len(connect.shape) > 1:  # If there is more than 1 element
-        idx_elem = np.where(connect == node_indice)[0]
-        node_to_element = ind[idx_elem]
+        idx_elem = (connect == node_indice).nonzero()[0]
+        node_to_element = self.indice[idx_elem]
 
     elif sum(connect == node_indice) > 0:
-        node_to_element = ind
+        node_to_element = self.indice
 
     return node_to_element
