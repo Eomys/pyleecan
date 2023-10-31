@@ -29,7 +29,7 @@ def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     mesh_renum = self.copy()
     mesh_renum.renum()
 
-    nodes = mesh_renum.get_node()
+    nodes = mesh_renum.get_node_coordinate()
     cells, _, _ = mesh_renum.get_element()
 
     cells_meshio = list()

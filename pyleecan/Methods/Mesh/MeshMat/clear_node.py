@@ -19,7 +19,7 @@ def clear_node(self):
 
     """
 
-    coord_init = self.get_node()
+    coord_init = self.get_node_coordinate()
     node_indice_init = self.get_node_indice()
     connect_dict, *_ = self.get_element()
 

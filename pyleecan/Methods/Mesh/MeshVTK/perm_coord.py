@@ -29,7 +29,7 @@ def perm_coord(
     mesh_mat = self.convert(meshtype="MeshMat", scale=1)
 
     # extract nodes en elements
-    mesh_mat_node = mesh_mat.get_node()
+    mesh_mat_node = mesh_mat.get_node_coordinate()
     mesh_mat_element = mesh_mat.get_element()
 
     # swap axis

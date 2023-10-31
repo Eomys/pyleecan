@@ -17,8 +17,8 @@ def test_convert_MeshVTK():
 
     meshmat = mesh.convert(meshtype="MeshMat", scale=1)
 
-    nodes_pv = mesh.get_node()
-    nodes = meshmat.get_node()
+    nodes_pv = mesh.get_node_coordinate()
+    nodes = meshmat.get_node_coordinate()
     assert_array_almost_equal(nodes_pv, nodes, decimal=6)
 
     elements_pv, _, _ = mesh.get_element()

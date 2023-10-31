@@ -1,25 +1,22 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
+from numpy.typing import ArrayLike
+import numpy as np
 
 
-def get_node(self, indices=None):
-    """Return a matrix of nodes coordinates.
+def get_node_coordinate(self, indices: Optional[ArrayLike] = None) -> np.ndarray:
+    """Return the coordinates of the node with provided indices.
+    If indices is not specified, returns every node coordinates
 
     Parameters
     ----------
-    self : Mesh
-        an Mesh object
-    indices : list
+    indices : Optional[ArrayLike], optional
         Indices of the targeted nodes. If None, return all.
-    is_indice: bool
-        Option to return the nodes indices (useful for unsorted
 
     Returns
     -------
-    coordinates: ndarray
+    np.ndarray
         nodes coordinates
-    indices : ndarray
-        nodes indices
-
     """
     if indices is None:
         return self.node.coordinate

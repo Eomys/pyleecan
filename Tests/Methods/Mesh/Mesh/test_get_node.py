@@ -7,7 +7,7 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class Test_get_node(object):
+class Test_get_node_coordinate(object):
     """unittest for nodes getter methods"""
 
     @classmethod
@@ -23,7 +23,7 @@ class Test_get_node(object):
     def test_MeshMat_triangle3(self):
         """unittest with ElementMat and NodeMat objects, only Triangle3 elements are defined"""
 
-        nodes = self.mesh.get_node(indices=[1, 2])
+        nodes = self.mesh.get_node_coordinate(indices=[1, 2])
         solution = np.array([[1, 0], [1, 2]])
 
         testA = np.sum(abs(solution - nodes))

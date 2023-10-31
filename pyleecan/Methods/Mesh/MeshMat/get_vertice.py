@@ -26,8 +26,10 @@ def get_vertice(self, indices=None):
     node_coordinates = {}
     for key, element in elements.items():
         if element.ndim > 1:
-            node_coordinates[key] = array([self.get_node(nodes) for nodes in element])
+            node_coordinates[key] = array(
+                [self.get_node_coordinate(nodes) for nodes in element]
+            )
         else:
-            node_coordinates[key] = self.get_node(element)
+            node_coordinates[key] = self.get_node_coordinate(element)
 
     return node_coordinates

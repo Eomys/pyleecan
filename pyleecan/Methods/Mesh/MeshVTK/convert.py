@@ -38,7 +38,7 @@ def convert(self, meshtype, scale):
         new_mesh = MeshMat(dimension=self.dimension)
 
         connect_all = self.get_element()[0]
-        nodes = array(self.get_node())
+        nodes = array(self.get_node_coordinate())
         nb_node = nodes.shape[0]
 
         new_mesh.node = NodeMat(

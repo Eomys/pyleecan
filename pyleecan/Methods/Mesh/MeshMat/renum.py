@@ -21,7 +21,7 @@ def renum(self):
     """
 
     if self._is_renum:
-        coord_init = self.get_node()
+        coord_init = self.get_node_coordinate()
         node_indice = self.get_node_indice()
         connect_dict, nb_element, indices = self.get_element()
 

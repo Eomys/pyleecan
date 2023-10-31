@@ -47,7 +47,7 @@ def test_MeshMat_1group():
     elements_grp, nb_element, indices = MS_grp.get_mesh().get_element()
     solution = np.array([[3, 3], [1, 2], [2, 3]])
     results = elements_grp["triangle"]  # The node indices have changed !
-    nodes = MS_grp.get_mesh().get_node(results)
+    nodes = MS_grp.get_mesh().get_node_coordinate(results)
     testA = np.sum(abs(solution - nodes))
     msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
     assert testA == pytest.approx(0, rel=DELTA), msg

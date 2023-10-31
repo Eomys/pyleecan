@@ -176,7 +176,7 @@ def get_field(
     # Get nodes coordinates if necessary
     if is_rthetaz or is_pol2cart:
         is_recursive = True
-        points = mesh.get_node(indices=indices)
+        points = mesh.get_node_coordinate(indices=indices)
     else:
         points = None
     # Get normals if necessary

@@ -29,7 +29,7 @@ def test_MeshMat():
     mesh.add_element(np.array([4, 2, 3]), "triangle")
 
     mesh.clear_node()
-    nodes_cleared = mesh.get_node()
+    nodes_cleared = mesh.get_node_coordinate()
     nb_nd_clear = len(nodes_cleared)
 
     msg = "Wrong output: returned " + str(nb_nd_clear) + ", expected: " + str(5)
