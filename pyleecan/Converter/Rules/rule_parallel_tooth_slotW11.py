@@ -58,25 +58,27 @@ def add_rule_parallel_tooth_slotW11(rule_list, is_stator):
         )
     )
 
+    rule_list.append(RuleComplex(fct_name="slotW11_H1", src="pyleecan"))
+
     rule_list.append(
         RuleEquation(
             param_other=[
                 {
                     "src": "other",
-                    "path": "Slot_Depth",
-                    "varaible": "y",
+                    "path": ["[Dimensions]", "Slot_Depth"],
+                    "variable": "y",
                 },
             ],
             param_pyleecan=[
                 {
                     "src": "pyleecan",
                     "path": f"machine.{lam_name}.slot.H2",
-                    "varaible": "x",
+                    "variable": "x",
                 },
                 {
                     "src": "pyleecan",
                     "path": f"machine.{lam_name}.slot.H1",
-                    "varaible": "a",
+                    "variable": "a",
                 },
             ],
             unit_type="m",

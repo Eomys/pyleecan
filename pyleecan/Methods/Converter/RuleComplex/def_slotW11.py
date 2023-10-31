@@ -1,6 +1,8 @@
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
+from pyleecan.Methods.Slot.SlotW11.get_H1 import get_H1
+
 
 def slotW11(machine):
     dict_machine = machine.stator.as_dict()
@@ -11,6 +13,14 @@ def slotW11(machine):
 
     machine.stator.slot.is_cstt_tooth = True
     machine.stator.slot.H1_is_rad = True
-    machine.stator.slot.H2 = 10
+
     machine.stator.is_internal = False
+    return machine
+
+
+def slotW11_H1(machine):
+    H1 = get_H1(machine.stator.slot)
+
+    machine.stator.slot.H1 = H1
+    machine.stator.slot.H1_is_rad = False
     return machine
