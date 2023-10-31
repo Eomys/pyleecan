@@ -9,8 +9,13 @@ from pyleecan.Methods.Converter.Machine_type_mot.get_CLAW import get_CLAW
 from pyleecan.Methods.Converter.Machine_type_mot.get_IM1PH import get_IM1PH
 from pyleecan.Methods.Converter.Machine_type_mot.get_WFC import get_WFC
 
+from pyleecan.Converter.Rules.rule_machine_dimension import add_rule_machine_dimension
+from pyleecan.Converter.Rules.rule_machine_type import add_rule_machine_type
 
-class machine_select:
+from pyleecan.Functions.Converter.rule_convert import rule_convert
+
+
+class MachineSelect:
     def __init__(self, rules=[]):
         self.rules = rules
         self.mot_dict = convert_mot_dict()
@@ -23,7 +28,10 @@ class machine_select:
 
         self.rules = self.add_rules(self.mot_dict, self.rules)
 
+        self.rules = add_rule_machine_type(self.rules)
+        # selecion motor_type
         if motor_type == "BPM":
+            self.rules = add_rule_machine_dimension(self.rules)
             get_BPM(self)
         elif motor_type == "IM":
             get_IM(self)
@@ -46,5 +54,9 @@ class machine_select:
 
 
 if __name__ == "__main__":
-    machine_select = machine_select()
-    machine_select.machine_selection()
+    mot_dict = convert_mot_dict()
+    machine_select = MachineSelect()
+    rules_list = machine_select.machine_selection()
+    machine = rule_convert(rules_list, mot_dict, None)
+
+    print("done")

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Converter/Rules_complex.csv
+# File generated according to Generator/ClassesRef/Converter/RuleComplex.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Converter/Rules_complex
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Converter/RuleComplex
 """
 
 from os import linesep
@@ -18,38 +18,55 @@ from .Rules import Rules
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Converter.Rules_complex.add_rules_complex import add_rules_complex
+    from ..Methods.Converter.RuleComplex.convert_to_P import convert_to_P
 except ImportError as error:
-    add_rules_complex = error
+    convert_to_P = error
+
+try:
+    from ..Methods.Converter.RuleComplex.convert_to_mot import convert_to_mot
+except ImportError as error:
+    convert_to_mot = error
 
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class Rules_complex(Rules):
+class RuleComplex(Rules):
     """complex rules"""
 
     VERSION = 1
 
-    # cf Methods.Converter.Rules_complex.add_rules_complex
-    if isinstance(add_rules_complex, ImportError):
-        add_rules_complex = property(
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Converter.RuleComplex.convert_to_P
+    if isinstance(convert_to_P, ImportError):
+        convert_to_P = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Rules_complex method add_rules_complex: "
-                    + str(add_rules_complex)
+                    "Can't use RuleComplex method convert_to_P: " + str(convert_to_P)
                 )
             )
         )
     else:
-        add_rules_complex = add_rules_complex
+        convert_to_P = convert_to_P
+    # cf Methods.Converter.RuleComplex.convert_to_mot
+    if isinstance(convert_to_mot, ImportError):
+        convert_to_mot = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RuleComplex method convert_to_mot: "
+                    + str(convert_to_mot)
+                )
+            )
+        )
+    else:
+        convert_to_mot = convert_to_mot
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, complex=None, init_dict=None, init_str=None):
+    def __init__(self, fct_name=None, src=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -65,23 +82,27 @@ class Rules_complex(Rules):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "complex" in list(init_dict.keys()):
-                complex = init_dict["complex"]
+            if "fct_name" in list(init_dict.keys()):
+                fct_name = init_dict["fct_name"]
+            if "src" in list(init_dict.keys()):
+                src = init_dict["src"]
         # Set the properties (value check and convertion are done in setter)
-        self.complex = complex
+        self.fct_name = fct_name
+        self.src = src
         # Call Rules init
-        super(Rules_complex, self).__init__()
+        super(RuleComplex, self).__init__()
         # The class is frozen (in Rules init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        Rules_complex_str = ""
+        RuleComplex_str = ""
         # Get the properties inherited from Rules
-        Rules_complex_str += super(Rules_complex, self).__str__()
-        Rules_complex_str += 'complex = "' + str(self.complex) + '"' + linesep
-        return Rules_complex_str
+        RuleComplex_str += super(RuleComplex, self).__str__()
+        RuleComplex_str += 'fct_name = "' + str(self.fct_name) + '"' + linesep
+        RuleComplex_str += 'src = "' + str(self.src) + '"' + linesep
+        return RuleComplex_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -90,9 +111,11 @@ class Rules_complex(Rules):
             return False
 
         # Check the properties inherited from Rules
-        if not super(Rules_complex, self).__eq__(other):
+        if not super(RuleComplex, self).__eq__(other):
             return False
-        if other.complex != self.complex:
+        if other.fct_name != self.fct_name:
+            return False
+        if other.src != self.src:
             return False
         return True
 
@@ -107,22 +130,30 @@ class Rules_complex(Rules):
 
         # Check the properties inherited from Rules
         diff_list.extend(
-            super(Rules_complex, self).compare(
+            super(RuleComplex, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._complex != self._complex:
+        if other._fct_name != self._fct_name:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._complex)
+                    + str(self._fct_name)
                     + ", other="
-                    + str(other._complex)
+                    + str(other._fct_name)
                     + ")"
                 )
-                diff_list.append(name + ".complex" + val_str)
+                diff_list.append(name + ".fct_name" + val_str)
             else:
-                diff_list.append(name + ".complex")
+                diff_list.append(name + ".fct_name")
+        if other._src != self._src:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._src) + ", other=" + str(other._src) + ")"
+                )
+                diff_list.append(name + ".src" + val_str)
+            else:
+                diff_list.append(name + ".src")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -133,8 +164,9 @@ class Rules_complex(Rules):
         S = 0  # Full size of the object
 
         # Get size of the properties inherited from Rules
-        S += super(Rules_complex, self).__sizeof__()
-        S += getsizeof(self.complex)
+        S += super(RuleComplex, self).__sizeof__()
+        S += getsizeof(self.fct_name)
+        S += getsizeof(self.src)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -149,46 +181,67 @@ class Rules_complex(Rules):
         """
 
         # Get the properties inherited from Rules
-        Rules_complex_dict = super(Rules_complex, self).as_dict(
+        RuleComplex_dict = super(RuleComplex, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
-        Rules_complex_dict["complex"] = self.complex
+        RuleComplex_dict["fct_name"] = self.fct_name
+        RuleComplex_dict["src"] = self.src
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        Rules_complex_dict["__class__"] = "Rules_complex"
-        return Rules_complex_dict
+        RuleComplex_dict["__class__"] = "RuleComplex"
+        return RuleComplex_dict
 
     def copy(self):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        complex_val = self.complex
+        fct_name_val = self.fct_name
+        src_val = self.src
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(complex=complex_val)
+        obj_copy = type(self)(fct_name=fct_name_val, src=src_val)
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.complex = None
+        self.fct_name = None
+        self.src = None
         # Set to None the properties inherited from Rules
-        super(Rules_complex, self)._set_None()
+        super(RuleComplex, self)._set_None()
 
-    def _get_complex(self):
-        """getter of complex"""
-        return self._complex
+    def _get_fct_name(self):
+        """getter of fct_name"""
+        return self._fct_name
 
-    def _set_complex(self, value):
-        """setter of complex"""
-        check_var("complex", value, "str")
-        self._complex = value
+    def _set_fct_name(self, value):
+        """setter of fct_name"""
+        check_var("fct_name", value, "str")
+        self._fct_name = value
 
-    complex = property(
-        fget=_get_complex,
-        fset=_set_complex,
+    fct_name = property(
+        fget=_get_fct_name,
+        fset=_set_fct_name,
         doc=u"""fonction name to convert 
+
+        :Type: str
+        """,
+    )
+
+    def _get_src(self):
+        """getter of src"""
+        return self._src
+
+    def _set_src(self, value):
+        """setter of src"""
+        check_var("src", value, "str")
+        self._src = value
+
+    src = property(
+        fget=_get_src,
+        fset=_set_src,
+        doc=u"""name source
 
         :Type: str
         """,

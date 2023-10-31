@@ -1,87 +1,87 @@
-from pyleecan.Classes.Rules_simple import Rules_simple
-from pyleecan.Classes.Rules_equation import Rules_equation
+from pyleecan.Classes.RuleSimple import RuleSimple
+from pyleecan.Classes.RuleEquation import RuleEquation
+from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_parallel_tooth_slotW11(rules, is_stator):
+def add_rule_parallel_tooth_slotW11(rule_list, is_stator):
     print("parallel_tooth_slotW11")
 
     if is_stator == True:
-        select_stator = "stator"
+        lam_name = "stator"
     else:
-        select_stator = "rotor"
+        lam_name = "rotor"
 
-    rules.append(
-        Rules_simple(
-            other="Parallel_Tooth",
-            pyleecan=f"machine.{select_stator}.slot",
+    rule_list.append(RuleComplex(fct_name="def_slotW11", src="pyleecan"))
+
+    rule_list.append(
+        RuleSimple(
+            other=["[Dimensions]", "Slot_Opening"],
+            pyleecan=f"machine.{lam_name}.slot.W0",
             unit_type="m",
             scaling_to_P=1,
         )
     )
 
-    rules.append(
-        Rules_simple(
-            other="Slot_Opening",
-            pyleecan=f"machine.{select_stator}.slot.W0",
+    rule_list.append(
+        RuleSimple(
+            other=["[Dimensions]", "Tooth_Width"],
+            pyleecan=f"machine.{lam_name}.slot.W3",
             unit_type="m",
             scaling_to_P=1,
         )
     )
 
-    rules.append(
-        Rules_simple(
-            other="Tooth_Width",
-            pyleecan=f"machine.{select_stator}.slot.W3",
+    rule_list.append(
+        RuleSimple(
+            other=["[Dimensions]", "Tooth_Tip_Depth"],
+            pyleecan=f"machine.{lam_name}.slot.H0",
             unit_type="m",
             scaling_to_P=1,
         )
     )
 
-    rules.append(
-        Rules_simple(
-            other="Tooth_Tip_Depth",
-            pyleecan=f"machine.{select_stator}.slot.H0",
+    rule_list.append(
+        RuleSimple(
+            other=["[Dimensions]", "Slot_Corner_Radius"],
+            pyleecan=f"machine.{lam_name}.slot.R1",
             unit_type="m",
             scaling_to_P=1,
         )
     )
 
-    rules.append(
-        Rules_simple(
-            other="Slot_Corner_Radius",
-            pyleecan=f"machine.{select_stator}.slot.R1",
-            unit_type="m",
-            scaling_to_P=1,
-        )
-    )
-
-    rules.append(
-        Rules_simple(
-            other="Tooth_Tip_Angle",
-            pyleecan=f"machine.{select_stator}.slot.H1",
+    rule_list.append(
+        RuleSimple(
+            other=["[Dimensions]", "Tooth_Tip_Angle"],
+            pyleecan=f"machine.{lam_name}.slot.H1",
             unit_type="rad",
             scaling_to_P=1,
         )
     )
 
-    rules.append(
-        Rules_equation(
-            param_other={
-                "src": "motor-cad",
-                "path": "Slot_Depth",
-                "varaible": "y",
-            },
-            param_pyleecan={
-                "src": "pyleecan",
-                "path": f"machine.{select_stator}.slot.H2",
-                "varaible": "x",
-                "src": "pyleecan",
-                "path": f"machine.{select_stator}.slot.H1",
-                "varaible": "a",
-            },
+    rule_list.append(
+        RuleEquation(
+            param_other=[
+                {
+                    "src": "other",
+                    "path": "Slot_Depth",
+                    "varaible": "y",
+                },
+            ],
+            param_pyleecan=[
+                {
+                    "src": "pyleecan",
+                    "path": f"machine.{lam_name}.slot.H2",
+                    "varaible": "x",
+                },
+                {
+                    "src": "pyleecan",
+                    "path": f"machine.{lam_name}.slot.H1",
+                    "varaible": "a",
+                },
+            ],
             unit_type="m",
             scaling_to_P="y = a+x",
         )
     )
 
-    return rules
+    return rule_list

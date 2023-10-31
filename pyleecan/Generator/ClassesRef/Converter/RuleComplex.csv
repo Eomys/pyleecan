@@ -1,5 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-complex,-,fonction name to convert ,0,str,None,,,
+fct_name,-,fonction name to convert ,0,str,None,,,
+src,-,name source,0,str,None,,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
-Converter,Rules,add_rules_complex,VERSION,1,complex rules,,,
+Converter,Rules,convert_to_P,VERSION,1,complex rules,,,
+,,convert_to_mot,,,,,,

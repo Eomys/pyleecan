@@ -12200,28 +12200,7 @@
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle6.csv",
         "properties": []
     },
-    "Rules": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Rules_complex",
-            "Rules_equation",
-            "Rules_simple"
-        ],
-        "desc": "abstract class for rules",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Rules",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Rules.csv",
-        "properties": []
-    },
-    "Rules_complex": {
+    "RuleComplex": {
         "constants": [
             {
                 "name": "VERSION",
@@ -12232,26 +12211,37 @@
         "desc": "complex rules",
         "is_internal": false,
         "methods": [
-            "add_rules_complex"
+            "convert_to_P",
+            "convert_to_mot"
         ],
         "mother": "Rules",
-        "name": "Rules_complex",
+        "name": "RuleComplex",
         "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Rules_complex.csv",
+        "path": "pyleecan/Generator/ClassesRef/Converter/RuleComplex.csv",
         "properties": [
             {
                 "as_dict": "",
                 "desc": "fonction name to convert ",
                 "max": "",
                 "min": "",
-                "name": "complex",
+                "name": "fct_name",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "as_dict": "",
+                "desc": "name source",
+                "max": "",
+                "min": "",
+                "name": "src",
                 "type": "str",
                 "unit": "-",
                 "value": "None"
             }
         ]
     },
-    "Rules_equation": {
+    "RuleEquation": {
         "constants": [
             {
                 "name": "VERSION",
@@ -12262,12 +12252,13 @@
         "desc": "simple rules",
         "is_internal": false,
         "methods": [
-            "add_rules_equation"
+            "convert_to_P",
+            "convert_to_mot"
         ],
         "mother": "Rules",
-        "name": "Rules_equation",
+        "name": "RuleEquation",
         "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Rules_equation.csv",
+        "path": "pyleecan/Generator/ClassesRef/Converter/RuleEquation.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -12275,7 +12266,7 @@
                 "max": "",
                 "min": "",
                 "name": "param_other",
-                "type": "dict",
+                "type": "list",
                 "unit": "-",
                 "value": null
             },
@@ -12285,7 +12276,7 @@
                 "max": "",
                 "min": "",
                 "name": "param_pyleecan",
-                "type": "dict",
+                "type": "list",
                 "unit": "-",
                 "value": null
             },
@@ -12310,6 +12301,88 @@
                 "value": "None"
             }
         ]
+    },
+    "RuleSimple": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "simple rules",
+        "is_internal": false,
+        "methods": [
+            "convert_to_P",
+            "convert_to_mot"
+        ],
+        "mother": "Rules",
+        "name": "RuleSimple",
+        "package": "Converter",
+        "path": "pyleecan/Generator/ClassesRef/Converter/RuleSimple.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "parameter ",
+                "max": "",
+                "min": "",
+                "name": "other",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "path pyleecan parameter in object machine ",
+                "max": "",
+                "min": "",
+                "name": "pyleecan",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "as_dict": "",
+                "desc": "unit",
+                "max": "",
+                "min": "",
+                "name": "unit_type",
+                "type": "str",
+                "unit": "-",
+                "value": "m"
+            },
+            {
+                "as_dict": "",
+                "desc": "conversion paramter to pyleecan",
+                "max": "",
+                "min": "",
+                "name": "scaling_to_P",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            }
+        ]
+    },
+    "Rules": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "RuleComplex",
+            "RuleEquation",
+            "RuleSimple"
+        ],
+        "desc": "abstract class for rules",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Rules",
+        "package": "Converter",
+        "path": "pyleecan/Generator/ClassesRef/Converter/Rules.csv",
+        "properties": []
     },
     "Rules_selections": {
         "constants": [
@@ -12366,66 +12439,6 @@
                 "type": "bool",
                 "unit": "-",
                 "value": true
-            }
-        ]
-    },
-    "Rules_simple": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "simple rules",
-        "is_internal": false,
-        "methods": [
-            "add_rules_simple"
-        ],
-        "mother": "Rules",
-        "name": "Rules_simple",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Rules_simple.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "parameter ",
-                "max": "",
-                "min": "",
-                "name": "other",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "path pyleecan parameter in object machine ",
-                "max": "",
-                "min": "",
-                "name": "pyleecan",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "unit",
-                "max": "",
-                "min": "",
-                "name": "unit_type",
-                "type": "str",
-                "unit": "-",
-                "value": "m"
-            },
-            {
-                "as_dict": "",
-                "desc": "conversion paramter to pyleecan",
-                "max": "",
-                "min": "",
-                "name": "scaling_to_P",
-                "type": "int",
-                "unit": "-",
-                "value": 1
             }
         ]
     },

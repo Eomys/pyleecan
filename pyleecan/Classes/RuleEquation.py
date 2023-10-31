@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Converter/Rules_simple.csv
+# File generated according to Generator/ClassesRef/Converter/RuleEquation.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Converter/Rules_simple
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Converter/RuleEquation
 """
 
 from os import linesep
@@ -18,32 +18,49 @@ from .Rules import Rules
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Converter.Rules_simple.add_rules_simple import add_rules_simple
+    from ..Methods.Converter.RuleEquation.convert_to_P import convert_to_P
 except ImportError as error:
-    add_rules_simple = error
+    convert_to_P = error
+
+try:
+    from ..Methods.Converter.RuleEquation.convert_to_mot import convert_to_mot
+except ImportError as error:
+    convert_to_mot = error
 
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class Rules_simple(Rules):
+class RuleEquation(Rules):
     """simple rules"""
 
     VERSION = 1
 
-    # cf Methods.Converter.Rules_simple.add_rules_simple
-    if isinstance(add_rules_simple, ImportError):
-        add_rules_simple = property(
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Converter.RuleEquation.convert_to_P
+    if isinstance(convert_to_P, ImportError):
+        convert_to_P = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Rules_simple method add_rules_simple: "
-                    + str(add_rules_simple)
+                    "Can't use RuleEquation method convert_to_P: " + str(convert_to_P)
                 )
             )
         )
     else:
-        add_rules_simple = add_rules_simple
+        convert_to_P = convert_to_P
+    # cf Methods.Converter.RuleEquation.convert_to_mot
+    if isinstance(convert_to_mot, ImportError):
+        convert_to_mot = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RuleEquation method convert_to_mot: "
+                    + str(convert_to_mot)
+                )
+            )
+        )
+    else:
+        convert_to_mot = convert_to_mot
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -51,10 +68,10 @@ class Rules_simple(Rules):
 
     def __init__(
         self,
-        other=None,
-        pyleecan=None,
+        param_other=None,
+        param_pyleecan=None,
         unit_type="m",
-        scaling_to_P=1,
+        scaling_to_P=None,
         init_dict=None,
         init_str=None,
     ):
@@ -73,35 +90,45 @@ class Rules_simple(Rules):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "other" in list(init_dict.keys()):
-                other = init_dict["other"]
-            if "pyleecan" in list(init_dict.keys()):
-                pyleecan = init_dict["pyleecan"]
+            if "param_other" in list(init_dict.keys()):
+                param_other = init_dict["param_other"]
+            if "param_pyleecan" in list(init_dict.keys()):
+                param_pyleecan = init_dict["param_pyleecan"]
             if "unit_type" in list(init_dict.keys()):
                 unit_type = init_dict["unit_type"]
             if "scaling_to_P" in list(init_dict.keys()):
                 scaling_to_P = init_dict["scaling_to_P"]
         # Set the properties (value check and convertion are done in setter)
-        self.other = other
-        self.pyleecan = pyleecan
+        self.param_other = param_other
+        self.param_pyleecan = param_pyleecan
         self.unit_type = unit_type
         self.scaling_to_P = scaling_to_P
         # Call Rules init
-        super(Rules_simple, self).__init__()
+        super(RuleEquation, self).__init__()
         # The class is frozen (in Rules init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        Rules_simple_str = ""
+        RuleEquation_str = ""
         # Get the properties inherited from Rules
-        Rules_simple_str += super(Rules_simple, self).__str__()
-        Rules_simple_str += 'other = "' + str(self.other) + '"' + linesep
-        Rules_simple_str += 'pyleecan = "' + str(self.pyleecan) + '"' + linesep
-        Rules_simple_str += 'unit_type = "' + str(self.unit_type) + '"' + linesep
-        Rules_simple_str += "scaling_to_P = " + str(self.scaling_to_P) + linesep
-        return Rules_simple_str
+        RuleEquation_str += super(RuleEquation, self).__str__()
+        RuleEquation_str += (
+            "param_other = "
+            + linesep
+            + str(self.param_other).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        RuleEquation_str += (
+            "param_pyleecan = "
+            + linesep
+            + str(self.param_pyleecan).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        RuleEquation_str += 'unit_type = "' + str(self.unit_type) + '"' + linesep
+        RuleEquation_str += 'scaling_to_P = "' + str(self.scaling_to_P) + '"' + linesep
+        return RuleEquation_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -110,11 +137,11 @@ class Rules_simple(Rules):
             return False
 
         # Check the properties inherited from Rules
-        if not super(Rules_simple, self).__eq__(other):
+        if not super(RuleEquation, self).__eq__(other):
             return False
-        if other.other != self.other:
+        if other.param_other != self.param_other:
             return False
-        if other.pyleecan != self.pyleecan:
+        if other.param_pyleecan != self.param_pyleecan:
             return False
         if other.unit_type != self.unit_type:
             return False
@@ -133,30 +160,34 @@ class Rules_simple(Rules):
 
         # Check the properties inherited from Rules
         diff_list.extend(
-            super(Rules_simple, self).compare(
+            super(RuleEquation, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._other != self._other:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._other) + ", other=" + str(other._other) + ")"
-                )
-                diff_list.append(name + ".other" + val_str)
-            else:
-                diff_list.append(name + ".other")
-        if other._pyleecan != self._pyleecan:
+        if other._param_other != self._param_other:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._pyleecan)
+                    + str(self._param_other)
                     + ", other="
-                    + str(other._pyleecan)
+                    + str(other._param_other)
                     + ")"
                 )
-                diff_list.append(name + ".pyleecan" + val_str)
+                diff_list.append(name + ".param_other" + val_str)
             else:
-                diff_list.append(name + ".pyleecan")
+                diff_list.append(name + ".param_other")
+        if other._param_pyleecan != self._param_pyleecan:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param_pyleecan)
+                    + ", other="
+                    + str(other._param_pyleecan)
+                    + ")"
+                )
+                diff_list.append(name + ".param_pyleecan" + val_str)
+            else:
+                diff_list.append(name + ".param_pyleecan")
         if other._unit_type != self._unit_type:
             if is_add_value:
                 val_str = (
@@ -191,9 +222,13 @@ class Rules_simple(Rules):
         S = 0  # Full size of the object
 
         # Get size of the properties inherited from Rules
-        S += super(Rules_simple, self).__sizeof__()
-        S += getsizeof(self.other)
-        S += getsizeof(self.pyleecan)
+        S += super(RuleEquation, self).__sizeof__()
+        if self.param_other is not None:
+            for value in self.param_other:
+                S += getsizeof(value)
+        if self.param_pyleecan is not None:
+            for value in self.param_pyleecan:
+                S += getsizeof(value)
         S += getsizeof(self.unit_type)
         S += getsizeof(self.scaling_to_P)
         return S
@@ -210,32 +245,42 @@ class Rules_simple(Rules):
         """
 
         # Get the properties inherited from Rules
-        Rules_simple_dict = super(Rules_simple, self).as_dict(
+        RuleEquation_dict = super(RuleEquation, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
-        Rules_simple_dict["other"] = self.other
-        Rules_simple_dict["pyleecan"] = self.pyleecan
-        Rules_simple_dict["unit_type"] = self.unit_type
-        Rules_simple_dict["scaling_to_P"] = self.scaling_to_P
+        RuleEquation_dict["param_other"] = (
+            self.param_other.copy() if self.param_other is not None else None
+        )
+        RuleEquation_dict["param_pyleecan"] = (
+            self.param_pyleecan.copy() if self.param_pyleecan is not None else None
+        )
+        RuleEquation_dict["unit_type"] = self.unit_type
+        RuleEquation_dict["scaling_to_P"] = self.scaling_to_P
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        Rules_simple_dict["__class__"] = "Rules_simple"
-        return Rules_simple_dict
+        RuleEquation_dict["__class__"] = "RuleEquation"
+        return RuleEquation_dict
 
     def copy(self):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        other_val = self.other
-        pyleecan_val = self.pyleecan
+        if self.param_other is None:
+            param_other_val = None
+        else:
+            param_other_val = self.param_other.copy()
+        if self.param_pyleecan is None:
+            param_pyleecan_val = None
+        else:
+            param_pyleecan_val = self.param_pyleecan.copy()
         unit_type_val = self.unit_type
         scaling_to_P_val = self.scaling_to_P
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            other=other_val,
-            pyleecan=pyleecan_val,
+            param_other=param_other_val,
+            param_pyleecan=param_pyleecan_val,
             unit_type=unit_type_val,
             scaling_to_P=scaling_to_P_val,
         )
@@ -244,46 +289,50 @@ class Rules_simple(Rules):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.other = None
-        self.pyleecan = None
+        self.param_other = None
+        self.param_pyleecan = None
         self.unit_type = None
         self.scaling_to_P = None
         # Set to None the properties inherited from Rules
-        super(Rules_simple, self)._set_None()
+        super(RuleEquation, self)._set_None()
 
-    def _get_other(self):
-        """getter of other"""
-        return self._other
+    def _get_param_other(self):
+        """getter of param_other"""
+        return self._param_other
 
-    def _set_other(self, value):
-        """setter of other"""
-        check_var("other", value, "str")
-        self._other = value
+    def _set_param_other(self, value):
+        """setter of param_other"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("param_other", value, "list")
+        self._param_other = value
 
-    other = property(
-        fget=_get_other,
-        fset=_set_other,
-        doc=u"""parameter 
+    param_other = property(
+        fget=_get_param_other,
+        fset=_set_param_other,
+        doc=u"""dict other parameters
 
-        :Type: str
+        :Type: list
         """,
     )
 
-    def _get_pyleecan(self):
-        """getter of pyleecan"""
-        return self._pyleecan
+    def _get_param_pyleecan(self):
+        """getter of param_pyleecan"""
+        return self._param_pyleecan
 
-    def _set_pyleecan(self, value):
-        """setter of pyleecan"""
-        check_var("pyleecan", value, "str")
-        self._pyleecan = value
+    def _set_param_pyleecan(self, value):
+        """setter of param_pyleecan"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("param_pyleecan", value, "list")
+        self._param_pyleecan = value
 
-    pyleecan = property(
-        fget=_get_pyleecan,
-        fset=_set_pyleecan,
-        doc=u"""path pyleecan parameter in object machine 
+    param_pyleecan = property(
+        fget=_get_param_pyleecan,
+        fset=_set_param_pyleecan,
+        doc=u"""dict pyleecan parameters
 
-        :Type: str
+        :Type: list
         """,
     )
 
@@ -311,7 +360,7 @@ class Rules_simple(Rules):
 
     def _set_scaling_to_P(self, value):
         """setter of scaling_to_P"""
-        check_var("scaling_to_P", value, "int")
+        check_var("scaling_to_P", value, "str")
         self._scaling_to_P = value
 
     scaling_to_P = property(
@@ -319,6 +368,6 @@ class Rules_simple(Rules):
         fset=_set_scaling_to_P,
         doc=u"""conversion paramter to pyleecan
 
-        :Type: int
+        :Type: str
         """,
     )

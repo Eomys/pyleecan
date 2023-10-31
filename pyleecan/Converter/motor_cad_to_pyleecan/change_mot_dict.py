@@ -2,13 +2,14 @@ from os.path import join, split
 
 
 def convert_mot_dict():
-    # Ouvrir le fichier
+    # open file
     path = split(__file__)[0]
     file = open(join(path, "EMD240_v16.mot"))
 
     mot_dict = {}
-    # utilisez readline() pour lire la première ligne
+    # convert .mot to dict
     for line in file:
+        # separation different part like .mot
         if line[:1] == "[":
             temp_dict = {}
             l = line.split("\n")
