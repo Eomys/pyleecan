@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import abs, newaxis, array
+from itertools import repeat
 
 
 def get_element_area(self, indices=None):
@@ -28,13 +29,13 @@ def get_element_area(self, indices=None):
                 A = self.element[key].interpolation.ref_element.get_element_area(
                     vertices
                 )
-                A = A.tolist()
+
             except:
                 logger.warning(
                     f'MeshMat: Reference element for "{key}" not found. '
                     + "Respective area set to zero."
                 )
-                A = [0 for i in range(vertices.shape[0])]
+                A = list(repeat(0, vertices.shape[0]))
 
             area.extend(A)
 

@@ -26,9 +26,17 @@ class Test_get_node2element(object):
 
         self.DELTA = 1e-10
 
-    def test_MeshMat_node(self):
+    def test_ElementMat_get_node2element(self):
         """unittest for an existing node"""
         ind_elem = self.mesh.element["triangle"].get_node2element(1)
+        solution = np.array([0, 1])
+        testA = np.sum(abs(solution - ind_elem))
+        msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
+        assert abs(testA - 0) < self.DELTA, msg
+
+    def test_MeshMat_get_node2element(self):
+        """unittest for an existing node"""
+        ind_elem = self.mesh.get_node2element(1)
         solution = np.array([0, 1])
         testA = np.sum(abs(solution - ind_elem))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
@@ -47,3 +55,14 @@ class Test_get_node2element(object):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
         assert abs(testA - 0) < self.DELTA, msg
+
+
+if __name__ == "__main__":
+
+    test_obj = Test_get_node2element()
+    test_obj.setup_method(None)
+    test_obj.test_ElementMat_get_node2element()
+    test_obj.setup_method(None)
+    test_obj.test_MeshMat_get_node2element()
+    test_obj.setup_method(None)
+    test_obj.test_MeshMat_fakenode()

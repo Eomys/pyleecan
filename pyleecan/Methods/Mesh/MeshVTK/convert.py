@@ -22,7 +22,7 @@ def convert(self, meshtype, scale):
     self : MeshVTK
         a MeshVTK object
     meshtype : str
-        a type of Mesh object
+        a type of Mesh object: MeshVTK or MeshMat
     scale : float
         scale factor
 
@@ -104,5 +104,9 @@ def convert(self, meshtype, scale):
                 interp.ref_element = None  # TODO
                 interp.scalar_product = None  # TODO
                 new_mesh.element["quad9"].interpolation = interp
+    else:
+        raise ValueError(
+            f"Wrong meshtype value, expected MeshVTK or MeshMat, got {meshtype}."
+        )
 
     return new_mesh

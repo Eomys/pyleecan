@@ -22,15 +22,17 @@ def get_node2element(self, node_indice):
 
     node_to_element = np.array([], dtype=int)
     connect = self.connectivity
+
+    if connect is None:
+        return node_to_element
+
     ind = self.indice
 
-    if (
-        connect is not None and len(connect.shape) > 1
-    ):  # If there is more than 1 element
+    if len(connect.shape) > 1:  # If there is more than 1 element
         idx_elem = np.where(connect == node_indice)[0]
         node_to_element = ind[idx_elem]
-    else:
-        if connect is not None and sum(connect == node_indice) > 0:
-            node_to_element = ind
+
+    elif sum(connect == node_indice) > 0:
+        node_to_element = ind
 
     return node_to_element

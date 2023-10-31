@@ -26,17 +26,16 @@ def get_connectivity(self, element_indice=None):
 
     if element_indice is None:  # Return all elements
         return connect
-    else:
-        if nb_element == 0:  # No element
-            return None
-        elif nb_element == 1:  # Only one element
-            if ind[0] == element_indice:
-                return connect
-            else:
-                return None
+    elif nb_element == 0:  # No element
+        return None
+    elif nb_element == 1:  # Only one element
+        if ind[0] == element_indice:
+            return connect
         else:
-            Ipos_select = np.where(ind == element_indice)[0]
-            if Ipos_select.size > 0:
-                return connect[Ipos_select[0], :]
-            else:
-                return None
+            return None
+    else:
+        Ipos_select = np.where(ind == element_indice)[0]
+        if Ipos_select.size > 0:
+            return connect[Ipos_select[0], :]
+        else:
+            return None

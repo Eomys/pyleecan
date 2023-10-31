@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def find_element(self, points, nb_pt, normal_t=None):
+def find_element(self, points, normal_t=None):
     """Return the elements containing the target point(s)
 
     Parameters
@@ -11,9 +11,8 @@ def find_element(self, points, nb_pt, normal_t=None):
     self : MeshMat
         an MeshMat object
     points : ndarray
-        coordinates of the target point(s)
-    nb_pt : int
-        number of target points
+        2darray containing the coordinates of the target point(s)
+    normal_t TODO identify what it is
 
     Returns
     -------
@@ -21,118 +20,66 @@ def find_element(self, points, nb_pt, normal_t=None):
         A list of selected elements
 
     """
+
+    if points.ndim != 2:
+        raise ValueError(
+            "points must have two dimensions, namely the number of points and the points coordinates."
+        )
+
     # nmax_search = 3
-    elements_list = list()
-    element_prop = list()
+    elements_list = []
+    element_prop = []
 
     nodes = self.node
     point_coord = nodes.coordinate
-    nb_tot_pt = nodes.nb_node
+    nb_mesh_point = nodes.nb_node
 
-    for ii in range(nb_pt):
-        if nb_pt == 1:
-            pt = points
-        else:
-            pt = points[ii, :]
+    for point in points:
+        # Find the closest node to the given point
+        point_rep = np.tile(point, (nb_mesh_point, 1))
+        dist_node = np.linalg.norm(point_coord - point_rep, axis=1, keepdims=True)
+        idx_closest_node = dist_node.argmin(axis=0)
+
         for key in self.element:
             elements = self.element[key]
             ref_element = elements.interpolation.ref_element
             connect = elements.connectivity
             nb_node_per_element = elements.nb_node_per_element
-            # vertice0 = point_coord[connect[0]]
-            # dist_ref = np.sqrt(
-            #     np.square(vertice0[0, 0] - vertice0[1, 0])
-            #     + np.square(vertice0[0, 1] - vertice0[1, 1])
-            # )
-
-            # compute the distance of all nodes to the current point 'pt'
-            point_rep = np.tile(pt, (nb_tot_pt, 1))
-
-            if self.dimension == 3:
-                dist_node = np.reshape(
-                    np.sqrt(
-                        np.square(point_coord[:, 0] - point_rep[:, 0])
-                        + np.square(point_coord[:, 1] - point_rep[:, 1])
-                        + np.square(point_coord[:, 2] - point_rep[:, 2])
-                    ),
-                    (nb_tot_pt, 1),
-                )
-            else:
-                dist_node = np.reshape(
-                    np.sqrt(
-                        np.square(point_coord[:, 0] - point_rep[:, 0])
-                        + np.square(point_coord[:, 1] - point_rep[:, 1])
-                    ),
-                    (nb_tot_pt, 1),
-                )
-            # min_dist = np.min(dist_node)
-            # min_node = np.where(dist_node == min_dist)[0]
-            Imin_node = np.argsort(dist_node, axis=0)
-            # Imin_node = Imin_node[0:nmax_search]  #
 
             # All selected nodes from the closest to the farthest are tested
-            inode = 0
-            # dontstop = True
-
-            # while inode < nmax_search and inode < nb_tot_pt and dontstop:
-
             # get elements that contain the closest node and test if point is inside
-            closest_elements = np.where(connect == Imin_node[inode])[0]
-            nb_closest_elem = len(closest_elements)
+            idx_closest_elements = np.where(connect == idx_closest_node)[0]
+            nb_closest_elem = len(idx_closest_elements)
             a, b = np.zeros(nb_closest_elem), np.zeros(nb_closest_elem)
             element_prop = list()
-            for ielt in range(nb_closest_elem):
-                vert = self.get_vertice(closest_elements[ielt])[key]
-                (is_inside, a[ielt], b[ielt]) = ref_element.is_inside(
-                    vert, pt, normal_t
-                )
+            for k, idx_closest_elem in enumerate(idx_closest_elements):
+                vert = self.get_vertice(idx_closest_elem)[key]
+                (is_inside, a[k], b[k]) = ref_element.is_inside(vert, point, normal_t)
                 if is_inside:
                     # dontstop = False
                     element_prop.append(key)
-                    element_prop.append(closest_elements[ielt])
+                    element_prop.append(idx_closest_elem)
 
                 # inode = inode + 1
-                # break
+                # break<
 
             # if no element was found, give it a second try
             # TODO first check if outside mesh
             if len(element_prop) == 0:
                 # test all elements (sorted by center, i.e. mean of vertices)
-                vert_cent = np.zeros(pt.shape)
-                for ielement in range(nb_node_per_element):
-                    vert_cent = (
-                        vert_cent
-                        + point_coord[connect[:, ielement]] / nb_node_per_element
-                    )
+                element_center = point_coord[connect].mean(axis=1)
 
-                if self.dimension == 3:
-                    dist_vert_cent = np.reshape(
-                        np.sqrt(
-                            (vert_cent[:, 0] - pt[0]) ** 2
-                            + (vert_cent[:, 1] - pt[1]) ** 2
-                            + (vert_cent[:, 2] - pt[2]) ** 2
-                        ),
-                        (elements.nb_element, 1),
-                    )
-                else:
-                    dist_vert_cent = np.reshape(
-                        np.sqrt(
-                            (vert_cent[:, 0] - pt[0]) ** 2
-                            + (vert_cent[:, 1] - pt[1]) ** 2
-                        ),
-                        (elements.nb_element, 1),
-                    )
+                dist_element_cent = np.linalg.norm(
+                    element_center - point[np.newaxis], axis=1, keepdims=True
+                )
 
-                Imin_vert_cent = np.argsort(dist_vert_cent, axis=0)[:, 0]
-                i = 0
-                is_inside = False
-                while i < elements.nb_element and not is_inside:
-                    vert = self.get_vertice(Imin_vert_cent[i])[key]
-                    (is_inside, a, b) = ref_element.is_inside(vert, pt, normal_t)
+                idx_sorted_dist = np.argsort(dist_element_cent, axis=0)[:, 0]
+                for i in range(elements.nb_element):
+                    vert = self.get_vertice(idx_sorted_dist[i])[key]
+                    (is_inside, a, b) = ref_element.is_inside(vert, point, normal_t)
                     if is_inside:
-                        # dontstop = False
-                        element_prop = [key, Imin_vert_cent[i]]
-                    i += 1
+                        element_prop = [key, idx_sorted_dist[i]]
+                        break
 
             # No element contain the point atleast (only possible if point is outside mesh)
             if len(element_prop) == 0:

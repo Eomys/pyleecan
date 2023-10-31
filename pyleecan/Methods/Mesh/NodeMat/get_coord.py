@@ -22,7 +22,6 @@ def get_coord(self, node_indice):
 
     coord = list()
     indices_all = self.indice
-    coordinate = self.coordinate
 
     for ind in node_indice:
         Ipos = np.where(indices_all == ind)[0][0]

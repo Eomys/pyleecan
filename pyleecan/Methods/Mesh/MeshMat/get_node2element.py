@@ -19,17 +19,8 @@ def get_node2element(self, node_indice):
         Indices of elements containing the node
 
     """
+    element_indices = np.concatenate(
+        [element.get_node2element(node_indice) for element in self.element.values()]
+    )
 
-    node_to_element = np.array([], dtype=int)
-
-    for key in self.element:
-        connect = self.element[key].connectivity
-        indice_elem = self.element[key].indice
-        if len(connect[key].shape) > 1:  # If there is more than 1 element
-            Ielem = np.where(connect[key] == node_indice)[0]
-            node_to_element = np.concatenate((node_to_element, indice_elem[key][Ielem]))
-        else:
-            if connect[key] is not None and sum(connect[key] == node_indice) > 0:
-                node_to_element = np.concatenate((node_to_element, indice_elem[key]))
-
-    return node_to_element
+    return element_indices

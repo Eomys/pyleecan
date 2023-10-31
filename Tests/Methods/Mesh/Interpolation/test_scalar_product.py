@@ -58,9 +58,7 @@ class unittest_scalar_product(TestCase):
         [
             func_ref,
             nb_func_per_element,
-        ] = c_line.interpolation.ref_element.shape_function(
-            gauss_points, nb_gauss_points
-        )
+        ] = c_line.interpolation.ref_element.shape_function(gauss_points)
         jacob = np.zeros((nb_gauss_points, 2, 2))
         detJ = np.zeros((nb_gauss_points))
         for ig in range(nb_gauss_points):
@@ -91,9 +89,7 @@ class unittest_scalar_product(TestCase):
         [
             func_ref,
             nb_func_per_element,
-        ] = c_line.interpolation.ref_element.shape_function(
-            gauss_points, nb_gauss_points
-        )
+        ] = c_line.interpolation.ref_element.shape_function(gauss_points)
         jacob = np.zeros((nb_gauss_points, 2, 2))
         detJ = np.zeros((nb_gauss_points))
         for ig in range(nb_gauss_points):

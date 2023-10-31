@@ -21,14 +21,14 @@ def clear_node(self):
 
     coord_init = self.get_node()
     node_indice_init = self.get_node_indice()
-    connect_dict, nb_element, indices = self.get_element()
+    connect_dict, *_ = self.get_element()
 
-    node_indice = list()
+    node_indice = []
     for key in connect_dict:
         node_indice.extend(np.unique(connect_dict[key]))
 
     node_indice = np.unique(node_indice)
-    common, index1, index2 = np.intersect1d(
+    common, _, index2 = np.intersect1d(
         node_indice, node_indice_init, return_indices=True
     )
 

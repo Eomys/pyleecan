@@ -17,20 +17,17 @@ def get_vertice(self, indices=None):
 
     Returns
     -------
-    vertice: ndarray
-        Selected vertices
+    node_coordinates: ndarray
+        Nodes coordinates of each selected element
 
     """
 
-    elements, nb_element, indices = self.get_element(indices=indices)
-    vertices = dict()
-    for key in elements:
-        if len(elements[key].shape) > 1:
-            vertices[key] = list()
-            for ii in range(elements[key].shape[0]):
-                vertices[key].append(self.get_node(elements[key][ii, :]))
-            vertices[key] = array(vertices[key])
+    elements, *_ = self.get_element(indices=indices)
+    node_coordinates = {}
+    for key, element in elements.items():
+        if element.ndim > 1:
+            node_coordinates[key] = array([self.get_node(nodes) for nodes in element])
         else:
-            vertices[key] = self.get_node(elements[key])
+            node_coordinates[key] = self.get_node(element)
 
-    return vertices
+    return node_coordinates

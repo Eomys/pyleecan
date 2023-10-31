@@ -13,9 +13,6 @@ def get_element_nb(self):
         total number of element of all kind
     """
 
-    nb_element = 0
-    for key in self.element:
-        if self.element[key].nb_element is not None:
-            nb_element += self.element[key].nb_element
+    nb_element = sum([element.nb_element for element in self.element.values()])
 
     return nb_element

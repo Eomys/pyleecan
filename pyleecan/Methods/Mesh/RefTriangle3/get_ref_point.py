@@ -21,7 +21,7 @@ def get_ref_point(self, vertice, point):
         coordinates of the ref point
     """
 
-    [jacob, detJ] = self.jacobian(point, vertice)
+    jacob, _ = self.jacobian(point, vertice)
     inv_jacob = np.linalg.inv(jacob)
     point_ref = np.dot((point - vertice[0, :]), inv_jacob)
 

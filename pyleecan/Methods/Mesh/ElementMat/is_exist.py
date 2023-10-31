@@ -20,16 +20,19 @@ def is_exist(self, connectivity):
             True if the element already exist
     """
 
-    # Check the existence of the element
-    e = np.array([], dtype=int)
-    for nd_tag in connectivity:
-        e = np.concatenate((e, self.get_node2element(nd_tag)))
+    # Check if the element connectivity provided has the good size
+    if self.nb_node_per_element != len(connectivity):
+        return False
 
-    unique, unique_counts = np.unique(e, return_counts=True)
-    for ie in range(len(unique)):
-        if unique_counts[ie] == self.nb_node_per_element and unique_counts[ie] == len(
-            connectivity
-        ):
-            # If this condition is valid, the element already exist
-            return True
-    return False
+    # Get the element index for each node of the connectivity
+    node_element = np.concatenate(
+        [self.get_node2element(node_index) for node_index in connectivity],
+    )
+
+    # Count how many nodes of each element are present in the connectivity
+    unique, unique_counts = np.unique(node_element, return_counts=True)
+
+    # The element already exist if all its node are present in the given connectivity
+    result = np.any(unique_counts == self.nb_node_per_element)
+
+    return result
