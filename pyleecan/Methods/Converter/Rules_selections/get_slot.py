@@ -10,7 +10,9 @@ def get_slot(self, is_stator):
     print(slot_type)
 
     if slot_type == "Parallel_Tooth":
-        self.rules = add_rule_parallel_tooth_slotW11(self.rules, self.is_stator)
+        self.rules_list = add_rule_parallel_tooth_slotW11(
+            self.rules_list, self.is_stator
+        )
 
     elif slot_type == "Parallel Tooth SqB":
         pass
@@ -24,4 +26,4 @@ def get_slot(self, is_stator):
     elif slot_type == "Form Wound":
         pass
 
-    return self.rules
+    return self.rules_list

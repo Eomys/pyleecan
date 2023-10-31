@@ -11,4 +11,6 @@ def slotW11(machine):
 
     machine.stator.slot.is_cstt_tooth = True
     machine.stator.slot.H1_is_rad = True
+    machine.stator.slot.H2 = 10
+    machine.stator.is_internal = False
     return machine

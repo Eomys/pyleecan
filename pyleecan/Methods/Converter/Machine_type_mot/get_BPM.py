@@ -4,9 +4,11 @@ from pyleecan.Methods.Converter.Rules_selections.get_winding import get_winding
 from pyleecan.Methods.Converter.Rules_selections.get_conductor import get_conductor
 from pyleecan.Methods.Converter.Rules_selections.get_magnet import get_magnet
 from pyleecan.Methods.Converter.Rules_selections.get_skew import get_skew
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
 
 def get_BPM(self):
+    self.machine = MachineSIPMSM()
     self.rules = get_slot(self, is_stator=True)
     self.rules = get_lamination(self, is_stator=True)
     self.rules = get_winding(self, is_stator=True)

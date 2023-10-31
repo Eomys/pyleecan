@@ -3,8 +3,8 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_machine_dimension(rules):
-    rules.append(
+def add_rule_machine_dimension(rules_list):
+    rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Stator_Bore"],
             pyleecan="machine.stator.Rint",
@@ -13,7 +13,7 @@ def add_rule_machine_dimension(rules):
         )
     )
 
-    rules.append(
+    rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Stator_Lam_Dia"],
             pyleecan="machine.stator.Rext",
@@ -22,34 +22,34 @@ def add_rule_machine_dimension(rules):
         )
     )
 
-    rules.append(
+    rules_list.append(
         RuleEquation(
             param_other=[
                 {
-                    "src": "motor-cad",
-                    "path": "[Dimension]" "Stator_Bore",
-                    "varaible": "y",
+                    "src": "MC",
+                    "path": ["[Dimensions]", "Stator_Bore"],
+                    "variable": "y",
                 },
                 {
-                    "src": "motor-cad",
-                    "path": "[Dimension]" ".0",
-                    "varaible": "a",
+                    "src": "MC",
+                    "path": ["[Dimensions]", "Airgap"],
+                    "variable": "a",
                 },
             ],
             param_pyleecan=[
                 {
                     "src": "pyleecan",
                     "path": "machine.rotor.Rext",
-                    "varaible": "x",
+                    "variable": "x",
                 }
             ],
             unit_type="m",
-            scaling_to_P="y/2+a = x",
+            scaling_to_P="y/2+a= x ",
         )
     )
 
     # shaft
-    rules.append(
+    rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Shaft_Dia"],
             pyleecan="machine.rotor.Rint",
@@ -59,7 +59,7 @@ def add_rule_machine_dimension(rules):
     )
 
     # frame
-    rules.append(
+    rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Motor_Length"],
             pyleecan="machine.frame.Lfra",
@@ -68,7 +68,7 @@ def add_rule_machine_dimension(rules):
         )
     )
 
-    rules.append(
+    rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Stator_Lam_Dia"],
             pyleecan="machine.frame.Rint",
@@ -77,7 +77,7 @@ def add_rule_machine_dimension(rules):
         )
     )
 
-    rules.append(
+    rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Housing_Dia"],
             pyleecan="machine.frame.Rext",
@@ -86,4 +86,4 @@ def add_rule_machine_dimension(rules):
         )
     )
 
-    return rules
+    return rules_list
