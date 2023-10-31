@@ -18,9 +18,9 @@ from .Mesh import Mesh
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.MeshMat.get_node import get_node
+    from ..Methods.Mesh.MeshMat.get_node_coordinate import get_node_coordinate
 except ImportError as error:
-    get_node = error
+    get_node_coordinate = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_node_indice import get_node_indice
@@ -98,15 +98,18 @@ class MeshMat(Mesh):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.MeshMat.get_node
-    if isinstance(get_node, ImportError):
-        get_node = property(
+    # cf Methods.Mesh.MeshMat.get_node_coordinate
+    if isinstance(get_node_coordinate, ImportError):
+        get_node_coordinate = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_node: " + str(get_node))
+                ImportError(
+                    "Can't use MeshMat method get_node_coordinate: "
+                    + str(get_node_coordinate)
+                )
             )
         )
     else:
-        get_node = get_node
+        get_node_coordinate = get_node_coordinate
     # cf Methods.Mesh.MeshMat.get_node_indice
     if isinstance(get_node_indice, ImportError):
         get_node_indice = property(

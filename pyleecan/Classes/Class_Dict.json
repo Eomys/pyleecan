@@ -8591,7 +8591,9 @@
         ],
         "desc": "Abstract Class for mesh related classes",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_node_coordinate"
+        ],
         "mother": "",
         "name": "Mesh",
         "package": "Mesh",
@@ -8630,7 +8632,7 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_node",
+            "get_node_coordinate",
             "get_node_indice",
             "get_element",
             "get_mesh_pv",
@@ -8815,7 +8817,7 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_node",
+            "get_node_coordinate",
             "get_element",
             "get_normals",
             "get_surf",

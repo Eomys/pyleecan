@@ -23,9 +23,9 @@ except ImportError as error:
     get_mesh_pv = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_node import get_node
+    from ..Methods.Mesh.MeshVTK.get_node_coordinate import get_node_coordinate
 except ImportError as error:
-    get_node = error
+    get_node_coordinate = error
 
 try:
     from ..Methods.Mesh.MeshVTK.get_element import get_element
@@ -97,15 +97,18 @@ class MeshVTK(Mesh):
         )
     else:
         get_mesh_pv = get_mesh_pv
-    # cf Methods.Mesh.MeshVTK.get_node
-    if isinstance(get_node, ImportError):
-        get_node = property(
+    # cf Methods.Mesh.MeshVTK.get_node_coordinate
+    if isinstance(get_node_coordinate, ImportError):
+        get_node_coordinate = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method get_node: " + str(get_node))
+                ImportError(
+                    "Can't use MeshVTK method get_node_coordinate: "
+                    + str(get_node_coordinate)
+                )
             )
         )
     else:
-        get_node = get_node
+        get_node_coordinate = get_node_coordinate
     # cf Methods.Mesh.MeshVTK.get_element
     if isinstance(get_element, ImportError):
         get_element = property(
