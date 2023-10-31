@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def is_exist(self, coordinate : np.ndarray) -> bool:
+def is_exist(self, coordinate: np.ndarray) -> bool:
     """Check the existence of a node defined by its coordinates
 
     Parameters
@@ -21,9 +21,8 @@ def is_exist(self, coordinate : np.ndarray) -> bool:
 
     if self.nb_node == 0:
         return False
-    
+
     # Compute the distance between the node coordinates and the provided coordinate
     dist_node = np.linalg.norm(self.coordinate - coordinate, axis=1)
 
-    return np.any(dist_node<self.delta)
-
+    return np.any(dist_node < self.delta)
