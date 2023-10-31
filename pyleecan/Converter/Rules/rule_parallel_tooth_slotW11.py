@@ -11,7 +11,7 @@ def add_rule_parallel_tooth_slotW11(rule_list, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list.append(RuleComplex(fct_name="def_slotW11", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="slotW11", src="pyleecan"))
 
     rule_list.append(
         RuleSimple(

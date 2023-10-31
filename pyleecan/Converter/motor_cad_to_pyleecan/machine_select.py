@@ -69,5 +69,5 @@ if __name__ == "__main__":
     machine_select = MachineSelect()
     machine = machine_select.machine_selection()
 
-    machine.stator.plot()
+    # machine.stator.plot()
     print("done")
