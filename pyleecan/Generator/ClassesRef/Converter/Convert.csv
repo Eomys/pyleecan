@@ -1,0 +1,5 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+file_path,-,file path to conevrt,0,str,0,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,,,VERSION,1,initialisation of conversion abstract,,,

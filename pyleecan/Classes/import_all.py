@@ -21,6 +21,8 @@ from ..Classes.CondType13 import CondType13
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
+from ..Classes.Convert import Convert
+from ..Classes.ConvertMC import ConvertMC
 from ..Classes.DXFImport import DXFImport
 from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
@@ -121,7 +123,6 @@ from ..Classes.MachineSyRM import MachineSyRM
 from ..Classes.MachineSync import MachineSync
 from ..Classes.MachineUD import MachineUD
 from ..Classes.MachineWRSM import MachineWRSM
-from ..Classes.Machine_type_mot import Machine_type_mot
 from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
 from ..Classes.Magnet import Magnet
@@ -194,7 +195,6 @@ from ..Classes.RuleComplex import RuleComplex
 from ..Classes.RuleEquation import RuleEquation
 from ..Classes.RuleSimple import RuleSimple
 from ..Classes.Rules import Rules
-from ..Classes.Rules_selections import Rules_selections
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
 from ..Classes.Section import Section

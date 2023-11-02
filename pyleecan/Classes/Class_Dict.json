@@ -1059,6 +1059,130 @@
             }
         ]
     },
+    "Convert": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ConvertMC"
+        ],
+        "desc": "initialisation of conversion abstract",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Convert",
+        "package": "Converter",
+        "path": "pyleecan/Generator/ClassesRef/Converter/Convert.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "file path to conevrt",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": "0"
+            }
+        ]
+    },
+    "ConvertMC": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "convertorMC abstract",
+        "is_internal": false,
+        "methods": [
+            "convert_mot_to_dict",
+            "selection_machine_type",
+            "convert",
+            "machine_type.selection_BPM_rules",
+            "machine_type.selection_IM_rules",
+            "machine_type.selection_SRM_rules",
+            "machine_type.selection_BPMO_rules",
+            "machine_type.selection_PMDC_rules",
+            "machine_type.selection_SYNC_rules",
+            "machine_type.selection_CLAW_rules",
+            "machine_type.selection_IM1PH_rules",
+            "machine_type.selection_WFC_rules",
+            "Step.selection_slot_rules",
+            "Step.selection_lamination_rules",
+            "Step.selection_winding_rules",
+            "Step.selection_conductor_rules",
+            "Step.selection_hole_rules",
+            "Step.selection_pole_rules",
+            "Step.selection_magnet_rules",
+            "Step.selection_skew_rules",
+            "Step.selection_bar_rules",
+            "Rules.Slot.add_rule_parallel_tooth_slotW11",
+            "Rules.add_rule_machine_select",
+            "Rules.add_rule_machine_type",
+            "Rules.Slot.add_rule_rotor_parallel_tooth_slotW11"
+        ],
+        "mother": "Convert",
+        "name": "ConvertMC",
+        "package": "Converter",
+        "path": "pyleecan/Generator/ClassesRef/Converter/ConvertMC.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "convertion file .mot in dict",
+                "max": "",
+                "min": "",
+                "name": "mot_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "machine pyleecan",
+                "max": "",
+                "min": "",
+                "name": "machine",
+                "type": "machine",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "list differents rules",
+                "max": "",
+                "min": "",
+                "name": "rules_list",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "selection rotor or stator, if true = stator else rotor",
+                "max": "",
+                "min": "",
+                "name": "is_stator",
+                "type": "bool",
+                "unit": "-",
+                "value": true
+            },
+            {
+                "as_dict": "",
+                "desc": "booleen to select the direction of conversion",
+                "max": "",
+                "min": "",
+                "name": "P_to_other",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            }
+        ]
+    },
     "DXFImport": {
         "constants": [
             {
@@ -7477,54 +7601,6 @@
             }
         ]
     },
-    "Machine_type_mot": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "All motor type in motor-cad",
-        "is_internal": false,
-        "methods": [
-            "get_BPM",
-            "get_IM",
-            "get_SRM",
-            "get_BPMO",
-            "get_PMDC",
-            "get_SYNC",
-            "get_CLAW",
-            "get_IM1PH",
-            "get_WFC"
-        ],
-        "mother": "",
-        "name": "Machine_type_mot",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Machine_type_mot.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "convertion file .mot in dict",
-                "max": "",
-                "min": "",
-                "name": "mot_dict",
-                "type": "dict",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "list differents rules",
-                "max": "",
-                "min": "",
-                "name": "rules",
-                "type": "list",
-                "unit": "-",
-                "value": 0
-            }
-        ]
-    },
     "MagElmer": {
         "constants": [
             {
@@ -12383,64 +12459,6 @@
         "package": "Converter",
         "path": "pyleecan/Generator/ClassesRef/Converter/Rules.csv",
         "properties": []
-    },
-    "Rules_selections": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "All motor type in motor-cad",
-        "is_internal": false,
-        "methods": [
-            "get_slot",
-            "get_lamination",
-            "get_winding",
-            "get_conductor",
-            "get_hole",
-            "get_pole",
-            "get_magnet",
-            "get_skew",
-            "get_bar"
-        ],
-        "mother": "",
-        "name": "Rules_selections",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Rules_selections.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "convertion file .mot in dict",
-                "max": "",
-                "min": "",
-                "name": "mot_dict",
-                "type": "dict",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "list differents rules",
-                "max": "",
-                "min": "",
-                "name": "rules",
-                "type": "list",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "selection rotor or stator, if true = stator else rotor",
-                "max": "",
-                "min": "",
-                "name": "is_stator",
-                "type": "bool",
-                "unit": "-",
-                "value": true
-            }
-        ]
     },
     "ScalarProduct": {
         "constants": [
