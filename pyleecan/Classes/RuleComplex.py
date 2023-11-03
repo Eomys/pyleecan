@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     convert_to_mot = error
 
+try:
+    from ..Methods.Converter.RuleComplex._set_fct_name import _set_fct_name
+except ImportError as error:
+    _set_fct_name = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -61,6 +66,17 @@ class RuleComplex(Rules):
         )
     else:
         convert_to_mot = convert_to_mot
+    # cf Methods.Converter.RuleComplex._set_fct_name
+    if isinstance(_set_fct_name, ImportError):
+        _set_fct_name = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RuleComplex method _set_fct_name: " + str(_set_fct_name)
+                )
+            )
+        )
+    else:
+        _set_fct_name = _set_fct_name
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -214,11 +230,6 @@ class RuleComplex(Rules):
     def _get_fct_name(self):
         """getter of fct_name"""
         return self._fct_name
-
-    def _set_fct_name(self, value):
-        """setter of fct_name"""
-        check_var("fct_name", value, "str")
-        self._fct_name = value
 
     fct_name = property(
         fget=_get_fct_name,

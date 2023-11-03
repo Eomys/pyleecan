@@ -3,7 +3,7 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 
 
-def add_duct_layer(machine, other_dict, is_stator):
+def other_to_P(machine, other_dict, is_stator):
     if is_stator == True:
         lam_name = "Stator"
         dict_machine = machine.stator.as_dict()
@@ -41,3 +41,7 @@ def add_duct_layer(machine, other_dict, is_stator):
             machine.rotor = VentilationTrap(init_dict=dict_machine)
 
     return machine
+
+
+def P_to_other(self, machine):
+    print("other_to_P")

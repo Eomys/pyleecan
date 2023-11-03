@@ -1086,6 +1086,46 @@
                 "type": "str",
                 "unit": "-",
                 "value": "0"
+            },
+            {
+                "as_dict": "",
+                "desc": "convertion file .mot in dict",
+                "max": "",
+                "min": "",
+                "name": "other_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "machine pyleecan",
+                "max": "",
+                "min": "",
+                "name": "machine",
+                "type": "Machine",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "list differents rules",
+                "max": "",
+                "min": "",
+                "name": "rules_list",
+                "type": "list",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "booleen to select the direction of conversion",
+                "max": "",
+                "min": "",
+                "name": "is_P_to_other",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },
@@ -1101,7 +1141,7 @@
         "is_internal": false,
         "methods": [
             "convert_mot_to_dict",
-            "selection_machine_type",
+            "selection_all_rules",
             "convert",
             "machine_type.selection_BPM_rules",
             "machine_type.selection_IM_rules",
@@ -1121,57 +1161,23 @@
             "Step.selection_magnet_rules",
             "Step.selection_skew_rules",
             "Step.selection_bar_rules",
-            "Rules.Slot.add_rule_parallel_tooth_slotW11",
             "Rules.add_rule_machine_select",
             "Rules.add_rule_machine_type",
-            "Rules.Slot.add_rule_rotor_parallel_tooth_slotW11"
+            "Rules.Slot.add_rule_rotor_parallel_tooth_slotW11",
+            "Rules.Slot.add_rule_parallel_tooth_slotW11",
+            "Rules.Slot.add_rule_form_wound_slotW29",
+            "Rules.Slot.add_rule_parallel_slot_slotW21",
+            "Rules.Slot.add_rule_parallel_tooth_SqB_slotW14",
+            "Rules.Slot.add_rule_tapered_slot_slotW23",
+            "Rules.Lamination.add_rule_lamination",
+            "Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15",
+            "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11"
         ],
         "mother": "Convert",
         "name": "ConvertMC",
         "package": "Converter",
         "path": "pyleecan/Generator/ClassesRef/Converter/ConvertMC.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "convertion file .mot in dict",
-                "max": "",
-                "min": "",
-                "name": "other_dict",
-                "type": "dict",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "machine pyleecan",
-                "max": "",
-                "min": "",
-                "name": "machine",
-                "type": "machine",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "list differents rules",
-                "max": "",
-                "min": "",
-                "name": "rules_list",
-                "type": "list",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "booleen to select the direction of conversion",
-                "max": "",
-                "min": "",
-                "name": "P_to_other",
-                "type": "bool",
-                "unit": "-",
-                "value": false
-            }
-        ]
+        "properties": []
     },
     "DXFImport": {
         "constants": [
@@ -12278,7 +12284,8 @@
         "is_internal": false,
         "methods": [
             "convert_to_P",
-            "convert_to_mot"
+            "convert_to_mot",
+            "_set_fct_name"
         ],
         "mother": "Rules",
         "name": "RuleComplex",

@@ -23,11 +23,9 @@ except ImportError as error:
     convert_mot_to_dict = error
 
 try:
-    from ..Methods.Converter.ConvertMC.selection_machine_type import (
-        selection_machine_type,
-    )
+    from ..Methods.Converter.ConvertMC.selection_all_rules import selection_all_rules
 except ImportError as error:
-    selection_machine_type = error
+    selection_all_rules = error
 
 try:
     from ..Methods.Converter.ConvertMC.convert import convert
@@ -161,13 +159,6 @@ except ImportError as error:
     selection_bar_rules = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slotW11 import (
-        add_rule_parallel_tooth_slotW11,
-    )
-except ImportError as error:
-    add_rule_parallel_tooth_slotW11 = error
-
-try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_select import (
         add_rule_machine_select,
     )
@@ -187,6 +178,62 @@ try:
     )
 except ImportError as error:
     add_rule_rotor_parallel_tooth_slotW11 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slotW11 import (
+        add_rule_parallel_tooth_slotW11,
+    )
+except ImportError as error:
+    add_rule_parallel_tooth_slotW11 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_form_wound_slotW29 import (
+        add_rule_form_wound_slotW29,
+    )
+except ImportError as error:
+    add_rule_form_wound_slotW29 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_slot_slotW21 import (
+        add_rule_parallel_slot_slotW21,
+    )
+except ImportError as error:
+    add_rule_parallel_slot_slotW21 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_SqB_slotW14 import (
+        add_rule_parallel_tooth_SqB_slotW14,
+    )
+except ImportError as error:
+    add_rule_parallel_tooth_SqB_slotW14 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_tapered_slot_slotW23 import (
+        add_rule_tapered_slot_slotW23,
+    )
+except ImportError as error:
+    add_rule_tapered_slot_slotW23 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_lamination import (
+        add_rule_lamination,
+    )
+except ImportError as error:
+    add_rule_lamination = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15 import (
+        add_rule_surface_parallel_slotM15,
+    )
+except ImportError as error:
+    add_rule_surface_parallel_slotM15 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM11 import (
+        add_rule_surface_radial_slotM11,
+    )
+except ImportError as error:
+    add_rule_surface_radial_slotM11 = error
 
 
 from numpy import isnan
@@ -211,18 +258,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_mot_to_dict = convert_mot_to_dict
-    # cf Methods.Converter.ConvertMC.selection_machine_type
-    if isinstance(selection_machine_type, ImportError):
-        selection_machine_type = property(
+    # cf Methods.Converter.ConvertMC.selection_all_rules
+    if isinstance(selection_all_rules, ImportError):
+        selection_all_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_machine_type: "
-                    + str(selection_machine_type)
+                    "Can't use ConvertMC method selection_all_rules: "
+                    + str(selection_all_rules)
                 )
             )
         )
     else:
-        selection_machine_type = selection_machine_type
+        selection_all_rules = selection_all_rules
     # cf Methods.Converter.ConvertMC.convert
     if isinstance(convert, ImportError):
         convert = property(
@@ -448,18 +495,6 @@ class ConvertMC(Convert):
         )
     else:
         selection_bar_rules = selection_bar_rules
-    # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slotW11
-    if isinstance(add_rule_parallel_tooth_slotW11, ImportError):
-        add_rule_parallel_tooth_slotW11 = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method add_rule_parallel_tooth_slotW11: "
-                    + str(add_rule_parallel_tooth_slotW11)
-                )
-            )
-        )
-    else:
-        add_rule_parallel_tooth_slotW11 = add_rule_parallel_tooth_slotW11
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_select
     if isinstance(add_rule_machine_select, ImportError):
         add_rule_machine_select = property(
@@ -496,6 +531,102 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_rotor_parallel_tooth_slotW11 = add_rule_rotor_parallel_tooth_slotW11
+    # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slotW11
+    if isinstance(add_rule_parallel_tooth_slotW11, ImportError):
+        add_rule_parallel_tooth_slotW11 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_tooth_slotW11: "
+                    + str(add_rule_parallel_tooth_slotW11)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_tooth_slotW11 = add_rule_parallel_tooth_slotW11
+    # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_form_wound_slotW29
+    if isinstance(add_rule_form_wound_slotW29, ImportError):
+        add_rule_form_wound_slotW29 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_form_wound_slotW29: "
+                    + str(add_rule_form_wound_slotW29)
+                )
+            )
+        )
+    else:
+        add_rule_form_wound_slotW29 = add_rule_form_wound_slotW29
+    # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_slot_slotW21
+    if isinstance(add_rule_parallel_slot_slotW21, ImportError):
+        add_rule_parallel_slot_slotW21 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_slot_slotW21: "
+                    + str(add_rule_parallel_slot_slotW21)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_slot_slotW21 = add_rule_parallel_slot_slotW21
+    # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_SqB_slotW14
+    if isinstance(add_rule_parallel_tooth_SqB_slotW14, ImportError):
+        add_rule_parallel_tooth_SqB_slotW14 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_tooth_SqB_slotW14: "
+                    + str(add_rule_parallel_tooth_SqB_slotW14)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_tooth_SqB_slotW14 = add_rule_parallel_tooth_SqB_slotW14
+    # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_tapered_slot_slotW23
+    if isinstance(add_rule_tapered_slot_slotW23, ImportError):
+        add_rule_tapered_slot_slotW23 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_tapered_slot_slotW23: "
+                    + str(add_rule_tapered_slot_slotW23)
+                )
+            )
+        )
+    else:
+        add_rule_tapered_slot_slotW23 = add_rule_tapered_slot_slotW23
+    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_lamination
+    if isinstance(add_rule_lamination, ImportError):
+        add_rule_lamination = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_lamination: "
+                    + str(add_rule_lamination)
+                )
+            )
+        )
+    else:
+        add_rule_lamination = add_rule_lamination
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15
+    if isinstance(add_rule_surface_parallel_slotM15, ImportError):
+        add_rule_surface_parallel_slotM15 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_surface_parallel_slotM15: "
+                    + str(add_rule_surface_parallel_slotM15)
+                )
+            )
+        )
+    else:
+        add_rule_surface_parallel_slotM15 = add_rule_surface_parallel_slotM15
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM11
+    if isinstance(add_rule_surface_radial_slotM11, ImportError):
+        add_rule_surface_radial_slotM11 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_surface_radial_slotM11: "
+                    + str(add_rule_surface_radial_slotM11)
+                )
+            )
+        )
+    else:
+        add_rule_surface_radial_slotM11 = add_rule_surface_radial_slotM11
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -503,11 +634,11 @@ class ConvertMC(Convert):
 
     def __init__(
         self,
-        other_dict=None,
-        machine=None,
-        rules_list=None,
-        P_to_other=False,
         file_path="0",
+        other_dict=-1,
+        machine=None,
+        rules_list=-1,
+        is_P_to_other=False,
         init_dict=None,
         init_str=None,
     ):
@@ -526,23 +657,25 @@ class ConvertMC(Convert):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
+            if "file_path" in list(init_dict.keys()):
+                file_path = init_dict["file_path"]
             if "other_dict" in list(init_dict.keys()):
                 other_dict = init_dict["other_dict"]
             if "machine" in list(init_dict.keys()):
                 machine = init_dict["machine"]
             if "rules_list" in list(init_dict.keys()):
                 rules_list = init_dict["rules_list"]
-            if "P_to_other" in list(init_dict.keys()):
-                P_to_other = init_dict["P_to_other"]
-            if "file_path" in list(init_dict.keys()):
-                file_path = init_dict["file_path"]
+            if "is_P_to_other" in list(init_dict.keys()):
+                is_P_to_other = init_dict["is_P_to_other"]
         # Set the properties (value check and convertion are done in setter)
-        self.other_dict = other_dict
-        self.machine = machine
-        self.rules_list = rules_list
-        self.P_to_other = P_to_other
         # Call Convert init
-        super(ConvertMC, self).__init__(file_path=file_path)
+        super(ConvertMC, self).__init__(
+            file_path=file_path,
+            other_dict=other_dict,
+            machine=machine,
+            rules_list=rules_list,
+            is_P_to_other=is_P_to_other,
+        )
         # The class is frozen (in Convert init), for now it's impossible to
         # add new properties
 
@@ -552,19 +685,6 @@ class ConvertMC(Convert):
         ConvertMC_str = ""
         # Get the properties inherited from Convert
         ConvertMC_str += super(ConvertMC, self).__str__()
-        ConvertMC_str += "other_dict = " + str(self.other_dict) + linesep
-        if self.machine is not None:
-            tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ConvertMC_str += "machine = " + tmp
-        else:
-            ConvertMC_str += "machine = None" + linesep + linesep
-        ConvertMC_str += (
-            "rules_list = "
-            + linesep
-            + str(self.rules_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        ConvertMC_str += "P_to_other = " + str(self.P_to_other) + linesep
         return ConvertMC_str
 
     def __eq__(self, other):
@@ -575,14 +695,6 @@ class ConvertMC(Convert):
 
         # Check the properties inherited from Convert
         if not super(ConvertMC, self).__eq__(other):
-            return False
-        if other.other_dict != self.other_dict:
-            return False
-        if other.machine != self.machine:
-            return False
-        if other.rules_list != self.rules_list:
-            return False
-        if other.P_to_other != self.P_to_other:
             return False
         return True
 
@@ -601,55 +713,6 @@ class ConvertMC(Convert):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._other_dict != self._other_dict:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._other_dict)
-                    + ", other="
-                    + str(other._other_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".other_dict" + val_str)
-            else:
-                diff_list.append(name + ".other_dict")
-        if (other.machine is None and self.machine is not None) or (
-            other.machine is not None and self.machine is None
-        ):
-            diff_list.append(name + ".machine None mismatch")
-        elif self.machine is not None:
-            diff_list.extend(
-                self.machine.compare(
-                    other.machine,
-                    name=name + ".machine",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if other._rules_list != self._rules_list:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._rules_list)
-                    + ", other="
-                    + str(other._rules_list)
-                    + ")"
-                )
-                diff_list.append(name + ".rules_list" + val_str)
-            else:
-                diff_list.append(name + ".rules_list")
-        if other._P_to_other != self._P_to_other:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._P_to_other)
-                    + ", other="
-                    + str(other._P_to_other)
-                    + ")"
-                )
-                diff_list.append(name + ".P_to_other" + val_str)
-            else:
-                diff_list.append(name + ".P_to_other")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -661,14 +724,6 @@ class ConvertMC(Convert):
 
         # Get size of the properties inherited from Convert
         S += super(ConvertMC, self).__sizeof__()
-        if self.other_dict is not None:
-            for key, value in self.other_dict.items():
-                S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.machine)
-        if self.rules_list is not None:
-            for value in self.rules_list:
-                S += getsizeof(value)
-        S += getsizeof(self.P_to_other)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -688,21 +743,6 @@ class ConvertMC(Convert):
             keep_function=keep_function,
             **kwargs
         )
-        ConvertMC_dict["other_dict"] = (
-            self.other_dict.copy() if self.other_dict is not None else None
-        )
-        if self.machine is None:
-            ConvertMC_dict["machine"] = None
-        else:
-            ConvertMC_dict["machine"] = self.machine.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        ConvertMC_dict["rules_list"] = (
-            self.rules_list.copy() if self.rules_list is not None else None
-        )
-        ConvertMC_dict["P_to_other"] = self.P_to_other
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ConvertMC_dict["__class__"] = "ConvertMC"
@@ -712,6 +752,7 @@ class ConvertMC(Convert):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
+        file_path_val = self.file_path
         if self.other_dict is None:
             other_dict_val = None
         else:
@@ -724,120 +765,19 @@ class ConvertMC(Convert):
             rules_list_val = None
         else:
             rules_list_val = self.rules_list.copy()
-        P_to_other_val = self.P_to_other
-        file_path_val = self.file_path
+        is_P_to_other_val = self.is_P_to_other
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
+            file_path=file_path_val,
             other_dict=other_dict_val,
             machine=machine_val,
             rules_list=rules_list_val,
-            P_to_other=P_to_other_val,
-            file_path=file_path_val,
+            is_P_to_other=is_P_to_other_val,
         )
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.other_dict = None
-        if self.machine is not None:
-            self.machine._set_None()
-        self.rules_list = None
-        self.P_to_other = None
         # Set to None the properties inherited from Convert
         super(ConvertMC, self)._set_None()
-
-    def _get_other_dict(self):
-        """getter of other_dict"""
-        return self._other_dict
-
-    def _set_other_dict(self, value):
-        """setter of other_dict"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("other_dict", value, "dict")
-        self._other_dict = value
-
-    other_dict = property(
-        fget=_get_other_dict,
-        fset=_set_other_dict,
-        doc=u"""convertion file .mot in dict
-
-        :Type: dict
-        """,
-    )
-
-    def _get_machine(self):
-        """getter of machine"""
-        return self._machine
-
-    def _set_machine(self, value):
-        """setter of machine"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "machine"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            machine = import_class("pyleecan.Classes", "machine", "machine")
-            value = machine()
-        check_var("machine", value, "machine")
-        self._machine = value
-
-        if self._machine is not None:
-            self._machine.parent = self
-
-    machine = property(
-        fget=_get_machine,
-        fset=_set_machine,
-        doc=u"""machine pyleecan
-
-        :Type: machine
-        """,
-    )
-
-    def _get_rules_list(self):
-        """getter of rules_list"""
-        return self._rules_list
-
-    def _set_rules_list(self, value):
-        """setter of rules_list"""
-        if type(value) is int and value == -1:
-            value = list()
-        check_var("rules_list", value, "list")
-        self._rules_list = value
-
-    rules_list = property(
-        fget=_get_rules_list,
-        fset=_set_rules_list,
-        doc=u"""list differents rules
-
-        :Type: list
-        """,
-    )
-
-    def _get_P_to_other(self):
-        """getter of P_to_other"""
-        return self._P_to_other
-
-    def _set_P_to_other(self, value):
-        """setter of P_to_other"""
-        check_var("P_to_other", value, "bool")
-        self._P_to_other = value
-
-    P_to_other = property(
-        fget=_get_P_to_other,
-        fset=_set_P_to_other,
-        doc=u"""booleen to select the direction of conversion
-
-        :Type: bool
-        """,
-    )

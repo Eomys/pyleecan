@@ -75,6 +75,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Methods/Converter/ConvertMC/convert.py",
             "console": "integratedTerminal",
+            "justMyCode": true,
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONPATH": "${cwd}"
