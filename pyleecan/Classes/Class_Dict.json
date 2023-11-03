@@ -1136,7 +1136,7 @@
                 "desc": "convertion file .mot in dict",
                 "max": "",
                 "min": "",
-                "name": "mot_dict",
+                "name": "other_dict",
                 "type": "dict",
                 "unit": "-",
                 "value": null
@@ -1160,16 +1160,6 @@
                 "type": "list",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "selection rotor or stator, if true = stator else rotor",
-                "max": "",
-                "min": "",
-                "name": "is_stator",
-                "type": "bool",
-                "unit": "-",
-                "value": true
             },
             {
                 "as_dict": "",

@@ -4,7 +4,7 @@ from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.Methods.Slot.SlotW11.get_H1 import get_H1
 
 
-def slotW11(machine):
+def parallel_tooth_slotW11(machine):
     dict_machine = machine.stator.as_dict()
 
     machine.stator = LamSlotWind(init_dict=dict_machine)

@@ -3,17 +3,18 @@ from os.path import join, split
 
 def mot_to_dict(file_path):
     # open file
+    file_path = "EMD240_v16.mot"
     path = split(__file__)[0]
-    file = open(join(path, "EMD240_v16.mot"))
+    file = open(join(path, file_path))
 
-    mot_dict = {}
+    other_dict = {}
     # convert .mot to dict
     for line in file:
         # separation different part like .mot
         if line[:1] == "[":
             temp_dict = {}
             l = line.split("\n")
-            mot_dict[l[0]] = temp_dict
+            other_dict[l[0]] = temp_dict
 
         elif line == "\n":
             pass
@@ -38,7 +39,7 @@ def mot_to_dict(file_path):
             else:
                 temp_dict[l[0]] = l1[0]
 
-    return mot_dict
+    return other_dict
 
 
 def isfloat(str):

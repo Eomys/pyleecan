@@ -1,4 +1,3 @@
-from pyleecan.Methods.Converter.ConvertMC.convert_mot_to_dict import convert_mot_dict
 from pyleecan.Methods.Converter.ConvertMC.Rules.add_rule_machine_type import (
     add_rule_machine_type,
 )
@@ -74,4 +73,3 @@ def selection_machine_type(self):
         selection_WFC_rules(self)
 
     # machine = rule_convert(self.rules_list, other_dict, None, self.machine)
-    return self.machine

@@ -1,9 +1,9 @@
-from pyleecan.Converter.Rules.rule_rotor_parallel_tooth_slotW11 import (
+from pyleecan.Methods.Converter.ConvertMC.Rules.Slot.add_rule_rotor_parallel_tooth_slotW11 import (
     add_rule_rotor_parallel_tooth_slotW11,
 )
 
 
-def selection_slot_rotor_rules(self):
+def selection_slot_rotor_rules(self, is_stator):
     slot_rotor_type = self.other_dict["[Design_Options]"]["Top_Bar_Type"]
 
     if slot_rotor_type == 0:

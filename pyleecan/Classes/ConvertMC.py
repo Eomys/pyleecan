@@ -503,10 +503,9 @@ class ConvertMC(Convert):
 
     def __init__(
         self,
-        mot_dict=None,
+        other_dict=None,
         machine=None,
         rules_list=None,
-        is_stator=True,
         P_to_other=False,
         file_path="0",
         init_dict=None,
@@ -527,23 +526,20 @@ class ConvertMC(Convert):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "mot_dict" in list(init_dict.keys()):
-                mot_dict = init_dict["mot_dict"]
+            if "other_dict" in list(init_dict.keys()):
+                other_dict = init_dict["other_dict"]
             if "machine" in list(init_dict.keys()):
                 machine = init_dict["machine"]
             if "rules_list" in list(init_dict.keys()):
                 rules_list = init_dict["rules_list"]
-            if "is_stator" in list(init_dict.keys()):
-                is_stator = init_dict["is_stator"]
             if "P_to_other" in list(init_dict.keys()):
                 P_to_other = init_dict["P_to_other"]
             if "file_path" in list(init_dict.keys()):
                 file_path = init_dict["file_path"]
         # Set the properties (value check and convertion are done in setter)
-        self.mot_dict = mot_dict
+        self.other_dict = other_dict
         self.machine = machine
         self.rules_list = rules_list
-        self.is_stator = is_stator
         self.P_to_other = P_to_other
         # Call Convert init
         super(ConvertMC, self).__init__(file_path=file_path)
@@ -556,7 +552,7 @@ class ConvertMC(Convert):
         ConvertMC_str = ""
         # Get the properties inherited from Convert
         ConvertMC_str += super(ConvertMC, self).__str__()
-        ConvertMC_str += "mot_dict = " + str(self.mot_dict) + linesep
+        ConvertMC_str += "other_dict = " + str(self.other_dict) + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             ConvertMC_str += "machine = " + tmp
@@ -568,7 +564,6 @@ class ConvertMC(Convert):
             + str(self.rules_list).replace(linesep, linesep + "\t")
             + linesep
         )
-        ConvertMC_str += "is_stator = " + str(self.is_stator) + linesep
         ConvertMC_str += "P_to_other = " + str(self.P_to_other) + linesep
         return ConvertMC_str
 
@@ -581,13 +576,11 @@ class ConvertMC(Convert):
         # Check the properties inherited from Convert
         if not super(ConvertMC, self).__eq__(other):
             return False
-        if other.mot_dict != self.mot_dict:
+        if other.other_dict != self.other_dict:
             return False
         if other.machine != self.machine:
             return False
         if other.rules_list != self.rules_list:
-            return False
-        if other.is_stator != self.is_stator:
             return False
         if other.P_to_other != self.P_to_other:
             return False
@@ -608,18 +601,18 @@ class ConvertMC(Convert):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._mot_dict != self._mot_dict:
+        if other._other_dict != self._other_dict:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._mot_dict)
+                    + str(self._other_dict)
                     + ", other="
-                    + str(other._mot_dict)
+                    + str(other._other_dict)
                     + ")"
                 )
-                diff_list.append(name + ".mot_dict" + val_str)
+                diff_list.append(name + ".other_dict" + val_str)
             else:
-                diff_list.append(name + ".mot_dict")
+                diff_list.append(name + ".other_dict")
         if (other.machine is None and self.machine is not None) or (
             other.machine is not None and self.machine is None
         ):
@@ -645,18 +638,6 @@ class ConvertMC(Convert):
                 diff_list.append(name + ".rules_list" + val_str)
             else:
                 diff_list.append(name + ".rules_list")
-        if other._is_stator != self._is_stator:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_stator)
-                    + ", other="
-                    + str(other._is_stator)
-                    + ")"
-                )
-                diff_list.append(name + ".is_stator" + val_str)
-            else:
-                diff_list.append(name + ".is_stator")
         if other._P_to_other != self._P_to_other:
             if is_add_value:
                 val_str = (
@@ -680,14 +661,13 @@ class ConvertMC(Convert):
 
         # Get size of the properties inherited from Convert
         S += super(ConvertMC, self).__sizeof__()
-        if self.mot_dict is not None:
-            for key, value in self.mot_dict.items():
+        if self.other_dict is not None:
+            for key, value in self.other_dict.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.machine)
         if self.rules_list is not None:
             for value in self.rules_list:
                 S += getsizeof(value)
-        S += getsizeof(self.is_stator)
         S += getsizeof(self.P_to_other)
         return S
 
@@ -708,8 +688,8 @@ class ConvertMC(Convert):
             keep_function=keep_function,
             **kwargs
         )
-        ConvertMC_dict["mot_dict"] = (
-            self.mot_dict.copy() if self.mot_dict is not None else None
+        ConvertMC_dict["other_dict"] = (
+            self.other_dict.copy() if self.other_dict is not None else None
         )
         if self.machine is None:
             ConvertMC_dict["machine"] = None
@@ -722,7 +702,6 @@ class ConvertMC(Convert):
         ConvertMC_dict["rules_list"] = (
             self.rules_list.copy() if self.rules_list is not None else None
         )
-        ConvertMC_dict["is_stator"] = self.is_stator
         ConvertMC_dict["P_to_other"] = self.P_to_other
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -733,10 +712,10 @@ class ConvertMC(Convert):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.mot_dict is None:
-            mot_dict_val = None
+        if self.other_dict is None:
+            other_dict_val = None
         else:
-            mot_dict_val = self.mot_dict.copy()
+            other_dict_val = self.other_dict.copy()
         if self.machine is None:
             machine_val = None
         else:
@@ -745,15 +724,13 @@ class ConvertMC(Convert):
             rules_list_val = None
         else:
             rules_list_val = self.rules_list.copy()
-        is_stator_val = self.is_stator
         P_to_other_val = self.P_to_other
         file_path_val = self.file_path
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            mot_dict=mot_dict_val,
+            other_dict=other_dict_val,
             machine=machine_val,
             rules_list=rules_list_val,
-            is_stator=is_stator_val,
             P_to_other=P_to_other_val,
             file_path=file_path_val,
         )
@@ -762,29 +739,28 @@ class ConvertMC(Convert):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.mot_dict = None
+        self.other_dict = None
         if self.machine is not None:
             self.machine._set_None()
         self.rules_list = None
-        self.is_stator = None
         self.P_to_other = None
         # Set to None the properties inherited from Convert
         super(ConvertMC, self)._set_None()
 
-    def _get_mot_dict(self):
-        """getter of mot_dict"""
-        return self._mot_dict
+    def _get_other_dict(self):
+        """getter of other_dict"""
+        return self._other_dict
 
-    def _set_mot_dict(self, value):
-        """setter of mot_dict"""
+    def _set_other_dict(self, value):
+        """setter of other_dict"""
         if type(value) is int and value == -1:
             value = dict()
-        check_var("mot_dict", value, "dict")
-        self._mot_dict = value
+        check_var("other_dict", value, "dict")
+        self._other_dict = value
 
-    mot_dict = property(
-        fget=_get_mot_dict,
-        fset=_set_mot_dict,
+    other_dict = property(
+        fget=_get_other_dict,
+        fset=_set_other_dict,
         doc=u"""convertion file .mot in dict
 
         :Type: dict
@@ -845,24 +821,6 @@ class ConvertMC(Convert):
         doc=u"""list differents rules
 
         :Type: list
-        """,
-    )
-
-    def _get_is_stator(self):
-        """getter of is_stator"""
-        return self._is_stator
-
-    def _set_is_stator(self, value):
-        """setter of is_stator"""
-        check_var("is_stator", value, "bool")
-        self._is_stator = value
-
-    is_stator = property(
-        fget=_get_is_stator,
-        fset=_set_is_stator,
-        doc=u"""selection rotor or stator, if true = stator else rotor
-
-        :Type: bool
         """,
     )
 

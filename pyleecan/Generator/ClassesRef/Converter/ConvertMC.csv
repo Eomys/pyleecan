@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-s,-,convertion file .mot in dict,0,dict,None,,,
+other_dict,-,convertion file .mot in dict,0,dict,None,,,
 machine,-,machine pyleecan,0,machine,None,,,
 rules_list,-,list differents rules,0,list,None,,,
 P_to_other,-,booleen to select the direction of conversion,0,bool,False,,,
