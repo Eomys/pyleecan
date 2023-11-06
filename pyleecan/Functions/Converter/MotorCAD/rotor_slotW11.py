@@ -5,7 +5,7 @@ from pyleecan.Methods.Slot.SlotW11.get_H1 import get_H1
 from pyleecan.Methods.Slot.SlotW11._comp_W import _comp_W
 
 
-def other_to_P(machine):
+def other_to_P(self, machine):
     dict_machine = machine.rotor.as_dict()
 
     machine.rotor = LamSlotMag(init_dict=dict_machine)

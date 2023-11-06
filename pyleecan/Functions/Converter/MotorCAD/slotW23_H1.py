@@ -1,4 +1,4 @@
-def other_to_P(machine):
+def other_to_P(self, machine):
     H1 = machine.stator.slot.get_H1()
 
     machine.stator.slot.H1 = H1

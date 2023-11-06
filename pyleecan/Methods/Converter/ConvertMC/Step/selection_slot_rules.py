@@ -5,8 +5,7 @@ from pyleecan.Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slo
 
 
 def selection_slot_rules(self, is_stator):
-    self.is_stator = is_stator
-    if not self.is_P_to_other:
+    if self.is_P_to_other:
         slot_type = type(self.machine.stator.slot).__name__
 
     else:
@@ -14,9 +13,7 @@ def selection_slot_rules(self, is_stator):
     print(slot_type)
 
     if slot_type in ["Parallel_Tooth", "SlotW11"]:
-        self.rules_list = add_rule_parallel_tooth_slotW11(
-            self.rules_list, self.is_stator
-        )
+        self.rules_list = add_rule_parallel_tooth_slotW11(self.rules_list, is_stator)
 
     elif slot_type == "Parallel Tooth SqB":
         pass

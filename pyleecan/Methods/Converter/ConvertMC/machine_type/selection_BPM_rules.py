@@ -16,23 +16,26 @@ from pyleecan.Methods.Converter.ConvertMC.Step.selection_conductor_rules import 
 from pyleecan.Methods.Converter.ConvertMC.Step.selection_magnet_rules import (
     selection_magnet_rules,
 )
+
 from pyleecan.Methods.Converter.ConvertMC.Step.selection_skew_rules import (
     selection_skew_rules,
 )
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
+# from pyleecan.Classes.MachineSPMSM import MachineSPMSM
+
 
 def selection_BPM_rules(self):
     self.machine = MachineSIPMSM()
     is_stator = True
-    self.rules = selection_slot_rules(self, is_stator)
-    self.rules = selection_lamination_rules(self, is_stator)
-    self.rules = selection_winding_rules(self, is_stator)
-    self.rules = selection_conductor_rules(self, is_stator)
-    self.is_stator = False
-    self.rules = selection_slot_rotor_rules(self, is_stator)
-    # self.rules = get_magnet(self, is_stator=False)
-    self.rules = selection_lamination_rules(self, is_stator)
-    self.rules = selection_skew_rules(self, is_stator)
+    self.rules_list = selection_slot_rules(self, is_stator)
+    self.rules_list = selection_lamination_rules(self, is_stator)
+    self.rules_list = selection_winding_rules(self, is_stator)
+    self.rules_list = selection_conductor_rules(self, is_stator)
+    is_stator = False
+    # self.rules_list = selection_slot_rotor_rules(self, is_stator)
+    self.rules_list = selection_magnet_rules(self, is_stator=False)
+    self.rules_list = selection_lamination_rules(self, is_stator)
+    self.rules_list = selection_skew_rules(self, is_stator)
 
-    return self.rules
+    return self.rules_list

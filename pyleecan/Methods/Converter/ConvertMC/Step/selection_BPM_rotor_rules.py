@@ -28,4 +28,4 @@ def selection_BPM_rotor_rules(self):
     elif BPM_rotor == "Spoke":
         pass
 
-    return self.rules
+    return self.rules_list

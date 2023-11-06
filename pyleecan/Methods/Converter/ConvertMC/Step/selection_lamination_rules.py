@@ -41,4 +41,4 @@ def selection_lamination_rules(self, is_stator):
     else:
         print("not axial cooling duct")
 
-    return self.rules
+    return self.rules_list

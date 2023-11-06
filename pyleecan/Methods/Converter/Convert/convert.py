@@ -20,13 +20,12 @@ def convert_to_P(path_to_other):
     liste_path = path_to_other.split(".")
 
     if liste_path[1] == "mot":
-        self = ConvertMC.__init__()
-        self.file_path = path_to_other
-        self.machine = None
+        self = ConvertMC()
         self.is_P_to_other = False
+        self.file_path = path_to_other
         machine = convert(self)
 
-    print("machine")
+    return machine
 
 
 if __name__ == "__main__":
