@@ -3,9 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_parallel_tooth_slotW11(rule_list, is_stator):
-    print("parallel_tooth_slotW11")
-
+def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
     if is_stator == True:
         lam_name = "stator"
     else:
@@ -49,44 +47,48 @@ def add_rule_parallel_tooth_slotW11(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
-            P_obj_path=f"machine.{lam_name}.slot.H1",
-            unit_type="rad",
-            scaling_to_P=1,
+    if not self.is_P_to_other:
+        rule_list.append(
+            RuleSimple(
+                other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
+                P_obj_path=f"machine.{lam_name}.slot.H1",
+                unit_type="rad",
+                scaling_to_P=1,
+            )
         )
-    )
 
-    rule_list.append(RuleComplex(fct_name="slotW11_H1", src="pyleecan"))
+        rule_list.append(RuleComplex(fct_name="slotW11_H1", src="pyleecan"))
 
-    rule_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Slot_Depth"],
-                    "variable": "y",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H2",
-                    "variable": "x",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H1",
-                    "variable": "a",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H0",
-                    "variable": "b",
-                },
-            ],
-            unit_type="m",
-            scaling_to_P="y = b+a+x",
+        rule_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Slot_Depth"],
+                        "variable": "y",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": f"machine.{lam_name}.slot.H2",
+                        "variable": "x",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": f"machine.{lam_name}.slot.H1",
+                        "variable": "a",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": f"machine.{lam_name}.slot.H0",
+                        "variable": "b",
+                    },
+                ],
+                unit_type="m",
+                scaling_to_P="y = b+a+x",
+            )
         )
-    )
+
+    else:
+        print("error type conversion to tooth_tip_depth_H1 is not in rad ")
 
     return rule_list

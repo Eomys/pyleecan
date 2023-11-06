@@ -4,8 +4,6 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_slot_slotW21(rule_list, is_stator):
-    print("parallel_slot_slotW21")
-
     if is_stator == True:
         lam_name = "stator"
     else:

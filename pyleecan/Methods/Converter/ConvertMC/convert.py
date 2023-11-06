@@ -17,8 +17,8 @@ def convert(self):
     if self.is_P_to_other == False:
         self.other_dict = mot_to_dict(self.file_path)
     else:
-        # self.other_dict = {}
-        self.other_dict["[Header]"] = {}
+        self.other_dict = {}
+        # self.other_dict["[Header]"] = {}
 
     selection_machine_type(self)
 

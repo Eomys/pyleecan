@@ -1,5 +1,4 @@
 def other_to_P(self, machine):
-    print("ok")
     return machine
 
 

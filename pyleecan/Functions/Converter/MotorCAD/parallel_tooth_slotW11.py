@@ -25,6 +25,6 @@ def P_to_other(self, other_dict):
 
     temp_dict = other_dict["[Calc_Options]"]
 
-    temp_dict["Slot_type"] = "Parallel_Tooth"
+    temp_dict["Slot_Type"] = "Parallel_Tooth"
 
     return other_dict
