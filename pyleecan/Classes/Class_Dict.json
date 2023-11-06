@@ -12284,7 +12284,7 @@
         "is_internal": false,
         "methods": [
             "convert_to_P",
-            "convert_to_mot",
+            "convert_to_other",
             "_set_fct_name"
         ],
         "mother": "Rules",
@@ -12326,7 +12326,7 @@
         "is_internal": false,
         "methods": [
             "convert_to_P",
-            "convert_to_mot"
+            "convert_to_other"
         ],
         "mother": "Rules",
         "name": "RuleEquation",
@@ -12335,20 +12335,10 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "dict other parameters",
+                "desc": "dict all parameters",
                 "max": "",
                 "min": "",
-                "name": "param_other",
-                "type": "list",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "dict pyleecan parameters",
-                "max": "",
-                "min": "",
-                "name": "param_pyleecan",
+                "name": "param",
                 "type": "list",
                 "unit": "-",
                 "value": null
@@ -12387,7 +12377,7 @@
         "is_internal": false,
         "methods": [
             "convert_to_P",
-            "convert_to_mot"
+            "convert_to_other"
         ],
         "mother": "Rules",
         "name": "RuleSimple",
@@ -12399,7 +12389,7 @@
                 "desc": "parameter ",
                 "max": "",
                 "min": "",
-                "name": "other",
+                "name": "other_key_list",
                 "type": "list",
                 "unit": "-",
                 "value": null
@@ -12409,7 +12399,7 @@
                 "desc": "path pyleecan parameter in object machine ",
                 "max": "",
                 "min": "",
-                "name": "pyleecan",
+                "name": "P_obj_path",
                 "type": "str",
                 "unit": "-",
                 "value": "None"
@@ -12450,7 +12440,12 @@
         ],
         "desc": "abstract class for rules",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "set_P",
+            "get_P",
+            "set_other",
+            "get_other"
+        ],
         "mother": "",
         "name": "Rules",
         "package": "Converter",

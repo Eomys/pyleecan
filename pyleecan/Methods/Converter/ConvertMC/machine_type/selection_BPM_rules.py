@@ -26,9 +26,11 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
 
 def selection_BPM_rules(self):
-    self.machine = MachineSIPMSM()
+    if not self.is_P_to_other:
+        self.machine = MachineSIPMSM()
     is_stator = True
     self.rules_list = selection_slot_rules(self, is_stator)
+    """
     self.rules_list = selection_lamination_rules(self, is_stator)
     self.rules_list = selection_winding_rules(self, is_stator)
     self.rules_list = selection_conductor_rules(self, is_stator)
@@ -37,5 +39,5 @@ def selection_BPM_rules(self):
     self.rules_list = selection_magnet_rules(self, is_stator=False)
     self.rules_list = selection_lamination_rules(self, is_stator)
     self.rules_list = selection_skew_rules(self, is_stator)
-
+    """
     return self.rules_list

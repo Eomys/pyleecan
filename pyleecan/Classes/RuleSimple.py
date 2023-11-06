@@ -23,9 +23,9 @@ except ImportError as error:
     convert_to_P = error
 
 try:
-    from ..Methods.Converter.RuleSimple.convert_to_mot import convert_to_mot
+    from ..Methods.Converter.RuleSimple.convert_to_other import convert_to_other
 except ImportError as error:
-    convert_to_mot = error
+    convert_to_other = error
 
 
 from numpy import isnan
@@ -49,17 +49,18 @@ class RuleSimple(Rules):
         )
     else:
         convert_to_P = convert_to_P
-    # cf Methods.Converter.RuleSimple.convert_to_mot
-    if isinstance(convert_to_mot, ImportError):
-        convert_to_mot = property(
+    # cf Methods.Converter.RuleSimple.convert_to_other
+    if isinstance(convert_to_other, ImportError):
+        convert_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RuleSimple method convert_to_mot: " + str(convert_to_mot)
+                    "Can't use RuleSimple method convert_to_other: "
+                    + str(convert_to_other)
                 )
             )
         )
     else:
-        convert_to_mot = convert_to_mot
+        convert_to_other = convert_to_other
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -67,8 +68,8 @@ class RuleSimple(Rules):
 
     def __init__(
         self,
-        other=None,
-        pyleecan=None,
+        other_key_list=None,
+        P_obj_path=None,
         unit_type="m",
         scaling_to_P=1,
         init_dict=None,
@@ -89,17 +90,17 @@ class RuleSimple(Rules):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "other" in list(init_dict.keys()):
-                other = init_dict["other"]
-            if "pyleecan" in list(init_dict.keys()):
-                pyleecan = init_dict["pyleecan"]
+            if "other_key_list" in list(init_dict.keys()):
+                other_key_list = init_dict["other_key_list"]
+            if "P_obj_path" in list(init_dict.keys()):
+                P_obj_path = init_dict["P_obj_path"]
             if "unit_type" in list(init_dict.keys()):
                 unit_type = init_dict["unit_type"]
             if "scaling_to_P" in list(init_dict.keys()):
                 scaling_to_P = init_dict["scaling_to_P"]
         # Set the properties (value check and convertion are done in setter)
-        self.other = other
-        self.pyleecan = pyleecan
+        self.other_key_list = other_key_list
+        self.P_obj_path = P_obj_path
         self.unit_type = unit_type
         self.scaling_to_P = scaling_to_P
         # Call Rules init
@@ -114,12 +115,12 @@ class RuleSimple(Rules):
         # Get the properties inherited from Rules
         RuleSimple_str += super(RuleSimple, self).__str__()
         RuleSimple_str += (
-            "other = "
+            "other_key_list = "
             + linesep
-            + str(self.other).replace(linesep, linesep + "\t")
+            + str(self.other_key_list).replace(linesep, linesep + "\t")
             + linesep
         )
-        RuleSimple_str += 'pyleecan = "' + str(self.pyleecan) + '"' + linesep
+        RuleSimple_str += 'P_obj_path = "' + str(self.P_obj_path) + '"' + linesep
         RuleSimple_str += 'unit_type = "' + str(self.unit_type) + '"' + linesep
         RuleSimple_str += "scaling_to_P = " + str(self.scaling_to_P) + linesep
         return RuleSimple_str
@@ -133,9 +134,9 @@ class RuleSimple(Rules):
         # Check the properties inherited from Rules
         if not super(RuleSimple, self).__eq__(other):
             return False
-        if other.other != self.other:
+        if other.other_key_list != self.other_key_list:
             return False
-        if other.pyleecan != self.pyleecan:
+        if other.P_obj_path != self.P_obj_path:
             return False
         if other.unit_type != self.unit_type:
             return False
@@ -158,26 +159,30 @@ class RuleSimple(Rules):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._other != self._other:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._other) + ", other=" + str(other._other) + ")"
-                )
-                diff_list.append(name + ".other" + val_str)
-            else:
-                diff_list.append(name + ".other")
-        if other._pyleecan != self._pyleecan:
+        if other._other_key_list != self._other_key_list:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._pyleecan)
+                    + str(self._other_key_list)
                     + ", other="
-                    + str(other._pyleecan)
+                    + str(other._other_key_list)
                     + ")"
                 )
-                diff_list.append(name + ".pyleecan" + val_str)
+                diff_list.append(name + ".other_key_list" + val_str)
             else:
-                diff_list.append(name + ".pyleecan")
+                diff_list.append(name + ".other_key_list")
+        if other._P_obj_path != self._P_obj_path:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._P_obj_path)
+                    + ", other="
+                    + str(other._P_obj_path)
+                    + ")"
+                )
+                diff_list.append(name + ".P_obj_path" + val_str)
+            else:
+                diff_list.append(name + ".P_obj_path")
         if other._unit_type != self._unit_type:
             if is_add_value:
                 val_str = (
@@ -220,10 +225,10 @@ class RuleSimple(Rules):
 
         # Get size of the properties inherited from Rules
         S += super(RuleSimple, self).__sizeof__()
-        if self.other is not None:
-            for value in self.other:
+        if self.other_key_list is not None:
+            for value in self.other_key_list:
                 S += getsizeof(value)
-        S += getsizeof(self.pyleecan)
+        S += getsizeof(self.P_obj_path)
         S += getsizeof(self.unit_type)
         S += getsizeof(self.scaling_to_P)
         return S
@@ -245,8 +250,10 @@ class RuleSimple(Rules):
             keep_function=keep_function,
             **kwargs
         )
-        RuleSimple_dict["other"] = self.other.copy() if self.other is not None else None
-        RuleSimple_dict["pyleecan"] = self.pyleecan
+        RuleSimple_dict["other_key_list"] = (
+            self.other_key_list.copy() if self.other_key_list is not None else None
+        )
+        RuleSimple_dict["P_obj_path"] = self.P_obj_path
         RuleSimple_dict["unit_type"] = self.unit_type
         RuleSimple_dict["scaling_to_P"] = self.scaling_to_P
         # The class name is added to the dict for deserialisation purpose
@@ -258,17 +265,17 @@ class RuleSimple(Rules):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.other is None:
-            other_val = None
+        if self.other_key_list is None:
+            other_key_list_val = None
         else:
-            other_val = self.other.copy()
-        pyleecan_val = self.pyleecan
+            other_key_list_val = self.other_key_list.copy()
+        P_obj_path_val = self.P_obj_path
         unit_type_val = self.unit_type
         scaling_to_P_val = self.scaling_to_P
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            other=other_val,
-            pyleecan=pyleecan_val,
+            other_key_list=other_key_list_val,
+            P_obj_path=P_obj_path_val,
             unit_type=unit_type_val,
             scaling_to_P=scaling_to_P_val,
         )
@@ -277,45 +284,45 @@ class RuleSimple(Rules):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.other = None
-        self.pyleecan = None
+        self.other_key_list = None
+        self.P_obj_path = None
         self.unit_type = None
         self.scaling_to_P = None
         # Set to None the properties inherited from Rules
         super(RuleSimple, self)._set_None()
 
-    def _get_other(self):
-        """getter of other"""
-        return self._other
+    def _get_other_key_list(self):
+        """getter of other_key_list"""
+        return self._other_key_list
 
-    def _set_other(self, value):
-        """setter of other"""
+    def _set_other_key_list(self, value):
+        """setter of other_key_list"""
         if type(value) is int and value == -1:
             value = list()
-        check_var("other", value, "list")
-        self._other = value
+        check_var("other_key_list", value, "list")
+        self._other_key_list = value
 
-    other = property(
-        fget=_get_other,
-        fset=_set_other,
+    other_key_list = property(
+        fget=_get_other_key_list,
+        fset=_set_other_key_list,
         doc=u"""parameter 
 
         :Type: list
         """,
     )
 
-    def _get_pyleecan(self):
-        """getter of pyleecan"""
-        return self._pyleecan
+    def _get_P_obj_path(self):
+        """getter of P_obj_path"""
+        return self._P_obj_path
 
-    def _set_pyleecan(self, value):
-        """setter of pyleecan"""
-        check_var("pyleecan", value, "str")
-        self._pyleecan = value
+    def _set_P_obj_path(self, value):
+        """setter of P_obj_path"""
+        check_var("P_obj_path", value, "str")
+        self._P_obj_path = value
 
-    pyleecan = property(
-        fget=_get_pyleecan,
-        fset=_set_pyleecan,
+    P_obj_path = property(
+        fget=_get_P_obj_path,
+        fset=_set_P_obj_path,
         doc=u"""path pyleecan parameter in object machine 
 
         :Type: str

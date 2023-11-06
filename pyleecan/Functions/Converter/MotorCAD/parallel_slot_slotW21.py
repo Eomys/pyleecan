@@ -18,3 +18,4 @@ def other_to_P(self, machine):
 
 def P_to_other(machine, other_dict):
     print("other_to_P")
+    return other_dict

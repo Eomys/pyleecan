@@ -23,9 +23,9 @@ except ImportError as error:
     convert_to_P = error
 
 try:
-    from ..Methods.Converter.RuleComplex.convert_to_mot import convert_to_mot
+    from ..Methods.Converter.RuleComplex.convert_to_other import convert_to_other
 except ImportError as error:
-    convert_to_mot = error
+    convert_to_other = error
 
 try:
     from ..Methods.Converter.RuleComplex._set_fct_name import _set_fct_name
@@ -54,18 +54,18 @@ class RuleComplex(Rules):
         )
     else:
         convert_to_P = convert_to_P
-    # cf Methods.Converter.RuleComplex.convert_to_mot
-    if isinstance(convert_to_mot, ImportError):
-        convert_to_mot = property(
+    # cf Methods.Converter.RuleComplex.convert_to_other
+    if isinstance(convert_to_other, ImportError):
+        convert_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RuleComplex method convert_to_mot: "
-                    + str(convert_to_mot)
+                    "Can't use RuleComplex method convert_to_other: "
+                    + str(convert_to_other)
                 )
             )
         )
     else:
-        convert_to_mot = convert_to_mot
+        convert_to_other = convert_to_other
     # cf Methods.Converter.RuleComplex._set_fct_name
     if isinstance(_set_fct_name, ImportError):
         _set_fct_name = property(

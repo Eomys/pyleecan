@@ -15,8 +15,17 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Slot_Opening"],
-            pyleecan=f"machine.{lam_name}.slot.W0",
+            other_key_list=["[Dimensions]", "Slot_Opening"],
+            P_obj_path=f"machine.{lam_name}.slot.W0",
+            unit_type="m",
+            scaling_to_P=1,
+        )
+    )
+
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Tooth_Width"],
+            P_obj_path=f"machine.{lam_name}.slot.W1",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -25,7 +34,7 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
     rule_list.append(
         RuleSimple(
             other=["[Dimensions]", "Tooth_Width"],
-            pyleecan=f"machine.{lam_name}.slot.W1",
+            P_obj_path=f"machine.{lam_name}.slot.W2",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -33,8 +42,8 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Tooth_Width"],
-            pyleecan=f"machine.{lam_name}.slot.W2",
+            other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
+            P_obj_path=f"machine.{lam_name}.slot.H0",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -42,17 +51,8 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Tooth_Tip_Depth"],
-            pyleecan=f"machine.{lam_name}.slot.H0",
-            unit_type="m",
-            scaling_to_P=1,
-        )
-    )
-
-    rule_list.append(
-        RuleSimple(
-            other=["[Dimensions]", "Tooth_Tip_Angle"],
-            pyleecan=f"machine.{lam_name}.slot.H1",
+            other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
+            P_obj_path=f"machine.{lam_name}.slot.H1",
             unit_type="rad",
             scaling_to_P=1,
         )
@@ -62,14 +62,12 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
 
     rule_list.append(
         RuleEquation(
-            param_other=[
+            param=[
                 {
                     "src": "other",
                     "path": ["[Dimensions]", "Slot_Depth"],
                     "variable": "y",
-                }
-            ],
-            param_pyleecan=[
+                },
                 {
                     "src": "pyleecan",
                     "path": f"machine.{lam_name}.slot.H2",

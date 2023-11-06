@@ -1,5 +1,6 @@
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Methods.Converter.Rules.set_other import set_other
 
 from pyleecan.Methods.Slot.SlotW11.get_H1 import get_H1
 
@@ -18,5 +19,12 @@ def other_to_P(self, machine):
     return machine
 
 
-def P_to_other(self, machine):
-    print("other_to_P")
+def P_to_other(self, other_dict):
+    if "[Calc_Options]" not in other_dict:
+        other_dict["[Calc_Options]"] = {}
+
+    temp_dict = other_dict["[Calc_Options]"]
+
+    temp_dict["Slot_type"] = "Parallel_Tooth"
+
+    return other_dict

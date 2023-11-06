@@ -15,6 +15,29 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Converter.Rules.set_P import set_P
+except ImportError as error:
+    set_P = error
+
+try:
+    from ..Methods.Converter.Rules.get_P import get_P
+except ImportError as error:
+    get_P = error
+
+try:
+    from ..Methods.Converter.Rules.set_other import set_other
+except ImportError as error:
+    set_other = error
+
+try:
+    from ..Methods.Converter.Rules.get_other import get_other
+except ImportError as error:
+    get_other = error
+
+
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -24,6 +47,43 @@ class Rules(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Converter.Rules.set_P
+    if isinstance(set_P, ImportError):
+        set_P = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Rules method set_P: " + str(set_P))
+            )
+        )
+    else:
+        set_P = set_P
+    # cf Methods.Converter.Rules.get_P
+    if isinstance(get_P, ImportError):
+        get_P = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Rules method get_P: " + str(get_P))
+            )
+        )
+    else:
+        get_P = get_P
+    # cf Methods.Converter.Rules.set_other
+    if isinstance(set_other, ImportError):
+        set_other = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Rules method set_other: " + str(set_other))
+            )
+        )
+    else:
+        set_other = set_other
+    # cf Methods.Converter.Rules.get_other
+    if isinstance(get_other, ImportError):
+        get_other = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Rules method get_other: " + str(get_other))
+            )
+        )
+    else:
+        get_other = get_other
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

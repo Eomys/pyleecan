@@ -15,8 +15,8 @@ def add_rule_lamination(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Slot_Opening"],
-            pyleecan=f"machine.{lam_name}.slot.W0",
+            other_key_list=["[Dimensions]", "Slot_Opening"],
+            P_obj_path=f"machine.{lam_name}.slot.W0",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -24,8 +24,8 @@ def add_rule_lamination(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Tooth_Width"],
-            pyleecan=f"machine.{lam_name}.slot.W3",
+            other_key_list=["[Dimensions]", "Tooth_Width"],
+            P_obj_path=f"machine.{lam_name}.slot.W3",
             unit_type="m",
             scaling_to_P=1,
         )

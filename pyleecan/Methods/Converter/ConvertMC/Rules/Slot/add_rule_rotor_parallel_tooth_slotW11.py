@@ -10,8 +10,8 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Bar_Opening_[T]"],
-            pyleecan=f"machine.rotor.slot.W0",
+            other_key_list=["[Dimensions]", "Bar_Opening_[T]"],
+            P_obj_path=f"machine.rotor.slot.W0",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -19,8 +19,8 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Rotor_Tooth_Width"],
-            pyleecan=f"machine.rotor.slot.W3",
+            other_key_list=["[Dimensions]", "Rotor_Tooth_Width"],
+            P_obj_path=f"machine.rotor.slot.W3",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -28,8 +28,8 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Bar_Opening_Depth_[T]"],
-            pyleecan=f"machine.rotor.slot.H0",
+            other_key_list=["[Dimensions]", "Bar_Opening_Depth_[T]"],
+            P_obj_path=f"machine.rotor.slot.H0",
             unit_type="m",
             scaling_to_P=1,
         )
@@ -37,8 +37,8 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Bar_Corner_Radius[T]"],
-            pyleecan=f"machine.rotor.slot.R1",
+            other_key_list=["[Dimensions]", "Bar_Corner_Radius[T]"],
+            P_obj_path=f"machine.rotor.slot.R1",
             unit_type="m",
             scaling_to_P=0.5,
         )
@@ -46,8 +46,8 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Bar_Tip_Angle_[T]"],
-            pyleecan=f"machine.rotor.slot.H1",
+            other_key_list=["[Dimensions]", "Bar_Tip_Angle_[T]"],
+            P_obj_path=f"machine.rotor.slot.H1",
             unit_type="rad",
             scaling_to_P=1,
         )
@@ -57,14 +57,12 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
 
     rule_list.append(
         RuleEquation(
-            param_other=[
+            param=[
                 {
                     "src": "other",
                     "path": ["[Dimensions]", "Bar_Depth_[T]"],
                     "variable": "y",
                 },
-            ],
-            param_pyleecan=[
                 {
                     "src": "pyleecan",
                     "path": f"machine.rotor.slot.H2",

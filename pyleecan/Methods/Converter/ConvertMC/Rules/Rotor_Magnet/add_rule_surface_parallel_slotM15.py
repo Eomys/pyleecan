@@ -10,8 +10,8 @@ def add_rule_surface_radial_slotM11(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Magnet_Arc_[ED]"],
-            pyleecan=f"machine.rotor.slot.W0",
+            other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
+            P_obj_path=f"machine.rotor.slot.W0",
             unit_type="ED",
             scaling_to_P=1,
         )
@@ -19,8 +19,8 @@ def add_rule_surface_radial_slotM11(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Magnet_Arc_[ED]"],
-            pyleecan=f"machine.rotor.slot.W1",
+            other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
+            P_obj_path=f"machine.rotor.slot.W1",
             unit_type="ED",
             scaling_to_P=1,
         )
@@ -28,8 +28,8 @@ def add_rule_surface_radial_slotM11(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Magnet_Thikness"],
-            pyleecan=f"machine.Magnet_Arc_[ED].slot.H1",
+            other_key_list=["[Dimensions]", "Magnet_Thikness"],
+            P_obj_path=f"machine.Magnet_Arc_[ED].slot.H1",
             unit_type="m",
             scaling_to_P=1,
         )

@@ -35,16 +35,22 @@ from pyleecan.Methods.Converter.ConvertMC.machine_type.selection_WFC_rules impor
     selection_WFC_rules,
 )
 
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+
 
 def selection_machine_type(self):
-    motor_type = self.other_dict["[Calc_Options]"]["Motor_Type"]
+    if self.is_P_to_other == False:
+        motor_type = self.other_dict["[Calc_Options]"]["Motor_Type"]
+
+    else:
+        motor_type = type(self.machine).__name__
 
     # self.rules_list = self.add_rules(self.mot_dict, self.rules_list)
 
     self.rules_list = add_rule_machine_type(self.rules_list)
     # selecion motor_type
-    if motor_type == "BPM":
-        self.rules_list = add_rule_machine_dimension(self.rules_list)
+    if motor_type in ["BPM", "MachineSIPMSM"]:
+        self.rules_list = add_rule_machine_dimension(self, self.rules_list)
         selection_BPM_rules(self)
 
     elif motor_type == "IM":

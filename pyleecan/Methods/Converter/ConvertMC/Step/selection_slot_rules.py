@@ -10,7 +10,6 @@ def selection_slot_rules(self, is_stator):
 
     else:
         slot_type = self.other_dict["[Calc_Options]"]["Slot_Type"]
-    print(slot_type)
 
     if slot_type in ["Parallel_Tooth", "SlotW11"]:
         self.rules_list = add_rule_parallel_tooth_slotW11(self.rules_list, is_stator)

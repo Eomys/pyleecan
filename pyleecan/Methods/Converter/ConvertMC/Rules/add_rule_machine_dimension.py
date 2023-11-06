@@ -3,11 +3,11 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_machine_dimension(rules_list):
+def add_rule_machine_dimension(self, rules_list):
     rules_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Stator_Bore"],
-            pyleecan="machine.stator.Rint",
+            other_key_list=["[Dimensions]", "Stator_Bore"],
+            P_obj_path="machine.stator.Rint",
             unit_type="m",
             scaling_to_P=0.5,
         )
@@ -15,33 +15,56 @@ def add_rule_machine_dimension(rules_list):
 
     rules_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Stator_Lam_Dia"],
-            pyleecan="machine.stator.Rext",
+            other_key_list=["[Dimensions]", "Stator_Lam_Dia"],
+            P_obj_path="machine.stator.Rext",
             unit_type="m",
             scaling_to_P=0.5,
         )
     )
+
+    if self.is_P_to_other:
+        rules_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Airgap"],
+                        "variable": "y",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.Rext",
+                        "variable": "a",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.stator.Rint",
+                        "variable": "b",
+                    },
+                ],
+                unit_type="m",
+                scaling_to_P="y= a-b ",
+            )
+        )
 
     rules_list.append(
         RuleEquation(
-            param_other=[
+            param=[
                 {
-                    "src": "MC",
+                    "src": "other",
                     "path": ["[Dimensions]", "Stator_Bore"],
                     "variable": "y",
                 },
                 {
-                    "src": "MC",
+                    "src": "other",
                     "path": ["[Dimensions]", "Airgap"],
                     "variable": "a",
                 },
-            ],
-            param_pyleecan=[
                 {
                     "src": "pyleecan",
                     "path": "machine.rotor.Rext",
                     "variable": "x",
-                }
+                },
             ],
             unit_type="m",
             scaling_to_P="y/2+a= x ",
@@ -51,8 +74,8 @@ def add_rule_machine_dimension(rules_list):
     # shaft
     rules_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Shaft_Dia"],
-            pyleecan="machine.rotor.Rint",
+            other_key_list=["[Dimensions]", "Shaft_Dia"],
+            P_obj_path="machine.rotor.Rint",
             unit_type="m",
             scaling_to_P=0.5,
         )
@@ -61,8 +84,8 @@ def add_rule_machine_dimension(rules_list):
     # frame
     rules_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Motor_Length"],
-            pyleecan="machine.frame.Lfra",
+            other_key_list=["[Dimensions]", "Motor_Length"],
+            P_obj_path="machine.frame.Lfra",
             unit_type="m",
             scaling_to_P=0.5,
         )
@@ -70,8 +93,8 @@ def add_rule_machine_dimension(rules_list):
 
     rules_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Stator_Lam_Dia"],
-            pyleecan="machine.frame.Rint",
+            other_key_list=["[Dimensions]", "Stator_Lam_Dia"],
+            P_obj_path="machine.frame.Rint",
             unit_type="m",
             scaling_to_P=0.5,
         )
@@ -79,8 +102,8 @@ def add_rule_machine_dimension(rules_list):
 
     rules_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Housing_Dia"],
-            pyleecan="machine.frame.Rext",
+            other_key_list=["[Dimensions]", "Housing_Dia"],
+            P_obj_path="machine.frame.Rext",
             unit_type="m",
             scaling_to_P=0.5,
         )

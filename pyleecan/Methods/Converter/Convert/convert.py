@@ -9,11 +9,17 @@ def selection_file():
     return path
 
 
-def convert_to_other(machine, path_to_other):
-    liste_path = path_to_other.split(".")
+def convert_to_other(machine, dict_to_other):
+    # liste_path = path_to_other.split(".")
 
-    if liste_path[1] == "mot":
-        convert(file_path=path_to_other, machine=machine, is_P_to_other=True)
+    # if liste_path[1] == "mot":
+    self = ConvertMC()
+    self.is_P_to_other = True
+    self.machine = machine
+    self.other_dict = {}
+
+    dict_to_other = convert(self)
+    return dict_to_other
 
 
 def convert_to_P(path_to_other):
@@ -32,4 +38,6 @@ if __name__ == "__main__":
     # path = selection_file()
 
     path = "pyleecan\pyleecan\Methods\Converter\ConvertMC\EMD240_v16.mot"
-    convert_to_P(path)
+    machine = convert_to_P(path)
+    dict_to_other = {}
+    convert_to_other(machine, dict_to_other)
