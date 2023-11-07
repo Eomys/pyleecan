@@ -16,4 +16,3 @@ def _set_fct_name(self, value):
 
     self.other_to_P = eval("other_to_P")
     self.P_to_other = eval("P_to_other")
-    # return file_path

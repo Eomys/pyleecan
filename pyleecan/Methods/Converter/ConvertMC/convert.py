@@ -34,15 +34,17 @@ def convert(self):
         path file use to convert
     """
 
+    # conversion file in dict
     if self.is_P_to_other == False:
         self.other_dict = convert_other_to_dict(self.file_path)
 
     selection_machine_type(self)
 
+    # conversion rules list
     if self.is_P_to_other == False:
         for rule in self.rules_list:
             self.machine = rule.convert_to_P(self.other_dict, self.machine)
-        # self.machine.stator.plot()
+        self.machine.stator.plot()
         print("Done")
         return self.machine
 

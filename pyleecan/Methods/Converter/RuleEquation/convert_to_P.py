@@ -18,12 +18,7 @@ def convert_to_P(self, other_dict, machine):
                 dict_temp = dict_temp[temp]
 
             # conversion unit
-            if unit == "m":
-                unit = 1
-            elif unit == "rad":
-                unit = 1
-            elif unit == "ED":
-                unit = 1
+            unit = self.set_unit(self.unit_type)
 
             dict_temp = dict_temp * unit
 
@@ -44,12 +39,7 @@ def convert_to_P(self, other_dict, machine):
                 )
 
                 # conversion unit
-                if unit == "m":
-                    unit = 1
-                elif unit == "rad":
-                    unit = 1
-                elif unit == "ED":
-                    unit = 1
+                unit = self.set_unit(self.unit_type)
 
                 val_P = val_P * unit
 

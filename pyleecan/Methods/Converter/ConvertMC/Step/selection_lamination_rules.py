@@ -14,8 +14,6 @@ def selection_lamination_rules(self, is_stator):
         type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"]
 
         if self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"] != 0:
-            print(self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"])
-
             if type_duct == 1:
                 name_type_duct = "ArcDuct"
 
@@ -40,6 +38,7 @@ def selection_lamination_rules(self, is_stator):
             # )
 
         else:
-            print("not axial cooling duct")
+            pass
+            # print("not axial cooling duct")
 
     return self.rules_list

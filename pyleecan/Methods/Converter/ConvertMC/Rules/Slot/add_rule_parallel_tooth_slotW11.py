@@ -4,6 +4,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_tooth_slotW11(self, is_stator):
+    # definie the correct position in rotor or in stator
     if is_stator == True:
         lam_name = "stator"
     else:
@@ -11,6 +12,15 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
 
     rules_list = self.rules_list
     rules_list.append(RuleComplex(fct_name="parallel_tooth_slotW11", src="pyleecan"))
+
+    rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Slot_Number"],
+            P_obj_path=f"machine.{lam_name}.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+        )
+    )
 
     rules_list.append(
         RuleSimple(

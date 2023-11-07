@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     get_other = error
 
+try:
+    from ..Methods.Converter.Rules.set_unit import set_unit
+except ImportError as error:
+    set_unit = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -84,6 +89,15 @@ class Rules(FrozenClass):
         )
     else:
         get_other = get_other
+    # cf Methods.Converter.Rules.set_unit
+    if isinstance(set_unit, ImportError):
+        set_unit = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Rules method set_unit: " + str(set_unit))
+            )
+        )
+    else:
+        set_unit = set_unit
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
