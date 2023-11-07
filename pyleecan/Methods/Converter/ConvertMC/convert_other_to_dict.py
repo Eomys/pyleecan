@@ -3,7 +3,6 @@ from os.path import join, split
 
 def convert_other_to_dict(file_path):
     # open file
-    file_path = "EMD240_v16.mot"
     path = split(__file__)[0]
     file = open(join(path, file_path))
 

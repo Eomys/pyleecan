@@ -28,7 +28,7 @@ def add_rule_surface_radial_slotM11(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Magnet_Thikness"],
+            other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.Magnet_Arc_[ED].slot.H1",
             unit_type="m",
             scaling_to_P=1,

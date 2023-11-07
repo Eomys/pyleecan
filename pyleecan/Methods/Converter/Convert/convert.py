@@ -44,8 +44,9 @@ def convert_to_P(path_to_other):
 if __name__ == "__main__":
     # path = selection_file()
 
-    path = "pyleecan\pyleecan\Methods\Converter\ConvertMC\EMD240_v16.mot"
-    path_save = "other_dict.json"
+    # path = "EMD240_v16.mot"
+    path = "Matlab_Test_2.mot"
+    # path_save = "other_dict.json"
     machine = convert_to_P(path)
     dict_to_other = {}
     other_dict = convert_to_other(machine, dict_to_other)

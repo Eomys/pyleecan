@@ -6,7 +6,7 @@ def convert_to_P(self, other_dict, machine):
 
     # possibility to have str in other_value
     if self.scaling_to_P != 1:
-        other_value = other_value * self.scaling_to_P * unit
+        other_value = other_value * self.scaling_to_P / unit
 
     machine = self.set_P(machine, other_value)
 

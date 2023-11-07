@@ -21,7 +21,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
 
 def selection_BPM_rules(self):
-    # check the dirction of conversion to define type machine
+    # check the direction of conversion to define type machine
     if self.is_P_to_other:
         if "[Calc_Options]" not in self.other_dict:
             self.other_dict["[Calc_Options]"] = {}

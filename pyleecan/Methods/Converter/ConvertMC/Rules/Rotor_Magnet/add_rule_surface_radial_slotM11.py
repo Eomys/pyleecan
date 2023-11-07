@@ -3,9 +3,9 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_radial_slotM11(rule_list, is_stator):
+def add_rule_surface_radial_slotM11(self, is_stator):
     print("surface_radial_slotM11")
-
+    rule_list = self.rules_list
     rule_list.append(RuleComplex(fct_name="surface_radial_slotM11", src="pyleecan"))
 
     rule_list.append(
@@ -28,11 +28,9 @@ def add_rule_surface_radial_slotM11(rule_list, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Magnet_Thikness"],
-            P_obj_path=f"machine.Magnet_Arc_[ED].slot.H1",
+            other_key_list=["[Dimensions]", "Magnet_Thickness"],
+            P_obj_path=f"machine.rotor.slot.H1",
             unit_type="m",
             scaling_to_P=1,
         )
     )
-
-    return rule_list

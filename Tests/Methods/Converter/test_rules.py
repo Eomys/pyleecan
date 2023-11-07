@@ -24,6 +24,15 @@ rule_list.append(
 )
 
 rule_list.append(
+    RuleSimple(
+        other_key_list=["[Dimensions]", "Slot_tooth"],
+        P_obj_path=f"machine.stator.slot.W2",
+        unit_type="m",
+        scaling_to_P=0.5,
+    )
+)
+
+rule_list.append(
     RuleEquation(
         param=[
             {
@@ -96,6 +105,7 @@ rule_list.append(
 
 other_dict = {}
 other_dict["[Dimensions]"] = {}
+other_dict["[Dimensions]"]["Slot_tooth"] = 15
 other_dict["[Dimensions]"]["Slot_Opening"] = 12.5
 other_dict["[Dimensions]"]["Slot_Depth"] = 72
 other_dict["[Dimensions]"]["Slot_2"] = 6.75
@@ -114,6 +124,9 @@ class Test_converter_mot(object):
         assert type(machine.stator.slot).__name__ == "SlotW11"
         msg = machine.stator.slot
         assert abs(machine.stator.slot.W0) == pytest.approx(12.5), msg
+
+        msg = machine.stator.slot.W2
+        assert abs(machine.stator.slot.W2) == pytest.approx(7.5), msg
 
         assert abs(machine.stator.slot.H2) == pytest.approx(5.75), msg
 

@@ -39,7 +39,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
 
 def selection_machine_type(self):
-    # check the dirction of conversion
+    # check the direction of conversion
     if self.is_P_to_other == False:
         motor_type = self.other_dict["[Calc_Options]"]["Motor_Type"]
 
@@ -48,15 +48,13 @@ def selection_machine_type(self):
 
     # add rule present in all machine
     add_rule_machine_type(self)
-
+    add_rule_machine_dimension(self)
     # selecion motor_type
     if motor_type in ["BPM", "MachineSIPMSM"]:
-        # particularity for BPM with airgap
-        add_rule_machine_dimension(self)
+        # particularity for BPM with airgap, changemen rule machine dimension
         selection_BPM_rules(self)
 
-    elif motor_type == "IM":
-        add_rule_machine_dimension(self)
+    elif motor_type in ["IM", "MachineIPmSM"]:
         selection_IM_rules(self)
 
     elif motor_type == "SRM":

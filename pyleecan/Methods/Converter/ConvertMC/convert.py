@@ -45,6 +45,7 @@ def convert(self):
         for rule in self.rules_list:
             self.machine = rule.convert_to_P(self.other_dict, self.machine)
         self.machine.stator.plot()
+        self.machine.plot()
         print("Done")
         return self.machine
 

@@ -20,7 +20,7 @@ def convert_to_P(self, other_dict, machine):
             # conversion unit
             unit = self.set_unit(self.unit_type)
 
-            dict_temp = dict_temp * unit
+            dict_temp = dict_temp / unit
 
             scaling = scaling.replace(param["variable"], str(dict_temp))
 
@@ -41,7 +41,7 @@ def convert_to_P(self, other_dict, machine):
                 # conversion unit
                 unit = self.set_unit(self.unit_type)
 
-                val_P = val_P * unit
+                val_P = val_P / unit
 
                 scaling = scaling.replace(param["variable"], str(val_P))
 

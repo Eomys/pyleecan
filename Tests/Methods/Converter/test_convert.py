@@ -3,7 +3,9 @@
 import pytest
 
 from pyleecan.Methods.Converter.Convert.convert import convert_to_P, convert_to_other
-from pyleecan.Methods.Converter.ConvertMC.convert_mot_to_dict import mot_to_dict
+from pyleecan.Methods.Converter.ConvertMC.convert_other_to_dict import (
+    convert_other_to_dict,
+)
 
 
 path = "pyleecan\pyleecan\Methods\Converter\ConvertMC\EMD240_v16.mot"
@@ -15,7 +17,7 @@ class Test_converter_mot(object):
         dict_to_other = {}
         dict_to_other = convert_to_other(machine, dict_to_other)
 
-        dict_to_mot = mot_to_dict(path)
+        dict_to_mot = convert_other_to_dict(path)
 
         for path_dict in dict_to_other:
             temp_dict = dict_to_other[path_dict]
