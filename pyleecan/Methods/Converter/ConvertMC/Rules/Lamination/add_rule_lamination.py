@@ -11,7 +11,7 @@ def add_rule_lamination(rule_list, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list.append(RuleComplex(fct_name="add_duct_layer", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="add_duct_layer", folder="MotorCAD"))
 
     rule_list.append(
         RuleSimple(

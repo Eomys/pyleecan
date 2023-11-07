@@ -3,17 +3,18 @@ from pyleecan.Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slo
     add_rule_parallel_tooth_slotW11,
 )
 
+from pyleecan.Methods.Converter.Convert.convert_slot_type import convert_slot_type
+
 
 def selection_slot_rules(self, is_stator):
     # check the dirction of conversion to select slot
-    if self.is_P_to_other:
-        slot_type = type(self.machine.stator.slot).__name__
 
-    else:
-        slot_type = self.other_dict["[Calc_Options]"]["Slot_Type"]
+    convert_slot_type(self)
+
+    slot_type = type(self.machine.stator.slot).__name__
 
     # add the correct rule depending on the slot
-    if slot_type in ["Parallel_Tooth", "SlotW11"]:
+    if slot_type == "SlotW11":
         add_rule_parallel_tooth_slotW11(self, is_stator)
     elif slot_type == "Parallel Tooth SqB":
         pass

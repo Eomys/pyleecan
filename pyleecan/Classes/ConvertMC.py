@@ -25,9 +25,11 @@ except ImportError as error:
     convert_other_to_dict = error
 
 try:
-    from ..Methods.Converter.ConvertMC.selection_all_rules import selection_all_rules
+    from ..Methods.Converter.ConvertMC.selection_machine_rules import (
+        selection_machine_rules,
+    )
 except ImportError as error:
-    selection_all_rules = error
+    selection_machine_rules = error
 
 try:
     from ..Methods.Converter.ConvertMC.convert import convert
@@ -260,18 +262,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_other_to_dict = convert_other_to_dict
-    # cf Methods.Converter.ConvertMC.selection_all_rules
-    if isinstance(selection_all_rules, ImportError):
-        selection_all_rules = property(
+    # cf Methods.Converter.ConvertMC.selection_machine_rules
+    if isinstance(selection_machine_rules, ImportError):
+        selection_machine_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_all_rules: "
-                    + str(selection_all_rules)
+                    "Can't use ConvertMC method selection_machine_rules: "
+                    + str(selection_machine_rules)
                 )
             )
         )
     else:
-        selection_all_rules = selection_all_rules
+        selection_machine_rules = selection_machine_rules
     # cf Methods.Converter.ConvertMC.convert
     if isinstance(convert, ImportError):
         convert = property(

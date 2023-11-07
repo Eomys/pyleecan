@@ -2,7 +2,7 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Converter,Convert,convert_other_to_dict,VERSION,1,convertorMC abstract,,,
-,,selection_all_rules,,,,,,
+,,selection_machine_rules,,,,,,
 ,,convert,,,,,,
 ,,machine_type.selection_BPM_rules,,,,,,
 ,,machine_type.selection_IM_rules,,,,,,

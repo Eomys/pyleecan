@@ -6,7 +6,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 def add_rule_rotor_parallel_tooth_slotW11(rule_list):
     print("rotor_parallel_tooth_slotW11")
 
-    rule_list.append(RuleComplex(fct_name="rotor_slotW11", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="rotor_slotW11", folder="MotorCAD"))
 
     rule_list.append(
         RuleSimple(
@@ -53,7 +53,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
         )
     )
 
-    rule_list.append(RuleComplex(fct_name="rotor_slotW11_H1", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="rotor_slotW11_H1", folder="MotorCAD"))
 
     rule_list.append(
         RuleEquation(

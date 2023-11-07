@@ -35,45 +35,22 @@ from pyleecan.Methods.Converter.ConvertMC.machine_type.selection_WFC_rules impor
     selection_WFC_rules,
 )
 
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Methods.Converter.Convert.convert_machine_type import convert_machine_type
 
 
-def selection_machine_type(self):
-    # check the direction of conversion
-    if self.is_P_to_other == False:
-        motor_type = self.other_dict["[Calc_Options]"]["Motor_Type"]
-
-    else:
-        motor_type = type(self.machine).__name__
-
+def selection_machine_rules(self):
+    convert_machine_type(self)
+    motor_type = type(self.machine).__name__
     # add rule present in all machine
     add_rule_machine_type(self)
-    add_rule_machine_dimension(self)
+
     # selecion motor_type
-    if motor_type in ["BPM", "MachineSIPMSM"]:
+
+    if motor_type == "MachineSIPMSM":
+        add_rule_machine_dimension(self)
         # particularity for BPM with airgap, changemen rule machine dimension
-        selection_BPM_rules(self)
+        self.selection_BPM_rules()
 
-    elif motor_type in ["IM", "MachineIPmSM"]:
+    elif motor_type == "MachineIPMSM":
+        add_rule_machine_dimension(self)
         selection_IM_rules(self)
-
-    elif motor_type == "SRM":
-        selection_SRM_rules(self)
-
-    elif motor_type == "BPMO":
-        selection_BPMO_rules(self)
-
-    elif motor_type == "PMDC":
-        selection_PMDC_rules(self)
-
-    elif motor_type == "SYNC":
-        selection_SYNC_rules(self)
-
-    elif motor_type == "CLAW":
-        selection_CLAW_rules(self)
-
-    elif motor_type == "IM1PH":
-        selection_IM1PH_rules(self)
-
-    elif motor_type == "WFC":
-        selection_WFC_rules(self)

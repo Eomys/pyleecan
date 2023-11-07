@@ -9,7 +9,7 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list.append(RuleComplex(fct_name="parallel_slot_slotW21", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="parallel_slot_slotW21", folder="MotorCAD"))
 
     rule_list.append(
         RuleSimple(
@@ -56,7 +56,7 @@ def add_rule_parallel_slot_slotW21(rule_list, is_stator):
         )
     )
 
-    rule_list.append(RuleComplex(fct_name="slotW21_H1", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="slotW21_H1", folder="MotorCAD"))
 
     rule_list.append(
         RuleEquation(

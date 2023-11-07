@@ -6,7 +6,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 def add_rule_surface_radial_slotM11(self, is_stator):
     print("surface_radial_slotM11")
     rule_list = self.rules_list
-    rule_list.append(RuleComplex(fct_name="surface_radial_slotM11", src="pyleecan"))
+    rule_list.append(RuleComplex(fct_name="surface_radial_slotM11", folder="MotorCAD"))
 
     rule_list.append(
         RuleSimple(

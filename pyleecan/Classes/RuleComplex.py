@@ -82,7 +82,7 @@ class RuleComplex(Rules):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, fct_name=None, src=None, init_dict=None, init_str=None):
+    def __init__(self, fct_name=None, folder=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -100,11 +100,11 @@ class RuleComplex(Rules):
             # Overwrite default value with init_dict content
             if "fct_name" in list(init_dict.keys()):
                 fct_name = init_dict["fct_name"]
-            if "src" in list(init_dict.keys()):
-                src = init_dict["src"]
+            if "folder" in list(init_dict.keys()):
+                folder = init_dict["folder"]
         # Set the properties (value check and convertion are done in setter)
         self.fct_name = fct_name
-        self.src = src
+        self.folder = folder
         # Call Rules init
         super(RuleComplex, self).__init__()
         # The class is frozen (in Rules init), for now it's impossible to
@@ -117,7 +117,7 @@ class RuleComplex(Rules):
         # Get the properties inherited from Rules
         RuleComplex_str += super(RuleComplex, self).__str__()
         RuleComplex_str += 'fct_name = "' + str(self.fct_name) + '"' + linesep
-        RuleComplex_str += 'src = "' + str(self.src) + '"' + linesep
+        RuleComplex_str += 'folder = "' + str(self.folder) + '"' + linesep
         return RuleComplex_str
 
     def __eq__(self, other):
@@ -131,7 +131,7 @@ class RuleComplex(Rules):
             return False
         if other.fct_name != self.fct_name:
             return False
-        if other.src != self.src:
+        if other.folder != self.folder:
             return False
         return True
 
@@ -162,14 +162,18 @@ class RuleComplex(Rules):
                 diff_list.append(name + ".fct_name" + val_str)
             else:
                 diff_list.append(name + ".fct_name")
-        if other._src != self._src:
+        if other._folder != self._folder:
             if is_add_value:
                 val_str = (
-                    " (self=" + str(self._src) + ", other=" + str(other._src) + ")"
+                    " (self="
+                    + str(self._folder)
+                    + ", other="
+                    + str(other._folder)
+                    + ")"
                 )
-                diff_list.append(name + ".src" + val_str)
+                diff_list.append(name + ".folder" + val_str)
             else:
-                diff_list.append(name + ".src")
+                diff_list.append(name + ".folder")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -182,7 +186,7 @@ class RuleComplex(Rules):
         # Get size of the properties inherited from Rules
         S += super(RuleComplex, self).__sizeof__()
         S += getsizeof(self.fct_name)
-        S += getsizeof(self.src)
+        S += getsizeof(self.folder)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -203,7 +207,7 @@ class RuleComplex(Rules):
             **kwargs
         )
         RuleComplex_dict["fct_name"] = self.fct_name
-        RuleComplex_dict["src"] = self.src
+        RuleComplex_dict["folder"] = self.folder
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RuleComplex_dict["__class__"] = "RuleComplex"
@@ -214,16 +218,16 @@ class RuleComplex(Rules):
 
         # Handle deepcopy of all the properties
         fct_name_val = self.fct_name
-        src_val = self.src
+        folder_val = self.folder
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(fct_name=fct_name_val, src=src_val)
+        obj_copy = type(self)(fct_name=fct_name_val, folder=folder_val)
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.fct_name = None
-        self.src = None
+        self.folder = None
         # Set to None the properties inherited from Rules
         super(RuleComplex, self)._set_None()
 
@@ -240,18 +244,18 @@ class RuleComplex(Rules):
         """,
     )
 
-    def _get_src(self):
-        """getter of src"""
-        return self._src
+    def _get_folder(self):
+        """getter of folder"""
+        return self._folder
 
-    def _set_src(self, value):
-        """setter of src"""
-        check_var("src", value, "str")
-        self._src = value
+    def _set_folder(self, value):
+        """setter of folder"""
+        check_var("folder", value, "str")
+        self._folder = value
 
-    src = property(
-        fget=_get_src,
-        fset=_set_src,
+    folder = property(
+        fget=_get_folder,
+        fset=_set_folder,
         doc=u"""name source
 
         :Type: str

@@ -2,9 +2,6 @@ from pyleecan.Classes.ConvertMC import ConvertMC
 from pyleecan.Methods.Converter.ConvertMC.convert_other_to_dict import (
     convert_other_to_dict,
 )
-from pyleecan.Methods.Converter.ConvertMC.selection_machine_type import (
-    selection_machine_type,
-)
 
 
 def __init__():
@@ -38,7 +35,7 @@ def convert(self):
     if self.is_P_to_other == False:
         self.other_dict = convert_other_to_dict(self.file_path)
 
-    selection_machine_type(self)
+    self.selection_machine_rules()
 
     # conversion rules list
     if self.is_P_to_other == False:
