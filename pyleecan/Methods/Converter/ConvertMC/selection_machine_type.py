@@ -45,16 +45,15 @@ def selection_machine_type(self):
     else:
         motor_type = type(self.machine).__name__
 
-    # self.rules_list = self.add_rules(self.mot_dict, self.rules_list)
+    add_rule_machine_type(self)
 
-    self.rules_list = add_rule_machine_type(self.rules_list)
     # selecion motor_type
     if motor_type in ["BPM", "MachineSIPMSM"]:
-        self.rules_list = add_rule_machine_dimension(self, self.rules_list)
+        add_rule_machine_dimension(self)
         selection_BPM_rules(self)
 
     elif motor_type == "IM":
-        self.rules_list = add_rule_machine_dimension(self.rules_list)
+        add_rule_machine_dimension(self)
         selection_IM_rules(self)
 
     elif motor_type == "SRM":

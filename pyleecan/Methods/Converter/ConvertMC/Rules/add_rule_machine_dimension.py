@@ -3,7 +3,8 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_machine_dimension(self, rules_list):
+def add_rule_machine_dimension(self):
+    rules_list = self.rules_list
     rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Bore"],
@@ -108,5 +109,3 @@ def add_rule_machine_dimension(self, rules_list):
             scaling_to_P=0.5,
         )
     )
-
-    return rules_list

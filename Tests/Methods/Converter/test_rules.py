@@ -23,12 +23,37 @@ rule_list.append(
     )
 )
 
+rule_list.append(
+    RuleEquation(
+        param=[
+            {
+                "src": "other",
+                "path": ["[Dimensions]", "Slot_Depth"],
+                "variable": "y",
+            },
+            {
+                "src": "pyleecan",
+                "path": f"machine.stator.slot.H2",
+                "variable": "x",
+            },
+            {
+                "src": "pyleecan",
+                "path": f"machine.stator.slot.W0",
+                "variable": "b",
+            },
+        ],
+        unit_type="m",
+        scaling_to_P="y/3 = b +2*x",
+    )
+)
+
 
 # add equation rules
 
 other_dict = {}
 other_dict["[Dimensions]"] = {}
 other_dict["[Dimensions]"]["Slot_Opening"] = 12.5
+other_dict["[Dimensions]"]["Slot_Depth"] = 72
 
 
 class Test_converter_mot(object):
@@ -42,6 +67,8 @@ class Test_converter_mot(object):
         assert type(machine.stator.slot).__name__ == "SlotW11"
         msg = machine.stator.slot
         assert abs(machine.stator.slot.W0) == pytest.approx(12.5), msg
+
+        assert abs(machine.stator.slot.H2) == pytest.approx(5.75), msg
 
 
 if __name__ == "__main__":

@@ -2,10 +2,13 @@ from sympy import Symbol
 from sympy.solvers import solve
 
 
-def convert_to_other(self, other_dict, unit_list, machine):
+def convert_to_other(self, other_dict, machine):
     # self.param_other
     # self.param_pyleecan
     # self.scaling_to_P
+
+    # we must have the same unit
+    unit = self.unit_type
 
     scaling = self.scaling_to_P
 
@@ -16,6 +19,16 @@ def convert_to_other(self, other_dict, unit_list, machine):
             if not param["variable"] == "y":
                 for temp in param["path"]:
                     dict_temp = dict_temp[temp]
+
+                # conversion unit
+                if unit == "m":
+                    unit = 1
+                elif unit == "rad":
+                    unit = 1
+                elif unit == "ED":
+                    unit = 1
+
+                dict_temp = dict_temp * unit
 
                 scaling = scaling.replace(param["variable"], str(dict_temp))
 
@@ -32,6 +45,15 @@ def convert_to_other(self, other_dict, unit_list, machine):
                 eval(path),
                 value_split[-1],
             )
+            # conversion unit
+            if unit == "m":
+                unit = 1
+            elif unit == "rad":
+                unit = 1
+            elif unit == "ED":
+                unit = 1
+
+            val_P = val_P * unit
 
             scaling = scaling.replace(param["variable"], str(val_P))
 

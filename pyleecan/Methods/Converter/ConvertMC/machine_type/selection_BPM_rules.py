@@ -26,18 +26,24 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
 
 def selection_BPM_rules(self):
-    if not self.is_P_to_other:
+    if self.is_P_to_other:
+        if "[Calc_Options]" not in self.other_dict:
+            self.other_dict["[Calc_Options]"] = {}
+        temp_dict = self.other_dict["[Calc_Options]"]
+
+        temp_dict["Motor_Type"] = "BPM"
+
+    else:
         self.machine = MachineSIPMSM()
+
     is_stator = True
-    self.rules_list = selection_slot_rules(self, is_stator)
-    """
-    self.rules_list = selection_lamination_rules(self, is_stator)
-    self.rules_list = selection_winding_rules(self, is_stator)
-    self.rules_list = selection_conductor_rules(self, is_stator)
+    selection_slot_rules(self, is_stator)
+    selection_lamination_rules(self, is_stator)
+    selection_winding_rules(self, is_stator)
+    selection_conductor_rules(self, is_stator)
+
     is_stator = False
     # self.rules_list = selection_slot_rotor_rules(self, is_stator)
-    self.rules_list = selection_magnet_rules(self, is_stator=False)
-    self.rules_list = selection_lamination_rules(self, is_stator)
-    self.rules_list = selection_skew_rules(self, is_stator)
-    """
-    return self.rules_list
+    selection_magnet_rules(self, is_stator)
+    selection_lamination_rules(self, is_stator)
+    selection_skew_rules(self, is_stator)

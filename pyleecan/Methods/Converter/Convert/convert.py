@@ -1,12 +1,20 @@
 from pyleecan.Classes.ConvertMC import ConvertMC
 from pyleecan.Methods.Converter.ConvertMC.convert import convert
 
+import json
+
 
 def selection_file():
     print("Enter path file other : ")
     path = input()
 
     return path
+
+
+def save_dict(path_save, other_dict):
+    file = open("Tests//Methods//Converter" + "//" + path_save, "x")
+    json.dump(other_dict, file)
+    file.close()
 
 
 def convert_to_other(machine, dict_to_other):
@@ -16,7 +24,6 @@ def convert_to_other(machine, dict_to_other):
     self = ConvertMC()
     self.is_P_to_other = True
     self.machine = machine
-    self.other_dict = {}
 
     dict_to_other = convert(self)
     return dict_to_other
@@ -38,6 +45,8 @@ if __name__ == "__main__":
     # path = selection_file()
 
     path = "pyleecan\pyleecan\Methods\Converter\ConvertMC\EMD240_v16.mot"
+    path_save = "other_dict.json"
     machine = convert_to_P(path)
     dict_to_other = {}
-    convert_to_other(machine, dict_to_other)
+    other_dict = convert_to_other(machine, dict_to_other)
+    # save_dict(path_save, other_dict)

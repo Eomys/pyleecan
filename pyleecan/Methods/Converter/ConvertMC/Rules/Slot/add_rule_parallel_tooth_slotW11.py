@@ -3,15 +3,16 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
+def add_rule_parallel_tooth_slotW11(self, is_stator):
     if is_stator == True:
         lam_name = "stator"
     else:
         lam_name = "rotor"
 
-    rule_list.append(RuleComplex(fct_name="parallel_tooth_slotW11", src="pyleecan"))
+    rules_list = self.rules_list
+    rules_list.append(RuleComplex(fct_name="parallel_tooth_slotW11", src="pyleecan"))
 
-    rule_list.append(
+    rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -20,7 +21,7 @@ def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W3",
@@ -29,7 +30,7 @@ def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
@@ -38,7 +39,7 @@ def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Corner_Radius"],
             P_obj_path=f"machine.{lam_name}.slot.R1",
@@ -48,7 +49,7 @@ def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
     )
 
     if not self.is_P_to_other:
-        rule_list.append(
+        rules_list.append(
             RuleSimple(
                 other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
                 P_obj_path=f"machine.{lam_name}.slot.H1",
@@ -57,9 +58,9 @@ def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
             )
         )
 
-        rule_list.append(RuleComplex(fct_name="slotW11_H1", src="pyleecan"))
+        rules_list.append(RuleComplex(fct_name="slotW11_H1", src="pyleecan"))
 
-        rule_list.append(
+        rules_list.append(
             RuleEquation(
                 param=[
                     {
@@ -90,5 +91,3 @@ def add_rule_parallel_tooth_slotW11(self, rule_list, is_stator):
 
     else:
         print("error type conversion to tooth_tip_depth_H1 is not in rad ")
-
-    return rule_list

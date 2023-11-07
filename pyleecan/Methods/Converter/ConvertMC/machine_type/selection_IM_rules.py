@@ -25,15 +25,13 @@ from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 
 def selection_IM_rules(self):
     self.machine = MachineIPMSM()
-    self.is_stator = True
-    self.rules = selection_slot_rules(self)
-    self.rules = selection_lamination_rules(self)
-    self.rules = selection_winding_rules(self)
-    self.rules = selection_conductor_rules(self)
-    self.is_stator = False
-    self.rules = selection_slot_rotor_rules(self)
-    self.rules = selection_bar_rules(self)
-    self.rules = selection_lamination_rules(self)
-    self.rules = selection_skew_rules(self)
-
-    return self.rules
+    is_stator = True
+    selection_slot_rules(self, is_stator)
+    selection_lamination_rules(self, is_stator)
+    selection_winding_rules(self, is_stator)
+    selection_conductor_rules(self, is_stator)
+    is_stator = False
+    selection_slot_rotor_rules(self, is_stator)
+    selection_bar_rules(self, is_stator)
+    selection_lamination_rules(self, is_stator)
+    selection_skew_rules(self, is_stator)

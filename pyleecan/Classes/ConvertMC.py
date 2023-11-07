@@ -18,9 +18,11 @@ from .Convert import Convert
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Converter.ConvertMC.convert_mot_to_dict import convert_mot_to_dict
+    from ..Methods.Converter.ConvertMC.convert_other_to_dict import (
+        convert_other_to_dict,
+    )
 except ImportError as error:
-    convert_mot_to_dict = error
+    convert_other_to_dict = error
 
 try:
     from ..Methods.Converter.ConvertMC.selection_all_rules import selection_all_rules
@@ -246,18 +248,18 @@ class ConvertMC(Convert):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Converter.ConvertMC.convert_mot_to_dict
-    if isinstance(convert_mot_to_dict, ImportError):
-        convert_mot_to_dict = property(
+    # cf Methods.Converter.ConvertMC.convert_other_to_dict
+    if isinstance(convert_other_to_dict, ImportError):
+        convert_other_to_dict = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_mot_to_dict: "
-                    + str(convert_mot_to_dict)
+                    "Can't use ConvertMC method convert_other_to_dict: "
+                    + str(convert_other_to_dict)
                 )
             )
         )
     else:
-        convert_mot_to_dict = convert_mot_to_dict
+        convert_other_to_dict = convert_other_to_dict
     # cf Methods.Converter.ConvertMC.selection_all_rules
     if isinstance(selection_all_rules, ImportError):
         selection_all_rules = property(

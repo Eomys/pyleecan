@@ -1,6 +1,15 @@
-def convert_to_other(self, other_dict, unit_list, machine):
+def convert_to_other(self, other_dict, machine):
     # select value in object machine
     P_value = self.get_P(machine)
+
+    unit = self.unit_type
+
+    if unit == "m":
+        unit = 1
+    elif unit == "rad":
+        unit = 1
+    elif unit == "ED":
+        unit = 1
 
     # possibility to have str in other_value and conversion
     if self.scaling_to_P != 1:
