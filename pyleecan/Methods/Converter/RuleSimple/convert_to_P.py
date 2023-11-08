@@ -6,8 +6,9 @@ def convert_to_P(self, other_dict, machine):
     self : RuleSimple
         A RuleSimple object
     other_dict : dict
-
+        dict created from the file to be converted
     machine : Machine
+        A pyleecan machine
 
     """
     # selection correct value

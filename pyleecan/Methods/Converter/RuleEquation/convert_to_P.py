@@ -10,8 +10,9 @@ def convert_to_P(self, other_dict, machine):
     self : RulesEquation
         A RuleEquation object
     other_dict : dict
-
+        dict created from the file to be converted
     machine : Machine
+        A pyleecan machine
 
     """
     # self.param

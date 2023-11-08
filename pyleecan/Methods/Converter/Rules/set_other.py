@@ -1,12 +1,15 @@
 def set_other(self, other_dict, P_value):
-    """Set value in other_dict
+    """Set P_value value in other_dict
 
     Parameters
     ----------
     self : RuleSimple
         A RuleSimple object
     other_dict : dict
-    P_value
+        dict created from the file to be converted
+    P_value :
+        value to set in other_dict
+
 
     Return
     ----------

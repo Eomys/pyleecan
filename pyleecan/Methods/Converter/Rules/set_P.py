@@ -6,8 +6,10 @@ def set_P(self, machine, other_value):
     self : RuleSimple
         A RuleSimple object
     machine : Machine
-        A machine obj
-    other_value
+        A pyleecan machine
+    other_value :
+        value to set in other_dict
+
 
     Return
     ----------

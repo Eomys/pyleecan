@@ -6,7 +6,7 @@ def get_P(self, machine):
     self : RuleSimple
         A RuleSimple object
     other_dict : dict
-
+        dict created from the file to be converted
     Return
     ----------
     P_value
