@@ -1,13 +1,28 @@
 from os.path import join, split
 
 
-def convert_other_to_dict(file_path):
-    # open file
+def convert_other_to_dict(self):
+    """conversion file .mot in dict
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+
+    Returns:
+        dict: dict with param present in file .mot
+    """
+
+    file_path = self.file_path
+    liste_path = file_path.split(".")
+    if not liste_path[-1] == "mot":
+        raise NameError("the file is not a .mot, please select a .mot to convert")
+
     path = split(__file__)[0]
     file = open(join(path, file_path))
 
     other_dict = {}
-    # convert .mot to dict
+
     for line in file:
         # separation different part like .mot
         if line[:1] == "[":

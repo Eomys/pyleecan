@@ -1,14 +1,5 @@
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_slot_rules import (
-    selection_slot_rules,
-)
 from pyleecan.Methods.Converter.ConvertMC.Step.selection_lamination_rules import (
     selection_lamination_rules,
-)
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_winding_rules import (
-    selection_winding_rules,
-)
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_conductor_rules import (
-    selection_conductor_rules,
 )
 from pyleecan.Methods.Converter.ConvertMC.Step.selection_slot_rotor_rules import (
     selection_slot_rotor_rules,
@@ -19,17 +10,25 @@ from pyleecan.Methods.Converter.ConvertMC.Step.selection_bar_rules import (
 from pyleecan.Methods.Converter.ConvertMC.Step.selection_skew_rules import (
     selection_skew_rules,
 )
+from pyleecan.Methods.Converter.Convert.selection_LamSlotWind_rules import (
+    selection_LamSlotWind_rules,
+)
 
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 
 
-def selection_IM_rules(self):
-    self.machine = MachineIPMSM()
-    is_stator = True
-    selection_slot_rules(self, is_stator)
-    selection_lamination_rules(self, is_stator)
-    selection_winding_rules(self, is_stator)
-    selection_conductor_rules(self, is_stator)
+def selection_IPMSM_rules(self):
+    """selection step to have rules for motor IPMSM
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+
+    """
+    # step for stator
+    selection_LamSlotWind_rules(self)
+
     is_stator = False
     selection_slot_rotor_rules(self, is_stator)
     selection_bar_rules(self, is_stator)

@@ -4,6 +4,16 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_tapered_slot_slotW23(rule_list, is_stator):
+    """Create and adapt all the rules related to slotW23 (lam radius,...)
+    Extend rules_list within Converter object
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    is_stator : Bool
+        A booleen to know, position in lamination
+    """
     print("tapered_slot_slotW23")
 
     if is_stator == True:

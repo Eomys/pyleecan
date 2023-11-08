@@ -4,6 +4,14 @@ from pyleecan.Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_ra
 
 
 def selection_magnet_rules(self, is_stator):
+    """selection step to add rules for slot
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+
+    """
     if self.is_P_to_other:
         magnet_type = type(self.machine.rotor.slot).__name__
 

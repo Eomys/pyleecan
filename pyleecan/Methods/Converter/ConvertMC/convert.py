@@ -1,7 +1,4 @@
 from pyleecan.Classes.ConvertMC import ConvertMC
-from pyleecan.Methods.Converter.ConvertMC.convert_other_to_dict import (
-    convert_other_to_dict,
-)
 
 
 def __init__():
@@ -14,39 +11,36 @@ def __init__():
 
 def convert(self):
     """convert the file .mot in machine pyleecan or vice versa
-
     Parameters
     ----------
-    class ConvertMC
+    self : ConvertMC
+        A ConvertMC object
 
-    is_P_to_other : bool
+    self.is_P_to_other : bool
         True conversion pyleecan to other, False conversion other to pyleecan
-    rules_list : list
+    self.rules_list : list
         list with all rules,
-    other_dict : dict
+    self.other_dict : dict
         A dict with all parameters motor_cad used to conversion or implementation after conversion obj machine
-    machine : Machine
+    self.machine : Machine
         A Machine with all parameters pyleecan used to conversion or implementation after conversion dict
-    file_path : str
+    self.file_path : str
         path file use to convert
     """
-
-    # conversion file in dict
-    if self.is_P_to_other == False:
-        self.other_dict = convert_other_to_dict(self.file_path)
 
     self.selection_machine_rules()
 
     # conversion rules list
-    if self.is_P_to_other == False:
+    if self.is_P_to_other == False:  # conversion to Pyleecan
         for rule in self.rules_list:
+            # utilisation polymorphism to choose type rule
             self.machine = rule.convert_to_P(self.other_dict, self.machine)
         self.machine.stator.plot()
         self.machine.plot()
         print("Done")
         return self.machine
 
-    else:
+    else:  # conversion to other
         for rule in self.rules_list:
             self.other_dict = rule.convert_to_other(
                 self.other_dict,

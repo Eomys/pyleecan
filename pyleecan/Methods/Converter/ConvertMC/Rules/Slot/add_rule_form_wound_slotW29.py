@@ -4,7 +4,16 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_form_wound_slotW29(rule_list, is_stator):
-    print("form_wound_slotW29")
+    """Create and adapt all the rules related to slotW29 (lam radius,...)
+    Extend rules_list within Converter object
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    is_stator : Bool
+        A booleen to know, position in lamination
+    """
 
     if is_stator == True:
         lam_name = "stator"

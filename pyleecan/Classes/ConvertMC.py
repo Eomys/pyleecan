@@ -37,67 +37,32 @@ except ImportError as error:
     convert = error
 
 try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_BPM_rules import (
-        selection_BPM_rules,
+    from ..Methods.Converter.ConvertMC.machine_type.selection_SIPMSM_rules import (
+        selection_SIPMSM_rules,
     )
 except ImportError as error:
-    selection_BPM_rules = error
+    selection_SIPMSM_rules = error
 
 try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_IM_rules import (
-        selection_IM_rules,
+    from ..Methods.Converter.ConvertMC.machine_type.selection_IPMSM_rules import (
+        selection_IPMSM_rules,
     )
 except ImportError as error:
-    selection_IM_rules = error
+    selection_IPMSM_rules = error
 
 try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_SRM_rules import (
-        selection_SRM_rules,
+    from ..Methods.Converter.ConvertMC.machine_type.selection_SCIM_rules import (
+        selection_SCIM_rules,
     )
 except ImportError as error:
-    selection_SRM_rules = error
+    selection_SCIM_rules = error
 
 try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_BPMO_rules import (
-        selection_BPMO_rules,
+    from ..Methods.Converter.ConvertMC.machine_type.selection_WRSM_rules import (
+        selection_WRSM_rules,
     )
 except ImportError as error:
-    selection_BPMO_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_PMDC_rules import (
-        selection_PMDC_rules,
-    )
-except ImportError as error:
-    selection_PMDC_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_SYNC_rules import (
-        selection_SYNC_rules,
-    )
-except ImportError as error:
-    selection_SYNC_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_CLAW_rules import (
-        selection_CLAW_rules,
-    )
-except ImportError as error:
-    selection_CLAW_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_IM1PH_rules import (
-        selection_IM1PH_rules,
-    )
-except ImportError as error:
-    selection_IM1PH_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_WFC_rules import (
-        selection_WFC_rules,
-    )
-except ImportError as error:
-    selection_WFC_rules = error
+    selection_WRSM_rules = error
 
 try:
     from ..Methods.Converter.ConvertMC.Step.selection_slot_rules import (
@@ -283,114 +248,54 @@ class ConvertMC(Convert):
         )
     else:
         convert = convert
-    # cf Methods.Converter.ConvertMC.machine_type.selection_BPM_rules
-    if isinstance(selection_BPM_rules, ImportError):
-        selection_BPM_rules = property(
+    # cf Methods.Converter.ConvertMC.machine_type.selection_SIPMSM_rules
+    if isinstance(selection_SIPMSM_rules, ImportError):
+        selection_SIPMSM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_BPM_rules: "
-                    + str(selection_BPM_rules)
+                    "Can't use ConvertMC method selection_SIPMSM_rules: "
+                    + str(selection_SIPMSM_rules)
                 )
             )
         )
     else:
-        selection_BPM_rules = selection_BPM_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_IM_rules
-    if isinstance(selection_IM_rules, ImportError):
-        selection_IM_rules = property(
+        selection_SIPMSM_rules = selection_SIPMSM_rules
+    # cf Methods.Converter.ConvertMC.machine_type.selection_IPMSM_rules
+    if isinstance(selection_IPMSM_rules, ImportError):
+        selection_IPMSM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_IM_rules: "
-                    + str(selection_IM_rules)
+                    "Can't use ConvertMC method selection_IPMSM_rules: "
+                    + str(selection_IPMSM_rules)
                 )
             )
         )
     else:
-        selection_IM_rules = selection_IM_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_SRM_rules
-    if isinstance(selection_SRM_rules, ImportError):
-        selection_SRM_rules = property(
+        selection_IPMSM_rules = selection_IPMSM_rules
+    # cf Methods.Converter.ConvertMC.machine_type.selection_SCIM_rules
+    if isinstance(selection_SCIM_rules, ImportError):
+        selection_SCIM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_SRM_rules: "
-                    + str(selection_SRM_rules)
+                    "Can't use ConvertMC method selection_SCIM_rules: "
+                    + str(selection_SCIM_rules)
                 )
             )
         )
     else:
-        selection_SRM_rules = selection_SRM_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_BPMO_rules
-    if isinstance(selection_BPMO_rules, ImportError):
-        selection_BPMO_rules = property(
+        selection_SCIM_rules = selection_SCIM_rules
+    # cf Methods.Converter.ConvertMC.machine_type.selection_WRSM_rules
+    if isinstance(selection_WRSM_rules, ImportError):
+        selection_WRSM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_BPMO_rules: "
-                    + str(selection_BPMO_rules)
+                    "Can't use ConvertMC method selection_WRSM_rules: "
+                    + str(selection_WRSM_rules)
                 )
             )
         )
     else:
-        selection_BPMO_rules = selection_BPMO_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_PMDC_rules
-    if isinstance(selection_PMDC_rules, ImportError):
-        selection_PMDC_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_PMDC_rules: "
-                    + str(selection_PMDC_rules)
-                )
-            )
-        )
-    else:
-        selection_PMDC_rules = selection_PMDC_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_SYNC_rules
-    if isinstance(selection_SYNC_rules, ImportError):
-        selection_SYNC_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_SYNC_rules: "
-                    + str(selection_SYNC_rules)
-                )
-            )
-        )
-    else:
-        selection_SYNC_rules = selection_SYNC_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_CLAW_rules
-    if isinstance(selection_CLAW_rules, ImportError):
-        selection_CLAW_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_CLAW_rules: "
-                    + str(selection_CLAW_rules)
-                )
-            )
-        )
-    else:
-        selection_CLAW_rules = selection_CLAW_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_IM1PH_rules
-    if isinstance(selection_IM1PH_rules, ImportError):
-        selection_IM1PH_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_IM1PH_rules: "
-                    + str(selection_IM1PH_rules)
-                )
-            )
-        )
-    else:
-        selection_IM1PH_rules = selection_IM1PH_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_WFC_rules
-    if isinstance(selection_WFC_rules, ImportError):
-        selection_WFC_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_WFC_rules: "
-                    + str(selection_WFC_rules)
-                )
-            )
-        )
-    else:
-        selection_WFC_rules = selection_WFC_rules
+        selection_WRSM_rules = selection_WRSM_rules
     # cf Methods.Converter.ConvertMC.Step.selection_slot_rules
     if isinstance(selection_slot_rules, ImportError):
         selection_slot_rules = property(

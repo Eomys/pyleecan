@@ -18,26 +18,22 @@ from pyleecan.Methods.Converter.ConvertMC.Step.selection_skew_rules import (
     selection_skew_rules,
 )
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Methods.Converter.Convert.selection_LamSlotWind_rules import (
+    selection_LamSlotWind_rules,
+)
 
 
-def selection_BPM_rules(self):
-    # check the direction of conversion to define type machine
-    if self.is_P_to_other:
-        if "[Calc_Options]" not in self.other_dict:
-            self.other_dict["[Calc_Options]"] = {}
-        temp_dict = self.other_dict["[Calc_Options]"]
+def selection_SIPMSM_rules(self):
+    """selection step to have rules for motor SIPMSM
 
-        temp_dict["Motor_Type"] = "BPM"
-
-    else:
-        self.machine = MachineSIPMSM()
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    """
 
     # step for stator
-    is_stator = True
-    selection_slot_rules(self, is_stator)
-    selection_lamination_rules(self, is_stator)
-    selection_winding_rules(self, is_stator)
-    selection_conductor_rules(self, is_stator)
+    selection_LamSlotWind_rules(self)
 
     # step for rotor
     is_stator = False

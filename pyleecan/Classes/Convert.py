@@ -15,6 +15,41 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Converter.Convert.convert_machine_type import convert_machine_type
+except ImportError as error:
+    convert_machine_type = error
+
+try:
+    from ..Methods.Converter.Convert.convert_slot_type import convert_slot_type
+except ImportError as error:
+    convert_slot_type = error
+
+try:
+    from ..Methods.Converter.Convert.selection_LamSlotWind_rules import (
+        selection_LamSlotWind_rules,
+    )
+except ImportError as error:
+    selection_LamSlotWind_rules = error
+
+try:
+    from ..Methods.Converter.Convert.convert import convert
+except ImportError as error:
+    convert = error
+
+try:
+    from ..Methods.Converter.Convert.convert_to_P import convert_to_P
+except ImportError as error:
+    convert_to_P = error
+
+try:
+    from ..Methods.Converter.Convert.convert_to_other import convert_to_other
+except ImportError as error:
+    convert_to_other = error
+
+
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -24,6 +59,75 @@ class Convert(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Converter.Convert.convert_machine_type
+    if isinstance(convert_machine_type, ImportError):
+        convert_machine_type = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method convert_machine_type: "
+                    + str(convert_machine_type)
+                )
+            )
+        )
+    else:
+        convert_machine_type = convert_machine_type
+    # cf Methods.Converter.Convert.convert_slot_type
+    if isinstance(convert_slot_type, ImportError):
+        convert_slot_type = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method convert_slot_type: "
+                    + str(convert_slot_type)
+                )
+            )
+        )
+    else:
+        convert_slot_type = convert_slot_type
+    # cf Methods.Converter.Convert.selection_LamSlotWind_rules
+    if isinstance(selection_LamSlotWind_rules, ImportError):
+        selection_LamSlotWind_rules = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method selection_LamSlotWind_rules: "
+                    + str(selection_LamSlotWind_rules)
+                )
+            )
+        )
+    else:
+        selection_LamSlotWind_rules = selection_LamSlotWind_rules
+    # cf Methods.Converter.Convert.convert
+    if isinstance(convert, ImportError):
+        convert = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Convert method convert: " + str(convert))
+            )
+        )
+    else:
+        convert = convert
+    # cf Methods.Converter.Convert.convert_to_P
+    if isinstance(convert_to_P, ImportError):
+        convert_to_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method convert_to_P: " + str(convert_to_P)
+                )
+            )
+        )
+    else:
+        convert_to_P = convert_to_P
+    # cf Methods.Converter.Convert.convert_to_other
+    if isinstance(convert_to_other, ImportError):
+        convert_to_other = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method convert_to_other: "
+                    + str(convert_to_other)
+                )
+            )
+        )
+    else:
+        convert_to_other = convert_to_other
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

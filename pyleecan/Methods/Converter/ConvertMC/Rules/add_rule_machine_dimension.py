@@ -4,6 +4,15 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_machine_dimension(self):
+    """Create and adapt all the rules related to machine dimensions (lam radius,...)
+    Extend rules_list within Converter object
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    """
+
     rules_list = self.rules_list
     rules_list.append(
         RuleSimple(

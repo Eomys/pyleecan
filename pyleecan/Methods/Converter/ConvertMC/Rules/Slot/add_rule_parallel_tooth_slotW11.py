@@ -4,6 +4,16 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_tooth_slotW11(self, is_stator):
+    """Create and adapt all the rules related to slotW11 (lam radius,...)
+    Extend rules_list within Converter object
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    is_stator : Bool
+        A booleen to know, position in lamination
+    """
     # definie the correct position in rotor or in stator
     if is_stator == True:
         lam_name = "stator"
@@ -11,7 +21,6 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
         lam_name = "rotor"
 
     rules_list = self.rules_list
-    rules_list.append(RuleComplex(fct_name="parallel_tooth_slotW11", folder="MotorCAD"))
 
     rules_list.append(
         RuleSimple(

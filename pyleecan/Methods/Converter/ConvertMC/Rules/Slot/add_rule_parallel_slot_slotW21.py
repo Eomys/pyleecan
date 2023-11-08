@@ -4,6 +4,16 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_slot_slotW21(rule_list, is_stator):
+    """Create and adapt all the rules related to slotW21 (lam radius,...)
+    Extend rules_list within Converter object
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    is_stator : Bool
+        A booleen to know, position in lamination
+    """
     if is_stator == True:
         lam_name = "stator"
     else:

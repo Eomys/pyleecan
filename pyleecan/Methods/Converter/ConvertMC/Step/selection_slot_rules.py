@@ -7,10 +7,19 @@ from pyleecan.Methods.Converter.Convert.convert_slot_type import convert_slot_ty
 
 
 def selection_slot_rules(self, is_stator):
-    # check the dirction of conversion to select slot
+    """selection step to add rules for slot
 
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+
+    """
+
+    # slection slot type and inlementation in obj machine or in dict
     convert_slot_type(self)
 
+    # selection name of slot
     slot_type = type(self.machine.stator.slot).__name__
 
     # add the correct rule depending on the slot
