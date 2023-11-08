@@ -1,4 +1,15 @@
 def convert_to_P(self, other_dict, machine):
+    """Select value in other_dict and implements in machine
+
+    Parameters
+    ----------
+    self : RuleSimple
+        A RuleSimple object
+    other_dict : dict
+
+    machine : Machine
+
+    """
     # selection correct value
     other_value = self.get_other(other_dict)
 

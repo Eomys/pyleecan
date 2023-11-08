@@ -150,9 +150,9 @@ except ImportError as error:
     selection_WRSM_rules = error
 
 try:
-    from ..Methods.Converter.Convert.convert_start import convert_start
+    from ..Methods.Converter.Convert.save_as_other_file import save_as_other_file
 except ImportError as error:
-    convert_start = error
+    save_as_other_file = error
 
 
 from numpy import isnan
@@ -401,17 +401,18 @@ class Convert(FrozenClass):
         )
     else:
         selection_WRSM_rules = selection_WRSM_rules
-    # cf Methods.Converter.Convert.convert_start
-    if isinstance(convert_start, ImportError):
-        convert_start = property(
+    # cf Methods.Converter.Convert.save_as_other_file
+    if isinstance(save_as_other_file, ImportError):
+        save_as_other_file = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method convert_start: " + str(convert_start)
+                    "Can't use Convert method save_as_other_file: "
+                    + str(save_as_other_file)
                 )
             )
         )
     else:
-        convert_start = convert_start
+        save_as_other_file = save_as_other_file
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

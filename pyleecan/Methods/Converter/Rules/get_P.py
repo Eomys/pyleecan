@@ -1,4 +1,16 @@
 def get_P(self, machine):
+    """Select value in machine
+
+    Parameters
+    ----------
+    self : RuleSimple
+        A RuleSimple object
+    other_dict : dict
+
+    Return
+    ----------
+    P_value
+    """
     # select value in object machine
     value_split = self.P_obj_path.split(".")
 

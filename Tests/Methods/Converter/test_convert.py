@@ -2,8 +2,6 @@
 
 import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
-from pyleecan.Methods.Converter.Convert.convert_to_P import convert_to_P
-from pyleecan.Methods.Converter.Convert.convert_to_other import convert_to_other
 from pyleecan.Methods.Converter.ConvertMC.convert_other_to_dict import (
     convert_other_to_dict,
 )
@@ -15,15 +13,15 @@ path = "EMD240_v16.mot"
 class Test_converter_mot(object):
     def compare(self, path):
         """check if dict are equal"""
-        converter = ConvertMC()
+        Conv = ConvertMC()
         # conversion file in machine
-        converter.machine = converter.convert_to_P(path)
+        Conv.machine = Conv.convert_to_P(path)
 
         # conversion machine in dict
-        convert_to_other(converter)
-        dict_to_other = converter.other_dict
+        Conv.convert_to_other()
+        dict_to_other = Conv.other_dict
         # conversoin file in dict to compare
-        dict_to_mot = convert_other_to_dict(converter)
+        dict_to_mot = convert_other_to_dict(Conv)
 
         # selection path and value in dict_to_other created after conversion, and compare this result with dict_to_mot, a file .mot convert in dict
         for path_dict in dict_to_other:

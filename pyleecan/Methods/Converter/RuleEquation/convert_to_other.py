@@ -3,6 +3,17 @@ from sympy.solvers import solve
 
 
 def convert_to_other(self, other_dict, machine):
+    """Select value in machine and implements in other_dict
+
+    Parameters
+    ----------
+    self : RulesEquation
+        A RuleEquation object
+    other_dict : dict
+
+    machine : Machine
+
+    """
     # self.param_other
     # self.param_pyleecan
     # self.scaling_to_P

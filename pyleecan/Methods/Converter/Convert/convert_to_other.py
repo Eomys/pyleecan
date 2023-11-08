@@ -1,6 +1,3 @@
-from pyleecan.Methods.Converter.Convert.convert import convert
-
-
 def convert_to_other(self):
     """conversion obj machine in dict
 
@@ -20,5 +17,5 @@ def convert_to_other(self):
     self.rules_list = []
 
     # conversion machine in dict
-    self.other_dict = convert(self)
+    self.other_dict = self.convert()
     return self.other_dict

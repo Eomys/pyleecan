@@ -1,4 +1,15 @@
 def convert_to_other(self, other_dict, machine):
+    """Select value in machine and implements in other_dict
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    other_dict : dict
+
+    machine : Machine
+
+    """
     # select value in object machine
     P_value = self.get_P(machine)
 

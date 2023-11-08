@@ -1,4 +1,17 @@
 def set_other(self, other_dict, P_value):
+    """Set value in other_dict
+
+    Parameters
+    ----------
+    self : RuleSimple
+        A RuleSimple object
+    other_dict : dict
+    P_value
+
+    Return
+    ----------
+    other_dict
+    """
     # Make sure that all the sub-keys exist
     dict_temp = other_dict
     for key in self.other_key_list[:-1]:

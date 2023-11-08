@@ -73,7 +73,7 @@
             "name": "Python : Convertor",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/pyleecan/Methods/Converter/Convert/convert.py",
+            "program": "${workspaceFolder}/Tests/Methods/Converter/convert_start.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "cwd": "${workspaceFolder}",

@@ -3,6 +3,17 @@ from sympy.solvers import solve
 
 
 def convert_to_P(self, other_dict, machine):
+    """Select value in other_dict and implements in machine
+
+    Parameters
+    ----------
+    self : RulesEquation
+        A RuleEquation object
+    other_dict : dict
+
+    machine : Machine
+
+    """
     # self.param
     # self.scaling_to_P
 

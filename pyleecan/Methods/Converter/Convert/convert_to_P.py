@@ -1,7 +1,4 @@
-from pyleecan.Methods.Converter.Convert.convert import convert
-
-
-def convert_to_P(self):
+def convert_to_P(self, file_path):
     """conversion file in obj machine
 
     Parameters
@@ -16,11 +13,12 @@ def convert_to_P(self):
     """
 
     self.is_P_to_other = False
+    self.file_path = file_path
     # conversion file in dict
     self.other_dict = self.convert_other_to_dict()
     self.rules_list = []
 
     # conversion dict in machine
-    machine = convert(self)
+    machine = self.convert()
 
     return machine

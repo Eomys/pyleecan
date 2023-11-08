@@ -32,6 +32,16 @@ def add_rule_machine_dimension(self):
         )
     )
 
+    # shaft
+    rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Shaft_Dia"],
+            P_obj_path="machine.rotor.Rint",
+            unit_type="m",
+            scaling_to_P=0.5,
+        )
+    )
+
     if self.is_P_to_other == True:
         rules_list.append(
             RuleEquation(
@@ -57,37 +67,27 @@ def add_rule_machine_dimension(self):
             )
         )
 
-        rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": ["[Dimensions]", "Stator_Bore"],
-                        "variable": "y",
-                    },
-                    {
-                        "src": "other",
-                        "path": ["[Dimensions]", "Airgap"],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": "machine.rotor.Rext",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="m",
-                scaling_to_P="y/2+a= x ",
-            )
-        )
-
-    # shaft
     rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "Shaft_Dia"],
-            P_obj_path="machine.rotor.Rint",
+        RuleEquation(
+            param=[
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", "Stator_Bore"],
+                    "variable": "y",
+                },
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", "Airgap"],
+                    "variable": "a",
+                },
+                {
+                    "src": "pyleecan",
+                    "path": "machine.rotor.Rext",
+                    "variable": "x",
+                },
+            ],
             unit_type="m",
-            scaling_to_P=0.5,
+            scaling_to_P="y/2+a= x ",
         )
     )
 

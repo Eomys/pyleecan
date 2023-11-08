@@ -1092,7 +1092,7 @@
             "machine_type.selection_IPMSM_rules",
             "machine_type.selection_SCIM_rules",
             "machine_type.selection_WRSM_rules",
-            "convert_start"
+            "save_as_other_file"
         ],
         "mother": "",
         "name": "Convert",
@@ -1117,7 +1117,7 @@
                 "name": "other_dict",
                 "type": "dict",
                 "unit": "-",
-                "value": 0
+                "value": {}
             },
             {
                 "as_dict": "",
@@ -1137,7 +1137,7 @@
                 "name": "rules_list",
                 "type": "list",
                 "unit": "-",
-                "value": 0
+                "value": []
             },
             {
                 "as_dict": "",
@@ -1165,7 +1165,7 @@
             "convert_other_to_dict",
             "convert_slot_type",
             "convert_machine_type",
-            "Rules.add_rule_machine_select",
+            "Rules.add_rule_machine_dimension",
             "Rules.add_rule_machine_type",
             "Rules.Slot.add_rule_rotor_parallel_tooth_slotW11",
             "Rules.Slot.add_rule_parallel_tooth_slotW11",
