@@ -5,7 +5,9 @@ from pyleecan.Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension impor
     add_rule_machine_dimension,
 )
 
-from pyleecan.Methods.Converter.Convert.convert_machine_type import convert_machine_type
+from pyleecan.Methods.Converter.ConvertMC.convert_machine_type import (
+    convert_machine_type,
+)
 
 
 def selection_machine_rules(self):

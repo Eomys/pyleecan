@@ -13,7 +13,6 @@ def add_rule_machine_type(self):
     """
     rules_list = self.rules_list
     # inutile pour le moment
-    rules_list.append(RuleComplex(fct_name="machine_type", folder="MotorCAD"))
 
     rules_list.append(RuleComplex(fct_name="set_pole_pair_number", folder="MotorCAD"))
 

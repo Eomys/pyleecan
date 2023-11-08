@@ -1,8 +1,7 @@
-from pyleecan.Classes.ConvertMC import ConvertMC
-from pyleecan.Methods.Converter.ConvertMC.convert import convert
+from pyleecan.Methods.Converter.Convert.convert import convert
 
 
-def convert_to_other(machine):
+def convert_to_other(self):
     """conversion obj machine in dict
 
     Parameters
@@ -14,12 +13,12 @@ def convert_to_other(machine):
     ---------
     other_dict : dict
         A dict with the conversion obj machine
-
     """
-    converter = ConvertMC()
-    converter.is_P_to_other = True
-    converter.machine = machine
+
+    self.is_P_to_other = True
+    self.other_dict = {}
+    self.rules_list = []
 
     # conversion machine in dict
-    converter.other_dict = convert(converter)
-    return converter.other_dict
+    self.other_dict = convert(self)
+    return self.other_dict

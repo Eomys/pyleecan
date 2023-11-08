@@ -25,107 +25,14 @@ except ImportError as error:
     convert_other_to_dict = error
 
 try:
-    from ..Methods.Converter.ConvertMC.selection_machine_rules import (
-        selection_machine_rules,
-    )
+    from ..Methods.Converter.ConvertMC.convert_slot_type import convert_slot_type
 except ImportError as error:
-    selection_machine_rules = error
+    convert_slot_type = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert import convert
+    from ..Methods.Converter.ConvertMC.convert_machine_type import convert_machine_type
 except ImportError as error:
-    convert = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_SIPMSM_rules import (
-        selection_SIPMSM_rules,
-    )
-except ImportError as error:
-    selection_SIPMSM_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_IPMSM_rules import (
-        selection_IPMSM_rules,
-    )
-except ImportError as error:
-    selection_IPMSM_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_SCIM_rules import (
-        selection_SCIM_rules,
-    )
-except ImportError as error:
-    selection_SCIM_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.machine_type.selection_WRSM_rules import (
-        selection_WRSM_rules,
-    )
-except ImportError as error:
-    selection_WRSM_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_slot_rules import (
-        selection_slot_rules,
-    )
-except ImportError as error:
-    selection_slot_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_lamination_rules import (
-        selection_lamination_rules,
-    )
-except ImportError as error:
-    selection_lamination_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_winding_rules import (
-        selection_winding_rules,
-    )
-except ImportError as error:
-    selection_winding_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_conductor_rules import (
-        selection_conductor_rules,
-    )
-except ImportError as error:
-    selection_conductor_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_hole_rules import (
-        selection_hole_rules,
-    )
-except ImportError as error:
-    selection_hole_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_pole_rules import (
-        selection_pole_rules,
-    )
-except ImportError as error:
-    selection_pole_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_magnet_rules import (
-        selection_magnet_rules,
-    )
-except ImportError as error:
-    selection_magnet_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_skew_rules import (
-        selection_skew_rules,
-    )
-except ImportError as error:
-    selection_skew_rules = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Step.selection_bar_rules import (
-        selection_bar_rules,
-    )
-except ImportError as error:
-    selection_bar_rules = error
+    convert_machine_type = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_select import (
@@ -227,183 +134,30 @@ class ConvertMC(Convert):
         )
     else:
         convert_other_to_dict = convert_other_to_dict
-    # cf Methods.Converter.ConvertMC.selection_machine_rules
-    if isinstance(selection_machine_rules, ImportError):
-        selection_machine_rules = property(
+    # cf Methods.Converter.ConvertMC.convert_slot_type
+    if isinstance(convert_slot_type, ImportError):
+        convert_slot_type = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_machine_rules: "
-                    + str(selection_machine_rules)
+                    "Can't use ConvertMC method convert_slot_type: "
+                    + str(convert_slot_type)
                 )
             )
         )
     else:
-        selection_machine_rules = selection_machine_rules
-    # cf Methods.Converter.ConvertMC.convert
-    if isinstance(convert, ImportError):
-        convert = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use ConvertMC method convert: " + str(convert))
-            )
-        )
-    else:
-        convert = convert
-    # cf Methods.Converter.ConvertMC.machine_type.selection_SIPMSM_rules
-    if isinstance(selection_SIPMSM_rules, ImportError):
-        selection_SIPMSM_rules = property(
+        convert_slot_type = convert_slot_type
+    # cf Methods.Converter.ConvertMC.convert_machine_type
+    if isinstance(convert_machine_type, ImportError):
+        convert_machine_type = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_SIPMSM_rules: "
-                    + str(selection_SIPMSM_rules)
+                    "Can't use ConvertMC method convert_machine_type: "
+                    + str(convert_machine_type)
                 )
             )
         )
     else:
-        selection_SIPMSM_rules = selection_SIPMSM_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_IPMSM_rules
-    if isinstance(selection_IPMSM_rules, ImportError):
-        selection_IPMSM_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_IPMSM_rules: "
-                    + str(selection_IPMSM_rules)
-                )
-            )
-        )
-    else:
-        selection_IPMSM_rules = selection_IPMSM_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_SCIM_rules
-    if isinstance(selection_SCIM_rules, ImportError):
-        selection_SCIM_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_SCIM_rules: "
-                    + str(selection_SCIM_rules)
-                )
-            )
-        )
-    else:
-        selection_SCIM_rules = selection_SCIM_rules
-    # cf Methods.Converter.ConvertMC.machine_type.selection_WRSM_rules
-    if isinstance(selection_WRSM_rules, ImportError):
-        selection_WRSM_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_WRSM_rules: "
-                    + str(selection_WRSM_rules)
-                )
-            )
-        )
-    else:
-        selection_WRSM_rules = selection_WRSM_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_slot_rules
-    if isinstance(selection_slot_rules, ImportError):
-        selection_slot_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_slot_rules: "
-                    + str(selection_slot_rules)
-                )
-            )
-        )
-    else:
-        selection_slot_rules = selection_slot_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_lamination_rules
-    if isinstance(selection_lamination_rules, ImportError):
-        selection_lamination_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_lamination_rules: "
-                    + str(selection_lamination_rules)
-                )
-            )
-        )
-    else:
-        selection_lamination_rules = selection_lamination_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_winding_rules
-    if isinstance(selection_winding_rules, ImportError):
-        selection_winding_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_winding_rules: "
-                    + str(selection_winding_rules)
-                )
-            )
-        )
-    else:
-        selection_winding_rules = selection_winding_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_conductor_rules
-    if isinstance(selection_conductor_rules, ImportError):
-        selection_conductor_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_conductor_rules: "
-                    + str(selection_conductor_rules)
-                )
-            )
-        )
-    else:
-        selection_conductor_rules = selection_conductor_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_hole_rules
-    if isinstance(selection_hole_rules, ImportError):
-        selection_hole_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_hole_rules: "
-                    + str(selection_hole_rules)
-                )
-            )
-        )
-    else:
-        selection_hole_rules = selection_hole_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_pole_rules
-    if isinstance(selection_pole_rules, ImportError):
-        selection_pole_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_pole_rules: "
-                    + str(selection_pole_rules)
-                )
-            )
-        )
-    else:
-        selection_pole_rules = selection_pole_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_magnet_rules
-    if isinstance(selection_magnet_rules, ImportError):
-        selection_magnet_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_magnet_rules: "
-                    + str(selection_magnet_rules)
-                )
-            )
-        )
-    else:
-        selection_magnet_rules = selection_magnet_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_skew_rules
-    if isinstance(selection_skew_rules, ImportError):
-        selection_skew_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_skew_rules: "
-                    + str(selection_skew_rules)
-                )
-            )
-        )
-    else:
-        selection_skew_rules = selection_skew_rules
-    # cf Methods.Converter.ConvertMC.Step.selection_bar_rules
-    if isinstance(selection_bar_rules, ImportError):
-        selection_bar_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method selection_bar_rules: "
-                    + str(selection_bar_rules)
-                )
-            )
-        )
-    else:
-        selection_bar_rules = selection_bar_rules
+        convert_machine_type = convert_machine_type
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_select
     if isinstance(add_rule_machine_select, ImportError):
         add_rule_machine_select = property(

@@ -1,20 +1,20 @@
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_slot_rules import (
+from pyleecan.Methods.Converter.Convert.Step.selection_slot_rules import (
     selection_slot_rules,
 )
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_lamination_rules import (
+from pyleecan.Methods.Converter.Convert.Step.selection_lamination_rules import (
     selection_lamination_rules,
 )
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_winding_rules import (
+from pyleecan.Methods.Converter.Convert.Step.selection_winding_rules import (
     selection_winding_rules,
 )
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_conductor_rules import (
+from pyleecan.Methods.Converter.Convert.Step.selection_conductor_rules import (
     selection_conductor_rules,
 )
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_magnet_rules import (
+from pyleecan.Methods.Converter.Convert.Step.selection_magnet_rules import (
     selection_magnet_rules,
 )
 
-from pyleecan.Methods.Converter.ConvertMC.Step.selection_skew_rules import (
+from pyleecan.Methods.Converter.Convert.Step.selection_skew_rules import (
     selection_skew_rules,
 )
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM

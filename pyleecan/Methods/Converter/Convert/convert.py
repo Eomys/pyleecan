@@ -1,30 +1,39 @@
-from pyleecan.Methods.Converter.Convert.convert_to_other import convert_to_other
-from pyleecan.Methods.Converter.Convert.convert_to_P import convert_to_P
+def convert(self):
+    """convert the file .mot in machine pyleecan or vice versa
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
 
-import json
+    self.is_P_to_other : bool
+        True conversion pyleecan to other, False conversion other to pyleecan
+    self.rules_list : list
+        list with all rules,
+    self.other_dict : dict
+        A dict with all parameters motor_cad used to conversion or implementation after conversion obj machine
+    self.machine : Machine
+        A Machine with all parameters pyleecan used to conversion or implementation after conversion dict
+    self.file_path : str
+        path file use to convert
+    """
 
+    self.selection_machine_rules()
 
-def selection_file():
-    print("Enter path file other : ")
-    path = input()
+    # conversion rules list
+    if self.is_P_to_other == False:  # conversion to Pyleecan
+        for rule in self.rules_list:
+            # utilisation polymorphism to choose type rule
+            self.machine = rule.convert_to_P(self.other_dict, self.machine)
+        # self.machine.stator.plot()
+        # self.machine.plot()
+        print("Done")
+        return self.machine
 
-    return path
-
-
-def save_dict(path_save, other_dict):
-    file = open("Tests//Methods//Converter" + "//" + path_save, "x")
-    json.dump(other_dict, file)
-    file.close()
-
-
-if __name__ == "__main__":
-    # path = selection_file()
-    # path = "EMD240_v16.mot"
-
-    path = "Matlab_Test_2.mot"
-    # path_save = "other_dict.json"
-
-    machine = convert_to_P(path)
-    other_dict = convert_to_other(machine)
-    print("Done")
-    # save_dict(path_save, other_dict)
+    else:  # conversion to other
+        for rule in self.rules_list:
+            self.other_dict = rule.convert_to_other(
+                self.other_dict,
+                self.machine,
+            )
+        print("Done")
+        return self.other_dict

@@ -32,7 +32,7 @@ def add_rule_machine_dimension(self):
         )
     )
 
-    if self.is_P_to_other:
+    if self.is_P_to_other == True:
         rules_list.append(
             RuleEquation(
                 param=[
@@ -57,29 +57,29 @@ def add_rule_machine_dimension(self):
             )
         )
 
-    rules_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Stator_Bore"],
-                    "variable": "y",
-                },
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Airgap"],
-                    "variable": "a",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": "machine.rotor.Rext",
-                    "variable": "x",
-                },
-            ],
-            unit_type="m",
-            scaling_to_P="y/2+a= x ",
+        rules_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Stator_Bore"],
+                        "variable": "y",
+                    },
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Airgap"],
+                        "variable": "a",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.Rext",
+                        "variable": "x",
+                    },
+                ],
+                unit_type="m",
+                scaling_to_P="y/2+a= x ",
+            )
         )
-    )
 
     # shaft
     rules_list.append(
