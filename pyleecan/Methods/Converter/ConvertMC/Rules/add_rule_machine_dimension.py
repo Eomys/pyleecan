@@ -61,35 +61,75 @@ def add_rule_machine_dimension(self):
                         "path": "machine.stator.Rint",
                         "variable": "b",
                     },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.slot.H1",
+                        "variable": "c",
+                    },
                 ],
                 unit_type="m",
-                scaling_to_P="y= a-b ",
+                scaling_to_P="y= b-a-c ",
             )
         )
 
-    rules_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Stator_Bore"],
-                    "variable": "y",
-                },
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Airgap"],
-                    "variable": "a",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": "machine.rotor.Rext",
-                    "variable": "x",
-                },
-            ],
-            unit_type="m",
-            scaling_to_P="y/2+a= x ",
+    if self.is_P_to_other == False:
+        rules_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Stator_Bore"],
+                        "variable": "y",
+                    },
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Airgap"],
+                        "variable": "a",
+                    },
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Magnet_Thickness"],
+                        "variable": "b",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.Rext",
+                        "variable": "x",
+                    },
+                ],
+                unit_type="m",
+                scaling_to_P="y/2-a-b= x ",
+            )
         )
-    )
+    else:
+        rules_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Stator_Bore"],
+                        "variable": "y",
+                    },
+                    {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Airgap"],
+                        "variable": "a",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.slot.H1",
+                        "variable": "b",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.Rext",
+                        "variable": "x",
+                    },
+                ],
+                unit_type="m",
+                scaling_to_P="y/2-a-b= x ",
+            )
+        )
 
     # frame
     rules_list.append(

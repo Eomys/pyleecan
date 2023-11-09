@@ -1,4 +1,14 @@
 def selection_BPM_rotor_rules(self):
+    """selection step to add rules for slot
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    is_stator : bool
+        True slot is in stator, False slot is in rotor
+
+    """
     BPM_rotor = self.other_dict["[Design_Options]"]["BPM_Rotor"]
 
     if BPM_rotor == "Surface_Radial":

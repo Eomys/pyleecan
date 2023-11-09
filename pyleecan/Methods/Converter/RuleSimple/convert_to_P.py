@@ -1,4 +1,4 @@
-def convert_to_P(self, other_dict, machine):
+def convert_to_P(self, other_dict, machine, other_unit_dict):
     """Select value in other_dict and implements in machine
 
     Parameters
@@ -12,13 +12,13 @@ def convert_to_P(self, other_dict, machine):
 
     """
     # selection correct value
-    other_value = self.get_other(other_dict)
+    unit = other_unit_dict[self.unit_type]
 
-    unit = self.set_unit(self.unit_type)
+    other_value = self.get_other(other_dict, self.other_key_list, unit)
 
     # possibility to have str in other_value
     if self.scaling_to_P != 1:
-        other_value = other_value * self.scaling_to_P / unit
+        other_value = other_value * self.scaling_to_P
 
     machine = self.set_P(machine, other_value)
 

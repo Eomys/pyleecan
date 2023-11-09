@@ -1,4 +1,4 @@
-def get_P(self, machine):
+def get_P(self, path_machine, machine, unit):
     """Select value in machine
 
     Parameters
@@ -12,7 +12,7 @@ def get_P(self, machine):
     P_value
     """
     # select value in object machine
-    value_split = self.P_obj_path.split(".")
+    value_split = path_machine.split(".")
 
     path = value_split[0]
     for temp in range(1, len(value_split) - 1):
@@ -23,4 +23,4 @@ def get_P(self, machine):
         value_split[-1],
     )
 
-    return P_value
+    return P_value * unit

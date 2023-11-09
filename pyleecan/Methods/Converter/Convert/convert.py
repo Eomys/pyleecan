@@ -1,4 +1,4 @@
-def convert(self):
+def convert(self, other_unit_dict):
     """convert the file .mot in machine pyleecan or vice versa
     Parameters
     ----------
@@ -23,7 +23,9 @@ def convert(self):
     if self.is_P_to_other == False:  # conversion to Pyleecan
         for rule in self.rules_list:
             # utilisation polymorphism to choose type rule
-            self.machine = rule.convert_to_P(self.other_dict, self.machine)
+            self.machine = rule.convert_to_P(
+                self.other_dict, self.machine, other_unit_dict
+            )
         # self.machine.stator.plot()
         # self.machine.plot()
         print("Done")
@@ -32,8 +34,7 @@ def convert(self):
     else:  # conversion to other
         for rule in self.rules_list:
             self.other_dict = rule.convert_to_other(
-                self.other_dict,
-                self.machine,
+                self.other_dict, self.machine, other_unit_dict
             )
         print("Done")
         return self.other_dict

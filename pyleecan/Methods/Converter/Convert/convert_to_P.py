@@ -15,10 +15,10 @@ def convert_to_P(self, file_path):
     self.is_P_to_other = False
     self.file_path = file_path
     # conversion file in dict
-    self.other_dict = self.convert_other_to_dict()
+    self.other_dict, other_unit_dict = self.convert_other_to_dict()
     self.rules_list = []
 
     # conversion dict in machine
-    machine = self.convert()
+    machine = self.convert(other_unit_dict)
 
     return machine

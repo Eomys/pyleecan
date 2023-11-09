@@ -111,6 +111,11 @@ try:
 except ImportError as error:
     add_rule_surface_radial_slotM11 = error
 
+try:
+    from ..Methods.Converter.ConvertMC.init_other_unit import init_other_unit
+except ImportError as error:
+    init_other_unit = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -290,6 +295,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_surface_radial_slotM11 = add_rule_surface_radial_slotM11
+    # cf Methods.Converter.ConvertMC.init_other_unit
+    if isinstance(init_other_unit, ImportError):
+        init_other_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method init_other_unit: "
+                    + str(init_other_unit)
+                )
+            )
+        )
+    else:
+        init_other_unit = init_other_unit
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

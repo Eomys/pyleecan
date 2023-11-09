@@ -1,4 +1,4 @@
-def convert_to_P(self, other_dict, machine):
+def convert_to_P(self, other_dict, machine, other_unit_dict):
     """Select value in other_dict and implements in machine
 
     Parameters
@@ -10,6 +10,6 @@ def convert_to_P(self, other_dict, machine):
     machine : Machine
         A pyleecan machine
     """
-    machine = self.other_to_P(self, machine)
+    machine = self.other_to_P(self, machine, other_dict)
 
     return machine

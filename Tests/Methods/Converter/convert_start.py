@@ -9,8 +9,9 @@ if __name__ == "__main__":
 
     conv = ConvertMC()
 
-    conv.machine = conv.convert_to_P(path)
+    machine = conv.convert_to_P(path)
+    machine.plot()
 
-    other_dict = conv.convert_to_other()
+    other_dict = conv.convert_to_other(machine)
     print("Done")
     # save_dict(path_save, other_dict)

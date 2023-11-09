@@ -2,7 +2,7 @@ from sympy import Symbol
 from sympy.solvers import solve
 
 
-def convert_to_other(self, other_dict, machine):
+def convert_to_other(self, other_dict, machine, other_unit_dict):
     """Select value in machine and implements in other_dict
 
     Parameters
@@ -20,44 +20,24 @@ def convert_to_other(self, other_dict, machine):
     # self.scaling_to_P
 
     # we must have the same unit
-    unit = self.unit_type
+    unit = other_unit_dict[self.unit_type]
 
     scaling = self.scaling_to_P
 
     # replace varialble mot
     for param in self.param:
         if param["src"] == "other":
-            dict_temp = other_dict
             if not param["variable"] == "y":
-                for temp in param["path"]:
-                    dict_temp = dict_temp[temp]
-
-                # conversion unit
-                unit = self.set_unit(self.unit_type)
-
-                dict_temp = dict_temp * unit
-
-                scaling = scaling.replace(param["variable"], str(dict_temp))
+                # unit = 1 beacause we want convert in the unit other so we don't need to change this unit
+                other_value = self.get_other(other_dict, param["path"], unit=1)
+                scaling = scaling.replace(param["variable"], str(other_value))
 
     # replace variable pyleecan
     for param in self.param:
         if param["src"] == "pyleecan":
-            value_split = param["path"].split(".")
+            P_value = self.get_P(param["path"], machine, unit)
 
-            path = value_split[0]
-            for temp in range(1, len(value_split) - 1):
-                path = eval('path+"."+value_split[temp]')
-
-            val_P = getattr(
-                eval(path),
-                value_split[-1],
-            )
-            # conversion unit
-            unit = self.set_unit(self.unit_type)
-
-            val_P = val_P * unit
-
-            scaling = scaling.replace(param["variable"], str(val_P))
+            scaling = scaling.replace(param["variable"], str(P_value))
 
     # equation cleaning, delete space and replace + and - to delete =
     scaling = scaling.replace(" ", "")

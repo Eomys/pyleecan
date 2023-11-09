@@ -1,15 +1,3 @@
-from pyleecan.Methods.Converter.ConvertMC.Rules.add_rule_machine_type import (
-    add_rule_machine_type,
-)
-from pyleecan.Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
-    add_rule_machine_dimension,
-)
-
-from pyleecan.Methods.Converter.ConvertMC.convert_machine_type import (
-    convert_machine_type,
-)
-
-
 def selection_machine_rules(self):
     """
     Parameters

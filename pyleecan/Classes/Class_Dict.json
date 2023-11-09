@@ -1175,7 +1175,8 @@
             "Rules.Slot.add_rule_tapered_slot_slotW23",
             "Rules.Lamination.add_rule_lamination",
             "Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15",
-            "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11"
+            "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11",
+            "init_other_unit"
         ],
         "mother": "Convert",
         "name": "ConvertMC",

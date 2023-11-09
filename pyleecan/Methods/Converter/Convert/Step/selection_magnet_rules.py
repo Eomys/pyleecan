@@ -10,6 +10,8 @@ def selection_magnet_rules(self, is_stator):
     ----------
     self : ConvertMC
         A ConvertMC object
+    is_stator : bool
+        True slot is in stator, False slot is in rotor
 
     """
     if self.is_P_to_other:

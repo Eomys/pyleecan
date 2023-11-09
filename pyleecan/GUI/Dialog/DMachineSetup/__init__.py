@@ -33,20 +33,20 @@ from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
 from ....GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from ....GUI.Resources import pixmap_dict
 
-# Steps needed to setup a LamSlotWind 
-LSW_step = [SWSlot, SLamShape, SWinding, SWindCond] * all stator
+# Steps needed to setup a LamSlotWind
+LSW_step = [SWSlot, SLamShape, SWinding, SWindCond]
 # Steps needed to setup a LamSlotWind for the rotor of a WRSM
-LP_step = [SWPole, SLamShape, SWinding, SWindCond, SSkew] * WRSM rotor -skew
+LP_step = [SWPole, SLamShape, SWinding, SWindCond, SSkew]
 # Steps needed to setup a LamSquirrelCage
-LSC_step = [SWSlot, SBar, SLamShape, SSkew] * SCIM rotor - skew
+LSC_step = [SWSlot, SBar, SLamShape, SSkew]
 # Steps needed to setup a LamSquirrelCageMag
 LSCM_step = [SWSlot, SBar, SMHoleMag, SLamShape, SSkew]
 # Steps needed to setup a LamHole
-LH_step = [SMHoleMag, SLamShape, SSkew]  * IPMSM rotor -skew
+LH_step = [SMHoleMag, SLamShape, SSkew]
 # Steps needed to setup a LamSlot
 LS_step = [SWSlot, SLamShape, SSkew]
 # Steps needed to setup a LamSlotMag
-LSM_step = [SMSlot, SLamShape, SSkew] * SPMSM rotor - skew
+LSM_step = [SMSlot, SLamShape, SSkew]
 # Steps to start the design of a machine with 2 laminations
 S_step = [SMachineType, SMachineDimension]
 

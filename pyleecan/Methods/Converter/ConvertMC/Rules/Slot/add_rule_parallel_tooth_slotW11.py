@@ -12,7 +12,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
     self : ConvertMC
         A ConvertMC object
     is_stator : Bool
-        A booleen to know, position in lamination
+        True slot is in stator, False slot is in rotor
     """
     # definie the correct position in rotor or in stator
     if is_stator == True:

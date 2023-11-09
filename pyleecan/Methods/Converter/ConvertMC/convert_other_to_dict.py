@@ -1,16 +1,21 @@
 from os.path import join, split
+from numpy import pi
 
 
 def convert_other_to_dict(self):
-    """conversion file .mot in dict
+    """conversion file .mot in dict and creation other_unit_dict
 
     Parameters
     ----------
     self : ConvertMC
         A ConvertMC object
 
-    Returns:
-        dict: dict with param present in file .mot
+    Returns
+    ----------
+    other_dict: dict
+        dict with param present in file .mot without unit
+    other_unit_dict : dict
+        dict with unit to make conversion
     """
 
     file_path = self.file_path
@@ -56,7 +61,28 @@ def convert_other_to_dict(self):
             else:
                 temp_dict[lb[0]] = value[0]
 
-    return other_dict
+    # Extract unit dict
+    other_unit_dict_temp = other_dict["[Units]"]
+    other_unit_dict = {}
+
+    # set length
+    unit = other_unit_dict_temp["Units_Length"]
+    if unit == "mm":
+        other_unit_dict["m"] = 0.001
+        # we want to have m so we need to multiply by 0.001
+    elif unit == "m":
+        other_unit_dict["m"] = 1
+
+    other_unit_dict["rad"] = 1
+
+    pole_number = other_dict["[Dimensions]"]["Pole_Number"]
+
+    other_unit_dict["ED"] = (2 / pole_number) * (pi / 180)
+    # we want to have rad so we need to multiply by 2/pole_number
+
+    other_unit_dict[""] = 1
+
+    return other_dict, other_unit_dict
 
 
 # conversion str in float

@@ -43,6 +43,6 @@ def other_to_P(machine, other_dict, is_stator):
     return machine
 
 
-def P_to_other(self, other_dict):
+def P_to_other(self, machine, other_dict):
     print("other_to_P")
     return other_dict
