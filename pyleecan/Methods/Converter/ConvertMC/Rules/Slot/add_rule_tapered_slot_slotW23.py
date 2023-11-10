@@ -29,6 +29,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.W0",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -38,6 +39,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.W1",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -47,6 +49,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.W2",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -56,6 +59,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.H0",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -65,6 +69,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.H1",
             unit_type="rad",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -95,7 +100,8 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
                 },
             ],
             unit_type="m",
-            scaling_to_P="y = b+a+x",
+            equation="y = b+a+x",
+            file_name=__file__,
         )
     )
 

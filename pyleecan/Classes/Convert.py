@@ -420,7 +420,7 @@ class Convert(FrozenClass):
 
     def __init__(
         self,
-        file_path="0",
+        other_unit_dict=-1,
         other_dict=-1,
         machine=None,
         rules_list=-1,
@@ -443,8 +443,8 @@ class Convert(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "file_path" in list(init_dict.keys()):
-                file_path = init_dict["file_path"]
+            if "other_unit_dict" in list(init_dict.keys()):
+                other_unit_dict = init_dict["other_unit_dict"]
             if "other_dict" in list(init_dict.keys()):
                 other_dict = init_dict["other_dict"]
             if "machine" in list(init_dict.keys()):
@@ -455,7 +455,7 @@ class Convert(FrozenClass):
                 is_P_to_other = init_dict["is_P_to_other"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.file_path = file_path
+        self.other_unit_dict = other_unit_dict
         self.other_dict = other_dict
         self.machine = machine
         self.rules_list = rules_list
@@ -472,7 +472,7 @@ class Convert(FrozenClass):
             Convert_str += "parent = None " + linesep
         else:
             Convert_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Convert_str += 'file_path = "' + str(self.file_path) + '"' + linesep
+        Convert_str += "other_unit_dict = " + str(self.other_unit_dict) + linesep
         Convert_str += "other_dict = " + str(self.other_dict) + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
@@ -493,7 +493,7 @@ class Convert(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.file_path != self.file_path:
+        if other.other_unit_dict != self.other_unit_dict:
             return False
         if other.other_dict != self.other_dict:
             return False
@@ -513,18 +513,18 @@ class Convert(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._file_path != self._file_path:
+        if other._other_unit_dict != self._other_unit_dict:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._file_path)
+                    + str(self._other_unit_dict)
                     + ", other="
-                    + str(other._file_path)
+                    + str(other._other_unit_dict)
                     + ")"
                 )
-                diff_list.append(name + ".file_path" + val_str)
+                diff_list.append(name + ".other_unit_dict" + val_str)
             else:
-                diff_list.append(name + ".file_path")
+                diff_list.append(name + ".other_unit_dict")
         if other._other_dict != self._other_dict:
             if is_add_value:
                 val_str = (
@@ -582,7 +582,9 @@ class Convert(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.file_path)
+        if self.other_unit_dict is not None:
+            for key, value in self.other_unit_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         if self.other_dict is not None:
             for key, value in self.other_dict.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -605,7 +607,9 @@ class Convert(FrozenClass):
         """
 
         Convert_dict = dict()
-        Convert_dict["file_path"] = self.file_path
+        Convert_dict["other_unit_dict"] = (
+            self.other_unit_dict.copy() if self.other_unit_dict is not None else None
+        )
         Convert_dict["other_dict"] = (
             self.other_dict.copy() if self.other_dict is not None else None
         )
@@ -629,7 +633,10 @@ class Convert(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        file_path_val = self.file_path
+        if self.other_unit_dict is None:
+            other_unit_dict_val = None
+        else:
+            other_unit_dict_val = self.other_unit_dict.copy()
         if self.other_dict is None:
             other_dict_val = None
         else:
@@ -645,7 +652,7 @@ class Convert(FrozenClass):
         is_P_to_other_val = self.is_P_to_other
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            file_path=file_path_val,
+            other_unit_dict=other_unit_dict_val,
             other_dict=other_dict_val,
             machine=machine_val,
             rules_list=rules_list_val,
@@ -656,28 +663,30 @@ class Convert(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.file_path = None
+        self.other_unit_dict = None
         self.other_dict = None
         if self.machine is not None:
             self.machine._set_None()
         self.rules_list = None
         self.is_P_to_other = None
 
-    def _get_file_path(self):
-        """getter of file_path"""
-        return self._file_path
+    def _get_other_unit_dict(self):
+        """getter of other_unit_dict"""
+        return self._other_unit_dict
 
-    def _set_file_path(self, value):
-        """setter of file_path"""
-        check_var("file_path", value, "str")
-        self._file_path = value
+    def _set_other_unit_dict(self, value):
+        """setter of other_unit_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("other_unit_dict", value, "dict")
+        self._other_unit_dict = value
 
-    file_path = property(
-        fget=_get_file_path,
-        fset=_set_file_path,
-        doc=u"""file path to conevrt
+    other_unit_dict = property(
+        fget=_get_other_unit_dict,
+        fset=_set_other_unit_dict,
+        doc=u"""convertion unit file .mot into unit_dict
 
-        :Type: str
+        :Type: dict
         """,
     )
 

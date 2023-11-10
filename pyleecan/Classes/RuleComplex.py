@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .Rules import Rules
+from .Rule import Rule
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -37,7 +37,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class RuleComplex(Rules):
+class RuleComplex(Rule):
     """complex rules"""
 
     VERSION = 1
@@ -82,7 +82,9 @@ class RuleComplex(Rules):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, fct_name=None, folder=None, init_dict=None, init_str=None):
+    def __init__(
+        self, fct_name=None, folder=None, unit_type="m", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -102,19 +104,21 @@ class RuleComplex(Rules):
                 fct_name = init_dict["fct_name"]
             if "folder" in list(init_dict.keys()):
                 folder = init_dict["folder"]
+            if "unit_type" in list(init_dict.keys()):
+                unit_type = init_dict["unit_type"]
         # Set the properties (value check and convertion are done in setter)
         self.fct_name = fct_name
         self.folder = folder
-        # Call Rules init
-        super(RuleComplex, self).__init__()
-        # The class is frozen (in Rules init), for now it's impossible to
+        # Call Rule init
+        super(RuleComplex, self).__init__(unit_type=unit_type)
+        # The class is frozen (in Rule init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         RuleComplex_str = ""
-        # Get the properties inherited from Rules
+        # Get the properties inherited from Rule
         RuleComplex_str += super(RuleComplex, self).__str__()
         RuleComplex_str += 'fct_name = "' + str(self.fct_name) + '"' + linesep
         RuleComplex_str += 'folder = "' + str(self.folder) + '"' + linesep
@@ -126,7 +130,7 @@ class RuleComplex(Rules):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Rules
+        # Check the properties inherited from Rule
         if not super(RuleComplex, self).__eq__(other):
             return False
         if other.fct_name != self.fct_name:
@@ -144,7 +148,7 @@ class RuleComplex(Rules):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from Rules
+        # Check the properties inherited from Rule
         diff_list.extend(
             super(RuleComplex, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -183,7 +187,7 @@ class RuleComplex(Rules):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from Rules
+        # Get size of the properties inherited from Rule
         S += super(RuleComplex, self).__sizeof__()
         S += getsizeof(self.fct_name)
         S += getsizeof(self.folder)
@@ -200,7 +204,7 @@ class RuleComplex(Rules):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from Rules
+        # Get the properties inherited from Rule
         RuleComplex_dict = super(RuleComplex, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -219,8 +223,11 @@ class RuleComplex(Rules):
         # Handle deepcopy of all the properties
         fct_name_val = self.fct_name
         folder_val = self.folder
+        unit_type_val = self.unit_type
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(fct_name=fct_name_val, folder=folder_val)
+        obj_copy = type(self)(
+            fct_name=fct_name_val, folder=folder_val, unit_type=unit_type_val
+        )
         return obj_copy
 
     def _set_None(self):
@@ -228,7 +235,7 @@ class RuleComplex(Rules):
 
         self.fct_name = None
         self.folder = None
-        # Set to None the properties inherited from Rules
+        # Set to None the properties inherited from Rule
         super(RuleComplex, self)._set_None()
 
     def _get_fct_name(self):
@@ -238,7 +245,7 @@ class RuleComplex(Rules):
     fct_name = property(
         fget=_get_fct_name,
         fset=_set_fct_name,
-        doc=u"""fonction name to convert 
+        doc=u"""fonction name to convert
 
         :Type: str
         """,

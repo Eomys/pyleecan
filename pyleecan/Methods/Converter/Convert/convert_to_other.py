@@ -3,6 +3,8 @@ def convert_to_other(self, machine):
 
     Parameters
     ----------
+    self : ConvertMC
+        A ConvertMC object
     machine : Machine
         A pyleecan machine
 
@@ -16,7 +18,7 @@ def convert_to_other(self, machine):
     self.other_dict = {}
     self.rules_list = []
 
-    other_unit_dict = self.init_other_unit()
+    self.init_other_unit()
     # conversion machine in dict
-    self.other_dict = self.convert(other_unit_dict)
+    self.convert()
     return self.other_dict

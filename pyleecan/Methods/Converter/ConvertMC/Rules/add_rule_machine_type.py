@@ -11,10 +11,10 @@ def add_rule_machine_type(self):
     self : ConvertMC
         A ConvertMC object
     """
-    rules_list = self.rules_list
-    # inutile pour le moment
 
-    rules_list.append(RuleComplex(fct_name="set_pole_pair_number", folder="MotorCAD"))
+    self.rules_list.append(
+        RuleComplex(fct_name="set_pole_pair_number", folder="MotorCAD")
+    )
 
     # ajout de la règle pour set le nom
 

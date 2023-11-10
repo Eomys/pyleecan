@@ -1,4 +1,4 @@
-def selection_WRSM_rules():
+def selection_WRSM_rules(self):
     """selection step to have rules for motor WRSM
 
     Parameters
@@ -7,4 +7,5 @@ def selection_WRSM_rules():
         A ConvertMC object
 
     """
+    raise Exception("Not Implemented Yet")
     print("WRSM")

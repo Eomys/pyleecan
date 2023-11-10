@@ -7,63 +7,46 @@ def convert_to_other(self, other_dict, machine, other_unit_dict):
 
     Parameters
     ----------
-    self : RulesEquation
+    self : RuleEquation
         A RuleEquation object
     other_dict : dict
         dict created from the file to be converted
     machine : Machine
         A pyleecan machine
+    other_unit_dict : dict
+        dict with unit to make conversion (key: unit family, value: factor)
 
     """
-    # self.param_other
-    # self.param_pyleecan
-    # self.scaling_to_P
-
     # we must have the same unit
-    unit = other_unit_dict[self.unit_type]
-
-    scaling = self.scaling_to_P
+    equation = self.equation
 
     # replace varialble mot
     for param in self.param:
-        if param["src"] == "other":
-            if not param["variable"] == "y":
-                # unit = 1 beacause we want convert in the unit other so we don't need to change this unit
-                other_value = self.get_other(other_dict, param["path"], unit=1)
-                scaling = scaling.replace(param["variable"], str(other_value))
+        if param["src"] == "other" and not param["variable"].lower() == "y":
+            other_value = self.get_other(other_dict, param["path"], other_unit_dict)
+            equation = equation.replace(param["variable"], str(other_value))
 
     # replace variable pyleecan
     for param in self.param:
         if param["src"] == "pyleecan":
-            P_value = self.get_P(param["path"], machine, unit)
+            P_value = self.get_P(param["path"], machine)
 
-            scaling = scaling.replace(param["variable"], str(P_value))
+            equation = equation.replace(param["variable"], str(P_value))
 
     # equation cleaning, delete space and replace + and - to delete =
-    scaling = scaling.replace(" ", "")
-    scaling = scaling.split("=")
+    equation = equation.replace(" ", "")
+    equation = equation.split("=")
 
-    equation = scaling[0] + "-(" + scaling[1] + ")"
+    equation = equation[0] + "-(" + equation[1] + ")"
     # result = eval(equation)
 
     value = solve(equation)
     value = float(value[0])
 
-    # adding value in dict_other
-    dict_temp = other_dict
-
+    # adding value in other_dict
     for variable in self.param:
         if variable["variable"] == "y":
             list_path = variable["path"]
-
-            # self.set_other(other_dict, value)
-            dict_temp = other_dict
-            for key in list_path[:-1]:
-                if key not in dict_temp:
-                    dict_temp[key] = dict()
-                dict_temp = dict_temp[key]
-            # Set the value
-            last_key = list_path[-1]
-            dict_temp[last_key] = value
+            other_dict = self.set_other(other_dict, value, other_unit_dict, list_path)
 
     return other_dict

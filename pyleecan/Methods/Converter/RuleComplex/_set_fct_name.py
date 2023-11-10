@@ -6,6 +6,16 @@ PATH_FUNCTION_RULE_COMPLEX_MOT = "pyleecan\Functions\Converter\MotorCAD\\"
 
 
 def _set_fct_name(self, value):
+    """finf the path of function
+
+    Parameters
+    ----------
+    self : Rule
+        A Rule object
+    value : str
+        name of file for complex rule
+
+    """
     self._fct_name = value
     if isinstance(self.fct_name, str):
         self._fct_name = PATH_FUNCTION_RULE_COMPLEX_MOT + self.fct_name + ".py"

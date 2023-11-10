@@ -1,24 +1,23 @@
 def convert_to_P(self, file_path):
-    """conversion file in obj machine
+    """Convert a "other" file to a Pyleecan machine
 
     Parameters
     ----------
-    path_to_other : str
-        A path to file
+    self : Convert
+        A Convert object
+    file_path : str
+        A path to "other" file to convert
 
     Returns
     ---------
     machine : Machine
-        A pyleecan machine
+        The converted pyleecan machine
     """
-
-    self.is_P_to_other = False
-    self.file_path = file_path
+    self.is_P_to_other = False  # Select rules direction
     # conversion file in dict
-    self.other_dict, other_unit_dict = self.convert_other_to_dict()
+    self.other_dict, self.other_unit_dict = self.convert_other_to_dict(file_path)
     self.rules_list = []
 
-    # conversion dict in machine
-    machine = self.convert(other_unit_dict)
-
-    return machine
+    # conversion dict into machine
+    self.convert()
+    return self.machine

@@ -8,7 +8,7 @@ from pyleecan.Methods.Converter.ConvertMC.convert_other_to_dict import (
 
 
 path = "EMD240_v16.mot"
-path = "Matlab_Test_2.mot"
+path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC\Matlab_Test_2.mot"
 
 
 class Test_converter_mot(object):
@@ -22,7 +22,7 @@ class Test_converter_mot(object):
         Conv.convert_to_other(machine)
         dict_to_other = Conv.other_dict
         # conversoin file in dict to compare
-        dict_to_mot, other_unit_dict = convert_other_to_dict(Conv)
+        dict_to_mot, other_unit_dict = convert_other_to_dict(Conv, path)
 
         # selection path and value in dict_to_other created after conversion, and compare this result with dict_to_mot, a file .mot convert in dict
         for path_dict in dict_to_other:

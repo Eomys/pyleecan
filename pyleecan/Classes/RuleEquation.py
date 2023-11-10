@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .Rules import Rules
+from .Rule import Rule
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -32,7 +32,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class RuleEquation(Rules):
+class RuleEquation(Rule):
     """simple rules"""
 
     VERSION = 1
@@ -69,8 +69,9 @@ class RuleEquation(Rules):
     def __init__(
         self,
         param=None,
+        equation=None,
+        file_name=None,
         unit_type="m",
-        scaling_to_P=None,
         init_dict=None,
         init_str=None,
     ):
@@ -91,24 +92,26 @@ class RuleEquation(Rules):
             # Overwrite default value with init_dict content
             if "param" in list(init_dict.keys()):
                 param = init_dict["param"]
+            if "equation" in list(init_dict.keys()):
+                equation = init_dict["equation"]
+            if "file_name" in list(init_dict.keys()):
+                file_name = init_dict["file_name"]
             if "unit_type" in list(init_dict.keys()):
                 unit_type = init_dict["unit_type"]
-            if "scaling_to_P" in list(init_dict.keys()):
-                scaling_to_P = init_dict["scaling_to_P"]
         # Set the properties (value check and convertion are done in setter)
         self.param = param
-        self.unit_type = unit_type
-        self.scaling_to_P = scaling_to_P
-        # Call Rules init
-        super(RuleEquation, self).__init__()
-        # The class is frozen (in Rules init), for now it's impossible to
+        self.equation = equation
+        self.file_name = file_name
+        # Call Rule init
+        super(RuleEquation, self).__init__(unit_type=unit_type)
+        # The class is frozen (in Rule init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         RuleEquation_str = ""
-        # Get the properties inherited from Rules
+        # Get the properties inherited from Rule
         RuleEquation_str += super(RuleEquation, self).__str__()
         RuleEquation_str += (
             "param = "
@@ -116,8 +119,8 @@ class RuleEquation(Rules):
             + str(self.param).replace(linesep, linesep + "\t")
             + linesep
         )
-        RuleEquation_str += 'unit_type = "' + str(self.unit_type) + '"' + linesep
-        RuleEquation_str += 'scaling_to_P = "' + str(self.scaling_to_P) + '"' + linesep
+        RuleEquation_str += 'equation = "' + str(self.equation) + '"' + linesep
+        RuleEquation_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         return RuleEquation_str
 
     def __eq__(self, other):
@@ -126,14 +129,14 @@ class RuleEquation(Rules):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Rules
+        # Check the properties inherited from Rule
         if not super(RuleEquation, self).__eq__(other):
             return False
         if other.param != self.param:
             return False
-        if other.unit_type != self.unit_type:
+        if other.equation != self.equation:
             return False
-        if other.scaling_to_P != self.scaling_to_P:
+        if other.file_name != self.file_name:
             return False
         return True
 
@@ -146,7 +149,7 @@ class RuleEquation(Rules):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from Rules
+        # Check the properties inherited from Rule
         diff_list.extend(
             super(RuleEquation, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -160,30 +163,30 @@ class RuleEquation(Rules):
                 diff_list.append(name + ".param" + val_str)
             else:
                 diff_list.append(name + ".param")
-        if other._unit_type != self._unit_type:
+        if other._equation != self._equation:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._unit_type)
+                    + str(self._equation)
                     + ", other="
-                    + str(other._unit_type)
+                    + str(other._equation)
                     + ")"
                 )
-                diff_list.append(name + ".unit_type" + val_str)
+                diff_list.append(name + ".equation" + val_str)
             else:
-                diff_list.append(name + ".unit_type")
-        if other._scaling_to_P != self._scaling_to_P:
+                diff_list.append(name + ".equation")
+        if other._file_name != self._file_name:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._scaling_to_P)
+                    + str(self._file_name)
                     + ", other="
-                    + str(other._scaling_to_P)
+                    + str(other._file_name)
                     + ")"
                 )
-                diff_list.append(name + ".scaling_to_P" + val_str)
+                diff_list.append(name + ".file_name" + val_str)
             else:
-                diff_list.append(name + ".scaling_to_P")
+                diff_list.append(name + ".file_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -193,13 +196,13 @@ class RuleEquation(Rules):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from Rules
+        # Get size of the properties inherited from Rule
         S += super(RuleEquation, self).__sizeof__()
         if self.param is not None:
             for value in self.param:
                 S += getsizeof(value)
-        S += getsizeof(self.unit_type)
-        S += getsizeof(self.scaling_to_P)
+        S += getsizeof(self.equation)
+        S += getsizeof(self.file_name)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -213,7 +216,7 @@ class RuleEquation(Rules):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from Rules
+        # Get the properties inherited from Rule
         RuleEquation_dict = super(RuleEquation, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -222,8 +225,8 @@ class RuleEquation(Rules):
         RuleEquation_dict["param"] = (
             self.param.copy() if self.param is not None else None
         )
-        RuleEquation_dict["unit_type"] = self.unit_type
-        RuleEquation_dict["scaling_to_P"] = self.scaling_to_P
+        RuleEquation_dict["equation"] = self.equation
+        RuleEquation_dict["file_name"] = self.file_name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RuleEquation_dict["__class__"] = "RuleEquation"
@@ -237,11 +240,15 @@ class RuleEquation(Rules):
             param_val = None
         else:
             param_val = self.param.copy()
+        equation_val = self.equation
+        file_name_val = self.file_name
         unit_type_val = self.unit_type
-        scaling_to_P_val = self.scaling_to_P
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            param=param_val, unit_type=unit_type_val, scaling_to_P=scaling_to_P_val
+            param=param_val,
+            equation=equation_val,
+            file_name=file_name_val,
+            unit_type=unit_type_val,
         )
         return obj_copy
 
@@ -249,9 +256,9 @@ class RuleEquation(Rules):
         """Set all the properties to None (except pyleecan object)"""
 
         self.param = None
-        self.unit_type = None
-        self.scaling_to_P = None
-        # Set to None the properties inherited from Rules
+        self.equation = None
+        self.file_name = None
+        # Set to None the properties inherited from Rule
         super(RuleEquation, self)._set_None()
 
     def _get_param(self):
@@ -274,37 +281,37 @@ class RuleEquation(Rules):
         """,
     )
 
-    def _get_unit_type(self):
-        """getter of unit_type"""
-        return self._unit_type
+    def _get_equation(self):
+        """getter of equation"""
+        return self._equation
 
-    def _set_unit_type(self, value):
-        """setter of unit_type"""
-        check_var("unit_type", value, "str")
-        self._unit_type = value
+    def _set_equation(self, value):
+        """setter of equation"""
+        check_var("equation", value, "str")
+        self._equation = value
 
-    unit_type = property(
-        fget=_get_unit_type,
-        fset=_set_unit_type,
-        doc=u"""unit
+    equation = property(
+        fget=_get_equation,
+        fset=_set_equation,
+        doc=u"""conversion paramter to pyleecan (Y are always on other side
 
         :Type: str
         """,
     )
 
-    def _get_scaling_to_P(self):
-        """getter of scaling_to_P"""
-        return self._scaling_to_P
+    def _get_file_name(self):
+        """getter of file_name"""
+        return self._file_name
 
-    def _set_scaling_to_P(self, value):
-        """setter of scaling_to_P"""
-        check_var("scaling_to_P", value, "str")
-        self._scaling_to_P = value
+    def _set_file_name(self, value):
+        """setter of file_name"""
+        check_var("file_name", value, "str")
+        self._file_name = value
 
-    scaling_to_P = property(
-        fget=_get_scaling_to_P,
-        fset=_set_scaling_to_P,
-        doc=u"""conversion paramter to pyleecan
+    file_name = property(
+        fget=_get_file_name,
+        fset=_set_file_name,
+        doc=u"""use just to debug, give name of file
 
         :Type: str
         """,

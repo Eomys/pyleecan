@@ -1,12 +1,43 @@
 def other_to_P(self, machine, other_dict):
+    """conversion obj machine in dict
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    machine : Machine
+        A pyleecan machine
+    other_dict : dict
+        A dict with the conversion obj machine
+
+    Returns
+    ---------
+    machine : Machine
+        A pyleecan machine
+    """
     other_value = other_dict["[Dimensions]"]["Pole_Number"]
     machine.set_pole_pair_number(int(other_value / 2))
 
-    print(f"set pole pair number :{other_value/2}")
     return machine
 
 
 def P_to_other(self, machine, other_dict):
+    """conversion obj machine in dict
+
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+    machine : Machine
+        A pyleecan machine
+    other_dict : dict
+        A dict with the conversion obj machine
+
+    Returns
+    ---------
+    other_dict : dict
+        A dict with the conversion obj machine
+    """
     pole_pair_number = machine.get_pole_pair_number() * 2
     if not "[Dimensions]" in other_dict:
         other_dict["[Dimensions]"] = {}

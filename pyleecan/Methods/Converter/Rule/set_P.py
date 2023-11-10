@@ -1,14 +1,16 @@
-def set_P(self, machine, other_value):
+def set_P(self, machine, other_value, path):
     """Set value in machine
 
     Parameters
     ----------
-    self : RuleSimple
-        A RuleSimple object
+    self : Rule
+        A Rule object
     machine : Machine
         A pyleecan machine
     other_value :
         value to set in other_dict
+    path : str
+        path to set the value
 
 
     Return
@@ -16,7 +18,7 @@ def set_P(self, machine, other_value):
     machine
     """
     # set value in object machine
-    value_split = self.P_obj_path.split(".")
+    value_split = path.split(".")
 
     path = value_split[0]
     for temp in range(1, len(value_split) - 1):

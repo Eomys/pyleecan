@@ -33,10 +33,10 @@ def selection_SIPMSM_rules(self):
     """
 
     # step for stator
-    selection_LamSlotWind_rules(self)
+    self.selection_LamSlotWind_rules(is_stator=True)
 
     # step for rotor
     is_stator = False
-    selection_magnet_rules(self, is_stator)
-    selection_lamination_rules(self, is_stator)
-    selection_skew_rules(self, is_stator)
+    self.selection_magnet_rules(is_stator)
+    self.selection_lamination_rules(is_stator)
+    self.selection_skew_rules(is_stator)

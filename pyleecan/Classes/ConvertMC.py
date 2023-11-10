@@ -35,11 +35,23 @@ except ImportError as error:
     convert_machine_type = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_magnet_type import convert_magnet_type
+except ImportError as error:
+    convert_magnet_type = error
+
+try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
         add_rule_machine_dimension,
     )
 except ImportError as error:
     add_rule_machine_dimension = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension_surface_magnet import (
+        add_rule_machine_dimension_surface_magnet,
+    )
+except ImportError as error:
+    add_rule_machine_dimension_surface_magnet = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_type import (
@@ -163,6 +175,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_machine_type = convert_machine_type
+    # cf Methods.Converter.ConvertMC.convert_magnet_type
+    if isinstance(convert_magnet_type, ImportError):
+        convert_magnet_type = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_magnet_type: "
+                    + str(convert_magnet_type)
+                )
+            )
+        )
+    else:
+        convert_magnet_type = convert_magnet_type
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(
@@ -175,6 +199,20 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_machine_dimension = add_rule_machine_dimension
+    # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension_surface_magnet
+    if isinstance(add_rule_machine_dimension_surface_magnet, ImportError):
+        add_rule_machine_dimension_surface_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_machine_dimension_surface_magnet: "
+                    + str(add_rule_machine_dimension_surface_magnet)
+                )
+            )
+        )
+    else:
+        add_rule_machine_dimension_surface_magnet = (
+            add_rule_machine_dimension_surface_magnet
+        )
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_type
     if isinstance(add_rule_machine_type, ImportError):
         add_rule_machine_type = property(
@@ -314,7 +352,7 @@ class ConvertMC(Convert):
 
     def __init__(
         self,
-        file_path="0",
+        other_unit_dict=-1,
         other_dict=-1,
         machine=None,
         rules_list=-1,
@@ -337,8 +375,8 @@ class ConvertMC(Convert):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "file_path" in list(init_dict.keys()):
-                file_path = init_dict["file_path"]
+            if "other_unit_dict" in list(init_dict.keys()):
+                other_unit_dict = init_dict["other_unit_dict"]
             if "other_dict" in list(init_dict.keys()):
                 other_dict = init_dict["other_dict"]
             if "machine" in list(init_dict.keys()):
@@ -350,7 +388,7 @@ class ConvertMC(Convert):
         # Set the properties (value check and convertion are done in setter)
         # Call Convert init
         super(ConvertMC, self).__init__(
-            file_path=file_path,
+            other_unit_dict=other_unit_dict,
             other_dict=other_dict,
             machine=machine,
             rules_list=rules_list,
@@ -432,7 +470,10 @@ class ConvertMC(Convert):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        file_path_val = self.file_path
+        if self.other_unit_dict is None:
+            other_unit_dict_val = None
+        else:
+            other_unit_dict_val = self.other_unit_dict.copy()
         if self.other_dict is None:
             other_dict_val = None
         else:
@@ -448,7 +489,7 @@ class ConvertMC(Convert):
         is_P_to_other_val = self.is_P_to_other
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            file_path=file_path_val,
+            other_unit_dict=other_unit_dict_val,
             other_dict=other_dict_val,
             machine=machine_val,
             rules_list=rules_list_val,

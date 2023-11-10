@@ -24,6 +24,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
             P_obj_path=f"machine.rotor.slot.W0",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -33,6 +34,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
             P_obj_path=f"machine.rotor.slot.W3",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -42,6 +44,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
             P_obj_path=f"machine.rotor.slot.H0",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -51,6 +54,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
             P_obj_path=f"machine.rotor.slot.R1",
             unit_type="m",
             scaling_to_P=0.5,
+            file_name=__file__,
         )
     )
 
@@ -60,6 +64,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
             P_obj_path=f"machine.rotor.slot.H1",
             unit_type="rad",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -85,7 +90,8 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
                 },
             ],
             unit_type="m",
-            scaling_to_P="y = a+x",
+            equation="y = a+x",
+            file_name=__file__,
         )
     )
 

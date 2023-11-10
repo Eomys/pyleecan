@@ -7,6 +7,8 @@ def other_to_P(self, machine, other_dict):
         A ConvertMC object
     machine : Machine
         A obj machine
+    other_dict : dict
+        A dict with the conversion obj machine
 
     Return
     ---------
@@ -27,6 +29,8 @@ def P_to_other(self, machine, other_dict):
     ----------
     self : ConvertMC
         A ConvertMC object
+    machine : Machine
+        A obj machine
     other_dict : dict
         A dict
 

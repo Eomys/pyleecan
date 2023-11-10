@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_machine_dimension(self):
+def add_rule_machine_dimension_surface_magnet(self):
     """Create and adapt all the rules related to machine dimensions (lam radius,...)
     Extend rules_list within Converter object
 
@@ -64,13 +64,19 @@ def add_rule_machine_dimension(self):
                         "path": "machine.stator.Rint",
                         "variable": "b",
                     },
+                    {
+                        "src": "pyleecan",
+                        "path": "machine.rotor.slot.H1",
+                        "variable": "c",
+                    },
                 ],
                 unit_type="m",
-                equation="y= b-a",
+                equation="y= b-a-c ",
                 file_name=__file__,
             )
         )
 
+    if self.is_P_to_other == False:
         rules_list.append(
             RuleEquation(
                 param=[
@@ -85,17 +91,21 @@ def add_rule_machine_dimension(self):
                         "variable": "a",
                     },
                     {
+                        "src": "other",
+                        "path": ["[Dimensions]", "Magnet_Thickness"],
+                        "variable": "b",
+                    },
+                    {
                         "src": "pyleecan",
                         "path": "machine.rotor.Rext",
                         "variable": "x",
                     },
                 ],
                 unit_type="m",
-                equation="y/2-a= x ",
+                equation="y/2-a-b= x ",
                 file_name=__file__,
             )
         )
-
     else:
         rules_list.append(
             RuleEquation(
@@ -112,12 +122,17 @@ def add_rule_machine_dimension(self):
                     },
                     {
                         "src": "pyleecan",
+                        "path": "machine.rotor.slot.H1",
+                        "variable": "b",
+                    },
+                    {
+                        "src": "pyleecan",
                         "path": "machine.rotor.Rext",
                         "variable": "x",
                     },
                 ],
                 unit_type="m",
-                equation="y/2-a= x ",
+                equation="y/2-a-b= x ",
                 file_name=__file__,
             )
         )

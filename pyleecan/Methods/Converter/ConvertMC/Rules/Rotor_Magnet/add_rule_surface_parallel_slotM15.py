@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_parallel_slotM15(rule_list, is_stator):
+def add_rule_surface_parallel_slotM15(self, is_stator):
     """Create and adapt all the rules related to slotM15 (lam radius,...)
     Extend rules_list within Converter object
 
@@ -16,6 +16,7 @@ def add_rule_surface_parallel_slotM15(rule_list, is_stator):
     """
     print("surface_radial_slotM15")
 
+    rule_list = self.rules_list
     rule_list.append(RuleComplex(fct_name="surface_radial_slotM15", folder="MotorCAD"))
 
     rule_list.append(
@@ -24,6 +25,7 @@ def add_rule_surface_parallel_slotM15(rule_list, is_stator):
             P_obj_path=f"machine.rotor.slot.W0",
             unit_type="ED",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -33,6 +35,7 @@ def add_rule_surface_parallel_slotM15(rule_list, is_stator):
             P_obj_path=f"machine.rotor.slot.W1",
             unit_type="ED",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -42,7 +45,6 @@ def add_rule_surface_parallel_slotM15(rule_list, is_stator):
             P_obj_path=f"machine.Magnet_Arc_[ED].slot.H1",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
-
-    return rule_list

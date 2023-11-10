@@ -9,24 +9,22 @@ def init_other_unit(self):
     self : ConvertMC
         A ConvertMC object
 
-    Returns
-    ---------
-    other_unit_dict : dict
-        dict with unit to make conversion
     """
-    other_unit_dict = {}
+    self.other_unit_dict = {}
 
     # set length
     # pyleecan m we want in mm
-    other_unit_dict["m"] = 1000
+    self.other_unit_dict["m"] = 0.001
     # we want to have m so we need to multiply by 1000
 
-    other_unit_dict["rad"] = 1
+    self.other_unit_dict["rad"] = 1
 
     # conversion electrical degree
     pole_pair_number = self.machine.get_pole_pair_number()
-    other_unit_dict["ED"] = (pole_pair_number) * (180 / pi)
+    self.other_unit_dict["ED"] = (2 / pole_pair_number / 2) * (pi / 180)
+    # self.other_unit_dict["ED"] = (pole_pair_number) * (180 / pi)
 
-    other_unit_dict[""] = 1
-
-    return other_unit_dict
+    self.other_unit_dict[None] = 1  # No unit => No scale
+    self.other_unit_dict[""] = 1  # No unit => No scale
+    self.other_unit_dict["-"] = 1  # No unit => No scale
+    self.other_unit_dict["[]"] = 1  # No unit => No scale

@@ -29,6 +29,7 @@ def add_rule_lamination(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.W0",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )
 
@@ -38,5 +39,6 @@ def add_rule_lamination(rule_list, is_stator):
             P_obj_path=f"machine.{lam_name}.slot.W3",
             unit_type="m",
             scaling_to_P=1,
+            file_name=__file__,
         )
     )

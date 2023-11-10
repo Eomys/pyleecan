@@ -3,7 +3,7 @@ from pyleecan.Classes.SlotW11 import SlotW11
 
 
 def convert_slot_type(self):
-    """Selection correct slot and inplementation in obj machine or in dict
+    """Selection correct slot and implementation in obj machine or in dict
 
     Parameters
     ----------

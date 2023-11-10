@@ -191,10 +191,10 @@ from ..Classes.RefQuad9 import RefQuad9
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
 from ..Classes.RefTriangle6 import RefTriangle6
+from ..Classes.Rule import Rule
 from ..Classes.RuleComplex import RuleComplex
 from ..Classes.RuleEquation import RuleEquation
 from ..Classes.RuleSimple import RuleSimple
-from ..Classes.Rules import Rules
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
 from ..Classes.Section import Section
