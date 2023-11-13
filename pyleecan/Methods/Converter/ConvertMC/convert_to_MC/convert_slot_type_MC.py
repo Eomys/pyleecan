@@ -13,8 +13,17 @@ def convert_slot_type_MC(self):
     if motor_type == "SlotW11":
         name_slot = "Parallel_Tooth"
 
-    elif motor_type == "":
-        name_slot = ""
+    elif motor_type == "SlotW14":
+        name_slot = "Parallel_tooth_SqB"
+
+    elif motor_type == "SlotW21":
+        name_slot = "Parallel_Slot"
+
+    elif motor_type == "SlotW23":
+        name_slot = "Tapered_slot"
+
+    elif motor_type == "SlotW29":
+        name_slot = "Form_Wound"
 
     else:
         raise Exception("Conversion of machine doesn't exist")

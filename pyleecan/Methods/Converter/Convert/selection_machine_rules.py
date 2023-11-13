@@ -19,22 +19,12 @@ def selection_machine_rules(self):
 
     # selecion motor_type
     if isinstance(self.machine, MachineSIPMSM):
-        if self.is_P_to_other:
-            self.convert_magnet_type_MC()
-        else:
-            self.convert_magnet_type_P()
-
-        magnet_name = type(self.machine.rotor.slot).__name__
-
-        if magnet_name in ["SlotM11", "SlotM15"] and self.machine.rotor.slot.H0 == 0:
-            self.add_rule_machine_dimension_surface_magnet()
-        else:
-            self.add_rule_machine_dimension()
-        # particularity for BPM with airgap, changemen rule machine dimension
+        # particularity for SIPMSM with airgap, changement rule machine dimension
+        self.selection_SIPMSM_machine_dimension()
         self.selection_SIPMSM_rules()
 
     elif isinstance(self.machine, MachineIPMSM):
         self.add_rule_machine_dimension()
-        self.selection_IM_rules()
+        self.selection_IPMSM_rules()
     else:
         raise Exception("Not implemented yet")

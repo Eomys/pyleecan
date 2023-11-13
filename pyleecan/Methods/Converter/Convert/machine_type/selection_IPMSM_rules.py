@@ -8,10 +8,10 @@ def selection_IPMSM_rules(self):
 
     """
     # step for stator
-    self.selection_LamSlotWind_rules()
+    self.selection_LamSlotWind_rules(is_stator=True)
 
     is_stator = False
-    self.selection_slot_rotor_rules(is_stator)
+    self.selection_hole_rules(is_stator)
     self.selection_bar_rules(is_stator)
     self.selection_lamination_rules(is_stator)
     self.selection_skew_rules(is_stator)

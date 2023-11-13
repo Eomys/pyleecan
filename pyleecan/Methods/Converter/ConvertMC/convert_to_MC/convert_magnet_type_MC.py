@@ -8,14 +8,29 @@ def convert_magnet_type_MC(self):
     """
 
     # conversion to Motor-CAD
-    motor_type = type(self.machine.rotor.slot).__name__
+    magnet_type = type(self.machine.rotor.slot).__name__
 
     # selection type of Slot
-    if motor_type == "SlotM11":
+    if magnet_type == "SlotM11" and self.machine.rotor.slot.H0 == 0:
         name_slot = "Surface_Radial"
 
-    elif motor_type == "":
-        name_slot = ""
+    elif magnet_type == "SlotM15" and self.machine.rotor.slot.H0 == 0:
+        name_slot = "Surface_Parallel"
+
+    elif magnet_type == "SlotM13" and self.machine.rotor.slot.H0 == 0:
+        name_slot = "Surface_Breadleaof"
+
+    if magnet_type == "SlotM11":
+        name_slot = "Inset_Radial"
+
+    elif magnet_type == "SlotM15":
+        name_slot = "Inset_Parallel"
+
+    elif magnet_type == "SlotM13":
+        name_slot = "Inset_Breadleaof"
+
+    elif magnet_type == "SlotM16":
+        name_slot = "Spoke"
 
     else:
         raise Exception("Conversion of machine doesn't exist")

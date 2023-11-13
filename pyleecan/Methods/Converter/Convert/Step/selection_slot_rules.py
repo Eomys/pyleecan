@@ -1,6 +1,8 @@
-from pyleecan.Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slotW11 import (
-    add_rule_parallel_tooth_slotW11,
-)
+from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Classes.SlotW14 import SlotW14
+from pyleecan.Classes.SlotW21 import SlotW21
+from pyleecan.Classes.SlotW23 import SlotW23
+from pyleecan.Classes.SlotW29 import SlotW29
 
 
 def selection_slot_rules(self, is_stator):
@@ -25,15 +27,15 @@ def selection_slot_rules(self, is_stator):
     slot_type = type(self.machine.stator.slot).__name__
 
     # add the correct rule depending on the slot
-    if slot_type == "SlotW11":
-        add_rule_parallel_tooth_slotW11(self, is_stator)
-    elif slot_type == "Parallel Tooth SqB":
-        pass
-    elif slot_type == "Parallel Slot":
-        pass
-    elif slot_type == "Tapered Slot":
-        pass
+    if isinstance(self.machine.stator.slot, SlotW11):
+        self.add_rule_parallel_tooth_slotW11(is_stator)
+    elif isinstance(self.machine.stator.slot, SlotW14):
+        self.add_rule_parallel_tooth_SqB_slotW11(is_stator)
+    elif isinstance(self.machine.stator.slot, SlotW21):
+        self.add_rule_parallel_slot_slotW21(is_stator)
+    elif isinstance(self.machine.stator.slot, SlotW23):
+        self.add_rule_tapered_slot_slotW23(is_stator)
     elif slot_type == "Slotless":
         pass
-    elif slot_type == "Form Wound":
-        pass
+    elif isinstance(self.machine.stator.slot, SlotW29):
+        self.add_rule_form_wound_slotW29(is_stator)

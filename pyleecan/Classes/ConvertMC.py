@@ -46,6 +46,13 @@ except ImportError as error:
     convert_magnet_type_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_hole_type_P import (
+        convert_hole_type_P,
+    )
+except ImportError as error:
+    convert_hole_type_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
         init_other_unit,
     )
@@ -72,6 +79,13 @@ try:
     )
 except ImportError as error:
     convert_magnet_type_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_hole_type_MC import (
+        convert_hole_type_MC,
+    )
+except ImportError as error:
+    convert_hole_type_MC = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -157,6 +171,13 @@ try:
 except ImportError as error:
     add_rule_surface_radial_slotM11 = error
 
+try:
+    from ..Methods.Converter.ConvertMC.selection_SIPMSM_machine_dimension import (
+        selection_SIPMSM_machine_dimension,
+    )
+except ImportError as error:
+    selection_SIPMSM_machine_dimension = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -216,6 +237,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_magnet_type_P = convert_magnet_type_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_hole_type_P
+    if isinstance(convert_hole_type_P, ImportError):
+        convert_hole_type_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_hole_type_P: "
+                    + str(convert_hole_type_P)
+                )
+            )
+        )
+    else:
+        convert_hole_type_P = convert_hole_type_P
     # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
@@ -264,6 +297,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_magnet_type_MC = convert_magnet_type_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_hole_type_MC
+    if isinstance(convert_hole_type_MC, ImportError):
+        convert_hole_type_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_hole_type_MC: "
+                    + str(convert_hole_type_MC)
+                )
+            )
+        )
+    else:
+        convert_hole_type_MC = convert_hole_type_MC
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(
@@ -410,6 +455,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_surface_radial_slotM11 = add_rule_surface_radial_slotM11
+    # cf Methods.Converter.ConvertMC.selection_SIPMSM_machine_dimension
+    if isinstance(selection_SIPMSM_machine_dimension, ImportError):
+        selection_SIPMSM_machine_dimension = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method selection_SIPMSM_machine_dimension: "
+                    + str(selection_SIPMSM_machine_dimension)
+                )
+            )
+        )
+    else:
+        selection_SIPMSM_machine_dimension = selection_SIPMSM_machine_dimension
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

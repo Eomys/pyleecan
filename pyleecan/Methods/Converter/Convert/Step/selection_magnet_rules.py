@@ -1,6 +1,7 @@
-from pyleecan.Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM11 import (
-    add_rule_surface_radial_slotM11,
-)
+from pyleecan.Classes.SlotM11 import SlotM11
+from pyleecan.Classes.SlotM13 import SlotM13
+from pyleecan.Classes.SlotM15 import SlotM15
+from pyleecan.Classes.SlotM16 import SlotM16
 
 
 def selection_magnet_rules(self, is_stator):
@@ -15,11 +16,14 @@ def selection_magnet_rules(self, is_stator):
 
     """
     if self.is_P_to_other:
-        magnet_type = type(self.machine.rotor.slot).__name__
+        self.convert_magnet_type_MC()
 
     else:
-        magnet_type = self.other_dict["[Design_Options]"]["BPM_Rotor"]
+        self.convert_magnet_type_P()
 
-    # add the correct rule depending on the slot
-    if magnet_type in ["Surface_Radial", "SlotM11"]:
-        add_rule_surface_radial_slotM11(self, is_stator)
+    # add the correct rule depending on the hole
+    if isinstance(self.machine.rotor.slot, SlotM11):
+        self.add_rule_surface_radial_slotM11(is_stator)
+
+    elif isinstance(self.machine.rotor.slot, SlotM15):
+        self.add_rule_surface_parallel_slotM15(is_stator)

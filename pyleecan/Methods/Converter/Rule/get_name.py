@@ -6,4 +6,7 @@ def get_name(self):
     self : Rule
         A Rule object
     """
-    return self.file_name or self.fct_name
+    if type(self).__name__ == "RuleComplex":
+        return self.fct_name
+    else:
+        return self.file_name
