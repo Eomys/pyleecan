@@ -2,7 +2,7 @@
 
 import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
-from pyleecan.Methods.Converter.ConvertMC.convert_other_to_dict import (
+from pyleecan.Methods.Converter.ConvertMC.convert_to_P.convert_other_to_dict import (
     convert_other_to_dict,
 )
 
@@ -22,7 +22,9 @@ class Test_converter_mot(object):
         Conv.convert_to_other(machine)
         dict_to_other = Conv.other_dict
         # conversoin file in dict to compare
-        dict_to_mot, other_unit_dict = convert_other_to_dict(Conv, path)
+        convert_other_to_dict(Conv, path)
+
+        dict_to_mot = Conv.other_dict
 
         # selection path and value in dict_to_other created after conversion, and compare this result with dict_to_mot, a file .mot convert in dict
         for path_dict in dict_to_other:

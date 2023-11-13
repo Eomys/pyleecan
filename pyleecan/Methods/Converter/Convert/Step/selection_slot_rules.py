@@ -1,9 +1,6 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Methods.Converter.ConvertMC.Rules.Slot.add_rule_parallel_tooth_slotW11 import (
     add_rule_parallel_tooth_slotW11,
 )
-
-from pyleecan.Methods.Converter.ConvertMC.convert_slot_type import convert_slot_type
 
 
 def selection_slot_rules(self, is_stator):
@@ -19,7 +16,10 @@ def selection_slot_rules(self, is_stator):
     """
 
     # slection slot type and inlementation in obj machine or in dict
-    convert_slot_type(self)
+    if self.is_P_to_other:
+        self.convert_slot_type_MC()
+    else:
+        self.convert_slot_type_P()
 
     # selection name of slot
     slot_type = type(self.machine.stator.slot).__name__

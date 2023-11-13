@@ -45,35 +45,34 @@ def convert_other_to_dict(self, file_path):
 
     other_dict = {}
     for line in file:
+        # deleted \n in line
+        line = line.strip("\n")
         # separation different part like .mot
         if line[:1] == "[":
             temp_dict = {}
-            # deleted \n in line
-            line = line.split("\n")
-            other_dict[line[0]] = temp_dict
-
-        elif line == "\n":
+            other_dict[line] = temp_dict
+        elif line == "":
             pass
 
         else:
             # lb = line before =
             lb = line.split("=")
-            value = lb[1].split("\n")
+            value = lb[1]
 
             # changement type after equal (value)
-            if isint(value[0]):
-                value[0] = int(value[0])
-            elif value[0] == ("True"):
-                value[0] = True
-            elif value[0] == ("False"):
-                value[0] = False
-            elif isfloat(value[0]):
-                value[0] = float(value[0])
+            if isint(value):
+                value = int(value)
+            elif value == ("True"):
+                value = True
+            elif value == ("False"):
+                value = False
+            elif isfloat(value):
+                value = float(value)
 
-            if value[0] == (""):
+            if value == (""):
                 pass
             else:
-                temp_dict[lb[0]] = value[0]
+                temp_dict[lb[0]] = value
 
     # Extract unit dict
     other_unit_dict_temp = other_dict["[Units]"]
@@ -97,7 +96,10 @@ def convert_other_to_dict(self, file_path):
     other_unit_dict[""] = 1  # No unit => No scale
     other_unit_dict["-"] = 1  # No unit => No scale
     other_unit_dict["[]"] = 1  # No unit => No scale
-    return other_dict, other_unit_dict
+
+    self.other_dict = other_dict
+    self.other_unit_dict = other_unit_dict
+    file.close
 
 
 # conversion str in float

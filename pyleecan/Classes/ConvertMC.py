@@ -18,26 +18,60 @@ from .Convert import Convert
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Converter.ConvertMC.convert_other_to_dict import (
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_other_to_dict import (
         convert_other_to_dict,
     )
 except ImportError as error:
     convert_other_to_dict = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_slot_type import convert_slot_type
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_slot_type_P import (
+        convert_slot_type_P,
+    )
 except ImportError as error:
-    convert_slot_type = error
+    convert_slot_type_P = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_machine_type import convert_machine_type
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_machine_type_P import (
+        convert_machine_type_P,
+    )
 except ImportError as error:
-    convert_machine_type = error
+    convert_machine_type_P = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_magnet_type import convert_magnet_type
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_magnet_type_P import (
+        convert_magnet_type_P,
+    )
 except ImportError as error:
-    convert_magnet_type = error
+    convert_magnet_type_P = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
+        init_other_unit,
+    )
+except ImportError as error:
+    init_other_unit = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_slot_type_MC import (
+        convert_slot_type_MC,
+    )
+except ImportError as error:
+    convert_slot_type_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_machine_type_MC import (
+        convert_machine_type_MC,
+    )
+except ImportError as error:
+    convert_machine_type_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_magnet_type_MC import (
+        convert_magnet_type_MC,
+    )
+except ImportError as error:
+    convert_magnet_type_MC = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -123,11 +157,6 @@ try:
 except ImportError as error:
     add_rule_surface_radial_slotM11 = error
 
-try:
-    from ..Methods.Converter.ConvertMC.init_other_unit import init_other_unit
-except ImportError as error:
-    init_other_unit = error
-
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -139,7 +168,7 @@ class ConvertMC(Convert):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Converter.ConvertMC.convert_other_to_dict
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_other_to_dict
     if isinstance(convert_other_to_dict, ImportError):
         convert_other_to_dict = property(
             fget=lambda x: raise_(
@@ -151,42 +180,90 @@ class ConvertMC(Convert):
         )
     else:
         convert_other_to_dict = convert_other_to_dict
-    # cf Methods.Converter.ConvertMC.convert_slot_type
-    if isinstance(convert_slot_type, ImportError):
-        convert_slot_type = property(
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_slot_type_P
+    if isinstance(convert_slot_type_P, ImportError):
+        convert_slot_type_P = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_slot_type: "
-                    + str(convert_slot_type)
+                    "Can't use ConvertMC method convert_slot_type_P: "
+                    + str(convert_slot_type_P)
                 )
             )
         )
     else:
-        convert_slot_type = convert_slot_type
-    # cf Methods.Converter.ConvertMC.convert_machine_type
-    if isinstance(convert_machine_type, ImportError):
-        convert_machine_type = property(
+        convert_slot_type_P = convert_slot_type_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_machine_type_P
+    if isinstance(convert_machine_type_P, ImportError):
+        convert_machine_type_P = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_machine_type: "
-                    + str(convert_machine_type)
+                    "Can't use ConvertMC method convert_machine_type_P: "
+                    + str(convert_machine_type_P)
                 )
             )
         )
     else:
-        convert_machine_type = convert_machine_type
-    # cf Methods.Converter.ConvertMC.convert_magnet_type
-    if isinstance(convert_magnet_type, ImportError):
-        convert_magnet_type = property(
+        convert_machine_type_P = convert_machine_type_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_magnet_type_P
+    if isinstance(convert_magnet_type_P, ImportError):
+        convert_magnet_type_P = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_magnet_type: "
-                    + str(convert_magnet_type)
+                    "Can't use ConvertMC method convert_magnet_type_P: "
+                    + str(convert_magnet_type_P)
                 )
             )
         )
     else:
-        convert_magnet_type = convert_magnet_type
+        convert_magnet_type_P = convert_magnet_type_P
+    # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
+    if isinstance(init_other_unit, ImportError):
+        init_other_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method init_other_unit: "
+                    + str(init_other_unit)
+                )
+            )
+        )
+    else:
+        init_other_unit = init_other_unit
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_slot_type_MC
+    if isinstance(convert_slot_type_MC, ImportError):
+        convert_slot_type_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_slot_type_MC: "
+                    + str(convert_slot_type_MC)
+                )
+            )
+        )
+    else:
+        convert_slot_type_MC = convert_slot_type_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_machine_type_MC
+    if isinstance(convert_machine_type_MC, ImportError):
+        convert_machine_type_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_machine_type_MC: "
+                    + str(convert_machine_type_MC)
+                )
+            )
+        )
+    else:
+        convert_machine_type_MC = convert_machine_type_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_magnet_type_MC
+    if isinstance(convert_magnet_type_MC, ImportError):
+        convert_magnet_type_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_magnet_type_MC: "
+                    + str(convert_magnet_type_MC)
+                )
+            )
+        )
+    else:
+        convert_magnet_type_MC = convert_magnet_type_MC
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(
@@ -333,18 +410,6 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_surface_radial_slotM11 = add_rule_surface_radial_slotM11
-    # cf Methods.Converter.ConvertMC.init_other_unit
-    if isinstance(init_other_unit, ImportError):
-        init_other_unit = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method init_other_unit: "
-                    + str(init_other_unit)
-                )
-            )
-        )
-    else:
-        init_other_unit = init_other_unit
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

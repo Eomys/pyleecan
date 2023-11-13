@@ -1162,10 +1162,14 @@
         "desc": "convertorMC abstract",
         "is_internal": false,
         "methods": [
-            "convert_other_to_dict",
-            "convert_slot_type",
-            "convert_machine_type",
-            "convert_magnet_type",
+            "convert_to_P.convert_other_to_dict",
+            "convert_to_P.convert_slot_type_P",
+            "convert_to_P.convert_machine_type_P",
+            "convert_to_P.convert_magnet_type_P",
+            "convert_to_MC.init_other_unit",
+            "convert_to_MC.convert_slot_type_MC",
+            "convert_to_MC.convert_machine_type_MC",
+            "convert_to_MC.convert_magnet_type_MC",
             "Rules.add_rule_machine_dimension",
             "Rules.add_rule_machine_dimension_surface_magnet",
             "Rules.add_rule_machine_type",
@@ -1177,8 +1181,7 @@
             "Rules.Slot.add_rule_tapered_slot_slotW23",
             "Rules.Lamination.add_rule_lamination",
             "Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15",
-            "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11",
-            "init_other_unit"
+            "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11"
         ],
         "mother": "Convert",
         "name": "ConvertMC",

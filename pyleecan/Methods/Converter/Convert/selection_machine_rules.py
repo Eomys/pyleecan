@@ -10,13 +10,20 @@ def selection_machine_rules(self):
         A ConvertMC object
     """
     # selection machine type, with implementation in obj machine or in dict
-    self.convert_machine_type()
+    if self.is_P_to_other:
+        self.convert_machine_type_MC()
+    else:
+        self.convert_machine_type_P()
     # add rule present in all machine
     self.add_rule_machine_type()
 
     # selecion motor_type
     if isinstance(self.machine, MachineSIPMSM):
-        self.convert_magnet_type()
+        if self.is_P_to_other:
+            self.convert_magnet_type_MC()
+        else:
+            self.convert_magnet_type_P()
+
         magnet_name = type(self.machine.rotor.slot).__name__
 
         if magnet_name in ["SlotM11", "SlotM15"] and self.machine.rotor.slot.H0 == 0:

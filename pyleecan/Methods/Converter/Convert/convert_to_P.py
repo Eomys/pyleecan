@@ -15,7 +15,7 @@ def convert_to_P(self, file_path):
     """
     self.is_P_to_other = False  # Select rules direction
     # conversion file in dict
-    self.other_dict, self.other_unit_dict = self.convert_other_to_dict(file_path)
+    self.convert_other_to_dict(file_path)
     self.rules_list = []
 
     # conversion dict into machine
