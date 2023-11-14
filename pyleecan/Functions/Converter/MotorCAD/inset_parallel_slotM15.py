@@ -1,3 +1,6 @@
+from numpy import sin, tan
+
+
 def other_to_P(self, machine, other_dict, other_unit_dict):
     """conversion obj machine in dict
 
@@ -17,8 +20,19 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
-    other_value = other_dict["[Dimensions]"]["Pole_Number"]
-    machine.set_pole_pair_number(int(other_value / 2))
+    other_path_list = ["[Dimensions]", "Magnet_Thickness"]
+    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    self.unit_type = "ED"
+    other_path_list = ["[Dimensions]", "Magnet_Arc_[ED]"]
+    W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    Rbo = machine.rotor.get_Rbo()
+
+    slot_width = (Rbo + H1) * sin(W1 / 2)
+    machine.rotor.slot.W1 = 2 * slot_width
+
+    machine.rotor.slot.Rtopm = machine.rotor.get_Rbo()
 
     return machine
 
@@ -40,11 +54,5 @@ def P_to_other(self, machine, other_dict):
     other_dict : dict
         A dict with the conversion obj machine
     """
-    pole_pair_number = machine.get_pole_pair_number() * 2
-    if not "[Dimensions]" in other_dict:
-        other_dict["[Dimensions]"] = {}
-        other_dict["[Dimensions]"]["Pole_Number"] = pole_pair_number
 
-    else:
-        other_dict["[Dimensions]"]["Pole_Number"] = pole_pair_number
     return other_dict

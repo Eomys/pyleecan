@@ -87,6 +87,7 @@ def convert_other_to_dict(self, file_path):
         other_unit_dict["m"] = 1
 
     other_unit_dict["rad"] = 1
+    other_unit_dict["deg"] = pi / 180
 
     pole_number = other_dict["[Dimensions]"]["Pole_Number"]
 

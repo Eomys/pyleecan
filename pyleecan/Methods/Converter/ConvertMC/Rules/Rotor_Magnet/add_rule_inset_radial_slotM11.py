@@ -48,3 +48,13 @@ def add_rule_surface_radial_slotM14(self, is_stator):
             file_name=__file__,
         )
     )
+
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Magnet_Thickness"],
+            P_obj_path=f"machine.rotor.slot.H0",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )

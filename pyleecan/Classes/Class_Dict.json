@@ -1184,7 +1184,15 @@
             "Rules.Lamination.add_rule_lamination",
             "Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15",
             "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11",
-            "selection_SIPMSM_machine_dimension"
+            "selection_SIPMSM_machine_dimension",
+            "Rules.Hole.add_rule_interior_U_shape_holeM61",
+            "Rules.Hole.add_rule_interior_V_web_holeM57",
+            "Rules.Hole.add_rule_interior_V_simple_holeM60",
+            "Rules.Hole.add_rule_interior_flat_simple_holeM63",
+            "Rules.Hole.add_rule_interior_flat_web_holeM52",
+            "Rules.Hole.add_rule_embedded_breadleoaf_holeM63",
+            "Rules.Hole.add_rule_embedded_parallel_holeM62",
+            "Rules.Hole.add_rule_embedded_radial_holeM62"
         ],
         "mother": "Convert",
         "name": "ConvertMC",

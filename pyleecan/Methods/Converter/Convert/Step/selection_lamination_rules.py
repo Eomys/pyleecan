@@ -1,9 +1,8 @@
-# from pyleecan.Methods.Funcion.Rules.add_rules_duct_layer import add_rules_duct_layer
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 
 
 def selection_lamination_rules(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for lamination
 
     Parameters
     ----------
@@ -13,7 +12,6 @@ def selection_lamination_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
-    print("lamination")
     if is_stator == True:
         lam_name = "Stator"
     else:
@@ -21,36 +19,13 @@ def selection_lamination_rules(self, is_stator):
 
     # sélection of number and type layers
     if not self.is_P_to_other:
-        pass
-        """
-        type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"]
+        try:
+            type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"]
+        except:
+            type_duct = 0
 
-        if self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"] != 0:
-            if type_duct == 1:
-                name_type_duct = "ArcDuct"
+        if type_duct != 0:
+            self.convert_duct_type_P(is_stator)
 
-            elif type_duct == 2:
-                name_type_duct = "SahftSpoke"
-
-            elif type_duct == 3:
-                name_type_duct = "CircularDuct"
-
-            elif type_duct == 4:
-                name_type_duct = "RectangularDuct"
-
-            temp = self.other_dict["[Through_Vent]"][
-                f"{lam_name}{name_type_duct}Layers"
-            ]
-            for nb_duct in range(temp):
-                # add_rules_duct_layer(
-                self,
-                lam_name,
-                nb_duct,
-                name_type_duct,
-            # )
-        
         else:
-            pass
-            # print("not axial cooling duct")"""
-
-    return self.rules_list
+            print(f"not axial cooling duct at {lam_name}")

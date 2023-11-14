@@ -1,4 +1,4 @@
-def other_to_P(self, machine, other_dict):
+def other_to_P(self, machine, other_dict, other_unit_dict):
     """conversion obj machine in dict
 
     Parameters
@@ -9,6 +9,8 @@ def other_to_P(self, machine, other_dict):
         A pyleecan machine
     other_dict : dict
         A dict with the conversion obj machine
+    other_unit_dict : dict
+        dict with unit to make conversion (key: unit family, value: factor)
 
     Returns
     ---------

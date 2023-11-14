@@ -1,4 +1,4 @@
-def other_to_P(self, machine, other_dict):
+def other_to_P(self, machine, other_dict, other_unit_dict):
     """Adapt the rule complex slotW11_H1
 
     Parameters
@@ -9,6 +9,8 @@ def other_to_P(self, machine, other_dict):
         A obj machine
     other_dict : dict
         A dict with the conversion obj machine
+    other_unit_dict : dict
+        dict with unit to make conversion (key: unit family, value: factor)
 
     Return
     ---------

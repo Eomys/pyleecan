@@ -178,6 +178,62 @@ try:
 except ImportError as error:
     selection_SIPMSM_machine_dimension = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_U_shape_holeM61 import (
+        add_rule_interior_U_shape_holeM61,
+    )
+except ImportError as error:
+    add_rule_interior_U_shape_holeM61 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_V_web_holeM57 import (
+        add_rule_interior_V_web_holeM57,
+    )
+except ImportError as error:
+    add_rule_interior_V_web_holeM57 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_V_simple_holeM60 import (
+        add_rule_interior_V_simple_holeM60,
+    )
+except ImportError as error:
+    add_rule_interior_V_simple_holeM60 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_flat_simple_holeM63 import (
+        add_rule_interior_flat_simple_holeM63,
+    )
+except ImportError as error:
+    add_rule_interior_flat_simple_holeM63 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_flat_web_holeM52 import (
+        add_rule_interior_flat_web_holeM52,
+    )
+except ImportError as error:
+    add_rule_interior_flat_web_holeM52 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_embedded_breadleoaf_holeM63 import (
+        add_rule_embedded_breadleoaf_holeM63,
+    )
+except ImportError as error:
+    add_rule_embedded_breadleoaf_holeM63 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_embedded_parallel_holeM62 import (
+        add_rule_embedded_parallel_holeM62,
+    )
+except ImportError as error:
+    add_rule_embedded_parallel_holeM62 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_embedded_radial_holeM62 import (
+        add_rule_embedded_radial_holeM62,
+    )
+except ImportError as error:
+    add_rule_embedded_radial_holeM62 = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -467,6 +523,102 @@ class ConvertMC(Convert):
         )
     else:
         selection_SIPMSM_machine_dimension = selection_SIPMSM_machine_dimension
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_U_shape_holeM61
+    if isinstance(add_rule_interior_U_shape_holeM61, ImportError):
+        add_rule_interior_U_shape_holeM61 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_interior_U_shape_holeM61: "
+                    + str(add_rule_interior_U_shape_holeM61)
+                )
+            )
+        )
+    else:
+        add_rule_interior_U_shape_holeM61 = add_rule_interior_U_shape_holeM61
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_V_web_holeM57
+    if isinstance(add_rule_interior_V_web_holeM57, ImportError):
+        add_rule_interior_V_web_holeM57 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_interior_V_web_holeM57: "
+                    + str(add_rule_interior_V_web_holeM57)
+                )
+            )
+        )
+    else:
+        add_rule_interior_V_web_holeM57 = add_rule_interior_V_web_holeM57
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_V_simple_holeM60
+    if isinstance(add_rule_interior_V_simple_holeM60, ImportError):
+        add_rule_interior_V_simple_holeM60 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_interior_V_simple_holeM60: "
+                    + str(add_rule_interior_V_simple_holeM60)
+                )
+            )
+        )
+    else:
+        add_rule_interior_V_simple_holeM60 = add_rule_interior_V_simple_holeM60
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_flat_simple_holeM63
+    if isinstance(add_rule_interior_flat_simple_holeM63, ImportError):
+        add_rule_interior_flat_simple_holeM63 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_interior_flat_simple_holeM63: "
+                    + str(add_rule_interior_flat_simple_holeM63)
+                )
+            )
+        )
+    else:
+        add_rule_interior_flat_simple_holeM63 = add_rule_interior_flat_simple_holeM63
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_flat_web_holeM52
+    if isinstance(add_rule_interior_flat_web_holeM52, ImportError):
+        add_rule_interior_flat_web_holeM52 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_interior_flat_web_holeM52: "
+                    + str(add_rule_interior_flat_web_holeM52)
+                )
+            )
+        )
+    else:
+        add_rule_interior_flat_web_holeM52 = add_rule_interior_flat_web_holeM52
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_embedded_breadleoaf_holeM63
+    if isinstance(add_rule_embedded_breadleoaf_holeM63, ImportError):
+        add_rule_embedded_breadleoaf_holeM63 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_embedded_breadleoaf_holeM63: "
+                    + str(add_rule_embedded_breadleoaf_holeM63)
+                )
+            )
+        )
+    else:
+        add_rule_embedded_breadleoaf_holeM63 = add_rule_embedded_breadleoaf_holeM63
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_embedded_parallel_holeM62
+    if isinstance(add_rule_embedded_parallel_holeM62, ImportError):
+        add_rule_embedded_parallel_holeM62 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_embedded_parallel_holeM62: "
+                    + str(add_rule_embedded_parallel_holeM62)
+                )
+            )
+        )
+    else:
+        add_rule_embedded_parallel_holeM62 = add_rule_embedded_parallel_holeM62
+    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_embedded_radial_holeM62
+    if isinstance(add_rule_embedded_radial_holeM62, ImportError):
+        add_rule_embedded_radial_holeM62 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_embedded_radial_holeM62: "
+                    + str(add_rule_embedded_radial_holeM62)
+                )
+            )
+        )
+    else:
+        add_rule_embedded_radial_holeM62 = add_rule_embedded_radial_holeM62
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

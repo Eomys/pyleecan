@@ -17,7 +17,7 @@ def convert_magnet_type_MC(self):
     elif magnet_type == "SlotM15" and self.machine.rotor.slot.H0 == 0:
         name_slot = "Surface_Parallel"
 
-    elif magnet_type == "SlotM13" and self.machine.rotor.slot.H0 == 0:
+    elif magnet_type == "SlotM13":
         name_slot = "Surface_Breadleaof"
 
     if magnet_type == "SlotM11":
@@ -26,7 +26,7 @@ def convert_magnet_type_MC(self):
     elif magnet_type == "SlotM15":
         name_slot = "Inset_Parallel"
 
-    elif magnet_type == "SlotM13":
+    elif magnet_type == "SlotM12":
         name_slot = "Inset_Breadleaof"
 
     elif magnet_type == "SlotM16":

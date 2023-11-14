@@ -7,7 +7,7 @@ def convert_hole_type_MC(self):
         A ConvertMC object
     """
     # conversion to pyleecan
-    motor_type = type(self.machine.stator.slot).__name__
+    motor_type = type(self.machine.rotor.hole).__name__
 
     # selection type of Slot
     if motor_type == "HoleM62" and self.machine.rotor.hole.W0_is_rad == False:

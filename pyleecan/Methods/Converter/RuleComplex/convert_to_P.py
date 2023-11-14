@@ -12,6 +12,6 @@ def convert_to_P(self, other_dict, machine, other_unit_dict):
     other_unit_dict : dict
         dict with unit to make conversion (key: unit family, value: factor)
     """
-    machine = self.other_to_P(self, machine, other_dict)
+    machine = self.other_to_P(self, machine, other_dict, other_unit_dict)
 
     return machine

@@ -1,4 +1,7 @@
-def other_to_P(self, machine, other_dict):
+from numpy import sin, tan
+
+
+def other_to_P(self, machine, other_dict, other_unit_dict):
     """conversion obj machine in dict
 
     Parameters
@@ -9,15 +12,30 @@ def other_to_P(self, machine, other_dict):
         A pyleecan machine
     other_dict : dict
         A dict with the conversion obj machine
+    other_unit_dict : dict
+        dict with unit to make conversion (key: unit family, value: factor)
 
     Returns
     ---------
     machine : Machine
         A pyleecan machine
     """
+    other_path_list = ["[Dimensions]", "Magnet_Thickness"]
+    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    self.unit_type = "ED"
+    other_path_list = ["[Dimensions]", "Magnet_Arc_[ED]"]
+    W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    self.unit_type = "m"
+    other_path_list = ["[Dimensions]", "Magnet_Reduction"]
+    Red = self.get_other(other_dict, other_path_list, other_unit_dict)
+
     Rbo = machine.rotor.get_Rbo()
-    H1 = other_dict["[Dimensions]"]["Magnet_Thickness"] * 0.001
-    machine.rotor.slot.Rtopm = Rbo + H1
+
+    slot_width = (Rbo + H1) * sin(W1 / 2)
+    machine.rotor.slot.W1 = 2 * slot_width
+    machine.rotor.slot.Rtopm = (slot_width / tan(W1 / 2)) + Red
 
     return machine
 
