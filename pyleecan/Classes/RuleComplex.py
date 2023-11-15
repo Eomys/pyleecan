@@ -83,7 +83,13 @@ class RuleComplex(Rule):
     get_logger = get_logger
 
     def __init__(
-        self, fct_name=None, folder=None, unit_type="m", init_dict=None, init_str=None
+        self,
+        fct_name=None,
+        folder=None,
+        id=None,
+        unit_type="m",
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -104,11 +110,14 @@ class RuleComplex(Rule):
                 fct_name = init_dict["fct_name"]
             if "folder" in list(init_dict.keys()):
                 folder = init_dict["folder"]
+            if "id" in list(init_dict.keys()):
+                id = init_dict["id"]
             if "unit_type" in list(init_dict.keys()):
                 unit_type = init_dict["unit_type"]
         # Set the properties (value check and convertion are done in setter)
         self.fct_name = fct_name
         self.folder = folder
+        self.id = id
         # Call Rule init
         super(RuleComplex, self).__init__(unit_type=unit_type)
         # The class is frozen (in Rule init), for now it's impossible to
@@ -122,6 +131,7 @@ class RuleComplex(Rule):
         RuleComplex_str += super(RuleComplex, self).__str__()
         RuleComplex_str += 'fct_name = "' + str(self.fct_name) + '"' + linesep
         RuleComplex_str += 'folder = "' + str(self.folder) + '"' + linesep
+        RuleComplex_str += "id = " + str(self.id) + linesep
         return RuleComplex_str
 
     def __eq__(self, other):
@@ -136,6 +146,8 @@ class RuleComplex(Rule):
         if other.fct_name != self.fct_name:
             return False
         if other.folder != self.folder:
+            return False
+        if other.id != self.id:
             return False
         return True
 
@@ -178,6 +190,12 @@ class RuleComplex(Rule):
                 diff_list.append(name + ".folder" + val_str)
             else:
                 diff_list.append(name + ".folder")
+        if other._id != self._id:
+            if is_add_value:
+                val_str = " (self=" + str(self._id) + ", other=" + str(other._id) + ")"
+                diff_list.append(name + ".id" + val_str)
+            else:
+                diff_list.append(name + ".id")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -191,6 +209,7 @@ class RuleComplex(Rule):
         S += super(RuleComplex, self).__sizeof__()
         S += getsizeof(self.fct_name)
         S += getsizeof(self.folder)
+        S += getsizeof(self.id)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -212,6 +231,7 @@ class RuleComplex(Rule):
         )
         RuleComplex_dict["fct_name"] = self.fct_name
         RuleComplex_dict["folder"] = self.folder
+        RuleComplex_dict["id"] = self.id
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RuleComplex_dict["__class__"] = "RuleComplex"
@@ -223,10 +243,11 @@ class RuleComplex(Rule):
         # Handle deepcopy of all the properties
         fct_name_val = self.fct_name
         folder_val = self.folder
+        id_val = self.id
         unit_type_val = self.unit_type
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            fct_name=fct_name_val, folder=folder_val, unit_type=unit_type_val
+            fct_name=fct_name_val, folder=folder_val, id=id_val, unit_type=unit_type_val
         )
         return obj_copy
 
@@ -235,6 +256,7 @@ class RuleComplex(Rule):
 
         self.fct_name = None
         self.folder = None
+        self.id = None
         # Set to None the properties inherited from Rule
         super(RuleComplex, self)._set_None()
 
@@ -266,5 +288,23 @@ class RuleComplex(Rule):
         doc=u"""name source
 
         :Type: str
+        """,
+    )
+
+    def _get_id(self):
+        """getter of id"""
+        return self._id
+
+    def _set_id(self, value):
+        """setter of id"""
+        check_var("id", value, "int")
+        self._id = value
+
+    id = property(
+        fget=_get_id,
+        fset=_set_id,
+        doc=u"""Identifaction number of param 
+
+        :Type: int
         """,
     )

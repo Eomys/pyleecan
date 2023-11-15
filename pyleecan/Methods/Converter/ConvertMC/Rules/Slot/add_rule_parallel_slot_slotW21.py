@@ -21,8 +21,6 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
 
     rule_list = self.rules_list
 
-    rule_list.append(RuleComplex(fct_name="parallel_slot_slotW21", folder="MotorCAD"))
-
     rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
@@ -45,7 +43,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
 
     rule_list.append(
         RuleSimple(
-            other=["[Dimensions]", "Tooth_Width"],
+            other_key_list=["[Dimensions]", "Tooth_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W2",
             unit_type="m",
             scaling_to_P=1,
@@ -68,7 +66,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
             RuleSimple(
                 other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
                 P_obj_path=f"machine.{lam_name}.slot.H1",
-                unit_type="rad",
+                unit_type="deg",
                 scaling_to_P=1,
                 file_name=__file__,
             )

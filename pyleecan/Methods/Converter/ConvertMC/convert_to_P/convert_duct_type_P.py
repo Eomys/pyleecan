@@ -24,34 +24,36 @@ def convert_duct_type_P(self, is_stator):
     type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"]
 
     if type_duct == 0:
-        print(f"not axial cooling duct at {lam_name}")
-
+        pass
     elif type_duct == 1:  # CircularDuct
         number_duct = self.other_dict["[Dimensions]"][f"{lam_name}RadialDuct_Number"]
         for duct_id in range(number_duct):
-            self.machine.lam_name.axial_vent.append(VentilationCirc())
-            self.add_rule_circular_duct_circular(is_stator)
+            if is_stator == True:
+                self.machine.stator.axial_vent.append(VentilationCirc())
+            else:
+                self.machine.rotor.axial_vent.append(VentilationCirc())
+            self.add_rule_circular_duct_circular(is_stator, duct_id)
 
-    elif type_duct == 2:
-        name_type_duct = "SahftSpoke"
+    elif type_duct == 2:  # Shaft_spoke
+        print("SahftSpoke")
 
-    elif type_duct == 3:
-        name_type_duct = "ArcDuct"
+    elif type_duct == 3:  # Arcduct
         number_duct = self.other_dict["[Dimensions]"][f"{lam_name}RadialDuct_Number"]
         for duct_id in range(number_duct):
-            self.machine.lam_name.axial_vent.append(VentilationPolar())
+            if is_stator == True:
+                self.machine.stator.axial_vent.append(VentilationPolar())
+            else:
+                self.machine.rotor.axial_vent.append(VentilationPolar())
+            self.add_rule_arc_duct_polar(is_stator, duct_id)
 
-    elif type_duct == 4:
-        name_type_duct = "RectangularDuct"
+    elif type_duct == 4:  # RectangularDuct
         number_duct = self.other_dict["[Dimensions]"][f"{lam_name}RadialDuct_Number"]
         for duct_id in range(number_duct):
-            self.machine.lam_name.axial_vent.append(VentilationTrap())
+            if is_stator == True:
+                self.machine.stator.axial_vent.append(VentilationTrap())
+            else:
+                self.machine.rotor.axial_vent.append(VentilationTrap())
+            self.add_rule_rectangular_duct_trapeze(is_stator, duct_id)
 
-    temp = self.other_dict["[Through_Vent]"][f"{lam_name}{name_type_duct}Layers"]
-    for nb_duct in range(temp):
-        self.add_rules_duct_layer(
-            self,
-            lam_name,
-            nb_duct,
-            name_type_duct,
-        )
+    else:
+        raise NameError("type of duct have not equivalent in pyleecan")

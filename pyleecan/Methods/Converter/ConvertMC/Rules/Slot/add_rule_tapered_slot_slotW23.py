@@ -67,7 +67,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         RuleSimple(
             other=["[Dimensions]", "Tooth_Tip_Angle"],
             P_obj_path=f"machine.{lam_name}.slot.H1",
-            unit_type="rad",
+            unit_type="deg",
             scaling_to_P=1,
             file_name=__file__,
         )

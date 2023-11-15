@@ -77,7 +77,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
             RuleSimple(
                 other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
                 P_obj_path=f"machine.{lam_name}.slot.H1",
-                unit_type="rad",
+                unit_type="deg",
                 scaling_to_P=1,
                 file_name=__file__,
             )

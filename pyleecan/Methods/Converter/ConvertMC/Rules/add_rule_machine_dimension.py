@@ -45,6 +45,16 @@ def add_rule_machine_dimension(self):
         )
     )
 
+    rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Shaft_Dia"],
+            P_obj_path="machine.shaft.Drsh",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
     if self.is_P_to_other == True:
         rules_list.append(
             RuleEquation(

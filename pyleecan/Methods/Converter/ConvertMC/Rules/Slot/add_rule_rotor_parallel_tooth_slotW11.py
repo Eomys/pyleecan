@@ -62,7 +62,7 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
         RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Tip_Angle_[T]"],
             P_obj_path=f"machine.rotor.slot.H1",
-            unit_type="rad",
+            unit_type="deg",
             scaling_to_P=1,
             file_name=__file__,
         )

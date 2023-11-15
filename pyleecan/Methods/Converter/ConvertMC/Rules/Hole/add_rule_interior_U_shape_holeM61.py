@@ -21,7 +21,7 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"Magnet_Thickness"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
             unit_type="m",
             scaling_to_P=1,
@@ -31,7 +31,7 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"UShape_BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H2",
             unit_type="m",
             scaling_to_P=1,
@@ -41,37 +41,7 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"PoleVAngle_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
-            unit_type="rad",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    rule_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetPost_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].1",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    rule_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetVWidth_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
-            unit_type="rad",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    rule_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", f"WebThickness_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"UShape_WebThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W3",
             unit_type="m",
             scaling_to_P=1,
@@ -81,10 +51,14 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetBarWidth_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W4",
+            other_key_list=["[Dimensions]", f"Magnet_Post"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
+    )
+
+    self.rules_list.append(
+        RuleComplex(fct_name="interior_U_shape_holeM61", folder="MotorCAD", id=hole_id)
     )

@@ -53,6 +53,13 @@ except ImportError as error:
     convert_hole_type_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_duct_type_P import (
+        convert_duct_type_P,
+    )
+except ImportError as error:
+    convert_duct_type_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
         init_other_unit,
     )
@@ -86,6 +93,13 @@ try:
     )
 except ImportError as error:
     convert_hole_type_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_duct_type_MC import (
+        convert_duct_type_MC,
+    )
+except ImportError as error:
+    convert_duct_type_MC = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -158,6 +172,27 @@ except ImportError as error:
     add_rule_lamination = error
 
 try:
+    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_circular_duct_circular import (
+        add_rule_circular_duct_circular,
+    )
+except ImportError as error:
+    add_rule_circular_duct_circular = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_arc_duct_polar import (
+        add_rule_arc_duct_polar,
+    )
+except ImportError as error:
+    add_rule_arc_duct_polar = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_rectangular_duct_trapeze import (
+        add_rule_rectangular_duct_trapeze,
+    )
+except ImportError as error:
+    add_rule_rectangular_duct_trapeze = error
+
+try:
     from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15 import (
         add_rule_surface_parallel_slotM15,
     )
@@ -170,6 +205,41 @@ try:
     )
 except ImportError as error:
     add_rule_surface_radial_slotM11 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13 import (
+        add_rule_surface_breadloaf_slotM13,
+    )
+except ImportError as error:
+    add_rule_surface_breadloaf_slotM13 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_spoke_slotM16 import (
+        add_rule_spoke_slotM16,
+    )
+except ImportError as error:
+    add_rule_spoke_slotM16 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_inset_radial_slotM11 import (
+        add_rule_inset_radial_slotM11,
+    )
+except ImportError as error:
+    add_rule_inset_radial_slotM11 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_inset_parallel_slotM15 import (
+        add_rule_inset_parallel_slotM15,
+    )
+except ImportError as error:
+    add_rule_inset_parallel_slotM15 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_inset_breadloaf_slotM12 import (
+        add_rule_inset_breadloaf_slotM12,
+    )
+except ImportError as error:
+    add_rule_inset_breadloaf_slotM12 = error
 
 try:
     from ..Methods.Converter.ConvertMC.selection_SIPMSM_machine_dimension import (
@@ -305,6 +375,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_hole_type_P = convert_hole_type_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_duct_type_P
+    if isinstance(convert_duct_type_P, ImportError):
+        convert_duct_type_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_duct_type_P: "
+                    + str(convert_duct_type_P)
+                )
+            )
+        )
+    else:
+        convert_duct_type_P = convert_duct_type_P
     # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
@@ -365,6 +447,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_hole_type_MC = convert_hole_type_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_duct_type_MC
+    if isinstance(convert_duct_type_MC, ImportError):
+        convert_duct_type_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_duct_type_MC: "
+                    + str(convert_duct_type_MC)
+                )
+            )
+        )
+    else:
+        convert_duct_type_MC = convert_duct_type_MC
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(
@@ -487,6 +581,42 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_lamination = add_rule_lamination
+    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_circular_duct_circular
+    if isinstance(add_rule_circular_duct_circular, ImportError):
+        add_rule_circular_duct_circular = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_circular_duct_circular: "
+                    + str(add_rule_circular_duct_circular)
+                )
+            )
+        )
+    else:
+        add_rule_circular_duct_circular = add_rule_circular_duct_circular
+    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_arc_duct_polar
+    if isinstance(add_rule_arc_duct_polar, ImportError):
+        add_rule_arc_duct_polar = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_arc_duct_polar: "
+                    + str(add_rule_arc_duct_polar)
+                )
+            )
+        )
+    else:
+        add_rule_arc_duct_polar = add_rule_arc_duct_polar
+    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_rectangular_duct_trapeze
+    if isinstance(add_rule_rectangular_duct_trapeze, ImportError):
+        add_rule_rectangular_duct_trapeze = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_rectangular_duct_trapeze: "
+                    + str(add_rule_rectangular_duct_trapeze)
+                )
+            )
+        )
+    else:
+        add_rule_rectangular_duct_trapeze = add_rule_rectangular_duct_trapeze
     # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15
     if isinstance(add_rule_surface_parallel_slotM15, ImportError):
         add_rule_surface_parallel_slotM15 = property(
@@ -511,6 +641,66 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_surface_radial_slotM11 = add_rule_surface_radial_slotM11
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13
+    if isinstance(add_rule_surface_breadloaf_slotM13, ImportError):
+        add_rule_surface_breadloaf_slotM13 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_surface_breadloaf_slotM13: "
+                    + str(add_rule_surface_breadloaf_slotM13)
+                )
+            )
+        )
+    else:
+        add_rule_surface_breadloaf_slotM13 = add_rule_surface_breadloaf_slotM13
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_spoke_slotM16
+    if isinstance(add_rule_spoke_slotM16, ImportError):
+        add_rule_spoke_slotM16 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_spoke_slotM16: "
+                    + str(add_rule_spoke_slotM16)
+                )
+            )
+        )
+    else:
+        add_rule_spoke_slotM16 = add_rule_spoke_slotM16
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_inset_radial_slotM11
+    if isinstance(add_rule_inset_radial_slotM11, ImportError):
+        add_rule_inset_radial_slotM11 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_inset_radial_slotM11: "
+                    + str(add_rule_inset_radial_slotM11)
+                )
+            )
+        )
+    else:
+        add_rule_inset_radial_slotM11 = add_rule_inset_radial_slotM11
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_inset_parallel_slotM15
+    if isinstance(add_rule_inset_parallel_slotM15, ImportError):
+        add_rule_inset_parallel_slotM15 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_inset_parallel_slotM15: "
+                    + str(add_rule_inset_parallel_slotM15)
+                )
+            )
+        )
+    else:
+        add_rule_inset_parallel_slotM15 = add_rule_inset_parallel_slotM15
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_inset_breadloaf_slotM12
+    if isinstance(add_rule_inset_breadloaf_slotM12, ImportError):
+        add_rule_inset_breadloaf_slotM12 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_inset_breadloaf_slotM12: "
+                    + str(add_rule_inset_breadloaf_slotM12)
+                )
+            )
+        )
+    else:
+        add_rule_inset_breadloaf_slotM12 = add_rule_inset_breadloaf_slotM12
     # cf Methods.Converter.ConvertMC.selection_SIPMSM_machine_dimension
     if isinstance(selection_SIPMSM_machine_dimension, ImportError):
         selection_SIPMSM_machine_dimension = property(
