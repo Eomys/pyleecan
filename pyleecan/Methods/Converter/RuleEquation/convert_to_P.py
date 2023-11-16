@@ -1,5 +1,6 @@
 from sympy import Symbol
 from sympy.solvers import solve
+from numpy import pi
 
 
 def convert_to_P(self, other_dict, machine, other_unit_dict):

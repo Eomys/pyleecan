@@ -67,7 +67,7 @@ def add_rule_parallel_tooth_SqB_slotW14(rule_list, is_stator):
 
     rule_list.append(
         RuleEquation(
-            param_=[
+            param=[
                 {
                     "src": "other",
                     "path": ["[Dimensions]", "Slot_Depth"],

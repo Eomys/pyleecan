@@ -1187,6 +1187,7 @@
             "Rules.Lamination.add_rule_circular_duct_circular",
             "Rules.Lamination.add_rule_arc_duct_polar",
             "Rules.Lamination.add_rule_rectangular_duct_trapeze",
+            "Rules.Lamination.add_rule_notch",
             "Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15",
             "Rules.Rotor_Magnet.add_rule_surface_radial_slotM11",
             "Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13",
@@ -12383,13 +12384,13 @@
             },
             {
                 "as_dict": "",
-                "desc": "Identifaction number of param ",
+                "desc": "dict to pass param ",
                 "max": "",
                 "min": "",
-                "name": "id",
-                "type": "int",
+                "name": "param_dict",
+                "type": "dict",
                 "unit": "-",
-                "value": null
+                "value": {}
             }
         ]
     },

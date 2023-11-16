@@ -86,7 +86,7 @@ class RuleComplex(Rule):
         self,
         fct_name=None,
         folder=None,
-        id=None,
+        param_dict=-1,
         unit_type="m",
         init_dict=None,
         init_str=None,
@@ -110,14 +110,14 @@ class RuleComplex(Rule):
                 fct_name = init_dict["fct_name"]
             if "folder" in list(init_dict.keys()):
                 folder = init_dict["folder"]
-            if "id" in list(init_dict.keys()):
-                id = init_dict["id"]
+            if "param_dict" in list(init_dict.keys()):
+                param_dict = init_dict["param_dict"]
             if "unit_type" in list(init_dict.keys()):
                 unit_type = init_dict["unit_type"]
         # Set the properties (value check and convertion are done in setter)
         self.fct_name = fct_name
         self.folder = folder
-        self.id = id
+        self.param_dict = param_dict
         # Call Rule init
         super(RuleComplex, self).__init__(unit_type=unit_type)
         # The class is frozen (in Rule init), for now it's impossible to
@@ -131,7 +131,7 @@ class RuleComplex(Rule):
         RuleComplex_str += super(RuleComplex, self).__str__()
         RuleComplex_str += 'fct_name = "' + str(self.fct_name) + '"' + linesep
         RuleComplex_str += 'folder = "' + str(self.folder) + '"' + linesep
-        RuleComplex_str += "id = " + str(self.id) + linesep
+        RuleComplex_str += "param_dict = " + str(self.param_dict) + linesep
         return RuleComplex_str
 
     def __eq__(self, other):
@@ -147,7 +147,7 @@ class RuleComplex(Rule):
             return False
         if other.folder != self.folder:
             return False
-        if other.id != self.id:
+        if other.param_dict != self.param_dict:
             return False
         return True
 
@@ -190,12 +190,18 @@ class RuleComplex(Rule):
                 diff_list.append(name + ".folder" + val_str)
             else:
                 diff_list.append(name + ".folder")
-        if other._id != self._id:
+        if other._param_dict != self._param_dict:
             if is_add_value:
-                val_str = " (self=" + str(self._id) + ", other=" + str(other._id) + ")"
-                diff_list.append(name + ".id" + val_str)
+                val_str = (
+                    " (self="
+                    + str(self._param_dict)
+                    + ", other="
+                    + str(other._param_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".param_dict" + val_str)
             else:
-                diff_list.append(name + ".id")
+                diff_list.append(name + ".param_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -209,7 +215,9 @@ class RuleComplex(Rule):
         S += super(RuleComplex, self).__sizeof__()
         S += getsizeof(self.fct_name)
         S += getsizeof(self.folder)
-        S += getsizeof(self.id)
+        if self.param_dict is not None:
+            for key, value in self.param_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -231,7 +239,9 @@ class RuleComplex(Rule):
         )
         RuleComplex_dict["fct_name"] = self.fct_name
         RuleComplex_dict["folder"] = self.folder
-        RuleComplex_dict["id"] = self.id
+        RuleComplex_dict["param_dict"] = (
+            self.param_dict.copy() if self.param_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RuleComplex_dict["__class__"] = "RuleComplex"
@@ -243,11 +253,17 @@ class RuleComplex(Rule):
         # Handle deepcopy of all the properties
         fct_name_val = self.fct_name
         folder_val = self.folder
-        id_val = self.id
+        if self.param_dict is None:
+            param_dict_val = None
+        else:
+            param_dict_val = self.param_dict.copy()
         unit_type_val = self.unit_type
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            fct_name=fct_name_val, folder=folder_val, id=id_val, unit_type=unit_type_val
+            fct_name=fct_name_val,
+            folder=folder_val,
+            param_dict=param_dict_val,
+            unit_type=unit_type_val,
         )
         return obj_copy
 
@@ -256,7 +272,7 @@ class RuleComplex(Rule):
 
         self.fct_name = None
         self.folder = None
-        self.id = None
+        self.param_dict = None
         # Set to None the properties inherited from Rule
         super(RuleComplex, self)._set_None()
 
@@ -291,20 +307,22 @@ class RuleComplex(Rule):
         """,
     )
 
-    def _get_id(self):
-        """getter of id"""
-        return self._id
+    def _get_param_dict(self):
+        """getter of param_dict"""
+        return self._param_dict
 
-    def _set_id(self, value):
-        """setter of id"""
-        check_var("id", value, "int")
-        self._id = value
+    def _set_param_dict(self, value):
+        """setter of param_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("param_dict", value, "dict")
+        self._param_dict = value
 
-    id = property(
-        fget=_get_id,
-        fset=_set_id,
-        doc=u"""Identifaction number of param 
+    param_dict = property(
+        fget=_get_param_dict,
+        fset=_set_param_dict,
+        doc=u"""dict to pass param 
 
-        :Type: int
+        :Type: dict
         """,
     )

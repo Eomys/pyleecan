@@ -106,3 +106,32 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
             file_name=__file__,
         )
     )
+
+    if self.is_P_to_other == False:
+        self.rules_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": [
+                            "[Dimensions]",
+                            "Pole_Number",
+                        ],
+                        "variable": "a",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": f"machine.{lam_name_py}.axial_vent[{duct_id}].Alpha0",
+                        "variable": "b",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": f"machine.{lam_name_py}.axial_vent[{duct_id}].Alpha0",
+                        "variable": "x",
+                    },
+                ],
+                unit_type="",
+                equation="pi/a= x+b",
+                file_name=__file__,
+            )
+        )

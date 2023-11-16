@@ -60,5 +60,33 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
     )
 
     self.rules_list.append(
-        RuleComplex(fct_name="interior_U_shape_holeM61", folder="MotorCAD", id=hole_id)
+        RuleComplex(
+            fct_name="interior_U_shape_holeM61",
+            folder="MotorCAD",
+            param_dict={"hole_id": hole_id},
+        )
     )
+
+    if self.is_P_to_other == False:
+        self.rules_list.append(
+            RuleEquation(
+                param=[
+                    {
+                        "src": "other",
+                        "path": [
+                            "[Dimensions]",
+                            "Pole_Number",
+                        ],
+                        "variable": "a",
+                    },
+                    {
+                        "src": "pyleecan",
+                        "path": f"machine.rotor.hole[{hole_id}].Alpha0",
+                        "variable": "x",
+                    },
+                ],
+                unit_type="",
+                equation="pi/a= x",
+                file_name=__file__,
+            )
+        )

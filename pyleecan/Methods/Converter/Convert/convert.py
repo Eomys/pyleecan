@@ -30,6 +30,9 @@ def convert(self):
                     self.other_dict, self.machine, self.other_unit_dict
                 )
             except Exception as e:
+                self.get_logger().error(
+                    "Error while running rule " + rule.get_name() + ":\n" + str(e)
+                )
                 raise Exception(
                     "Error while running rule " + rule.get_name() + ":\n" + str(e)
                 )

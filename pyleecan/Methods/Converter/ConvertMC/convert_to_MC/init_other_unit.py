@@ -18,6 +18,7 @@ def init_other_unit(self):
     # we want to have m so we need to multiply by 1000
 
     self.other_unit_dict["rad"] = 1
+    self.other_unit_dict["deg"] = 180 / pi
 
     # conversion electrical degree
     pole_pair_number = self.machine.get_pole_pair_number()

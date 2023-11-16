@@ -193,6 +193,13 @@ except ImportError as error:
     add_rule_rectangular_duct_trapeze = error
 
 try:
+    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_notch import (
+        add_rule_notch,
+    )
+except ImportError as error:
+    add_rule_notch = error
+
+try:
     from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15 import (
         add_rule_surface_parallel_slotM15,
     )
@@ -617,6 +624,17 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_rectangular_duct_trapeze = add_rule_rectangular_duct_trapeze
+    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_notch
+    if isinstance(add_rule_notch, ImportError):
+        add_rule_notch = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_notch: " + str(add_rule_notch)
+                )
+            )
+        )
+    else:
+        add_rule_notch = add_rule_notch
     # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15
     if isinstance(add_rule_surface_parallel_slotM15, ImportError):
         add_rule_surface_parallel_slotM15 = property(

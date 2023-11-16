@@ -20,4 +20,9 @@ def convert_to_P(self, file_path):
 
     # conversion dict into machine
     self.convert()
+
+    list_path = file_path.split(".")
+    name = list_path[-2].split("/")
+    self.machine.name = name[-1]
+
     return self.machine

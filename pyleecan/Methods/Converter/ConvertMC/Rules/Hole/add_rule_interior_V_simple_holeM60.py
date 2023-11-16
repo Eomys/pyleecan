@@ -59,12 +59,27 @@ def add_rule_interior_V_simple_holeM60(self, is_stator, hole_id):
         )
     )
 
-    rule_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", f"VSimpleWidth_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
+    self.rules_list.append(
+        RuleEquation(
+            param=[
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", f"VSimpleWidth_Array[{hole_id}]"],
+                    "variable": "y",
+                },
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
+                    "variable": "a",
+                },
+                {
+                    "src": "pyleecan",
+                    "path": f"machine.rotor.hole[{hole_id}].W2",
+                    "variable": "x",
+                },
+            ],
             unit_type="m",
-            scaling_to_P=1,
+            equation="y+a = x",
             file_name=__file__,
         )
     )

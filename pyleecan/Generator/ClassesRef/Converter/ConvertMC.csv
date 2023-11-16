@@ -26,6 +26,7 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,Rules.Lamination.add_rule_circular_duct_circular,,,,,,
 ,,Rules.Lamination.add_rule_arc_duct_polar,,,,,,
 ,,Rules.Lamination.add_rule_rectangular_duct_trapeze,,,,,,
+,,Rules.Lamination.add_rule_notch,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_surface_radial_slotM11,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13,,,,,,

@@ -1,5 +1,4 @@
-from numpy import sin, tan
-from pyleecan.Classes.Magnet import Magnet
+from numpy import cos, sqrt
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -21,27 +20,20 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
-
-    try:
-        hole_id = self.param_dict["hole_id"]
-    except:
-        ValueError("hole_id isn't found")
-
-    self.unit_type = "m"
-    other_path_list = ["[Dimensions]", f"UShape_InnerDiameter_Array[{hole_id}]"]
-    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
-
+    other_path_list = ["[Dimensions]", "PoleNotchDepth"]
+    H0 = self.get_other(other_dict, other_path_list, other_unit_dict)
     Rbo = machine.rotor.get_Rbo()
 
-    machine.rotor.hole[hole_id].H0 = Rbo - H1 / 2
+    self.unit_type = "ED"
+    other_path_list = ["[Dimensions]", "PoleNotchArc_Outer"]
+    W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    point_dict = machine.rotor.hole[hole_id]._comp_point_coordinate()
-    Z4 = point_dict["Z4"]
-    Z3 = point_dict["Z3"]
-    Z2 = point_dict["Z2"]
+    self.unit_type = "ED"
+    other_path_list = ["[Dimensions]", "PoleNotchArc_Inner"]
+    W0 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    machine.rotor.hole[hole_id].W1 = 0.001
-    machine.rotor.hole[hole_id].W2 = 0.001
+    machine.rotor.notch[0].notch_shape.W1 = sqrt(2 * Rbo**2 * (1 - cos(W1)))
+    machine.rotor.notch[0].notch_shape.W0 = sqrt(2 * (Rbo - H0) ** 2 * (1 - cos(W0)))
 
     return machine
 
