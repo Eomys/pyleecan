@@ -7,7 +7,7 @@ from pyleecan.Classes.HoleM63 import HoleM63
 
 
 def selection_hole_rules(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for hole and add hole into obj machine
 
     Parameters
     ----------

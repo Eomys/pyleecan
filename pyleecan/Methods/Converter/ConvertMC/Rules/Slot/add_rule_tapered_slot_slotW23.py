@@ -21,8 +21,6 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list.append(RuleComplex(fct_name="tapered_slot_slotW23", folder="MotorCAD"))
-
     rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],

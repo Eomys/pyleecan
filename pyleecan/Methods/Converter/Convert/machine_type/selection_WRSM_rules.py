@@ -7,5 +7,4 @@ def selection_WRSM_rules(self):
         A ConvertMC object
 
     """
-    raise Exception("Not Implemented Yet")
-    print("WRSM")
+    print("WRSM, not yet defined")

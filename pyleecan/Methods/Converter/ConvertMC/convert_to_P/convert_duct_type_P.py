@@ -19,13 +19,16 @@ def convert_duct_type_P(self, is_stator):
     else:
         lam_name = "Rotor"
 
-    # sélection of number and type layers
+    # selection of number and type layers
+    try:
+        type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}_Duct_Type"]
+    except:
+        type_duct = f"No_{lam_name}_Duct"
 
-    type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}DuctType"]
+    if type_duct == f"No_{lam_name}_Duct":
+        self.get_logger().info(f"not axial cooling duct at {lam_name}")
 
-    if type_duct == 0:
-        pass
-    elif type_duct == 1:  # CircularDuct
+    elif type_duct == f"{lam_name}_Circular_Ducts":  # CircularDuct
         number_duct = self.other_dict["[Dimensions]"][f"{lam_name}RadialDuct_Number"]
         for duct_id in range(number_duct):
             if is_stator == True:
@@ -35,9 +38,9 @@ def convert_duct_type_P(self, is_stator):
             self.add_rule_circular_duct_circular(is_stator, duct_id)
 
     elif type_duct == 2:  # Shaft_spoke
-        print("SahftSpoke")
+        self.get_logger().info(f"ShaftSpoke ins't define in pyleecan")
 
-    elif type_duct == 3:  # Arcduct
+    elif type_duct == f"{lam_name}_Arc_Ducts":  # Arcduct
         number_duct = self.other_dict["[Dimensions]"][f"{lam_name}RadialDuct_Number"]
         for duct_id in range(number_duct):
             if is_stator == True:
@@ -46,7 +49,7 @@ def convert_duct_type_P(self, is_stator):
                 self.machine.rotor.axial_vent.append(VentilationPolar())
             self.add_rule_arc_duct_polar(is_stator, duct_id)
 
-    elif type_duct == 4:  # RectangularDuct
+    elif type_duct == f"{lam_name}_Rectangular_Ducts":  # RectangularDuct
         number_duct = self.other_dict["[Dimensions]"][f"{lam_name}RadialDuct_Number"]
         for duct_id in range(number_duct):
             if is_stator == True:

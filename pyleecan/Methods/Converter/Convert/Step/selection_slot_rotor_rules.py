@@ -1,10 +1,5 @@
-from pyleecan.Methods.Converter.ConvertMC.Rules.Slot.add_rule_rotor_parallel_tooth_slotW11 import (
-    add_rule_rotor_parallel_tooth_slotW11,
-)
-
-
 def selection_slot_rotor_rules(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for slot rotor
 
     Parameters
     ----------
@@ -29,4 +24,4 @@ def selection_slot_rotor_rules(self, is_stator):
         pass
         # add_rules_parallel_slot_slotW11
 
-    return self.rules_list
+    print("rotor slot, not yet defined")

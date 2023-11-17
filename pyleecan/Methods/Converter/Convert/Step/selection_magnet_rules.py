@@ -6,7 +6,7 @@ from pyleecan.Classes.SlotM16 import SlotM16
 
 
 def selection_magnet_rules(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for magnet ansd convert the magnet
 
     Parameters
     ----------
@@ -16,6 +16,7 @@ def selection_magnet_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
+    # set the machine or dict with the corect conversion of magnet type
     if self.is_P_to_other:
         self.convert_magnet_type_MC()
 

@@ -51,6 +51,26 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
 
     rule_list.append(
         RuleSimple(
+            other_key_list=["[Dimensions]", f"UMagnet_Length_Outer_Array[{hole_id}]"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"UMagnet_Length_Inner_Array[{hole_id}]"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
+        RuleSimple(
             other_key_list=["[Dimensions]", f"Magnet_Post"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
             unit_type="m",
@@ -66,27 +86,3 @@ def add_rule_interior_U_shape_holeM61(self, is_stator, hole_id):
             param_dict={"hole_id": hole_id},
         )
     )
-
-    if self.is_P_to_other == False:
-        self.rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": [
-                            "[Dimensions]",
-                            "Pole_Number",
-                        ],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": f"machine.rotor.hole[{hole_id}].Alpha0",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="",
-                equation="pi/a= x",
-                file_name=__file__,
-            )
-        )

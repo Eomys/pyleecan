@@ -1,4 +1,4 @@
-def selection_SCIM_rules():
+def selection_SCIM_rules(self):
     """selection step to have rules for motor SCIM
 
     Parameters
@@ -7,4 +7,4 @@ def selection_SCIM_rules():
         A ConvertMC object
 
     """
-    print("SCIM")
+    print("SCIM, not yet defined")

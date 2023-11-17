@@ -18,9 +18,11 @@ def convert_to_P(self, file_path):
     self.convert_other_to_dict(file_path)
     self.rules_list = []
 
+    self.get_logger().info("Conversion dict into obj machine")
     # conversion dict into machine
     self.convert()
 
+    # add name for machine
     list_path = file_path.split(".")
     name = list_path[-2].split("/")
     self.machine.name = name[-1]

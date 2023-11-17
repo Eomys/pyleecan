@@ -32,6 +32,10 @@ def convert_machine_type_P(self):
     elif motor_type == "IM":
         self.machine = MachineSCIM()
 
-    # exepction if machine as not an equivalent in pyleecan
+    # exception if machine as not an equivalent in pyleecan
     else:
         raise Exception("Conversion of machine doesn't exist")
+
+    self.get_logger().info(
+        f"Conversion {motor_type} into {type(self.machine).__name__}"
+    )

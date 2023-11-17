@@ -1,4 +1,4 @@
-from numpy import sin, tan, sqrt, arccos, cos, arctan
+from numpy import sin, tan, sqrt, exp, cos, arctan
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -35,7 +35,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     Rbo = machine.rotor.get_Rbo()
 
     slot_W1 = sqrt(2 * (Rbo + H1) ** 2 * (1 - cos(W1)))
-    machine.rotor.slot.W1 = slot_W1
+    machine.rotor.slot.W1 = 2 * arctan((slot_W1 / 2) / Rbo)
 
     # set W0
     machine.rotor.slot.W0 = 2 * arctan((slot_W1 / 2) / Rbo)
@@ -47,8 +47,13 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     ZM0 = point_dict["ZM0"]
     ZM2 = point_dict["ZM2"]
     ZM3 = point_dict["ZM3"]
+    ZM2 = ZM2 * exp(-1j * machine.rotor.slot.W0 / 2)
     ZM2 = ZM2 - Red
+    ZM2 = ZM2 * exp(+1j * machine.rotor.slot.W0 / 2)
+
+    ZM3 = ZM3 * exp(1j * machine.rotor.slot.W0 / 2)
     ZM3 = ZM3 - Red
+    ZM3 = ZM3 * exp(-1j * machine.rotor.slot.W0 / 2)
 
     x2 = ZM0
     y2 = 0

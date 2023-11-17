@@ -54,3 +54,7 @@ def convert_slot_type_P(self):
 
     else:
         raise Exception("Conversion of machine doesn't exist")
+
+    self.get_logger().info(
+        f"Conversion {slot_type} into {type(self.machine.stator.slot).__name__}"
+    )

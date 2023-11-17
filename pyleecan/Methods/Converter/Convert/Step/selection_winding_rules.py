@@ -1,5 +1,5 @@
 def selection_winding_rules(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for winding
 
     Parameters
     ----------
@@ -9,5 +9,4 @@ def selection_winding_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
-    print("winding")
-    return self.rules_list
+    print("winding, not yet defined")

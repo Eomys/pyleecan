@@ -1,4 +1,4 @@
-from numpy import sin, tan, sqrt, arccos, cos, arctan
+from numpy import sin, tan, sqrt, arccos, cos, arctan, arcsin, exp
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -38,9 +38,16 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine.rotor.slot.W1 = slot_W1
 
     # set W0
-    machine.rotor.slot.W0 = 2 * arctan((slot_W1 / 2) / Rbo)
+    machine.rotor.slot.W0 = slot_W1
 
-    machine.rotor.slot.Rtopm = Rbo + H1
+    # define rtopm at max
+
+    # alpha is the angle to rotate Z0 so ||Z1,Z10|| = W0
+    alpha = float(arcsin(slot_W1 / (2 * Rbo)))
+
+    Z1 = Rbo * exp(-1j * alpha)
+
+    machine.rotor.slot.Rtopm = abs(Z1)
 
     point_dict = machine.rotor.slot._comp_point_coordinate()
 

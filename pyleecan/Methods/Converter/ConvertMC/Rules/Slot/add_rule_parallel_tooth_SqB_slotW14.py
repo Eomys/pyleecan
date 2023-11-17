@@ -20,10 +20,6 @@ def add_rule_parallel_tooth_SqB_slotW14(rule_list, is_stator):
         lam_name = "rotor"
 
     rule_list.append(
-        RuleComplex(fct_name="parallel_tooth_SqB_slotW14", folder="MotorCAD")
-    )
-
-    rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
             P_obj_path=f"machine.{lam_name}.slot.W0",

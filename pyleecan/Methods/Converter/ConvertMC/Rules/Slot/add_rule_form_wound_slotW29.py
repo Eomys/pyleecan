@@ -20,8 +20,6 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list.append(RuleComplex(fct_name="form_wound_slotW29", folder="MotorCAD"))
-
     rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width"],

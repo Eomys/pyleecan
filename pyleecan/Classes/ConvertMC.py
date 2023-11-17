@@ -60,6 +60,13 @@ except ImportError as error:
     convert_duct_type_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_notch_type_P import (
+        convert_notch_type_P,
+    )
+except ImportError as error:
+    convert_notch_type_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
         init_other_unit,
     )
@@ -100,6 +107,13 @@ try:
     )
 except ImportError as error:
     convert_duct_type_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_notch_type_MC import (
+        convert_notch_type_MC,
+    )
+except ImportError as error:
+    convert_notch_type_MC = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -394,6 +408,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_duct_type_P = convert_duct_type_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_notch_type_P
+    if isinstance(convert_notch_type_P, ImportError):
+        convert_notch_type_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_notch_type_P: "
+                    + str(convert_notch_type_P)
+                )
+            )
+        )
+    else:
+        convert_notch_type_P = convert_notch_type_P
     # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
@@ -466,6 +492,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_duct_type_MC = convert_duct_type_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_notch_type_MC
+    if isinstance(convert_notch_type_MC, ImportError):
+        convert_notch_type_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_notch_type_MC: "
+                    + str(convert_notch_type_MC)
+                )
+            )
+        )
+    else:
+        convert_notch_type_MC = convert_notch_type_MC
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(

@@ -10,6 +10,7 @@ def selection_IPMSM_rules(self):
     # step for stator
     self.selection_LamSlotWind_rules(is_stator=True)
 
+    # step for rotor
     is_stator = False
     self.selection_hole_rules(is_stator)
     self.selection_bar_rules(is_stator)

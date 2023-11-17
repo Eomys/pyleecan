@@ -40,8 +40,15 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     Z3 = point_dict["Z3"]
     Z2 = point_dict["Z2"]
 
-    machine.rotor.hole[hole_id].W1 = 0.001
-    machine.rotor.hole[hole_id].W2 = 0.001
+    other_path_list = ["[Dimensions]", f"UMagnet_Length_Outer_Array[{hole_id}]"]
+    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+    if H1 == 0:
+        machine.rotor.hole[hole_id].W2 = None
+
+    other_path_list = ["[Dimensions]", f"UMagnet_Length_Inner_Array[{hole_id}]"]
+    H2 = self.get_other(other_dict, other_path_list, other_unit_dict)
+    if H2 == 0:
+        machine.rotor.hole[hole_id].W1 = None
 
     return machine
 

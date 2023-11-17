@@ -19,6 +19,9 @@ def convert_to_other(self, machine):
     self.rules_list = []
 
     self.init_other_unit()
+
+    self.get_logger().info("Conversion obj machine into dict")
     # conversion machine in dict
     self.convert()
+
     return self.other_dict

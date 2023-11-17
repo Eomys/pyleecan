@@ -1,5 +1,5 @@
 def selection_skew_rules(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for skew
 
     Parameters
     ----------
@@ -9,5 +9,4 @@ def selection_skew_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
-    print("skew")
-    return self.rules_list
+    print("skew, not yet defined")

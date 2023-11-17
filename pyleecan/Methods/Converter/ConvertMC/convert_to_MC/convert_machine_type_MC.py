@@ -19,6 +19,8 @@ def convert_machine_type_MC(self):  # conversion to MotorCAD
     else:
         raise Exception("Conversion of machine doesn't exist")
 
+    self.get_logger().info(f"Conversion {motor_type} into {name_machine}")
+
     # writting in dict
     if "[Calc_Options]" not in self.other_dict:
         self.other_dict["[Calc_Options]"] = {"Motor_Type": name_machine}
