@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-import numpy as np
 from unittest import TestCase
 
+import numpy as np
+import pytest
+
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.FPGNSeg import FPGNSeg
+from pyleecan.Classes.Interpolation import Interpolation
+from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.MeshMat import MeshMat
-
+from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
 from pyleecan.Classes.RefTriangle3 import RefTriangle3
 from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
-from pyleecan.Classes.Interpolation import Interpolation
-from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
-from pyleecan.Classes.FPGNSeg import FPGNSeg
 
 
 @pytest.mark.MeshSol
@@ -27,7 +27,7 @@ class unittest_ref_nodes(TestCase):
         mesh.element["line"] = ElementMat(nb_node_per_element=2)
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([0, 0]))
-        mesh.node.add_node(np.array([1, 0]))
+        mesh.node.add_node(np.array([1, 1]))
         mesh.node.add_node(np.array([0, 1]))
         mesh.node.add_node(np.array([2, 3]))
         mesh.node.add_node(np.array([3, 3]))
@@ -45,10 +45,11 @@ class unittest_ref_nodes(TestCase):
 
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
+        meshsol.plot_mesh()
 
         vert = mesh.get_vertice(0)["line"]
-        solution = np.array([0, 0])
-        test = np.array([0.5, 0])
+        solution = np.array([0.5, 0])
+        test = np.array([0.5, 0.5])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
@@ -57,7 +58,7 @@ class unittest_ref_nodes(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         vert = mesh.get_vertice(1)["line"]
-        solution = np.array([0, 0])
+        solution = np.array([0.5, 0])
         test = np.array([0, 0.5])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
@@ -67,8 +68,9 @@ class unittest_ref_nodes(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         vert = mesh.get_vertice(2)["line"]
-        solution = np.array([0, 0])
-        test = np.array([0.5, 0.5])
+        print(vert)
+        solution = np.array([0.2, 0])
+        test = np.array([0.8, 1])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
@@ -77,8 +79,8 @@ class unittest_ref_nodes(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         vert = mesh.get_vertice(2)["line"]
-        solution = np.array([0.8, 0])
-        test = np.array([0.1, 0.9])
+        solution = np.array([1, 0])
+        test = np.array([0, 1])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (

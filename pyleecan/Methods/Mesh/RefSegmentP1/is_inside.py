@@ -29,15 +29,21 @@ def is_inside(self, vertice, point, normal_t=None):
     s = point_ref[0]
     t = point_ref[1]
 
-    a = abs(s) - (1 + epsilon)
-    b = abs(t) - (epsilon * ((1 - s ** 2) + 1))
-    is_inside = (a < 0) & (b < 0)  # >= in case the point is "just" on the border
+    a = abs(s) - (1 + epsilon / 5)
+    b = abs(t) / 2
+
+    # The point projected in the reference element domain must be in a rectangle of size (1+2*epsilon)×(2*epsilon)
+    # ? Why the tolerance is different according to the direction
+    is_inside = (-epsilon < point_ref[0] < 1 + epsilon) & (
+        -epsilon < point_ref[1] < epsilon
+    )
 
     # Check that normals are almost aligned
     if normal_t is not None:
         normal_s = self.get_normal(vertice)
         scal_st = np.dot(normal_t[0:2], normal_s)
         is_colinear = abs(scal_st) > 1 - 2 * epsilon
-        is_inside = is_inside & is_colinear
+        is_inside = is_colinear & is_inside
 
+    # TODO return the distance to the element from a different method
     return is_inside, a, b

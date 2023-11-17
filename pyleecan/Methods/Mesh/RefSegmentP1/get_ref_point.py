@@ -21,16 +21,22 @@ def get_ref_point(self, vertice, point):
         coordinates of the ref point
     """
 
-    point_ref = np.array([0, 0], dtype=float)
-    point_decal = np.array([-1, 0], dtype=float)
+    # Coordinate of the element node shift to the origin
+    elem_node_origin = vertice[1] - vertice[0]
 
-    pt1 = point[0:2] - vertice[0, :]
-    pt2 = vertice[1, :] - vertice[0, :]
-    rho2 = np.sqrt(pt2[0] ** 2 + pt2[1] ** 2)
-    phi2 = np.arctan2(pt2[1], pt2[0])
-    Trot = np.array([[np.cos(phi2), np.sin(phi2)], [-np.sin(phi2), np.cos(phi2)]])
+    # Compute angle and norm of the element
+    elem_lenght = np.linalg.norm(elem_node_origin)
+    elem_angle = np.arctan2(elem_node_origin[1], elem_node_origin[0])
 
-    pt1_ref = 2 * np.dot(Trot, pt1) / rho2 + point_decal
-    # pt2_ref =np.dot(Trot, pt2) / rho2 - point_decal
+    # Create rotation matrix to rotate the element on the x-axis
+    mat_rot = np.array(
+        [
+            [np.cos(elem_angle), np.sin(elem_angle)],
+            [-np.sin(elem_angle), np.cos(elem_angle)],
+        ]
+    )
 
-    return pt1_ref
+    # ref_elem_node =  np.dot(mat_rot, elem_node_origin) / elem_lenght
+    point_in_ref_elem = np.dot(mat_rot, point - vertice[0]) / elem_lenght
+
+    return point_in_ref_elem
