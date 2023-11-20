@@ -35,11 +35,6 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     machine.rotor.hole[hole_id].H0 = Rbo - H1 / 2
 
-    point_dict = machine.rotor.hole[hole_id]._comp_point_coordinate()
-    Z4 = point_dict["Z4"]
-    Z3 = point_dict["Z3"]
-    Z2 = point_dict["Z2"]
-
     other_path_list = ["[Dimensions]", f"UMagnet_Length_Outer_Array[{hole_id}]"]
     H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
     if H1 == 0:
@@ -53,7 +48,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     return machine
 
 
-def P_to_other(self, machine, other_dict):
+def P_to_other(self, machine, other_dict, other_unit_dict):
     """conversion obj machine in dict
 
     Parameters
@@ -64,6 +59,8 @@ def P_to_other(self, machine, other_dict):
         A pyleecan machine
     other_dict : dict
         A dict with the conversion obj machine
+    other_unit_dict : dict
+        dict with unit to make conversion (key: unit family, value: factor)
 
     Returns
     ---------

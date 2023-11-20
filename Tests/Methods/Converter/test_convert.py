@@ -8,11 +8,11 @@ from pyleecan.Methods.Converter.ConvertMC.convert_to_P.convert_other_to_dict imp
 
 
 path = "EMD240_v16.mot"
-path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC\Matlab_Test_2.mot"
 
 
 class Test_converter_mot(object):
-    def compare(self, path):
+    def test_convert(self):
+        path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC\Matlab_Test_2.mot"
         """check if dict are equal"""
         Conv = ConvertMC()
         # conversion file in machine
@@ -43,10 +43,10 @@ class Test_converter_mot(object):
                     assert abs(value_mot) == pytest.approx(value), msg
 
                 elif value != value_mot:
-                    raise ValueError("")
+                    raise ValueError(f"{value} is different {value_mot}")
 
 
 if __name__ == "__main__":
     a = Test_converter_mot()
     a.compare(path)
-    print("Done")
+    print("Test Done")

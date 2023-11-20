@@ -1,5 +1,5 @@
 def convert_magnet_type_MC(self):
-    """Selection correct magnet and implementation in obj machine or in dict
+    """Selection correct magnet and implementation in dict
 
     Parameters
     ----------
@@ -20,7 +20,7 @@ def convert_magnet_type_MC(self):
     elif magnet_type == "SlotM13":
         name_slot = "Surface_Breadleaof"
 
-    if magnet_type == "SlotM11":
+    elif magnet_type == "SlotM11":
         name_slot = "Inset_Radial"
 
     elif magnet_type == "SlotM15":

@@ -25,23 +25,22 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
 
 def P_to_other(self, machine, other_dict, other_unit_dict):
-    """Adapt the rule complex slotW11_H1
+    """conversion obj machine in dict
 
     Parameters
     ----------
     self : ConvertMC
         A ConvertMC object
     machine : Machine
-        A obj machine
+        A pyleecan machine
     other_dict : dict
         A dict with the conversion obj machine
     other_unit_dict : dict
         dict with unit to make conversion (key: unit family, value: factor)
 
-    Return
+    Returns
     ---------
-    machine : Machine
-        A obj machine
+    other_dict : dict
+        A dict with the conversion obj machine
     """
-    print("other_to_P")
     return other_dict

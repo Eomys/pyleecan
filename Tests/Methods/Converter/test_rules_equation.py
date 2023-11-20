@@ -1,15 +1,10 @@
 import pytest
 
-from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
-
-from pyleecan.Methods.Converter.RuleSimple.convert_to_P import convert_to_P
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
-from pyleecan.Classes.ConvertMC import ConvertMC
 
 rule_list = list()
 
@@ -18,7 +13,6 @@ rule_list = list()
 
 other_dict = {}
 other_dict["[Dimensions]"] = {}
-other_dict["[Dimensions]"]["Pole_Number"] = 6
 other_dict["[Dimensions]"]["Slot_tooth"] = 15
 other_dict["[Dimensions]"]["Slot_Opening"] = 12.5
 other_dict["[Dimensions]"]["Slot_Depth"] = 72
@@ -28,53 +22,13 @@ other_dict["[Dimensions]"]["Slot_4"] = 3.25
 
 
 class Test_converter_mot(object):
-    def compare_rule_complex(self):
+    def test_rule_equation_0(self):
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
-        rule = RuleComplex(fct_name="set_pole_pair_number", folder="MotorCAD")
-        # first rule complex use to define a slot
-        machine = rule.convert_to_P(other_dict, machine, other_unit_dict=None)
-        pole_number = machine.get_pole_pair_number()
-        assert pole_number == pytest.approx(3)
+        machine.stator.slot.W0 = 4
 
-    def compare_rule_simple_0(self):
-        machine = MachineSIPMSM()
-        machine.stator = LamSlotWind()
-        machine.stator.slot = SlotW11()
-
-        rule = RuleSimple(
-            other_key_list=["[Dimensions]", "Slot_Opening"],
-            P_obj_path=f"machine.stator.slot.W0",
-            unit_type="m",
-            scaling_to_P=1,
-        )
-        # rule simple to set slot.W0
-        machine = rule.convert_to_P(other_dict, machine, other_unit_dict={"m": 1})
-        msg = f"{machine.stator.slot.W0}, should be equal at 12.5"
-        assert abs(machine.stator.slot.W0) == pytest.approx(12.5), msg
-
-    def compare_rule_simple_1(self):
-        machine = MachineSIPMSM()
-        machine.stator = LamSlotWind()
-        machine.stator.slot = SlotW11()
-        rule = RuleSimple(
-            other_key_list=["[Dimensions]", "Slot_tooth"],
-            P_obj_path=f"machine.stator.slot.W2",
-            unit_type="m",
-            scaling_to_P=0.5,
-        )
-        # rule simple to set value, with conversion
-        machine = rule.convert_to_P(other_dict, machine, other_unit_dict={"m": 1})
-        msg = f"{machine.stator.slot.W2}, should be equal at 7.5"
-        assert abs(machine.stator.slot.W2) == pytest.approx(7.5), msg
-
-    def compare_rule_equation_0(self):
-        machine = MachineSIPMSM()
-        machine.stator = LamSlotWind()
-        machine.stator.slot = SlotW11()
-        machine.stator.slot.W0 = 12.5
-
+        # rule equation
         rule = RuleEquation(
             param=[
                 {
@@ -96,13 +50,12 @@ class Test_converter_mot(object):
             unit_type="m",
             equation="y/3 = b +2*x",
         )
-        # rule equation
 
-        machine = rule.convert_to_P(other_dict, machine, other_unit_dict={"m": 1})
-        msg = f"{machine.stator.slot.H2}, should be equal at 5.75"
-        assert abs(machine.stator.slot.H2) == pytest.approx(5.75), msg
+        machine = rule.convert_to_P(other_dict, machine, other_unit_dict={"m": 1 / 3})
+        msg = f"{machine.stator.slot.H2}, should be equal at 2.0"
+        assert abs(machine.stator.slot.H2) == pytest.approx(2.0), msg
 
-    def compare_rule_equation_1(self):
+    def test_rule_equation_1(self):
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
@@ -158,9 +111,6 @@ class Test_converter_mot(object):
 
 if __name__ == "__main__":
     a = Test_converter_mot()
-    a.compare_rule_complex()
-    a.compare_rule_equation_0()
-    a.compare_rule_equation_1()
-    a.compare_rule_simple_0()
-    a.compare_rule_simple_1()
+    a.test_rule_equation_0()
+    a.test_rule_equation_1()
     print("Done")

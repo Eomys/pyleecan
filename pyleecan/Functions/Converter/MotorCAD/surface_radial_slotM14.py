@@ -66,12 +66,12 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     # equation cercle with 3 points
     # coordonné du centre x
     x = -(
-        (x3 ** 2 - x2 ** 2 + y3 ** 2 - y2 ** 2) / (2 * (y3 - y2))
-        - (x2 ** 2 - x1 ** 2 + y2 ** 2 - y1 ** 2) / (2 * (y2 - y1))
+        (x3**2 - x2**2 + y3**2 - y2**2) / (2 * (y3 - y2))
+        - (x2**2 - x1**2 + y2**2 - y1**2) / (2 * (y2 - y1))
     ) / (((x2 - x1) / (y2 - y1)) - ((x3 - x2) / (y3 - y2)))
 
     y = -((x2 - x1) * x / (y2 - y1)) + (
-        (x2 ** 2 - x1 ** 2 + y2 ** 2 - y1 ** 2) / (2 * (y2 - y1))
+        (x2**2 - x1**2 + y2**2 - y1**2) / (2 * (y2 - y1))
     )
 
     Rtopm = sqrt((x1 - x) ** 2 + (y1 - y) ** 2)
@@ -81,7 +81,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     return machine
 
 
-def P_to_other(self, machine, other_dict):
+def P_to_other(self, machine, other_dict, other_unit_dict):
     """conversion obj machine in dict
 
     Parameters
@@ -92,6 +92,8 @@ def P_to_other(self, machine, other_dict):
         A pyleecan machine
     other_dict : dict
         A dict with the conversion obj machine
+    other_unit_dict : dict
+        dict with unit to make conversion (key: unit family, value: factor)
 
     Returns
     ---------
