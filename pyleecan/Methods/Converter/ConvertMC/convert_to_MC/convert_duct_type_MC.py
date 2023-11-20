@@ -1,8 +1,3 @@
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-
-
 def convert_duct_type_MC(self, is_stator):
     """selection step to add rules for duct
 
@@ -16,13 +11,10 @@ def convert_duct_type_MC(self, is_stator):
 
     if is_stator == True:
         lam_name_MC = "Stator"
-        lam_name_py = "stator"
     else:
         lam_name_MC = "Rotor"
-        lam_name_py = "rotor"
 
     # conversion to motor-cad
-
     if (len(self.machine.rotor.axial_vent)) == 0:
         pass
     elif (len(self.machine.stator.axial_vent)) == 0:
@@ -48,24 +40,26 @@ def convert_duct_type_MC(self, is_stator):
 
             elif type_duct == "VentilationCirc":  # CircularDuct
                 self.add_rule_circular_duct_circular(is_stator, nb_duct)
-                temp_dict = self.other_dict["[Through_Vent]"]
-                temp_dict.append({f"{lam_name_MC}_Duct_Type": "Rotor_Circular_Ducts"})
+                self.other_dict["[Through_Vent]"][
+                    f"{lam_name_MC}_Duct_Type"
+                ] = "Rotor_Circular_Ducts"
                 self.get_logger().info(
                     f"Conversion {type_duct} into Rotor_Circular_Ducts"
                 )
 
             elif type_duct == "VentilationPolar":  # Arcduct
                 self.add_rule_arc_duct_polar(is_stator, nb_duct)
-                temp_dict = self.other_dict["[Through_Vent]"]
-                temp_dict.append({f"{lam_name_MC}_Duct_Type": "Rotor_Arc_Ducts"})
+                self.other_dict["[Through_Vent]"][
+                    f"{lam_name_MC}_Duct_Type"
+                ] = "Rotor_Arc_Ducts"
                 self.get_logger().info(f"Conversion {type_duct} into Rotor_Arc_Ducts")
 
             elif type_duct == "VentilationTrap":  # RectangularDuct
                 self.add_rule_rectangular_duct_trapeze(is_stator, nb_duct)
-                temp_dict = self.other_dict["[Through_Vent]"]
-                temp_dict.append(
-                    {f"{lam_name_MC}_Duct_Type": "Rotor_Rectangular_Ducts"}
-                )
+                self.other_dict["[Through_Vent]"][
+                    f"{lam_name_MC}_Duct_Type"
+                ] = "Rotor_Rectangular_Ducts"
+
                 self.get_logger().info(
                     f"Conversion {type_duct} into Rotor_Rectangular_Ducts"
                 )

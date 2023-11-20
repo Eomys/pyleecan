@@ -37,9 +37,7 @@ def convert_magnet_type_MC(self):
 
     # writting in dict
     if "[Design_Options]" not in self.other_dict:
-        self.other_dict["[Design_Options]"] = {}
-        temp_dict = self.other_dict["[Design_Options]"]
-        temp_dict["BPM_Rotor"] = name_slot
+        self.other_dict["[Design_Options]"] = {"BPM_Rotor": name_slot}
     else:
         self.other_dict["[Design_Options]"]["BPM_Rotor"] = name_slot
 

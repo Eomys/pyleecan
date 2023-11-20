@@ -32,8 +32,6 @@ def convert_slot_type_MC(self):
 
     # writting in dict
     if "[Calc_Options]" not in self.other_dict:
-        self.other_dict["[Calc_Options]"] = {}
-        temp_dict = self.other_dict["[Calc_Options]"]
-        temp_dict["Slot_Type"] = name_slot
+        self.other_dict["[Calc_Options]"] = {"Slot_Type": name_slot}
     else:
         self.other_dict["[Calc_Options]"]["Slot_Type"] = name_slot
