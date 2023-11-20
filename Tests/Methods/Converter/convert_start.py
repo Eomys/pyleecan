@@ -9,10 +9,10 @@ if __name__ == "__main__":
 
     # path = selection_file()
     # path_save = "other_dict.json"
-    path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/EMD240_v16.mot"
+    # path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/EMD240_v16.mot"
     # path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/parallel_tooth_interior_V_simple.mot"
     # path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/Matlab_Test_2.mot"
-    # path = "/Users\LAP17\Documents/Documentation motor-CAD/fichier.mot/various_mot_files/VF_Manatee_Hairpin_winding.mot"
+    path = "/Users\LAP17\Documents/Documentation motor-CAD/fichier.mot/various_mot_files/VF_Manatee_Hairpin_winding.mot"
 
     conv = ConvertMC()
 

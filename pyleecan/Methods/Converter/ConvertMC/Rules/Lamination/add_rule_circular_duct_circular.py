@@ -62,37 +62,6 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
             file_name=__file__,
         )
     )
-    """
-    self.rules_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": [
-                        "[Through_Vent]",
-                        f"{lam_name_MC}CircularDuctLayer_OffsetAngle[{duct_id}]",
-                    ],
-                    "variable": "y",
-                },
-                {
-                    "src": "other",
-                    "path": [
-                        "[Through_Vent]",
-                        f"{lam_name_MC}CircularDuctLayer_Channels[{duct_id}]",
-                    ],
-                    "variable": "a",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": "fmachine.{lam_name_py}.axial_vent[{duct_id}].Alpha0",
-                    "variable": "x",
-                },
-            ],
-            unit_type="m",
-            equation="y*pi/180= x",
-            file_name=__file__,
-        )
-    )"""
 
     self.rules_list.append(
         RuleSimple(

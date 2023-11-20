@@ -14,6 +14,11 @@ def convert_hole_type_P(self):
     ----------
     self : ConvertMC
         A ConvertMC object
+
+    Returns
+    ---------
+    len_hole : int
+        The number of hole
     """
     hole_type = self.other_dict["[Design_Options]"]["BPM_Rotor"]
 
@@ -26,44 +31,45 @@ def convert_hole_type_P(self):
     self.machine.rotor.is_internal = True
 
     for hole_id in range(number_hole):
+        # set the hole in obj machine, and add particularity to hole
         if hole_type == "Embedded_Parallel":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM62())
             self.machine.rotor.hole[hole_id].W0_is_rad = False
 
         elif hole_type == "Embedded_Radial":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM62())
             self.machine.rotor.hole[hole_id].W0_is_rad = True
 
         elif hole_type == "Embedded_Breadleaof":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM63())
             self.machine.rotor.hole[hole_id].top_flat = False
 
         elif hole_type == "Interior_FlatSimple":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM63())
             self.machine.rotor.hole[hole_id].top_flat = True
 
         elif hole_type == "Interior_FlatWeb":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM52())
             self.machine.rotor.hole[hole_id].H2 = 0
 
         elif hole_type == "Interior_VSimple":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM60())
 
         elif hole_type == "Interior_VWeb":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM57())
 
         elif hole_type == "Interior_UShape":
-            # set the hole in obj machine, and add particularity to hole
             self.machine.rotor.hole.append(HoleM61())
 
         else:
             raise Exception("Conversion of machine doesn't exist")
 
-    return self.other_dict["[Dimensions]"]["Magnet_Layers"]
+    self.get_logger().info(
+        f"Conversion {hole_type} into {type(self.machine.rotor.hole[0]).__name__}"
+    )
+
+    # writing exception/approximation for Hole
+    if type(self.machine.rotor.hole[0]).__name__ == "HoleM60":
+        self.get_logger().warning(f"Approximation for W3, Magnet_Post")
+
+    return number_hole

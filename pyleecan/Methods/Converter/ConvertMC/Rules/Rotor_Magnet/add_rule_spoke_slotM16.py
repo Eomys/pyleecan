@@ -4,7 +4,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_spoke_slotM16(self, is_stator):
-    """Create and adapt all the rules related to slotM11(lam radius,...)
+    """Create and adapt all the rules related to slotM16
     Extend rules_list within Converter object
 
     Parameters

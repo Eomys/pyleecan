@@ -5,6 +5,11 @@ def convert_hole_type_MC(self):
     ----------
     self : ConvertMC
         A ConvertMC object
+
+    Returns
+    ---------
+    len_hole : int
+        The number of hole
     """
     # conversion to motor-cad
     hole_type = type(self.machine.rotor.hole[0]).__name__
@@ -35,6 +40,7 @@ def convert_hole_type_MC(self):
 
     elif hole_type == "HoleM60":
         name_hole = "Interior_V(simple)"
+        self.get_logger().warning(f"Approximation for W3, Magnet_Post")
 
     elif hole_type == "HoleM57":
         name_hole = "Interior_V(web)"
@@ -52,5 +58,7 @@ def convert_hole_type_MC(self):
         temp_dict["BPM_Rotor"] = name_hole
     else:
         self.other_dict["[Design_Options]"]["BPM_Rotor"] = name_hole
+
+    self.get_logger().info(f"Conversion {hole_type} into {name_hole}")
 
     return len_hole

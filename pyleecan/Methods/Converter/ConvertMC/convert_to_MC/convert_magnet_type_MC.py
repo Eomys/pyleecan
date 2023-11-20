@@ -42,3 +42,5 @@ def convert_magnet_type_MC(self):
         temp_dict["BPM_Rotor"] = name_slot
     else:
         self.other_dict["[Design_Options]"]["BPM_Rotor"] = name_slot
+
+    self.get_logger().info(f"Conversion {magnet_type} into {name_slot}")

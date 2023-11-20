@@ -20,33 +20,29 @@ def convert_slot_type_P(self):
     dict_machine = self.machine.stator.as_dict()
     self.machine.stator = LamSlotWind(init_dict=dict_machine)
 
+    # set the slot in obj machine, and add particularity
     if slot_type == "Parallel_Tooth":
-        # set the slot in obj machine, and add particularity to slotW11
         self.machine.stator.slot = SlotW11()
         self.machine.stator.slot.is_cstt_tooth = True
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
     elif slot_type == "Parallel_tooth_SqB":
-        # set the slot in obj machine, and add particularity to slotW11
         self.machine.stator.slot = SlotW14()
         self.machine.stator.is_internal = False
 
     elif slot_type == "Parallel_Slot":
-        # set the slot in obj machine, and add particularity to slotW11
         self.machine.stator.slot = SlotW21()
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
     elif slot_type == "Tapered_slot":
-        # set the slot in obj machine, and add particularity to slotW11
         self.machine.stator.slot = SlotW23()
         self.machine.stator.slot.is_cstt_tooth = True
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
     elif slot_type == "Form_Wound":
-        # set the slot in obj machine, and add particularity to slotW11
         self.machine.stator.slot = SlotW29()
         self.machine.stator.slot.is_cstt_tooth = True
         self.machine.stator.slot.H1_is_rad = True

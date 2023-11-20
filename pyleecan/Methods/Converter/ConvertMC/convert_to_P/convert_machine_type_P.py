@@ -4,7 +4,7 @@ from pyleecan.Classes.MachineSCIM import MachineSCIM
 
 
 def convert_machine_type_P(self):
-    """Update other_dict or machine with the correct machine type
+    """Update machine with the correct machine type
 
     Parameters
     ----------

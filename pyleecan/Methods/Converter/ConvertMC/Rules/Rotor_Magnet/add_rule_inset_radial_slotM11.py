@@ -3,8 +3,8 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_radial_slotM14(self, is_stator):
-    """Create and adapt all the rules related to slotM11(lam radius,...)
+def add_rule_inset_radial_slotM11(self, is_stator):
+    """Create and adapt all the rules related to slotM11
     Extend rules_list within Converter object
 
     Parameters

@@ -3,8 +3,8 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_breadloaf_slotM13(self, is_stator):
-    """Create and adapt all the rules related to slotM15 (lam radius,...)
+def add_rule_surface_breadloaf_slotM12(self, is_stator):
+    """Create and adapt all the rules related to slotM12
     Extend rules_list within Converter object
 
     Parameters

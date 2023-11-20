@@ -1,3 +1,6 @@
+# !!!!! not use for the moment
+
+
 def other_to_P(self, machine, other_dict):
     H1 = machine.rotor.slot.get_H1()
 

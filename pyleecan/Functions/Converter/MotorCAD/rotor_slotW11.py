@@ -4,6 +4,8 @@ from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.Methods.Slot.SlotW11.get_H1 import get_H1
 from pyleecan.Methods.Slot.SlotW11._comp_W import _comp_W
 
+# !!!!! not use for the moment
+
 
 def other_to_P(self, machine, other_dict):
     dict_machine = machine.rotor.as_dict()

@@ -4,7 +4,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_rectangular_duct_trapeze(self, is_stator, duct_id):
-    """Create and adapt all the rules related to lamination (lam radius,...)
+    """Create and adapt all the rules related to duct
     Extend rules_list within Converter object
 
     Parameters

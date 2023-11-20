@@ -4,7 +4,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_surface_parallel_slotM15(self, is_stator):
-    """Create and adapt all the rules related to slotM15 (lam radius,...)
+    """Create and adapt all the rules related to slotM15
     Extend rules_list within Converter object
 
     Parameters

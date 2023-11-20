@@ -1,4 +1,4 @@
-from os.path import join, split, isfile
+from os.path import join, isfile
 from numpy import pi
 
 
@@ -41,6 +41,22 @@ def convert_other_to_dict(self, file_path):
     # BPM_Rotor=Surface_Radial
     # Top_Bar=Round
     # Bottom_Bar=Rectangular
+    ####
+
+    ####
+    # other_dict = {
+    #   [Dimensions] = {
+    #        Stator_Lam_Dia : 130
+    #        Stator_Bore : 80
+    #        Airgap : 1
+    #       }
+    #
+    #   [Design_Options] = {
+    #       BPM_Rotor : Surface_Radial
+    #       Top_Bar : Round
+    #       Bottom_Bar : Rectangular
+    #       }
+    # }
     ####
 
     other_dict = {}

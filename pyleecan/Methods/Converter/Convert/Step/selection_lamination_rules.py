@@ -1,9 +1,3 @@
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.Notch import Notch
-from pyleecan.Classes.NotchEvenDist import NotchEvenDist
-from pyleecan.Classes.SlotM19 import SlotM19
-
-
 def selection_lamination_rules(self, is_stator):
     """selection step to add rules for lamination
 
