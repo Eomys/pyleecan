@@ -16,9 +16,6 @@ def add_rule_inset_radial_slotM11(self, is_stator):
     """
     rule_list = self.rules_list
 
-    rule_list = self.rules_list
-    rule_list.append(RuleComplex(fct_name="surface_radial_slotM14", folder="MotorCAD"))
-
     rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],

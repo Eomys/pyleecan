@@ -1,4 +1,4 @@
-def other_to_P(self, machine, other_dict, other_unit_dict):
+def other_to_P(self, machine, other_dict, other_unit_dict=None):
     """conversion obj machine in dict
 
     Parameters
@@ -23,7 +23,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     return machine
 
 
-def P_to_other(self, machine, other_dict, other_unit_dict):
+def P_to_other(self, machine, other_dict, other_unit_dict=None):
     """conversion obj machine in dict
 
     Parameters

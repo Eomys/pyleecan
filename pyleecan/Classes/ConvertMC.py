@@ -221,11 +221,11 @@ except ImportError as error:
     add_rule_surface_parallel_slotM15 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM11 import (
-        add_rule_surface_radial_slotM11,
+    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM14 import (
+        add_rule_surface_radial_slotM14,
     )
 except ImportError as error:
-    add_rule_surface_radial_slotM11 = error
+    add_rule_surface_radial_slotM14 = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13 import (
@@ -685,18 +685,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_surface_parallel_slotM15 = add_rule_surface_parallel_slotM15
-    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM11
-    if isinstance(add_rule_surface_radial_slotM11, ImportError):
-        add_rule_surface_radial_slotM11 = property(
+    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_radial_slotM14
+    if isinstance(add_rule_surface_radial_slotM14, ImportError):
+        add_rule_surface_radial_slotM14 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_surface_radial_slotM11: "
-                    + str(add_rule_surface_radial_slotM11)
+                    "Can't use ConvertMC method add_rule_surface_radial_slotM14: "
+                    + str(add_rule_surface_radial_slotM14)
                 )
             )
         )
     else:
-        add_rule_surface_radial_slotM11 = add_rule_surface_radial_slotM11
+        add_rule_surface_radial_slotM14 = add_rule_surface_radial_slotM14
     # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13
     if isinstance(add_rule_surface_breadloaf_slotM13, ImportError):
         add_rule_surface_breadloaf_slotM13 = property(

@@ -3,7 +3,6 @@ from pyleecan.Classes.CondType12 import CondType12
 
 if __name__ == "__main__":
     # cleaning log file
-
     f = open("/Users\LAP17\AppData\Roaming\pyleecan/Pyleecan.log", "w")
     f.close()
 

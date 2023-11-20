@@ -110,13 +110,6 @@ except ImportError as error:
     selection_skew_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_BPM_rotor_rules import (
-        selection_BPM_rotor_rules,
-    )
-except ImportError as error:
-    selection_BPM_rotor_rules = error
-
-try:
     from ..Methods.Converter.Convert.Step.selection_bar_rules import selection_bar_rules
 except ImportError as error:
     selection_bar_rules = error
@@ -329,18 +322,6 @@ class Convert(FrozenClass):
         )
     else:
         selection_skew_rules = selection_skew_rules
-    # cf Methods.Converter.Convert.Step.selection_BPM_rotor_rules
-    if isinstance(selection_BPM_rotor_rules, ImportError):
-        selection_BPM_rotor_rules = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Convert method selection_BPM_rotor_rules: "
-                    + str(selection_BPM_rotor_rules)
-                )
-            )
-        )
-    else:
-        selection_BPM_rotor_rules = selection_BPM_rotor_rules
     # cf Methods.Converter.Convert.Step.selection_bar_rules
     if isinstance(selection_bar_rules, ImportError):
         selection_bar_rules = property(

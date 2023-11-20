@@ -30,7 +30,7 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,Rules.Lamination.add_rule_rectangular_duct_trapeze,,,,,,
 ,,Rules.Lamination.add_rule_notch,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_surface_parallel_slotM15,,,,,,
-,,Rules.Rotor_Magnet.add_rule_surface_radial_slotM11,,,,,,
+,,Rules.Rotor_Magnet.add_rule_surface_radial_slotM14,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_surface_breadloaf_slotM13,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_spoke_slotM16,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_inset_radial_slotM11,,,,,,

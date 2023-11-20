@@ -12,8 +12,9 @@ path = "EMD240_v16.mot"
 
 class Test_converter_mot(object):
     def test_convert(self):
-        path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC\Matlab_Test_2.mot"
         """check if dict are equal"""
+        path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC\Matlab_Test_2.mot"
+
         Conv = ConvertMC()
         # conversion file in machine
         machine = Conv.convert_to_P(path)

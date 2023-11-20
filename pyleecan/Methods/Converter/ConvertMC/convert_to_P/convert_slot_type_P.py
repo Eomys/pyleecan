@@ -48,6 +48,9 @@ def convert_slot_type_P(self):
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
+    elif slot_type == "Slotless":
+        self.get_logger().error("Slotless has not equivalent in Pyleecan")
+
     else:
         raise Exception("Conversion of machine doesn't exist")
 
