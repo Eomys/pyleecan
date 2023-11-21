@@ -16,6 +16,7 @@ other_dict["[Dimensions]"]["Pole_Number"] = 6
 
 class Test_converter_mot(object):
     def test_set_pole_pair_number(self):
+        """test rule complex"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()

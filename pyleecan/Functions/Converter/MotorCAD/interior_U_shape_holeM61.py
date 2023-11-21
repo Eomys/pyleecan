@@ -1,7 +1,3 @@
-from numpy import sin, tan
-from pyleecan.Classes.Magnet import Magnet
-
-
 def other_to_P(self, machine, other_dict, other_unit_dict):
     """conversion obj machine in dict
 

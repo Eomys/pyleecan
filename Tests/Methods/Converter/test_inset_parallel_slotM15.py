@@ -19,6 +19,7 @@ other_dict["[Dimensions]"]["Magnet_Arc_[ED]"] = 120
 
 class Test_converter_mot(object):
     def test_inset_parallel_slotM15(self):
+        """test rule complex"""
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
         machine.rotor.slot = SlotM15()

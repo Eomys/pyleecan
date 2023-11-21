@@ -6,7 +6,7 @@ from pyleecan.Classes.ConvertMC import ConvertMC
 
 class Test_converter_mot(object):
     def test_SIPMSM(self):
-        """check if dict are equal"""
+        """check if SIPMSM is correct define"""
         path = "/Users\LAP17\Documents/Documentation motor-CAD/fichier.mot/various_mot_files/VF_Manatee_Hairpin_winding.mot"
 
         Conv = ConvertMC()

@@ -19,6 +19,7 @@ other_dict["[Dimensions]"]["Slot_Depth"] = 90
 
 class Test_converter_mot(object):
     def test_rule_simple_0(self):
+        """test rule simple"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
@@ -35,6 +36,7 @@ class Test_converter_mot(object):
         assert abs(machine.stator.slot.W0) == pytest.approx(12.5), msg
 
     def test_rule_simple_1(self):
+        """test rule simple"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
@@ -50,6 +52,7 @@ class Test_converter_mot(object):
         assert abs(machine.stator.slot.W2) == pytest.approx(7.5), msg
 
     def test_rule_simple_2(self):
+        """test rule simple"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()

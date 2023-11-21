@@ -12,6 +12,7 @@ rule_list = list()
 
 class Test_converter_mot(object):
     def test_slotW21_H1(self):
+        """test rule complex"""
         machine = MachineSIPMSM()
         machine.stator = LamSlot()
         machine.stator.slot = SlotW21()

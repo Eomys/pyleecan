@@ -7,7 +7,7 @@ from pyleecan.Classes.SlotW29 import SlotW29
 
 
 def convert_slot_type_P(self):
-    """Selection correct slot and implementation in obj machine or in dict
+    """Selection correct slot and implementation in obj machine
 
     Parameters
     ----------

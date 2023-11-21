@@ -15,7 +15,3 @@ def add_rule_machine_type(self):
     self.rules_list.append(
         RuleComplex(fct_name="set_pole_pair_number", folder="MotorCAD")
     )
-
-    # ajout de la règle pour set le nom
-
-    # ajout de la topology

@@ -22,6 +22,7 @@ other_dict["[Dimensions]"]["PoleNotchArc_Inner"] = 140
 
 class Test_converter_mot(object):
     def test_add_notch(self):
+        """test rule complex"""
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
         machine.rotor.notch.append(Notch())

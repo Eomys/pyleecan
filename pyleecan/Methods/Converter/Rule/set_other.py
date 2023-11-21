@@ -21,7 +21,7 @@ def set_other(self, other_dict, P_value, other_unit_dict, path_list):
     """
     unit = other_unit_dict[self.unit_type]
 
-    P_value = P_value / unit
+    P_value = P_value / unit  # set in correct unit
     # Make sure that all the sub-keys exist
     dict_temp = other_dict
     for key in path_list[:-1]:

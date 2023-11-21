@@ -23,6 +23,7 @@ other_dict["[Dimensions]"]["Slot_4"] = 3.25
 
 class Test_converter_mot(object):
     def test_rule_equation_0(self):
+        """test rule equation"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
@@ -56,6 +57,7 @@ class Test_converter_mot(object):
         assert abs(machine.stator.slot.H2) == pytest.approx(2.0), msg
 
     def test_rule_equation_1(self):
+        """test rule equation"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()

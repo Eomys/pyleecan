@@ -1,4 +1,4 @@
-from numpy import sin, tan
+from numpy import sin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -20,6 +20,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
+    self.unit_type = "m"
     other_path_list = ["[Dimensions]", "Magnet_Thickness"]
     H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
     Rbo = machine.rotor.get_Rbo()

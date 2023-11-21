@@ -20,6 +20,7 @@ other_dict["[Dimensions]"]["Magnet_Reduction"] = 1
 
 class Test_converter_mot(object):
     def test_surface_breadloaf_slotM13(self):
+        """test rule complex"""
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
         machine.rotor.slot = SlotM13()

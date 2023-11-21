@@ -1,4 +1,4 @@
-from numpy import sin, tan, sqrt, exp, cos, arctan
+from numpy import sqrt, exp, cos, arctan
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -66,12 +66,12 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     # equation cercle with 3 points
     # coordonné du centre x
     x = -(
-        (x3 ** 2 - x2 ** 2 + y3 ** 2 - y2 ** 2) / (2 * (y3 - y2))
-        - (x2 ** 2 - x1 ** 2 + y2 ** 2 - y1 ** 2) / (2 * (y2 - y1))
+        (x3**2 - x2**2 + y3**2 - y2**2) / (2 * (y3 - y2))
+        - (x2**2 - x1**2 + y2**2 - y1**2) / (2 * (y2 - y1))
     ) / (((x2 - x1) / (y2 - y1)) - ((x3 - x2) / (y3 - y2)))
 
     y = -((x2 - x1) * x / (y2 - y1)) + (
-        (x2 ** 2 - x1 ** 2 + y2 ** 2 - y1 ** 2) / (2 * (y2 - y1))
+        (x2**2 - x1**2 + y2**2 - y1**2) / (2 * (y2 - y1))
     )
 
     Rtopm = sqrt((x1 - x) ** 2 + (y1 - y) ** 2)

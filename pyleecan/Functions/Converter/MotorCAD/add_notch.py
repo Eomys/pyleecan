@@ -2,7 +2,7 @@ from numpy import cos, sqrt
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """conversion dict in obj machine
+    """conversion dict in obj machine for notch
 
     Parameters
     ----------
@@ -20,6 +20,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
+    self.unit_type = "m"
     other_path_list = ["[Dimensions]", "PoleNotchDepth"]
     H0 = self.get_other(other_dict, other_path_list, other_unit_dict)
     Rbo = machine.rotor.get_Rbo()

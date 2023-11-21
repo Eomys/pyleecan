@@ -1,5 +1,5 @@
 def convert_slot_type_MC(self):
-    """Selection correct slot and implementation in obj machine or in dict
+    """Selection correct slot and implementation in dict
 
     Parameters
     ----------

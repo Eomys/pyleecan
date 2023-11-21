@@ -4,14 +4,14 @@ from pyleecan.Classes.VentilationTrap import VentilationTrap
 
 
 def convert_duct_type_P(self, is_stator):
-    """selection step to add rules for slot
+    """selection step to add rules for duct
 
     Parameters
     ----------
     self : ConvertMC
         A ConvertMC object
     is_stator : bool
-        True slot is in stator, False slot is in rotor
+        True lam is in stator, False lam is in rotor
 
     """
     if is_stator == True:

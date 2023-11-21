@@ -20,6 +20,7 @@ other_dict["[Dimensions]"]["UMagnet_Length_Inner_Array[0]"] = 0
 
 class Test_converter_mot(object):
     def test_interior_U_shape_holeM61(self):
+        """test rule complex"""
         machine = MachineIPMSM()
         machine.rotor = LamHole()
         machine.rotor.hole.append(HoleM61())
