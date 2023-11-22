@@ -3,8 +3,8 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_spoke_slotM16(self, is_stator):
-    """Create and adapt all the rules related to slotM16
+def add_rule_round_slotW26(self, is_stator):
+    """Create and adapt all the rules related to slotW23 (lam radius,...)
     Extend rules_list within Converter object
 
     Parameters
@@ -14,10 +14,22 @@ def add_rule_spoke_slotM16(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
+    if is_stator == True:
+        raise KeyError("this rule is for slot in rotor")
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Magnet_Opening"],
+            other_key_list=["[Dimensions]", "Rotor_Bars"],
+            P_obj_path=f"machine.rotor.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Bar_Opening_[T]"],
             P_obj_path=f"machine.rotor.slot.W0",
             unit_type="m",
             scaling_to_P=1,
@@ -27,17 +39,7 @@ def add_rule_spoke_slotM16(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Magnet_Thickness"],
-            P_obj_path=f"machine.rotor.slot.W1",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "Magnet_Inset"],
+            other_key_list=["[Dimensions]", "Bar_Opening_Depth_[T]"],
             P_obj_path=f"machine.rotor.slot.H0",
             unit_type="m",
             scaling_to_P=1,
@@ -47,10 +49,10 @@ def add_rule_spoke_slotM16(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Magnet_Inset"],
-            P_obj_path=f"machine.rotor.slot.H0",
+            other_key_list=["[Dimensions]", "Bar_Width_[T]"],
+            P_obj_path=f"machine.rotor.slot.R1",
             unit_type="m",
-            scaling_to_P=1,
+            scaling_to_P=0.5,
             file_name=__file__,
         )
     )

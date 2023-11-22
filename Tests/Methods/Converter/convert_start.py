@@ -11,7 +11,9 @@ if __name__ == "__main__":
     # path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/EMD240_v16.mot"
     # path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/parallel_tooth_interior_V_simple.mot"
     # path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC/Matlab_Test_2.mot"
-    path = "/Users\LAP17\Documents/Documentation motor-CAD/fichier.mot/various_mot_files/VF_Manatee_Hairpin_winding.mot"
+    # path = "/Users\LAP17\Documents/Documentation motor-CAD/fichier.mot/various_mot_files/VF_Manatee_Hairpin_winding.mot"
+    # path = "/Users\LAP17\Documents\Documentation motor-CAD/fichier.mot\Example of files from Rheinmetall/VPMSM_2p6_NdFeB_HAIRPIN_M14_V05.mot"
+    path = "/Users\LAP17\Documents\Documentation motor-CAD/fichier.mot/SCIM.mot"
 
     conv = ConvertMC()
 

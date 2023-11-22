@@ -19,9 +19,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list = self.rules_list
-
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -31,7 +29,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W1",
@@ -41,7 +39,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W2",
@@ -51,7 +49,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
@@ -62,7 +60,7 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
     )
 
     if not self.is_P_to_other:
-        rule_list.append(
+        self.rules_list.append(
             RuleSimple(
                 other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
                 P_obj_path=f"machine.{lam_name}.slot.H1",
@@ -72,9 +70,9 @@ def add_rule_parallel_slot_slotW21(self, is_stator):
             )
         )
 
-        rule_list.append(RuleComplex(fct_name="slotW21_H1", folder="MotorCAD"))
+        self.rules_list.append(RuleComplex(fct_name="slotW21_H1", folder="MotorCAD"))
 
-        rule_list.append(
+        self.rules_list.append(
             RuleEquation(
                 param=[
                     {

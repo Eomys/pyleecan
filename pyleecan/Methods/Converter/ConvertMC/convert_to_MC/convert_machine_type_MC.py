@@ -14,6 +14,9 @@ def convert_machine_type_MC(self):  # conversion to MotorCAD
         name_machine = "BPM"
 
     elif motor_type == "MachineIPMSM":
+        name_machine = "BPM"
+
+    elif motor_type == "MachineSCIM":
         name_machine = "IM"
 
     else:

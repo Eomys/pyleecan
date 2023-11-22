@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_form_wound_slotW29(rule_list, is_stator):
+def add_rule_form_wound_slotW29(self, is_stator):
     """Create and adapt all the rules related to slotW29 (lam radius,...)
     Extend rules_list within Converter object
 
@@ -20,7 +20,7 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
     else:
         lam_name = "rotor"
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -30,7 +30,7 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleEquation(
             param=[
                 {
@@ -55,7 +55,7 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W2",
@@ -65,7 +65,7 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Wedge_Depth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
@@ -75,7 +75,7 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Wedge_Thickeness"],
             P_obj_path=f"machine.{lam_name}.slot.H1",
@@ -85,7 +85,7 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleEquation(
             param=[
                 {
@@ -115,4 +115,4 @@ def add_rule_form_wound_slotW29(rule_list, is_stator):
         )
     )
 
-    return rule_list
+    return self.rules_list

@@ -27,7 +27,7 @@ def selection_slot_rules(self, is_stator):
     if isinstance(self.machine.stator.slot, SlotW11):
         self.add_rule_parallel_tooth_slotW11(is_stator)
     elif isinstance(self.machine.stator.slot, SlotW14):
-        self.add_rule_parallel_tooth_SqB_slotW11(is_stator)
+        self.add_rule_parallel_tooth_SqB_slotW14(is_stator)
     elif isinstance(self.machine.stator.slot, SlotW21):
         self.add_rule_parallel_slot_slotW21(is_stator)
     elif isinstance(self.machine.stator.slot, SlotW23):

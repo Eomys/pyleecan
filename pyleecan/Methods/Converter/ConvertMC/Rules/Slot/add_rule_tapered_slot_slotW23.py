@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_tapered_slot_slotW23(rule_list, is_stator):
+def add_rule_tapered_slot_slotW23(self, is_stator):
     """Create and adapt all the rules related to slotW23 (lam radius,...)
     Extend rules_list within Converter object
 
@@ -14,14 +14,13 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    print("tapered_slot_slotW23")
 
     if is_stator == True:
         lam_name = "stator"
     else:
         lam_name = "rotor"
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -31,7 +30,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width_(top)"],
             P_obj_path=f"machine.{lam_name}.slot.W1",
@@ -41,7 +40,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width_(bottom)"],
             P_obj_path=f"machine.{lam_name}.slot.W2",
@@ -51,7 +50,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
@@ -61,7 +60,7 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other=["[Dimensions]", "Tooth_Tip_Angle"],
             P_obj_path=f"machine.{lam_name}.slot.H1",
@@ -71,9 +70,9 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         )
     )
 
-    rule_list.append(RuleComplex(fct_name="slotW23_H1", folder="MotorCAD"))
+    self.rules_list.append(RuleComplex(fct_name="slotW23_H1", folder="MotorCAD"))
 
-    rule_list.append(
+    self.rules_list.append(
         RuleEquation(
             param=[
                 {
@@ -103,4 +102,4 @@ def add_rule_tapered_slot_slotW23(rule_list, is_stator):
         )
     )
 
-    return rule_list
+    return self.rules_list

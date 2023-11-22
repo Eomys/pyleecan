@@ -1,3 +1,9 @@
+from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Classes.SlotW15 import SlotW15
+from pyleecan.Classes.SlotW23 import SlotW23
+from pyleecan.Classes.SlotW26 import SlotW26
+
+
 def selection_slot_rotor_rules(self, is_stator):
     """selection step to add rules for slot rotor
 
@@ -9,19 +15,21 @@ def selection_slot_rotor_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
-    slot_rotor_type = self.other_dict["[Design_Options]"]["Top_Bar_Type"]
+    if self.is_P_to_other:
+        self.convert_slot_rotor_type_MC()
 
-    if slot_rotor_type == 0:
-        pass
+    else:
+        self.convert_slot_rotor_type_P()
 
-    elif slot_rotor_type == 1:
-        pass
+    # add the correct rule depending on the slot
+    if isinstance(self.machine.rotor.slot, SlotW11):
+        self.add_rule_rotor_parallel_tooth_slotW11(is_stator)
 
-    elif slot_rotor_type == 2:
-        # self.rules_list = add_rule_rotor_parallel_tooth_slotW11(self.rules_list)
-        pass
-    elif slot_rotor_type == 3:
-        pass
-        # add_rules_parallel_slot_slotW11
+    elif isinstance(self.machine.rotor.slot, SlotW15):
+        self.add_rule_pears_slotW15(is_stator)
 
-    print("rotor slot, not yet defined")
+    elif isinstance(self.machine.rotor.slot, SlotW23):
+        self.add_rule_rectangular_slotW23(is_stator)
+
+    elif isinstance(self.machine.rotor.slot, SlotW26):
+        self.add_rule_round_slotW26(is_stator)

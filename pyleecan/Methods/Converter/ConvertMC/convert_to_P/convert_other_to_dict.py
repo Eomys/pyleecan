@@ -61,6 +61,7 @@ def convert_other_to_dict(self, file_path):
 
     other_dict = {}
     for line in file:
+        line = line.replace(",", ".")
         # deleted \n in line
         line = line.strip("\n")
         # separation different part like .mot

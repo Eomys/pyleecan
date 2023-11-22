@@ -1,5 +1,6 @@
 from ....Classes.MachineIPMSM import MachineIPMSM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.MachineSCIM import MachineSCIM
 
 
 def selection_machine_rules(self):
@@ -26,5 +27,10 @@ def selection_machine_rules(self):
     elif isinstance(self.machine, MachineIPMSM):
         self.add_rule_machine_dimension()
         self.selection_IPMSM_rules()
+
+    elif isinstance(self.machine, MachineSCIM):
+        self.add_rule_machine_dimension()
+        self.selection_SCIM_rules()
+
     else:
         raise Exception("Not implemented yet")

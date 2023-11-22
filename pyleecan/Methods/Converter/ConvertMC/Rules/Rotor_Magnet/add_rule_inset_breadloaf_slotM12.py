@@ -15,12 +15,11 @@ def add_rule_inset_breadloaf_slotM12(self, is_stator):
         A booleen to know, position in lamination
     """
 
-    rule_list = self.rules_list
-    rule_list.append(
+    self.rules_list.append(
         RuleComplex(fct_name="inset_breadleoaf_slotM12", folder="MotorCAD")
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H1",
@@ -30,7 +29,7 @@ def add_rule_inset_breadloaf_slotM12(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H0",

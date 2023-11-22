@@ -17,9 +17,7 @@ def add_rule_embedded_breadleoaf_holeM63(self, is_stator, hole_id):
         A int to know the number of hole
     """
 
-    rule_list = self.rules_list
-
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetArc[ED]_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
@@ -29,7 +27,7 @@ def add_rule_embedded_breadleoaf_holeM63(self, is_stator, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H0",
@@ -39,7 +37,7 @@ def add_rule_embedded_breadleoaf_holeM63(self, is_stator, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetEmbedDepth_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
