@@ -28,14 +28,14 @@ def shape_function(self, points):
     # the "1" dimension is important for scalar product calculations
 
     for i, (x, y) in enumerate(points[:, :2]):
-        if (x >= 0) and (x <= 1):
-            values[i, 0, 0] = 1 - x
-            values[i, 0, 1] = x
+        if (x >= -1) and (x <= 1):
+            values[i, 0, 0] = (1 - 1 * x) / 2
+            values[i, 0, 1] = (x + 1) / 2
         # ! The shape function should be zero outside the element
-        # elif x < 0:
-        #     values[i, 0, 0] = 1 + x
-        #     values[i, 0, 1] = -x
+        # elif x < -1:
+        #     values[i, 0, 0] = (3 + x) / 2
+        #     values[i, 0, 1] = -(1 + x) / 2
         # elif x > 1:
-        #     values[i, 0, 0] = x - 1
-        #     values[i, 0, 1] = 2 - x
+        #     values[i, 0, 0] = -(1 - x) / 2
+        #     values[i, 0, 1] = (3 - x) / 2
     return values, nb_func

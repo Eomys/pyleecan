@@ -48,7 +48,7 @@ class unittest_ref_nodes(TestCase):
         meshsol.plot_mesh()
 
         vert = mesh.get_vertice(0)["line"]
-        solution = np.array([0.5, 0])
+        solution = np.array([0, 0])
         test = np.array([0.5, 0.5])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
@@ -58,7 +58,7 @@ class unittest_ref_nodes(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         vert = mesh.get_vertice(1)["line"]
-        solution = np.array([0.5, 0])
+        solution = np.array([0, 0])
         test = np.array([0, 0.5])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
@@ -69,7 +69,7 @@ class unittest_ref_nodes(TestCase):
 
         vert = mesh.get_vertice(2)["line"]
         print(vert)
-        solution = np.array([0.2, 0])
+        solution = np.array([-0.6, 0])
         test = np.array([0.8, 1])
         ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))

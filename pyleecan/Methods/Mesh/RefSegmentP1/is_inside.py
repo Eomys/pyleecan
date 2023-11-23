@@ -25,16 +25,17 @@ def is_inside(self, vertice, point, normal_t=None):
 
     epsilon = self.epsilon
 
+    # Convert world coordinates (x,y) to reference segment (-1,0)--(1,0)
     point_ref = self.get_ref_point(vertice, point)
     s = point_ref[0]
     t = point_ref[1]
 
-    a = abs(s) - (1 + epsilon / 5)
+    a = max(0, abs(s) - 1)
     b = abs(t) / 2
 
-    # The point projected in the reference element domain must be in a rectangle of size (1+2*epsilon)×(2*epsilon)
+    # The point projected in the reference element domain must be in a rectangle of size (2+2*epsilon)×(2*epsilon)
     # ? Why the tolerance is different according to the direction
-    is_inside = (-epsilon < point_ref[0] < 1 + epsilon) & (
+    is_inside = (-1 - epsilon < point_ref[0] < 1 + epsilon) & (
         -epsilon < point_ref[1] < epsilon
     )
 

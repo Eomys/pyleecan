@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-import numpy as np
 from unittest import TestCase
 
+import numpy as np
+import pytest
+
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.FPGNSeg import FPGNSeg
+from pyleecan.Classes.Interpolation import Interpolation
+from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
-from pyleecan.Classes.Interpolation import Interpolation
 from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
-from pyleecan.Classes.FPGNSeg import FPGNSeg
+from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
 
 
 @pytest.mark.MeshSol
@@ -44,6 +45,7 @@ class unittest_real_nodes(TestCase):
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
+        # Constant field
         vert = mesh.get_vertice(0)["line"]
         test_pt = np.array([0.7, 0])
         test_field = np.array([1, 1])
@@ -53,6 +55,7 @@ class unittest_real_nodes(TestCase):
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(test_field)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
+        # Constant field with multiple time steps
         vert = mesh.get_vertice(0)["line"]
         test_pt = np.array([0.7, 0])
         test_field = np.ones(
@@ -64,6 +67,7 @@ class unittest_real_nodes(TestCase):
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(sol)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
+        # Not constant
         vert = mesh.get_vertice(2)["line"]
         test_pt = np.array([0.6, 0.4])
         test_field = np.zeros((2, 120, 3))

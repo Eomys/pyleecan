@@ -4,7 +4,7 @@ import numpy as np
 
 
 def get_ref_point(self, vertice, point):
-    """Return the coordinate of the equivalent point in the ref element
+    """Return the coordinate of the equivalent point in the ref element (-1,0) -- (1,0)
 
     Parameters
     ----------
@@ -37,6 +37,11 @@ def get_ref_point(self, vertice, point):
     )
 
     # ref_elem_node =  np.dot(mat_rot, elem_node_origin) / elem_lenght
-    point_in_ref_elem = np.dot(mat_rot, point - vertice[0]) / elem_lenght
+
+    point_in_ref_elem = (
+        np.dot(mat_rot, point - vertice[0]) / elem_lenght
+    )  # (0,0) -- (1,0)
+    point_in_ref_elem[0] *= 2  # (0,0) -- (2,0)
+    point_in_ref_elem[0] -= 1  # (-1,0) -- (1,0)
 
     return point_in_ref_elem
