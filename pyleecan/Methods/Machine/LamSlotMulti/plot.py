@@ -1,12 +1,9 @@
 from matplotlib.patches import Patch
 
-from ....Functions.labels import decode_label, LAM_LAB
 from ....Functions.init_fig import init_fig
-from ....definitions import config_dict
-from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
-
-ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+from ....Functions.Plot.get_color_legend_from_surface import (
+    get_color_legend_from_surface,
+)
 
 
 def plot(
@@ -64,24 +61,25 @@ def plot(
         Axis containing the plot
     """
 
-    if self.is_stator:
-        lam_color = STATOR_COLOR
-    else:
-        lam_color = ROTOR_COLOR
-
     (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        color = get_path_color_from_label(surf.label)
-        patches.extend(
-            surf.get_patches(
-                color=color,
-                is_edge_only=is_edge_only,
-                edgecolor=edgecolor,
+        color, legend = get_color_legend_from_surface(surf, is_lam_only)
+
+        if color is not None:
+            patches.extend(
+                surf.get_patches(
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
+                )
             )
-        )
+        if not is_edge_only and legend is not None and legend not in label_leg:
+            label_leg.append(legend)
+            patch_leg.append(Patch(color=color))
+
     # Display the result
     if is_display:
         (fig, ax, patch_leg, label_leg) = init_fig(fig)
@@ -101,12 +99,8 @@ def plot(
         # Add the legend
         if not is_edge_only:
             if self.is_stator:
-                patch_leg.append(Patch(color=STATOR_COLOR))
-                label_leg.append("Stator")
                 ax.set_title("Stator with empty slot")
             else:
-                patch_leg.append(Patch(color=ROTOR_COLOR))
-                label_leg.append("Rotor")
                 ax.set_title("Rotor with empty slot")
 
             ax.legend(patch_leg, label_leg)

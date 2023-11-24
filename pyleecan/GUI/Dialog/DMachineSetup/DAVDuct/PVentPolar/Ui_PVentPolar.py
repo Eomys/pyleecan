@@ -35,7 +35,9 @@ class Ui_PVentPolar(object):
         self.img_vent.setMinimumSize(QSize(410, 410))
         self.img_vent.setMaximumSize(QSize(16777215, 16777215))
         self.img_vent.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/LamParam/VentilationPolar.png")
+            QPixmap(
+                u":/images/images/MachineSetup/LamParam/VentilationPolar_empty_int_rotor.png"
+            )
         )
         self.img_vent.setScaledContents(False)
         self.img_vent.setAlignment(Qt.AlignCenter)
