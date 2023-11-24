@@ -73,7 +73,7 @@ def find_element(self, points, normal_t=None):
             # if no element was found, give it a second try
             # TODO first check if outside mesh
             if len(element_prop) == 0:
-                # test all elements (sorted by center, i.e. mean of vertices)
+                # test all elements (sorted by center, i.e. mean of element vertices coordinate)
                 element_center = point_coord[connect].mean(axis=1)
 
                 dist_element_cent = np.linalg.norm(

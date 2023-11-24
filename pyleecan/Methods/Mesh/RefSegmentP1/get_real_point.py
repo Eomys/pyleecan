@@ -3,15 +3,15 @@
 import numpy as np
 
 
-def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
+def get_real_point(self, element_coordinate, ref_pt, nb_ref_pt=1):
     """Return the coordinates in the element of a point in the reference element.
 
     Parameters
     ----------
     self : RefElement
          an RefElement object
-    vertice : ndarray
-        vertices of the element
+    element_coordinate : ndarray
+        coordinates of the element
     ref_pt : ndarray
         ref point(s)
     nb_ref_pt : int
@@ -34,6 +34,8 @@ def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
 
         length = 2
         s = (s + 1) / length
-        real_points[ii, :] = vertice[0, :] + s * (vertice[1, :] - vertice[0, :])
+        real_points[ii, :] = element_coordinate[0, :] + s * (
+            element_coordinate[1, :] - element_coordinate[0, :]
+        )
 
     return real_points

@@ -30,21 +30,23 @@ def get_element_area(self, element_indices=None, element_name=[]):
         element_mat_dict=self.element, element_name=element_name
     )
 
-    vertices_dict = self.get_element_coordinate(
+    element_coordinate_dict = self.get_element_coordinate(
         element_indices=element_indices, element_name=element_name
     )
 
-    for element_name, vertices in vertices_dict.items():
-        if len(vertices) != 0:
+    for element_name, element_coordinate in element_coordinate_dict.items():
+        if len(element_coordinate) != 0:
             try:
-                A = self.element[element_name].ref_element.get_element_area(vertices)
+                A = self.element[element_name].ref_element.get_element_area(
+                    element_coordinate
+                )
 
             except (AttributeError, NotImplementedError):
                 logger.warning(
                     f'MeshMat: Reference element for "{element_name}" of type "{type(self.element[element_name])}" not found. '
                     + "Respective area set to zero."
                 )
-                A = list(repeat(0, vertices.shape[0]))
+                A = list(repeat(0, element_coordinate.shape[0]))
 
             area.extend(A)
 
