@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from numpy import abs, newaxis, array
+from numpy import abs, array, newaxis
 
 
-def get_element_area(self, vertices):
+def get_element_area(self, element_coordinate):
     """Return the area of the elements.
     https://en.wikipedia.org/wiki/Shoelace_formula
 
@@ -10,25 +10,25 @@ def get_element_area(self, vertices):
     ----------
     self : RefTriangle3
         a RefTriangle3 object
-    vertices : list or array
-        the elements vertices
+    element_coordinate : list or array
+        the elements coordinates
 
     Returns
     -------
     area: array
         area of the elements
     """
-    if isinstance(vertices, list):
-        vertices = array(vertices)
+    if isinstance(element_coordinate, list):
+        element_coordinate = array(element_coordinate)
 
-    if vertices.shape[-1] == 2:  # 2D - case
-        if len(vertices.shape) == 2:  # only one indice -> adapt array shape
-            vertices = vertices[newaxis, :, :]
+    if element_coordinate.shape[-1] == 2:  # 2D - case
+        if len(element_coordinate.shape) == 2:  # only one indice -> adapt array shape
+            element_coordinate = element_coordinate[newaxis, :, :]
 
-        a = vertices[:, 0, 0] - vertices[:, 1, 0]  # x1 - x2
-        b = vertices[:, 0, 1] - vertices[:, 2, 1]  # y1 - y3
-        c = vertices[:, 0, 0] - vertices[:, 2, 0]  # x1 - x3
-        d = vertices[:, 0, 1] - vertices[:, 1, 1]  # y1 - y2
+        a = element_coordinate[:, 0, 0] - element_coordinate[:, 1, 0]  # x1 - x2
+        b = element_coordinate[:, 0, 1] - element_coordinate[:, 2, 1]  # y1 - y3
+        c = element_coordinate[:, 0, 0] - element_coordinate[:, 2, 0]  # x1 - x3
+        d = element_coordinate[:, 0, 1] - element_coordinate[:, 1, 1]  # y1 - y2
 
     area = 1 / 2 * abs(a * b - c * d)
 
