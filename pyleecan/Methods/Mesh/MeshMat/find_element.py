@@ -44,7 +44,7 @@ def find_element(self, points, normal_t=None):
 
         for key in self.element:
             elements = self.element[key]
-            ref_element = elements.interpolation.ref_element
+            ref_element = elements.ref_element
             connect = elements.connectivity
             nb_node_per_element = elements.nb_node_per_element
 

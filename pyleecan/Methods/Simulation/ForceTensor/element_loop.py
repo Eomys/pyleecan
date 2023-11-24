@@ -1,6 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import csv
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def element_loop(
@@ -45,7 +46,6 @@ def element_loop(
 
     # For every type of element (now only Triangle3, TO BE extended)
     for key in mesh.element:
-
         # mesh.element[key].interpolation = Interpolation()
         # mesh.element[key].interpolation.init_key(key=key, nb_gauss=1)
 
@@ -65,18 +65,17 @@ def element_loop(
         # Nodal forces init
         f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
 
-        # ref_element = mesh.element[key].interpolation.ref_element // pas besoin d'interpoler car tout est cst
+        # ref_element = mesh.element[key].ref_element // pas besoin d'interpoler car tout est cst
 
         # Gauss nodes
         # pts_gauss, poidsGauss, nb_gauss = mesh.element[
         #     key
-        # ].interpolation.gauss_point.get_gauss_points()
+        # ].gauss_point.get_gauss_points()
 
         # indice_elem = mesh.element[key].indice
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-
             node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
@@ -109,7 +108,6 @@ def element_loop(
 
             # Loop on edges
             for n in range(nb_node_per_element):
-
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
                 node_indice = np.where(mesh.node.indice == node_number[n])[0][0]
 

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from numpy import abs, newaxis, array
 from itertools import repeat
+
+from numpy import abs, array, newaxis
+
 from .get_element import _check_element_name
 
 
@@ -35,9 +37,7 @@ def get_element_area(self, element_indices=None, element_name=[]):
     for element_name, vertices in vertices_dict.items():
         if len(vertices) != 0:
             try:
-                A = self.element[
-                    element_name
-                ].interpolation.ref_element.get_element_area(vertices)
+                A = self.element[element_name].ref_element.get_element_area(vertices)
 
             except (AttributeError, NotImplementedError):
                 logger.warning(

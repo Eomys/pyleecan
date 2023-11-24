@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-import numpy as np
 from unittest import TestCase
 
-from pyleecan.Classes.ElementMat import ElementMat
+import numpy as np
+import pytest
 
+from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.FPGNSeg import FPGNSeg
+from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.MeshMat import MeshMat
-
-from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
-from pyleecan.Classes.Interpolation import Interpolation
 from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
-from pyleecan.Classes.FPGNSeg import FPGNSeg
+from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
 
 
 @pytest.mark.MeshSol
@@ -24,7 +22,11 @@ class unittest_scalar_product(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat()
-        mesh.element["line"] = ElementMat(nb_node_per_element=2)
+        mesh.element["line"] = ElementMat(
+            nb_node_per_element=2,
+            ref_element=RefSegmentP1(),
+            gauss_point=FPGNSeg(nb_gauss_point=4),
+        )
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([-1, 0]))
         mesh.node.add_node(np.array([1, 0]))
@@ -38,11 +40,6 @@ class unittest_scalar_product(TestCase):
 
         c_line = mesh.element["line"]
 
-        c_line.interpolation = Interpolation()
-        c_line.interpolation.ref_element = RefSegmentP1()
-        c_line.interpolation.scalar_product = ScalarProductL2()
-        c_line.interpolation.gauss_point = FPGNSeg(nb_gauss_point=4)
-
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
@@ -54,20 +51,20 @@ class unittest_scalar_product(TestCase):
             gauss_points,
             weights,
             nb_gauss_points,
-        ] = c_line.interpolation.gauss_point.get_gauss_points()
+        ] = c_line.gauss_point.get_gauss_points()
         [
             func_ref,
             nb_func_per_element,
-        ] = c_line.interpolation.ref_element.shape_function(gauss_points)
+        ] = c_line.ref_element.shape_function(gauss_points)
         jacob = np.zeros((nb_gauss_points, 2, 2))
         detJ = np.zeros((nb_gauss_points))
         for ig in range(nb_gauss_points):
-            [jacob[ig, :], detJ[ig]] = c_line.interpolation.ref_element.jacobian(
+            [jacob[ig, :], detJ[ig]] = c_line.ref_element.jacobian(
                 gauss_points[ig, :], vert
             )
 
         # scal_mat_ij = < w_i , w_j >
-        scal_mat = c_line.interpolation.scalar_product.scalar_product(
+        scal_mat = c_line.scalar_product.scalar_product(
             func_ref, func_ref, detJ, weights, nb_gauss_points
         )
 
@@ -85,20 +82,20 @@ class unittest_scalar_product(TestCase):
             gauss_points,
             weights,
             nb_gauss_points,
-        ] = c_line.interpolation.gauss_point.get_gauss_points()
+        ] = c_line.gauss_point.get_gauss_points()
         [
             func_ref,
             nb_func_per_element,
-        ] = c_line.interpolation.ref_element.shape_function(gauss_points)
+        ] = c_line.ref_element.shape_function(gauss_points)
         jacob = np.zeros((nb_gauss_points, 2, 2))
         detJ = np.zeros((nb_gauss_points))
         for ig in range(nb_gauss_points):
-            [jacob[ig, :], detJ[ig]] = c_line.interpolation.ref_element.jacobian(
+            [jacob[ig, :], detJ[ig]] = c_line.ref_element.jacobian(
                 gauss_points[ig, :], vert
             )
 
         # scal_mat_ij = < w_i , w_j >
-        scal_mat = c_line.interpolation.scalar_product.scalar_product(
+        scal_mat = c_line.scalar_product.scalar_product(
             func_ref, func_ref, detJ, weights, nb_gauss_points
         )
 

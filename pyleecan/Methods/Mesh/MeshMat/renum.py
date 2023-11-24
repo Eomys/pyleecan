@@ -42,7 +42,9 @@ def renum(self):
                 nb_element=len(connect_dict_new[key]),
                 nb_node_per_element=self.element[key].nb_node_per_element,
                 indice=self.element[key].indice,
-                interpolation=self.element[key].interpolation,
+                ref_element=self.element[key].ref_element,
+                gauss_point=self.element[key].gauss_point,
+                scalar_product=self.element[key].scalar_product,
             )
 
         self._is_renum = False

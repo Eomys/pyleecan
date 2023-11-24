@@ -1,16 +1,15 @@
 import os
-import numpy as np
-
-from ....definitions import MAIN_DIR
-from ....Classes.MeshMat import MeshMat
-from ....Classes.ElementMat import ElementMat
-from ....Classes.NodeMat import NodeMat
-from ....Classes.RefTriangle3 import RefTriangle3
-from ....Classes.FPGNTri import FPGNTri
-from ....Classes.ScalarProductL2 import ScalarProductL2
-
 from os.path import join
 
+import numpy as np
+
+from ....Classes.ElementMat import ElementMat
+from ....Classes.FPGNTri import FPGNTri
+from ....Classes.MeshMat import MeshMat
+from ....Classes.NodeMat import NodeMat
+from ....Classes.RefTriangle3 import RefTriangle3
+from ....Classes.ScalarProductL2 import ScalarProductL2
+from ....definitions import MAIN_DIR
 from ....Functions.FEMM import FEMM_GROUPS
 
 
@@ -105,9 +104,9 @@ def get_meshsolution(
             nb_node_per_element=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
-        mesh.element["triangle"].interpolation.ref_element = RefTriangle3(epsilon=1e-9)
-        mesh.element["triangle"].interpolation.gauss_point = FPGNTri(nb_gauss_point=1)
-        mesh.element["triangle"].interpolation.scalar_product = ScalarProductL2()
+        mesh.element["triangle"].ref_element = RefTriangle3(epsilon=1e-9)
+        mesh.element["triangle"].gauss_point = FPGNTri(nb_gauss_point=1)
+        mesh.element["triangle"].scalar_product = ScalarProductL2()
 
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2],

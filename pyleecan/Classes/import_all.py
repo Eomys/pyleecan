@@ -81,7 +81,6 @@ from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
 from ..Classes.InputVoltage import InputVoltage
-from ..Classes.Interpolation import Interpolation
 from ..Classes.LUT import LUT
 from ..Classes.LUTdq import LUTdq
 from ..Classes.LUTslip import LUTslip

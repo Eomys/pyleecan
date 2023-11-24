@@ -7,7 +7,6 @@ import pytest
 
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.FPGNSeg import FPGNSeg
-from pyleecan.Classes.Interpolation import Interpolation
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
@@ -24,7 +23,9 @@ class unittest_ref_nodes(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat(dimension=2)
-        mesh.element["line"] = ElementMat(nb_node_per_element=2)
+        mesh.element["line"] = ElementMat(
+            nb_node_per_element=2, ref_element=RefSegmentP1(), gauss_point=FPGNSeg()
+        )
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([0, 0]))
         mesh.node.add_node(np.array([1, 1]))
@@ -38,10 +39,6 @@ class unittest_ref_nodes(TestCase):
 
         c_line = mesh.element["line"]
 
-        c_line.interpolation = Interpolation()
-        c_line.interpolation.ref_element = RefSegmentP1()
-        c_line.interpolation.scalar_product = ScalarProductL2()
-        c_line.interpolation.gauss_point = FPGNSeg()
 
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
@@ -50,7 +47,7 @@ class unittest_ref_nodes(TestCase):
         vert = mesh.get_vertice(0)["line"]
         solution = np.array([0, 0])
         test = np.array([0.5, 0.5])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)
@@ -60,7 +57,7 @@ class unittest_ref_nodes(TestCase):
         vert = mesh.get_vertice(1)["line"]
         solution = np.array([0, 0])
         test = np.array([0, 0.5])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)
@@ -71,7 +68,7 @@ class unittest_ref_nodes(TestCase):
         print(vert)
         solution = np.array([-0.6, 0])
         test = np.array([0.8, 1])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)
@@ -81,7 +78,7 @@ class unittest_ref_nodes(TestCase):
         vert = mesh.get_vertice(2)["line"]
         solution = np.array([1, 0])
         test = np.array([0, 1])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)
@@ -92,7 +89,7 @@ class unittest_ref_nodes(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat(dimension=2)
-        mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
+        mesh.element["triangle"] = ElementMat(nb_node_per_element=3, ref_element=RefTriangle3(), gauss_point=FPGNSeg())
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([0, 0]))
         mesh.node.add_node(np.array([1, 0]))
@@ -106,18 +103,13 @@ class unittest_ref_nodes(TestCase):
 
         c_line = mesh.element["triangle"]
 
-        c_line.interpolation = Interpolation()
-        c_line.interpolation.ref_element = RefTriangle3()
-        c_line.interpolation.scalar_product = ScalarProductL2()
-        c_line.interpolation.gauss_point = FPGNSeg()
-
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
         vert = mesh.get_vertice(0)["triangle"]
         solution = np.array([0.5, 0])
         test = np.array([0.5, 0])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)
@@ -127,7 +119,7 @@ class unittest_ref_nodes(TestCase):
         vert = mesh.get_vertice(1)["triangle"]
         solution = np.array([0.5, 0])
         test = np.array([0.5, 0.5])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)
@@ -137,7 +129,7 @@ class unittest_ref_nodes(TestCase):
         vert = mesh.get_vertice(2)["triangle"]
         solution = np.array([0.5, 0.25])
         test = np.array([1.25, 0.5])
-        ref_nodes = c_line.interpolation.ref_element.get_ref_point(vert, test)
+        ref_nodes = c_line.ref_element.get_ref_point(vert, test)
         testA = np.sum(abs(solution - ref_nodes))
         msg = (
             "Wrong result: returned " + str(ref_nodes) + ", expected: " + str(solution)

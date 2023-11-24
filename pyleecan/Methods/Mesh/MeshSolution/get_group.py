@@ -77,7 +77,9 @@ def get_group(self, group_names):
                 nb_element=len(connect_dict[key]),
                 nb_node_per_element=mesh_init.element[key].nb_node_per_element,
                 indice=indice_dict[key],
-                interpolation=mesh_init.element[key].interpolation,
+                ref_element=mesh_init.element[key].ref_element,
+                gauss_point=mesh_init.element[key].gauss_point,
+                scalar_product=mesh_init.element[key].scalar_product,
             )
         node_indice = np.unique(node_indice)
 

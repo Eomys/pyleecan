@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     is_exist = error
 
+try:
+    from ..Methods.Mesh.ElementMat.interpolate import interpolate
+except ImportError as error:
+    interpolate = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -93,6 +98,17 @@ class ElementMat(FrozenClass):
         )
     else:
         is_exist = is_exist
+    # cf Methods.Mesh.ElementMat.interpolate
+    if isinstance(interpolate, ImportError):
+        interpolate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method interpolate: " + str(interpolate)
+                )
+            )
+        )
+    else:
+        interpolate = interpolate
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -104,7 +120,9 @@ class ElementMat(FrozenClass):
         nb_element=0,
         nb_node_per_element=0,
         indice=None,
-        interpolation=-1,
+        ref_element=None,
+        gauss_point=None,
+        scalar_product=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -131,15 +149,21 @@ class ElementMat(FrozenClass):
                 nb_node_per_element = init_dict["nb_node_per_element"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
-            if "interpolation" in list(init_dict.keys()):
-                interpolation = init_dict["interpolation"]
+            if "ref_element" in list(init_dict.keys()):
+                ref_element = init_dict["ref_element"]
+            if "gauss_point" in list(init_dict.keys()):
+                gauss_point = init_dict["gauss_point"]
+            if "scalar_product" in list(init_dict.keys()):
+                scalar_product = init_dict["scalar_product"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.connectivity = connectivity
         self.nb_element = nb_element
         self.nb_node_per_element = nb_node_per_element
         self.indice = indice
-        self.interpolation = interpolation
+        self.ref_element = ref_element
+        self.gauss_point = gauss_point
+        self.scalar_product = scalar_product
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -170,15 +194,29 @@ class ElementMat(FrozenClass):
             + linesep
             + linesep
         )
-        if self.interpolation is not None:
+        if self.ref_element is not None:
             tmp = (
-                self.interpolation.__str__()
+                self.ref_element.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            ElementMat_str += "ref_element = " + tmp
+        else:
+            ElementMat_str += "ref_element = None" + linesep + linesep
+        if self.gauss_point is not None:
+            tmp = (
+                self.gauss_point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            ElementMat_str += "gauss_point = " + tmp
+        else:
+            ElementMat_str += "gauss_point = None" + linesep + linesep
+        if self.scalar_product is not None:
+            tmp = (
+                self.scalar_product.__str__()
                 .replace(linesep, linesep + "\t")
                 .rstrip("\t")
             )
-            ElementMat_str += "interpolation = " + tmp
+            ElementMat_str += "scalar_product = " + tmp
         else:
-            ElementMat_str += "interpolation = None" + linesep + linesep
+            ElementMat_str += "scalar_product = None" + linesep + linesep
         return ElementMat_str
 
     def __eq__(self, other):
@@ -194,7 +232,11 @@ class ElementMat(FrozenClass):
             return False
         if not array_equal(other.indice, self.indice):
             return False
-        if other.interpolation != self.interpolation:
+        if other.ref_element != self.ref_element:
+            return False
+        if other.gauss_point != self.gauss_point:
+            return False
+        if other.scalar_product != self.scalar_product:
             return False
         return True
 
@@ -234,15 +276,41 @@ class ElementMat(FrozenClass):
                 diff_list.append(name + ".nb_node_per_element")
         if not array_equal(other.indice, self.indice):
             diff_list.append(name + ".indice")
-        if (other.interpolation is None and self.interpolation is not None) or (
-            other.interpolation is not None and self.interpolation is None
+        if (other.ref_element is None and self.ref_element is not None) or (
+            other.ref_element is not None and self.ref_element is None
         ):
-            diff_list.append(name + ".interpolation None mismatch")
-        elif self.interpolation is not None:
+            diff_list.append(name + ".ref_element None mismatch")
+        elif self.ref_element is not None:
             diff_list.extend(
-                self.interpolation.compare(
-                    other.interpolation,
-                    name=name + ".interpolation",
+                self.ref_element.compare(
+                    other.ref_element,
+                    name=name + ".ref_element",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.gauss_point is None and self.gauss_point is not None) or (
+            other.gauss_point is not None and self.gauss_point is None
+        ):
+            diff_list.append(name + ".gauss_point None mismatch")
+        elif self.gauss_point is not None:
+            diff_list.extend(
+                self.gauss_point.compare(
+                    other.gauss_point,
+                    name=name + ".gauss_point",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.scalar_product is None and self.scalar_product is not None) or (
+            other.scalar_product is not None and self.scalar_product is None
+        ):
+            diff_list.append(name + ".scalar_product None mismatch")
+        elif self.scalar_product is not None:
+            diff_list.extend(
+                self.scalar_product.compare(
+                    other.scalar_product,
+                    name=name + ".scalar_product",
                     ignore_list=ignore_list,
                     is_add_value=is_add_value,
                 )
@@ -259,7 +327,9 @@ class ElementMat(FrozenClass):
         S += getsizeof(self.nb_element)
         S += getsizeof(self.nb_node_per_element)
         S += getsizeof(self.indice)
-        S += getsizeof(self.interpolation)
+        S += getsizeof(self.ref_element)
+        S += getsizeof(self.gauss_point)
+        S += getsizeof(self.scalar_product)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -302,10 +372,26 @@ class ElementMat(FrozenClass):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
-        if self.interpolation is None:
-            ElementMat_dict["interpolation"] = None
+        if self.ref_element is None:
+            ElementMat_dict["ref_element"] = None
         else:
-            ElementMat_dict["interpolation"] = self.interpolation.as_dict(
+            ElementMat_dict["ref_element"] = self.ref_element.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        if self.gauss_point is None:
+            ElementMat_dict["gauss_point"] = None
+        else:
+            ElementMat_dict["gauss_point"] = self.gauss_point.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        if self.scalar_product is None:
+            ElementMat_dict["scalar_product"] = None
+        else:
+            ElementMat_dict["scalar_product"] = self.scalar_product.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
@@ -328,17 +414,27 @@ class ElementMat(FrozenClass):
             indice_val = None
         else:
             indice_val = self.indice.copy()
-        if self.interpolation is None:
-            interpolation_val = None
+        if self.ref_element is None:
+            ref_element_val = None
         else:
-            interpolation_val = self.interpolation.copy()
+            ref_element_val = self.ref_element.copy()
+        if self.gauss_point is None:
+            gauss_point_val = None
+        else:
+            gauss_point_val = self.gauss_point.copy()
+        if self.scalar_product is None:
+            scalar_product_val = None
+        else:
+            scalar_product_val = self.scalar_product.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             connectivity=connectivity_val,
             nb_element=nb_element_val,
             nb_node_per_element=nb_node_per_element_val,
             indice=indice_val,
-            interpolation=interpolation_val,
+            ref_element=ref_element_val,
+            gauss_point=gauss_point_val,
+            scalar_product=scalar_product_val,
         )
         return obj_copy
 
@@ -349,8 +445,12 @@ class ElementMat(FrozenClass):
         self.nb_element = None
         self.nb_node_per_element = None
         self.indice = None
-        if self.interpolation is not None:
-            self.interpolation._set_None()
+        if self.ref_element is not None:
+            self.ref_element._set_None()
+        if self.gauss_point is not None:
+            self.gauss_point._set_None()
+        if self.scalar_product is not None:
+            self.scalar_product._set_None()
 
     def _get_connectivity(self):
         """getter of connectivity"""
@@ -438,12 +538,12 @@ class ElementMat(FrozenClass):
         """,
     )
 
-    def _get_interpolation(self):
-        """getter of interpolation"""
-        return self._interpolation
+    def _get_ref_element(self):
+        """getter of ref_element"""
+        return self._ref_element
 
-    def _set_interpolation(self, value):
-        """setter of interpolation"""
+    def _set_ref_element(self, value):
+        """setter of ref_element"""
         if isinstance(value, str):  # Load from file
             try:
                 value = load_init_dict(value)[1]
@@ -454,25 +554,99 @@ class ElementMat(FrozenClass):
                 value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "interpolation"
+                "pyleecan.Classes", value.get("__class__"), "ref_element"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Interpolation = import_class(
-                "pyleecan.Classes", "Interpolation", "interpolation"
+            RefElement = import_class("pyleecan.Classes", "RefElement", "ref_element")
+            value = RefElement()
+        check_var("ref_element", value, "RefElement")
+        self._ref_element = value
+
+        if self._ref_element is not None:
+            self._ref_element.parent = self
+
+    ref_element = property(
+        fget=_get_ref_element,
+        fset=_set_ref_element,
+        doc=u"""
+
+        :Type: RefElement
+        """,
+    )
+
+    def _get_gauss_point(self):
+        """getter of gauss_point"""
+        return self._gauss_point
+
+    def _set_gauss_point(self, value):
+        """setter of gauss_point"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "gauss_point"
             )
-            value = Interpolation()
-        check_var("interpolation", value, "Interpolation")
-        self._interpolation = value
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            GaussPoint = import_class("pyleecan.Classes", "GaussPoint", "gauss_point")
+            value = GaussPoint()
+        check_var("gauss_point", value, "GaussPoint")
+        self._gauss_point = value
 
-        if self._interpolation is not None:
-            self._interpolation.parent = self
+        if self._gauss_point is not None:
+            self._gauss_point.parent = self
 
-    interpolation = property(
-        fget=_get_interpolation,
-        fset=_set_interpolation,
-        doc=u"""Define FEA interpolation
+    gauss_point = property(
+        fget=_get_gauss_point,
+        fset=_set_gauss_point,
+        doc=u"""
 
-        :Type: Interpolation
+        :Type: GaussPoint
+        """,
+    )
+
+    def _get_scalar_product(self):
+        """getter of scalar_product"""
+        return self._scalar_product
+
+    def _set_scalar_product(self, value):
+        """setter of scalar_product"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "scalar_product"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            ScalarProductL2 = import_class(
+                "pyleecan.Classes", "ScalarProductL2", "scalar_product"
+            )
+            value = ScalarProductL2()
+        check_var("scalar_product", value, "ScalarProductL2")
+        self._scalar_product = value
+
+        if self._scalar_product is not None:
+            self._scalar_product.parent = self
+
+    scalar_product = property(
+        fget=_get_scalar_product,
+        fset=_set_scalar_product,
+        doc=u"""
+
+        :Type: ScalarProductL2
         """,
     )

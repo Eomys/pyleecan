@@ -7,7 +7,6 @@ from numpy import int32
 
 from ....Classes.ElementMat import ElementMat
 from ....Classes.ImportMeshUnv import ImportMeshUnv
-from ....Classes.Interpolation import Interpolation
 from ....Classes.MeshMat import MeshMat
 from ....Classes.NodeMat import NodeMat
 from ....Classes.RefQuad4 import RefQuad4
@@ -95,9 +94,9 @@ def get_data(self):
         )
         # Add element of reference using names from pyUFF
         if elt_type == "triangle":
-            element.interpolation = Interpolation(ref_element=RefTriangle3())
+            element.ref_element = RefTriangle3()
         elif elt_type == "quad":
-            element.interpolation = Interpolation(ref_element=RefQuad4())
+            element.ref_element = RefQuad4()
         else:
             raise ValueError(f"Wrong element type {elt_type}.")
 

@@ -7,12 +7,10 @@ import pytest
 
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.FPGNSeg import FPGNSeg
-from pyleecan.Classes.Interpolation import Interpolation
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
-from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
 
 
 @pytest.mark.MeshSol
@@ -23,7 +21,9 @@ class unittest_real_nodes(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat()
-        mesh.element["line"] = ElementMat(nb_node_per_element=2)
+        mesh.element["line"] = ElementMat(
+            nb_node_per_element=2, ref_element=RefSegmentP1(), gauss_point=FPGNSeg()
+        )
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([0, 0]))
         mesh.node.add_node(np.array([1, 0]))
@@ -37,11 +37,6 @@ class unittest_real_nodes(TestCase):
 
         c_line = mesh.element["line"]
 
-        c_line.interpolation = Interpolation()
-        c_line.interpolation.ref_element = RefSegmentP1()
-        c_line.interpolation.scalar_product = ScalarProductL2()
-        c_line.interpolation.gauss_point = FPGNSeg()
-
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
@@ -50,7 +45,7 @@ class unittest_real_nodes(TestCase):
         test_pt = np.array([0.7, 0])
         test_field = np.array([1, 1])
         sol = [1]
-        func = c_line.interpolation.ref_element.interpolation(test_pt, vert, test_field)
+        func = c_line.interpolate(test_pt, vert, test_field)
         testA = np.sum(abs(func - sol))
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(test_field)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
@@ -61,7 +56,7 @@ class unittest_real_nodes(TestCase):
         test_field = np.ones(
             (2, 120, 3)
         )  # Simulate a 3D vector field for 120 time step
-        func = c_line.interpolation.ref_element.interpolation(test_pt, vert, test_field)
+        func = c_line.interpolate(test_pt, vert, test_field)
         sol = np.ones((120, 3))
         testA = np.sum(abs(func - sol))
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(sol)
@@ -74,7 +69,7 @@ class unittest_real_nodes(TestCase):
         test_field[0, :] = np.ones(
             (1, 120, 3)
         )  # Simulate a 3D vector field for 120 time step
-        func = c_line.interpolation.ref_element.interpolation(test_pt, vert, test_field)
+        func = c_line.interpolate(test_pt, vert, test_field)
         sol = 0.6 * np.ones((120, 3))
         testA = np.sum(abs(sol - func))
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(sol)
@@ -86,7 +81,7 @@ class unittest_real_nodes(TestCase):
         test_field[1, :] = np.ones(
             (1, 120, 3)
         )  # Simulate a 3D vector field for 120 time step
-        func = c_line.interpolation.ref_element.interpolation(test_pt, vert, test_field)
+        func = c_line.interpolate(test_pt, vert, test_field)
         sol = 0.4 * np.ones((120, 3))
         testA = np.sum(abs(sol - func))
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(sol)

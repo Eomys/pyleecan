@@ -65,7 +65,7 @@ def convert(
         element_types.extend(
             list(
                 repeat(
-                    element_types_dict[type(element.interpolation.ref_element)],
+                    element_types_dict[type(element.ref_element)],
                     nb_element,
                 )
             )

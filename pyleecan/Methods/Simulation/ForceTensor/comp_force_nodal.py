@@ -1,7 +1,6 @@
 import numpy as np
-from SciDataTool import DataTime, VectorField, Data1D
+from SciDataTool import Data1D, DataTime, VectorField
 
-from pyleecan.Classes.Interpolation import Interpolation
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.SolutionVector import SolutionVector
 

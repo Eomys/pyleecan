@@ -6,7 +6,6 @@ from numpy import arange, array
 from ....Classes.ElementMat import ElementMat
 from ....Classes.FPGNSeg import FPGNSeg
 from ....Classes.FPGNTri import FPGNTri
-from ....Classes.Interpolation import Interpolation
 from ....Classes.Mesh import Mesh
 from ....Classes.MeshMat import MeshMat
 from ....Classes.NodeMat import NodeMat
@@ -68,48 +67,37 @@ def convert(
                     connectivity=connect,
                     nb_element=nb_element,
                     indice=indices,
+                    gauss_point=FPGNSeg(),
+                    ref_element=RefSegmentP1(),
+                    scalar_product=ScalarProductL2(),
                 )
-                interp = Interpolation()
-                interp.gauss_point = FPGNSeg()
-                interp.ref_element = RefSegmentP1()
-                interp.scalar_product = ScalarProductL2()
-                new_mesh.element["line"].interpolation = interp
             elif key == "line3":
                 new_mesh.element["line3"] = ElementMat(
                     nb_node_per_element=3,
                     connectivity=connect,
                     nb_element=nb_element,
                     indice=indices,
+                    ref_element=RefLine3(),
+                    gauss_point=None,  # TODO
                 )
-                interp = Interpolation()
-                interp.gauss_point = None  # TODO
-                interp.ref_element = RefLine3()  # TODO
-                interp.scalar_product = None  # TODO
-                new_mesh.element["line3"].interpolation = interp
             elif key == "triangle3":
                 new_mesh.element["triangle"] = ElementMat(
                     nb_node_per_element=3,
                     connectivity=connect,
                     nb_element=nb_element,
                     indice=indices,
+                    gauss_point=FPGNTri(),
+                    ref_element=RefTriangle3(),
+                    scalar_product=ScalarProductL2(),
                 )
-                interp = Interpolation()
-                interp.gauss_point = FPGNTri()
-                interp.ref_element = RefTriangle3()
-                interp.scalar_product = ScalarProductL2()
-                new_mesh.element["triangle"].interpolation = interp
             elif key == "quad9":
                 new_mesh.element["quad9"] = ElementMat(
                     nb_node_per_element=9,
                     connectivity=connect,
                     nb_element=nb_element,
                     indice=indices,
+                    ref_element=RefQuad9(),
                 )
-                interp = Interpolation()
-                interp.gauss_point = None  # TODO
-                interp.ref_element = RefQuad9()  # TODO
-                interp.scalar_product = None  # TODO
-                new_mesh.element["quad9"].interpolation = interp
     else:
         raise ValueError(
             f"Wrong meshtype value, expected MeshVTK or MeshMat, got {meshtype}."

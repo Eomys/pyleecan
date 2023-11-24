@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-from ....Classes.NodeMat import NodeMat
-from ....Classes.ElementMat import ElementMat
-from ....Classes.Interpolation import Interpolation
-from ....Classes.FPGNSeg import FPGNSeg
-from ....Classes.ScalarProductL2 import ScalarProductL2
-from ....Classes.RefSegmentP1 import RefSegmentP1
-
-from ....definitions import PACKAGE_NAME
 from collections import Counter
-import numpy as np
 from itertools import combinations
+
+import numpy as np
+
+from ....Classes.ElementMat import ElementMat
+from ....Classes.FPGNSeg import FPGNSeg
+from ....Classes.RefSegmentP1 import RefSegmentP1
 
 
 def interface(self, other_mesh):
@@ -34,16 +31,11 @@ def interface(self, other_mesh):
     new_mesh.element = dict()
 
     for key in self.element:
-
         # Developer info: IDK if this code works with other than triangle elements. To be checked.
         if self.element[key].nb_node_per_element == 3:  # Triangle case
-
-            new_mesh.element["line"] = ElementMat(nb_node_per_element=2)
-            interp = Interpolation()
-            interp.gauss_point = FPGNSeg()
-            interp.ref_element = RefSegmentP1()
-            interp.scalar_product = ScalarProductL2()
-            new_mesh.element["line"].interpolation = interp
+            new_mesh.element["line"] = ElementMat(
+                nb_node_per_element=2, gauss_point=FPGNSeg(), ref_element=RefSegmentP1()
+            )
 
             connect = self.element[key].get_connectivity()
             connect2 = other_mesh.element[key].get_connectivity()

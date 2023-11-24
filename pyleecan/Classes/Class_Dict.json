@@ -1917,7 +1917,8 @@
             "add_element",
             "get_connectivity",
             "get_node2element",
-            "is_exist"
+            "is_exist",
+            "interpolate"
         ],
         "mother": "",
         "name": "ElementMat",
@@ -1966,11 +1967,31 @@
             },
             {
                 "as_dict": "",
-                "desc": "Define FEA interpolation",
+                "desc": "",
                 "max": "",
                 "min": "",
-                "name": "interpolation",
-                "type": "Interpolation",
+                "name": "ref_element",
+                "type": "RefElement",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "gauss_point",
+                "type": "GaussPoint",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "scalar_product",
+                "type": "ScalarProductL2",
                 "unit": "",
                 "value": ""
             }
@@ -5561,54 +5582,6 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
-            }
-        ]
-    },
-    "Interpolation": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Store shape functions",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Interpolation",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/Interpolation.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "ref_element",
-                "type": "RefElement",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "gauss_point",
-                "type": "GaussPoint",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "scalar_product",
-                "type": "ScalarProduct",
-                "unit": "",
-                "value": null
             }
         ]
     },

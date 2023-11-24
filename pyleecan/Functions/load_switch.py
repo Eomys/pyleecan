@@ -83,7 +83,6 @@ load_switch = {
     "InputFlux": InputFlux,
     "InputForce": InputForce,
     "InputVoltage": InputVoltage,
-    "Interpolation": Interpolation,
     "LUT": LUT,
     "LUTdq": LUTdq,
     "LUTslip": LUTslip,
