@@ -3,7 +3,6 @@ from ....Classes.LamSlotWind import LamSlotWind
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-BAR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
 SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
 
 

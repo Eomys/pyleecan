@@ -2,13 +2,10 @@ from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 from numpy import pi, exp
 from ....Functions.init_fig import init_fig
-from ....definitions import config_dict
 from ....Functions.labels import decode_label, MAG_LAB, LAM_LAB
-from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
-
-ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
-MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+from ....Functions.Plot.get_color_legend_from_surface import (
+    get_color_legend_from_surface,
+)
 
 
 def plot(
@@ -70,9 +67,9 @@ def plot(
     """
 
     if self.is_stator:
-        Lam_Name = "Stator"
+        lam_name = "Stator"
     else:
-        Lam_Name = "Rotor"
+        lam_name = "Rotor"
 
     (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
@@ -81,10 +78,9 @@ def plot(
     patches = list()
     for surf in surf_list:
         label_dict = decode_label(surf.label)
-        if MAG_LAB in label_dict["surf_type"] and is_lam_only:
-            pass
-        else:
-            color = get_path_color_from_label(surf.label)
+        color, legend = get_color_legend_from_surface(surf, is_lam_only)
+
+        if color is not None:
             patches.extend(
                 surf.get_patches(
                     color=color,
@@ -92,46 +88,49 @@ def plot(
                     edgecolor=edgecolor,
                 )
             )
-            # Add the magnetization direction as arrow on top of the lamination
-            if MAG_LAB in label_dict["surf_type"] and label_dict["S_id"] == 0:
-                if hasattr(self, "magnet"):
-                    mag_type = self.magnet.type_magnetization
-                else:
-                    mag_type = self.magnet_north.type_magnetization
-                if is_add_arrow and mag_type in [0, 1]:  # Radial or Parallel only
-                    # Create arrow coordinates
-                    Zs = self.slot.Zs
-                    H = self.slot.comp_height_active()
-                    for ii in range(Zs // sym):
-                        # if mag is not None and mag.type_magnetization == 3:
-                        #     off -= pi / 2
-                        Z1 = (abs(surf.point_ref) + delta - H / 4) * exp(
-                            1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
+        if not is_edge_only and legend is not None and legend not in label_leg:
+            label_leg.append(legend)
+            patch_leg.append(Patch(color=color))
+
+        # Add the magnetization direction as arrow on top of the lamination
+        if (
+            not is_lam_only
+            and MAG_LAB in label_dict["surf_type"]
+            and label_dict["S_id"] == 0
+        ):
+            if hasattr(self, "magnet"):
+                mag_type = self.magnet.type_magnetization
+            else:
+                mag_type = self.magnet_north.type_magnetization
+            if is_add_arrow and mag_type in [0, 1]:  # Radial or Parallel only
+                # Create arrow coordinates
+                Zs = self.slot.Zs
+                H = self.slot.comp_height_active()
+                for ii in range(Zs // sym):
+                    # if mag is not None and mag.type_magnetization == 3:
+                    #     off -= pi / 2
+                    Z1 = (abs(surf.point_ref) + delta - H / 4) * exp(
+                        1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
+                    )
+                    Z2 = (abs(surf.point_ref) + delta + H / 4) * exp(
+                        1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
+                    )
+                    # Change arrow direction for North/South
+                    if ii % 2 == 1:
+                        ax.annotate(
+                            text="",
+                            xy=(Z1.real, Z1.imag),
+                            xytext=(Z2.real, Z2.imag),
+                            arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
                         )
-                        Z2 = (abs(surf.point_ref) + delta + H / 4) * exp(
-                            1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
+                    else:
+                        ax.annotate(
+                            text="",
+                            xy=(Z2.real, Z2.imag),
+                            xytext=(Z1.real, Z1.imag),
+                            arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
                         )
-                        # Change arrow direction for North/South
-                        if ii % 2 == 1:
-                            ax.annotate(
-                                text="",
-                                xy=(Z1.real, Z1.imag),
-                                xytext=(Z2.real, Z2.imag),
-                                arrowprops=dict(
-                                    arrowstyle="->", linewidth=1, color="b"
-                                ),
-                            )
-                        else:
-                            ax.annotate(
-                                text="",
-                                xy=(Z2.real, Z2.imag),
-                                xytext=(Z1.real, Z1.imag),
-                                arrowprops=dict(
-                                    arrowstyle="->", linewidth=1, color="b"
-                                ),
-                            )
-    # Display the result
-    (fig, ax, patch_leg, label_leg) = init_fig(fig)
+
     ax.set_xlabel("(m)")
     ax.set_ylabel("(m)")
     for patch in patches:
@@ -151,26 +150,16 @@ def plot(
         and self.parent is not None
         and self.parent.name not in [None, ""]
     ):
-        win_title = self.parent.name + " " + Lam_Name
+        win_title = self.parent.name + " " + lam_name
     elif win_title is None:
-        win_title = Lam_Name
+        win_title = lam_name
     manager = plt.get_current_fig_manager()
     if manager is not None:
         manager.set_window_title(win_title)
 
     # Add the legend
     if not is_edge_only:
-        if self.is_stator:
-            patch_leg.append(Patch(color=STATOR_COLOR))
-            label_leg.append("Stator")
-            ax.set_title("Stator with Magnet")
-        else:
-            patch_leg.append(Patch(color=ROTOR_COLOR))
-            label_leg.append("Rotor")
-            ax.set_title("Rotor with Magnet")
-        if not is_lam_only:
-            patch_leg.append(Patch(color=MAGNET_COLOR))
-            label_leg.append("Magnet")
+        ax.set_title(f"{lam_name} with Magnet")
 
         if is_legend:
             ax.legend(patch_leg, label_leg)
