@@ -3,15 +3,15 @@
 import numpy as np
 
 
-def get_ref_point(self, vertice, point):
+def get_ref_point(self, element_coordinate, point):
     """Return the coordinate of the equivalent point in the ref element
 
     Parameters
     ----------
     self : RefTriangle3
         a RefTriangle3 object
-    vertice : ndarray
-        vertice of the element
+    element_coordinate : ndarray
+        coordinates of the element
     point : ndarray
         coordinates of a point
 

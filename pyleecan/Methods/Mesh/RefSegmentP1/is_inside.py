@@ -3,15 +3,15 @@
 import numpy as np
 
 
-def is_inside(self, vertice, point, normal_t=None):
+def is_inside(self, element_coordinate, point, normal_t=None):
     """Check if a point is inside the element.
 
     Parameters
     ----------
     self : RefSegmentP1
         a RefSegmentP1 object
-    vertice : ndarray
-        vertice of the element
+    element_coordinate : ndarray
+        coordinates of the element
     point : ndarray
         coordinates of a point
     normal : ndarray
@@ -26,7 +26,7 @@ def is_inside(self, vertice, point, normal_t=None):
     epsilon = self.epsilon
 
     # Convert world coordinates (x,y) to reference segment (-1,0)--(1,0)
-    point_ref = self.get_ref_point(vertice, point)
+    point_ref = self.get_ref_point(element_coordinate, point)
     s = point_ref[0]
     t = point_ref[1]
 
@@ -41,7 +41,7 @@ def is_inside(self, vertice, point, normal_t=None):
 
     # Check that normals are almost aligned
     if normal_t is not None:
-        normal_s = self.get_normal(vertice)
+        normal_s = self.get_normal(element_coordinate)
         scal_st = np.dot(normal_t[0:2], normal_s)
         is_colinear = abs(scal_st) > 1 - 2 * epsilon
         is_inside = is_colinear & is_inside

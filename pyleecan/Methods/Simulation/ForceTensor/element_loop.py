@@ -79,7 +79,7 @@ def element_loop(
             node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
-            vertice = mesh.get_element_coordinate(elt_number)[
+            element_coordinate = mesh.get_element_coordinate(elt_number)[
                 key
             ]  # elt nodes coordonates
 
@@ -105,7 +105,10 @@ def element_loop(
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
-                np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
+                np.cross(
+                    element_coordinate[1] - element_coordinate[0],
+                    element_coordinate[2] - element_coordinate[0],
+                )
             )
 
             # Loop on edges
@@ -119,8 +122,8 @@ def element_loop(
 
                 # Edge cooordinates
                 edge_vector = (
-                    vertice[(n + 1) % nb_node_per_element]
-                    - vertice[n % nb_node_per_element]
+                    element_coordinate[(n + 1) % nb_node_per_element]
+                    - element_coordinate[n % nb_node_per_element]
                 )  # coordonées du vecteur nn+1
 
                 # Volume ratio (Green Ostrogradski)

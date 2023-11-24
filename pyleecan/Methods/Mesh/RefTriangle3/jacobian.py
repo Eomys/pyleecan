@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def jacobian(self, point, vertice):
+def jacobian(self, point, element_coordinate):
     """Compute jacobian, jacobian determinant and jacobian derivatives for linear triangle.
 
     Parameters
@@ -16,7 +16,7 @@ def jacobian(self, point, vertice):
     """
 
     grad_func = self.grad_shape_function(point)
-    jacob = np.dot(grad_func, vertice[:, 0:2])
+    jacob = np.dot(grad_func, element_coordinate[:, 0:2])
     det_jacob = np.linalg.det(jacob)
 
     return jacob, det_jacob

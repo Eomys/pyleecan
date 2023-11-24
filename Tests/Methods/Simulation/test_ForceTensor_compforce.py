@@ -148,19 +148,19 @@ def test_comp_normal_to_edge():
             node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
-            vertice = mesh.get_element_coordinate(elt_number)[
+            element_coordinate = mesh.get_element_coordinate(elt_number)[
                 key
             ]  # elt nodes coordonates
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
-                np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
+                np.cross(element_coordinate[1] - element_coordinate[0], element_coordinate[2] - element_coordinate[0])
             )
 
             for n in range(nb_node_per_element):
                 edge_vector = (
-                    vertice[(n + 1) % nb_node_per_element]
-                    - vertice[n % nb_node_per_element]
+                    element_coordinate[(n + 1) % nb_node_per_element]
+                    - element_coordinate[n % nb_node_per_element]
                 )  # coordonées du vecteur nn+1
 
                 L = np.linalg.norm(edge_vector)
@@ -177,22 +177,22 @@ def test_comp_normal_to_edge():
 
                 # x_normal.append(
                 #     normal_to_edge[0]
-                #     + (vertice[n][0] + vertice[(n + 1) % nb_node_per_element][0]) / 2
+                #     + (element_coordinate[n][0] + element_coordinate[(n + 1) % nb_node_per_element][0]) / 2
                 # )
                 vec_x.append(normal_to_edge[0])
                 vec_y.append(normal_to_edge[1])
                 x_normal.append(
-                    (vertice[n][0] + vertice[(n + 1) % nb_node_per_element][0]) / 2
+                    (element_coordinate[n][0] + element_coordinate[(n + 1) % nb_node_per_element][0]) / 2
                 )
-                x_nodes.append(vertice[n][0])
+                x_nodes.append(element_coordinate[n][0])
                 # y_normal.append(
                 #     normal_to_edge[1]
-                #     + (vertice[n][1] + vertice[(n + 1) % nb_node_per_element][1]) / 2
+                #     + (element_coordinate[n][1] + element_coordinate[(n + 1) % nb_node_per_element][1]) / 2
                 # )
                 y_normal.append(
-                    (vertice[n][1] + vertice[(n + 1) % nb_node_per_element][1]) / 2
+                    (element_coordinate[n][1] + element_coordinate[(n + 1) % nb_node_per_element][1]) / 2
                 )
-                y_nodes.append(vertice[n][1])
+                y_nodes.append(element_coordinate[n][1])
                 # print(np.linalg.norm(normal_to_edge))
                 # plt.plot(edge_vector[0],edge_vector[1],'b')
                 # plt.plot(normal_to_edge[0],normal_to_edge[1],'r')
