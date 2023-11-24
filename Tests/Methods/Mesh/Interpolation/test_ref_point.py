@@ -39,12 +39,11 @@ class unittest_ref_nodes(TestCase):
 
         c_line = mesh.element["line"]
 
-
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
         meshsol.plot_mesh()
 
-        vert = mesh.get_vertice(0)["line"]
+        vert = mesh.get_element_coordinate(0)["line"]
         solution = np.array([0, 0])
         test = np.array([0.5, 0.5])
         ref_nodes = c_line.ref_element.get_ref_point(vert, test)
@@ -54,7 +53,7 @@ class unittest_ref_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(1)["line"]
+        vert = mesh.get_element_coordinate(1)["line"]
         solution = np.array([0, 0])
         test = np.array([0, 0.5])
         ref_nodes = c_line.ref_element.get_ref_point(vert, test)
@@ -64,7 +63,7 @@ class unittest_ref_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(2)["line"]
+        vert = mesh.get_element_coordinate(2)["line"]
         print(vert)
         solution = np.array([-0.6, 0])
         test = np.array([0.8, 1])
@@ -75,7 +74,7 @@ class unittest_ref_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(2)["line"]
+        vert = mesh.get_element_coordinate(2)["line"]
         solution = np.array([1, 0])
         test = np.array([0, 1])
         ref_nodes = c_line.ref_element.get_ref_point(vert, test)
@@ -89,7 +88,9 @@ class unittest_ref_nodes(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat(dimension=2)
-        mesh.element["triangle"] = ElementMat(nb_node_per_element=3, ref_element=RefTriangle3(), gauss_point=FPGNSeg())
+        mesh.element["triangle"] = ElementMat(
+            nb_node_per_element=3, ref_element=RefTriangle3(), gauss_point=FPGNSeg()
+        )
         mesh.node = NodeMat()
         mesh.node.add_node(np.array([0, 0]))
         mesh.node.add_node(np.array([1, 0]))
@@ -106,7 +107,7 @@ class unittest_ref_nodes(TestCase):
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
-        vert = mesh.get_vertice(0)["triangle"]
+        vert = mesh.get_element_coordinate(0)["triangle"]
         solution = np.array([0.5, 0])
         test = np.array([0.5, 0])
         ref_nodes = c_line.ref_element.get_ref_point(vert, test)
@@ -116,7 +117,7 @@ class unittest_ref_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(1)["triangle"]
+        vert = mesh.get_element_coordinate(1)["triangle"]
         solution = np.array([0.5, 0])
         test = np.array([0.5, 0.5])
         ref_nodes = c_line.ref_element.get_ref_point(vert, test)
@@ -126,7 +127,7 @@ class unittest_ref_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(2)["triangle"]
+        vert = mesh.get_element_coordinate(2)["triangle"]
         solution = np.array([0.5, 0.25])
         test = np.array([1.25, 0.5])
         ref_nodes = c_line.ref_element.get_ref_point(vert, test)

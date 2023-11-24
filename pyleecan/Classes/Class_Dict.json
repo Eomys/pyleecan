@@ -8610,7 +8610,7 @@
             "get_element",
             "get_mesh_pv",
             "get_element_area",
-            "get_vertice",
+            "get_element_coordinate",
             "get_node2element",
             "add_element",
             "renum",

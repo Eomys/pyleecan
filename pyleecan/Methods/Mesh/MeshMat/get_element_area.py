@@ -30,7 +30,7 @@ def get_element_area(self, element_indices=None, element_name=[]):
         element_mat_dict=self.element, element_name=element_name
     )
 
-    vertices_dict = self.get_vertice(
+    vertices_dict = self.get_element_coordinate(
         element_indices=element_indices, element_name=element_name
     )
 

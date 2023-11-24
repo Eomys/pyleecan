@@ -41,7 +41,7 @@ class unittest_real_nodes(TestCase):
         meshsol.mesh = [mesh]
 
         # Constant field
-        vert = mesh.get_vertice(0)["line"]
+        vert = mesh.get_element_coordinate(0)["line"]
         test_pt = np.array([0.7, 0])
         test_field = np.array([1, 1])
         sol = [1]
@@ -51,7 +51,7 @@ class unittest_real_nodes(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Constant field with multiple time steps
-        vert = mesh.get_vertice(0)["line"]
+        vert = mesh.get_element_coordinate(0)["line"]
         test_pt = np.array([0.7, 0])
         test_field = np.ones(
             (2, 120, 3)
@@ -63,7 +63,7 @@ class unittest_real_nodes(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Not constant
-        vert = mesh.get_vertice(2)["line"]
+        vert = mesh.get_element_coordinate(2)["line"]
         test_pt = np.array([0.6, 0.4])
         test_field = np.zeros((2, 120, 3))
         test_field[0, :] = np.ones(
@@ -75,7 +75,7 @@ class unittest_real_nodes(TestCase):
         msg = "Wrong result: returned " + str(func) + ", expected: " + str(sol)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(1)["line"]
+        vert = mesh.get_element_coordinate(1)["line"]
         test_pt = np.array([0, 0.4])
         test_field = np.zeros((2, 120, 3))
         test_field[1, :] = np.ones(

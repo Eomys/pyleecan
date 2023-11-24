@@ -79,7 +79,9 @@ def element_loop(
             node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
-            vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
+            vertice = mesh.get_element_coordinate(elt_number)[
+                key
+            ]  # elt nodes coordonates
 
             # elt physical fields values
             Be = B[elt_indice, :, :]

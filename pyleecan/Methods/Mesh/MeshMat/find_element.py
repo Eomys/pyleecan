@@ -56,7 +56,9 @@ def find_element(self, points, normal_t=None):
             element_idx = []
             element_prop = []
             for k, idx_closest_elem in enumerate(idx_closest_elements):
-                vert = self.get_vertice(idx_closest_elem, element_name=key)[key]
+                vert = self.get_element_coordinate(idx_closest_elem, element_name=key)[
+                    key
+                ]
                 (is_inside, a[k], b[k]) = ref_element.is_inside(
                     vert, point[: self.dimension], normal_t
                 )
@@ -80,7 +82,7 @@ def find_element(self, points, normal_t=None):
 
                 idx_sorted_dist = np.argsort(dist_element_cent, axis=0)[:, 0]
                 for i in range(elements.nb_element):
-                    vert = self.get_vertice(idx_sorted_dist[i])[key]
+                    vert = self.get_element_coordinate(idx_sorted_dist[i])[key]
                     (is_inside, a, b) = ref_element.is_inside(
                         vert, point[: self.dimension], normal_t
                     )

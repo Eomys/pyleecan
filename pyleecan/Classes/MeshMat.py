@@ -43,9 +43,9 @@ except ImportError as error:
     get_element_area = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_vertice import get_vertice
+    from ..Methods.Mesh.MeshMat.get_element_coordinate import get_element_coordinate
 except ImportError as error:
-    get_vertice = error
+    get_element_coordinate = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_node2element import get_node2element
@@ -156,15 +156,18 @@ class MeshMat(Mesh):
         )
     else:
         get_element_area = get_element_area
-    # cf Methods.Mesh.MeshMat.get_vertice
-    if isinstance(get_vertice, ImportError):
-        get_vertice = property(
+    # cf Methods.Mesh.MeshMat.get_element_coordinate
+    if isinstance(get_element_coordinate, ImportError):
+        get_element_coordinate = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_vertice: " + str(get_vertice))
+                ImportError(
+                    "Can't use MeshMat method get_element_coordinate: "
+                    + str(get_element_coordinate)
+                )
             )
         )
     else:
-        get_vertice = get_vertice
+        get_element_coordinate = get_element_coordinate
     # cf Methods.Mesh.MeshMat.get_node2element
     if isinstance(get_node2element, ImportError):
         get_node2element = property(

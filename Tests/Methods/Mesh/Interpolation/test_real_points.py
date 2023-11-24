@@ -41,7 +41,7 @@ class unittest_real_nodes(TestCase):
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
 
-        vert = mesh.get_vertice(0)["line"]
+        vert = mesh.get_element_coordinate(0)["line"]
         test = np.array([0, 0])
         solution = np.array([0.5, 0])
         ref_nodes = c_line.ref_element.get_real_point(vert, test)
@@ -51,7 +51,7 @@ class unittest_real_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(1)["line"]
+        vert = mesh.get_element_coordinate(1)["line"]
         test = np.array([0, 0])
         solution = np.array([0, 0.5])
         ref_nodes = c_line.ref_element.get_real_point(vert, test)
@@ -61,7 +61,7 @@ class unittest_real_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(2)["line"]
+        vert = mesh.get_element_coordinate(2)["line"]
         test = np.array([0, 0])
         solution = np.array([0.5, 0.5])
         ref_nodes = c_line.ref_element.get_real_point(vert, test)
@@ -71,7 +71,7 @@ class unittest_real_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(2)["line"]
+        vert = mesh.get_element_coordinate(2)["line"]
         test = np.array([-1, 0])
         solution = np.array([1, 0])
         ref_nodes = c_line.ref_element.get_real_point(vert, test)
@@ -81,7 +81,7 @@ class unittest_real_nodes(TestCase):
         )
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        vert = mesh.get_vertice(2)["line"]
+        vert = mesh.get_element_coordinate(2)["line"]
         test = np.array([-0.2, 0])
         solution = np.array([0.6, 0.4])
         ref_nodes = c_line.ref_element.get_real_point(vert, test)

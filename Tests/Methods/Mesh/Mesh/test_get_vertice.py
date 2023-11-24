@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import pytest
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
+import pytest
+
+from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.NodeMat import NodeMat
 
 
 @pytest.mark.MeshSol
@@ -26,7 +27,7 @@ def test_MeshMat():
     DELTA = 1e-10
 
     solution = np.array([[3, 3], [1, 2], [2, 3]])
-    vert = mesh.get_vertice([2, 3])
+    vert = mesh.get_element_coordinate([2, 3])
     results = vert["triangle"]
     testA = np.sum(abs(solution - results))
     msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
@@ -45,7 +46,7 @@ def test_MeshMat():
             [[3, 3], [1, 2], [2, 3]],
         ]
     )
-    vert = mesh.get_vertice([0, 1, 2])
+    vert = mesh.get_element_coordinate([0, 1, 2])
     results = vert["triangle"]
     testA = np.sum(abs(solution - results))
     msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)

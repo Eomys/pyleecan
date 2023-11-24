@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import numpy as np
 import pytest
 
-from pyleecan.Classes.ForceTensor import ForceTensor
-
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.ElementMat import ElementMat
-
-import numpy as np
-import matplotlib.pyplot as plt
+from pyleecan.Classes.ForceTensor import ForceTensor
+from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.NodeMat import NodeMat
 from Tests import save_plot_path as save_path
 
 
@@ -133,7 +131,6 @@ def test_comp_normal_to_edge():
     dim = 2
 
     for key in mesh.element:
-
         nb_node_per_element = mesh.element[
             key
         ].nb_node_per_element  # Number of nodes per element
@@ -148,11 +145,12 @@ def test_comp_normal_to_edge():
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-
             node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
-            vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
+            vertice = mesh.get_element_coordinate(elt_number)[
+                key
+            ]  # elt nodes coordonates
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
@@ -160,7 +158,6 @@ def test_comp_normal_to_edge():
             )
 
             for n in range(nb_node_per_element):
-
                 edge_vector = (
                     vertice[(n + 1) % nb_node_per_element]
                     - vertice[n % nb_node_per_element]

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from numpy import array
+
 from .get_element import _check_element_name
 
 
-def get_vertice(self, element_indices=None, element_name=[]):
+def get_element_coordinate(self, element_indices=None, element_name=[]):
     """Return a connectivity matrix where the nodes indices are replaced by their coordinates.
 
     Parameters

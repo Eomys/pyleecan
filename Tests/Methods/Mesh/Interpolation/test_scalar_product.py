@@ -44,7 +44,7 @@ class unittest_scalar_product(TestCase):
         meshsol.mesh = [mesh]
 
         # Ref element line
-        vert = mesh.get_vertice(0)["line"]
+        vert = mesh.get_element_coordinate(0)["line"]
         sol = [2 / 3, 1 / 3]
 
         [
@@ -75,7 +75,7 @@ class unittest_scalar_product(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Vertical element line
-        vert = mesh.get_vertice(1)["line"]
+        vert = mesh.get_element_coordinate(1)["line"]
         sol = [1 / 3, 1 / 6]
 
         [
