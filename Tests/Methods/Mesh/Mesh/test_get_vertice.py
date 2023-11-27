@@ -11,8 +11,8 @@ from pyleecan.Classes.NodeMat import NodeMat
 def test_MeshMat():
     """unittest with Meshmat object"""
     mesh = MeshMat()
-    mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
-    mesh.element["segment"] = ElementMat(nb_node_per_element=2)
+    mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
+    mesh.element_dict["segment"] = ElementMat(nb_node_per_element=2)
     mesh.node = NodeMat()
     mesh.node.add_node(np.array([0, 0]))
     mesh.node.add_node(np.array([1, 0]))

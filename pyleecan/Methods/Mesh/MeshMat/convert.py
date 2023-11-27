@@ -59,7 +59,7 @@ def convert(
 
     # Construct the element connectivity and element type vector to create the pyvista unstructured grid
     # https://docs.pyvista.org/version/stable/examples/00-load/create-unstructured-surface.html#creating-an-unstructured-grid
-    for element in self.element.values():
+    for element in self.element_dict.values():
         connectivity = element.connectivity
         nb_element = connectivity.shape[0]
         element_types.extend(

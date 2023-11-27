@@ -22,7 +22,7 @@ class unittest_scalar_product(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat()
-        mesh.element["line"] = ElementMat(
+        mesh.element_dict["line"] = ElementMat(
             nb_node_per_element=2,
             ref_element=RefSegmentP1(),
             gauss_point=FPGNSeg(nb_gauss_point=4),
@@ -38,7 +38,7 @@ class unittest_scalar_product(TestCase):
         mesh.add_element(np.array([0, 2]), "line")
         mesh.add_element(np.array([1, 2]), "line")
 
-        c_line = mesh.element["line"]
+        c_line = mesh.element_dict["line"]
 
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]

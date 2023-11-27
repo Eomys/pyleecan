@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-import pytest
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
+import pytest
+
+from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
 
 
 @pytest.mark.MeshSol
@@ -11,8 +12,8 @@ class Test_add_element(object):
 
     def setup_method(self, method):
         self.mesh = MeshMat()
-        self.mesh.element["triangle3"] = ElementMat(nb_node_per_element=3)
-        self.mesh.element["segment2"] = ElementMat(nb_node_per_element=2)
+        self.mesh.element_dict["triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.element_dict["segment2"] = ElementMat(nb_node_per_element=2)
         self.DELTA = 1e-10
 
     def test_MeshMat_add_1element(self):
@@ -21,10 +22,12 @@ class Test_add_element(object):
         points_test = np.array([0, 1])
         self.mesh.add_element(np.array([0, 1]), "segment2")
         # Check result
-        testA = np.sum(abs(self.mesh.element["segment2"].connectivity - points_test))
+        testA = np.sum(
+            abs(self.mesh.element_dict["segment2"].connectivity - points_test)
+        )
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["segment2"].connectivity)
+            + str(self.mesh.element_dict["segment2"].connectivity)
             + ", expected: "
             + str(points_test)
         )
@@ -32,11 +35,11 @@ class Test_add_element(object):
 
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["segment2"].nb_element)
+            + str(self.mesh.element_dict["segment2"].nb_element)
             + ", expected: "
             + str(1)
         )
-        assert abs(self.mesh.element["segment2"].nb_element - 1) < self.DELTA, msg
+        assert abs(self.mesh.element_dict["segment2"].nb_element - 1) < self.DELTA, msg
 
     def test_MeshMat_add_3element(self):
         """unittest with MeshMat, add 3 different elements"""
@@ -50,10 +53,10 @@ class Test_add_element(object):
 
         # Check result
         solution = np.array([[0, 1], [1, 2]])
-        testA = np.sum(abs(self.mesh.element["segment2"].connectivity - solution))
+        testA = np.sum(abs(self.mesh.element_dict["segment2"].connectivity - solution))
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["segment2"].connectivity)
+            + str(self.mesh.element_dict["segment2"].connectivity)
             + ", expected: "
             + str(solution)
         )
@@ -61,17 +64,17 @@ class Test_add_element(object):
 
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["segment2"].nb_element)
+            + str(self.mesh.element_dict["segment2"].nb_element)
             + ", expected: "
             + str(2)
         )
-        assert abs(self.mesh.element["segment2"].nb_element - 2) < self.DELTA, msg
+        assert abs(self.mesh.element_dict["segment2"].nb_element - 2) < self.DELTA, msg
 
         solution = np.array([[0, 1, 2]])
-        testA = np.sum(abs(self.mesh.element["triangle3"].connectivity - solution))
+        testA = np.sum(abs(self.mesh.element_dict["triangle3"].connectivity - solution))
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["triangle3"].connectivity)
+            + str(self.mesh.element_dict["triangle3"].connectivity)
             + ", expected: "
             + str(solution)
         )
@@ -79,11 +82,11 @@ class Test_add_element(object):
 
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["segment2"].nb_element)
+            + str(self.mesh.element_dict["segment2"].nb_element)
             + ", expected: "
             + str(1)
         )
-        assert abs(self.mesh.element["triangle3"].nb_element - 1) < self.DELTA, msg
+        assert abs(self.mesh.element_dict["triangle3"].nb_element - 1) < self.DELTA, msg
 
     def test_MeshMat_add_exist(self):
         """unittest with MeshMat, try to add an already existing element."""
@@ -99,11 +102,11 @@ class Test_add_element(object):
 
         msg = (
             "Wrong result: returned "
-            + str(self.mesh.element["segment2"].nb_element)
+            + str(self.mesh.element_dict["segment2"].nb_element)
             + ", expected: "
             + str(2)
         )
-        assert abs(self.mesh.element["segment2"].nb_element - 2) < self.DELTA, msg
+        assert abs(self.mesh.element_dict["segment2"].nb_element - 2) < self.DELTA, msg
 
     def test_MeshMat_add_stupid(self):
         """unittest with ElementMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
@@ -117,7 +120,7 @@ class Test_add_element(object):
         assert not test2
 
         solution = np.array([0, 1], dtype=int)
-        result = self.mesh.element["segment2"].connectivity
+        result = self.mesh.element_dict["segment2"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10

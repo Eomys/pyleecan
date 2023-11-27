@@ -20,7 +20,7 @@ def test_element_loop_1element():
 
     # Mesh object
     mesh = MeshMat()
-    mesh.element["triangle3"] = ElementMat(nb_node_per_element=3)
+    mesh.element_dict["triangle3"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
 
     mesh.node.add_node(np.array([0, 0]))
@@ -114,7 +114,7 @@ def test_comp_normal_to_edge():
 
     ## Mesh object
     mesh = MeshMat()
-    mesh.element["triangle3"] = ElementMat(nb_node_per_element=3)
+    mesh.element_dict["triangle3"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
 
     mesh.node.add_node(np.array([1, 1.22]))
@@ -130,13 +130,13 @@ def test_comp_normal_to_edge():
 
     dim = 2
 
-    for key in mesh.element:
-        nb_node_per_element = mesh.element[
+    for key in mesh.element_dict:
+        nb_node_per_element = mesh.element_dict[
             key
         ].nb_node_per_element  # Number of nodes per element
 
-        mesh_element_key = mesh.element[key]
-        connect = mesh.element[
+        mesh_element_key = mesh.element_dict[key]
+        connect = mesh.element_dict[
             key
         ].get_connectivity()  # Each row of connect is an element
         nb_elem = len(connect)
@@ -154,7 +154,10 @@ def test_comp_normal_to_edge():
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
-                np.cross(element_coordinate[1] - element_coordinate[0], element_coordinate[2] - element_coordinate[0])
+                np.cross(
+                    element_coordinate[1] - element_coordinate[0],
+                    element_coordinate[2] - element_coordinate[0],
+                )
             )
 
             for n in range(nb_node_per_element):
@@ -182,7 +185,11 @@ def test_comp_normal_to_edge():
                 vec_x.append(normal_to_edge[0])
                 vec_y.append(normal_to_edge[1])
                 x_normal.append(
-                    (element_coordinate[n][0] + element_coordinate[(n + 1) % nb_node_per_element][0]) / 2
+                    (
+                        element_coordinate[n][0]
+                        + element_coordinate[(n + 1) % nb_node_per_element][0]
+                    )
+                    / 2
                 )
                 x_nodes.append(element_coordinate[n][0])
                 # y_normal.append(
@@ -190,7 +197,11 @@ def test_comp_normal_to_edge():
                 #     + (element_coordinate[n][1] + element_coordinate[(n + 1) % nb_node_per_element][1]) / 2
                 # )
                 y_normal.append(
-                    (element_coordinate[n][1] + element_coordinate[(n + 1) % nb_node_per_element][1]) / 2
+                    (
+                        element_coordinate[n][1]
+                        + element_coordinate[(n + 1) % nb_node_per_element][1]
+                    )
+                    / 2
                 )
                 y_nodes.append(element_coordinate[n][1])
                 # print(np.linalg.norm(normal_to_edge))

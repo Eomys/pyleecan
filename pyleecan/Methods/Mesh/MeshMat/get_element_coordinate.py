@@ -25,7 +25,7 @@ def get_element_coordinate(self, element_indices=None, element_name=[]):
     """
 
     element_name = _check_element_name(
-        element_mat_dict=self.element, element_name=element_name
+        element_mat_dict=self.element_dict, element_name=element_name
     )
 
     element_connectivity_dict, *_ = self.get_element(

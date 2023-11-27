@@ -1,13 +1,16 @@
-from os import remove
-from os.path import splitext, isfile
 from os import remove, rename
+from os.path import isfile, splitext
 
-from numpy import zeros, pi, roll, cos, sin, max as np_max, abs as np_abs, all as np_all
+from numpy import abs as np_abs
+from numpy import all as np_all
+from numpy import cos
+from numpy import max as np_max
+from numpy import pi, roll, sin, zeros
 
 from ....Classes._FEMMHandler import _FEMMHandler
-from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
-from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
+from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
+from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 
 
 def solve_FEMM(
@@ -272,7 +275,7 @@ def solve_FEMM(
             if ii == start_t:
                 meshFEMM = [meshFEMMi]
                 groups = groupsi
-                Nelem = meshFEMM[0].element["triangle"].nb_element
+                Nelem = meshFEMM[0].element_dict["triangle"].nb_element
                 Nnode = meshFEMM[0].node.nb_node
                 Nt0 = end_t - start_t
                 B_elem = zeros([Nt0, Nelem, 3])

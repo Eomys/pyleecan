@@ -8631,7 +8631,7 @@
                 "desc": "Storing connectivity",
                 "max": "",
                 "min": "",
-                "name": "element",
+                "name": "element_dict",
                 "type": "{ElementMat}",
                 "unit": "",
                 "value": ""

@@ -14,7 +14,7 @@ def test_line():
     DELTA = 1e-10
 
     mesh = MeshMat()
-    mesh.element["line"] = ElementMat(
+    mesh.element_dict["line"] = ElementMat(
         nb_node_per_element=2, ref_element=RefSegmentP1(epsilon=0.005)
     )
     mesh.node = NodeMat()
@@ -26,7 +26,7 @@ def test_line():
     mesh.add_element(np.array([0, 2]), "line")
     mesh.add_element(np.array([1, 2]), "line")
 
-    c_line = mesh.element["line"]
+    c_line = mesh.element_dict["line"]
 
     # This node is inside
     test_pt = np.array([[0.7, 0]])
@@ -65,7 +65,7 @@ def test_triangle3():
     mesh.node.add_node(np.array([2, 2]))
     mesh.node.add_node(np.array([0, 2]))
 
-    mesh.element["triangle"] = ElementMat(
+    mesh.element_dict["triangle"] = ElementMat(
         nb_node_per_element=3, ref_element=RefTriangle3()
     )
     mesh.add_element(np.array([0, 1, 2]), "triangle")

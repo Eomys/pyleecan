@@ -45,7 +45,7 @@ def get_element(self, element_indices=None, element_name=[]):
         element_indices = (element_indices,)
 
     element_name = _check_element_name(
-        element_mat_dict=self.element, element_name=element_name
+        element_mat_dict=self.element_dict, element_name=element_name
     )
 
     dict_connectivity = {}
@@ -54,7 +54,7 @@ def get_element(self, element_indices=None, element_name=[]):
     # Extract full connectivity matrix and element element_indices
     if element_indices is None:
         for key in element_name:
-            element = self.element[key]
+            element = self.element_dict[key]
             dict_connectivity[key] = element.get_connectivity()
             dict_index[key] = element.indice
             nb_element += element.nb_element
@@ -62,7 +62,7 @@ def get_element(self, element_indices=None, element_name=[]):
     # Extract element connectivity and index for each element
     else:
         for key in element_name:
-            element = self.element[key]
+            element = self.element_dict[key]
             list_connectivity = [
                 element.get_connectivity(index) for index in element_indices
             ]

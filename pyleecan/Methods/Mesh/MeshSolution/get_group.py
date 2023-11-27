@@ -72,14 +72,14 @@ def get_group(self, group_names):
         )
         for key in connect_dict:
             node_indice.extend(np.unique(connect_dict[key]))
-            mesh_new.element[key] = ElementMat(
+            mesh_new.element_dict[key] = ElementMat(
                 connectivity=connect_dict[key],
                 nb_element=len(connect_dict[key]),
-                nb_node_per_element=mesh_init.element[key].nb_node_per_element,
+                nb_node_per_element=mesh_init.element_dict[key].nb_node_per_element,
                 indice=indice_dict[key],
-                ref_element=mesh_init.element[key].ref_element,
-                gauss_point=mesh_init.element[key].gauss_point,
-                scalar_product=mesh_init.element[key].scalar_product,
+                ref_element=mesh_init.element_dict[key].ref_element,
+                gauss_point=mesh_init.element_dict[key].gauss_point,
+                scalar_product=mesh_init.element_dict[key].scalar_product,
             )
         node_indice = np.unique(node_indice)
 

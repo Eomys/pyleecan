@@ -1,15 +1,13 @@
-import pytest
 import numpy as np
+import pytest
+from SciDataTool import DataFreq, DataLinspace, VectorField
 
-from SciDataTool import DataLinspace, DataFreq, VectorField
-
-from pyleecan.Functions.load import load
-
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.SolutionVector import SolutionVector
+from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
+from pyleecan.Classes.NodeMat import NodeMat
+from pyleecan.Classes.SolutionVector import SolutionVector
+from pyleecan.Functions.load import load
 from Tests import save_plot_path as save_path
 
 mesh = MeshMat(dimension=3)
@@ -31,7 +29,7 @@ mesh.node.add_node([-0.707, -0.707, 1])
 mesh.node.add_node([0, -1, 1])
 mesh.node.add_node([0.707, -0.707, 1])
 
-mesh.element["quad"] = ElementMat(nb_node_per_element=4)
+mesh.element_dict["quad"] = ElementMat(nb_node_per_element=4)
 mesh.add_element([0, 8, 9, 1], "quad")
 mesh.add_element([1, 9, 10, 2], "quad")
 mesh.add_element([2, 10, 11, 3], "quad")
@@ -40,7 +38,7 @@ mesh.add_element([4, 12, 13, 5], "quad")
 mesh.add_element([5, 13, 14, 6], "quad")
 mesh.add_element([6, 14, 15, 7], "quad")
 mesh.add_element([7, 15, 8, 0], "quad")
-mesh.element["quad"].indice = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+mesh.element_dict["quad"].indice = np.array([1, 2, 3, 4, 5, 6, 7, 8])
 
 
 alpha = np.arange(8) * 2 * np.pi / 8

@@ -45,16 +45,16 @@ def element_loop(
     """
 
     # For every type of element (now only Triangle3, TO BE extended)
-    for key in mesh.element:
-        # mesh.element[key].interpolation = Interpolation()
-        # mesh.element[key].interpolation.init_key(key=key, nb_gauss=1)
+    for key in mesh.element_dict:
+        # mesh.element_dict[key].interpolation = Interpolation()
+        # mesh.element_dict[key].interpolation.init_key(key=key, nb_gauss=1)
 
-        nb_node_per_element = mesh.element[
+        nb_node_per_element = mesh.element_dict[
             key
         ].nb_node_per_element  # Number of nodes per element
 
-        mesh_element_key = mesh.element[key]
-        connect = mesh.element[
+        mesh_element_key = mesh.element_dict[key]
+        connect = mesh.element_dict[
             key
         ].get_connectivity()  # Each row of connect is an element
 
@@ -65,14 +65,14 @@ def element_loop(
         # Nodal forces init
         f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
 
-        # ref_element = mesh.element[key].ref_element // pas besoin d'interpoler car tout est cst
+        # ref_element = mesh.element_dict[key].ref_element // pas besoin d'interpoler car tout est cst
 
         # Gauss nodes
-        # pts_gauss, poidsGauss, nb_gauss = mesh.element[
+        # pts_gauss, poidsGauss, nb_gauss = mesh.element_dict[
         #     key
         # ].gauss_point.get_gauss_points()
 
-        # indice_elem = mesh.element[key].indice
+        # indice_elem = mesh.element_dict[key].indice
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):

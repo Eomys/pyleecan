@@ -1,6 +1,6 @@
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.ElementMat import ElementMat
 
 
 def perm_coord(
@@ -45,7 +45,6 @@ def perm_coord(
     elementMatDict = dict()
 
     for key in mesh_mat_element[0]:
-
         elementMat = ElementMat(
             connectivity=mesh_mat_element[0][key],
             nb_element=len(mesh_mat_element[0][key]),
@@ -53,7 +52,7 @@ def perm_coord(
         elementMatDict[key] = elementMat
 
     # 3. create MeshMat
-    meshmat = MeshMat(element=elementMatDict, node=nodemat)
+    meshmat = MeshMat(element_dict=elementMatDict, node=nodemat)
 
     # convert and save into vtk
     mesh_pv = meshmat.get_mesh_pv()

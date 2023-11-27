@@ -100,6 +100,6 @@ def get_data(self):
         else:
             raise ValueError(f"Wrong element type {elt_type}.")
 
-        mesh.element[elt_type] = element
+        mesh.element_dict[elt_type] = element
 
     return mesh

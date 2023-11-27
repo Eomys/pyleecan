@@ -37,14 +37,14 @@ def renum(self):
         self.node.indice = node_indice_new
 
         for key in connect_dict:
-            self.element[key] = ElementMat(
+            self.element_dict[key] = ElementMat(
                 connectivity=connect_dict_new[key],
                 nb_element=len(connect_dict_new[key]),
-                nb_node_per_element=self.element[key].nb_node_per_element,
-                indice=self.element[key].indice,
-                ref_element=self.element[key].ref_element,
-                gauss_point=self.element[key].gauss_point,
-                scalar_product=self.element[key].scalar_product,
+                nb_node_per_element=self.element_dict[key].nb_node_per_element,
+                indice=self.element_dict[key].indice,
+                ref_element=self.element_dict[key].ref_element,
+                gauss_point=self.element_dict[key].gauss_point,
+                scalar_product=self.element_dict[key].scalar_product,
             )
 
         self._is_renum = False

@@ -1,11 +1,10 @@
 import numpy as np
-
 from SciDataTool import DataFreq
 
-from ....Classes.SolutionData import SolutionData
-from ....Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.OutLossModel import OutLossModel
 
+from ....Classes.MeshSolution import MeshSolution
+from ....Classes.SolutionData import SolutionData
 from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
@@ -32,7 +31,7 @@ def comp_all_losses(
     meshsol = output.mag.meshsolution
     group = meshsol.group
     freqs = axes_dict["freqs"].get_values()
-    Nelem = meshsol.mesh[0].element["triangle"].nb_element
+    Nelem = meshsol.mesh[0].element_dict["triangle"].nb_element
 
     out_loss.loss_dict = dict()
     for key, model in self.model_dict.items():

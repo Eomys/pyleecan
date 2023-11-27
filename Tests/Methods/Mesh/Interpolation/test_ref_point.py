@@ -23,7 +23,7 @@ class unittest_ref_nodes(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat(dimension=2)
-        mesh.element["line"] = ElementMat(
+        mesh.element_dict["line"] = ElementMat(
             nb_node_per_element=2, ref_element=RefSegmentP1(), gauss_point=FPGNSeg()
         )
         mesh.node = NodeMat()
@@ -37,7 +37,7 @@ class unittest_ref_nodes(TestCase):
         mesh.add_element(np.array([0, 2]), "line")
         mesh.add_element(np.array([1, 2]), "line")
 
-        c_line = mesh.element["line"]
+        c_line = mesh.element_dict["line"]
 
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]
@@ -88,7 +88,7 @@ class unittest_ref_nodes(TestCase):
         DELTA = 1e-10
 
         mesh = MeshMat(dimension=2)
-        mesh.element["triangle"] = ElementMat(
+        mesh.element_dict["triangle"] = ElementMat(
             nb_node_per_element=3, ref_element=RefTriangle3(), gauss_point=FPGNSeg()
         )
         mesh.node = NodeMat()
@@ -102,7 +102,7 @@ class unittest_ref_nodes(TestCase):
         mesh.add_element(np.array([1, 2, 3]), "triangle")
         mesh.add_element(np.array([1, 3, 4]), "triangle")
 
-        c_line = mesh.element["triangle"]
+        c_line = mesh.element_dict["triangle"]
 
         meshsol = MeshSolution()
         meshsol.mesh = [mesh]

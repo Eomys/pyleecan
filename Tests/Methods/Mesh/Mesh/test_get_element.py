@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
+import pytest
+
+from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.NodeMat import NodeMat
 
 
 @pytest.mark.MeshSol
@@ -13,8 +14,8 @@ class Test_get_element_MeshMat(object):
 
     def setup_method(self, method):
         self.mesh = MeshMat()
-        self.mesh.element["triangle3"] = ElementMat(nb_node_per_element=3)
-        self.mesh.element["segment2"] = ElementMat(nb_node_per_element=2)
+        self.mesh.element_dict["triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.element_dict["segment2"] = ElementMat(nb_node_per_element=2)
         self.mesh.add_element([2, 1, 0], "triangle3")
         self.mesh.add_element([1, 2, 3], "triangle3")
         self.mesh.add_element([3, 1, 4], "triangle3")
@@ -118,4 +119,4 @@ class Test_get_element_MeshMat(object):
 
     def test_get_connectivity_None(self):
         """Check if get_connectivity works correctly"""
-        assert self.mesh.element["triangle3"].get_connectivity(5) == None
+        assert self.mesh.element_dict["triangle3"].get_connectivity(5) == None

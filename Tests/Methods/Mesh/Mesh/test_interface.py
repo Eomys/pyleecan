@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 import pytest
+
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.ElementMat import ElementMat
-import numpy as np
 
 
 @pytest.mark.MeshSol
@@ -13,13 +14,13 @@ class Test_interface(object):
 
     def setup_method(self, method):
         self.mesh = MeshMat()
-        self.mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
-        self.mesh.element["line"] = ElementMat(nb_node_per_element=2)
+        self.mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
+        self.mesh.element_dict["line"] = ElementMat(nb_node_per_element=2)
         self.mesh.node = NodeMat()
 
         self.other_mesh = MeshMat()
-        self.other_mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
-        self.other_mesh.element["line"] = ElementMat(nb_node_per_element=2)
+        self.other_mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
+        self.other_mesh.element_dict["line"] = ElementMat(nb_node_per_element=2)
         self.other_mesh.node = self.mesh.node
 
     def test_MeshMat_flat(self):
@@ -41,7 +42,7 @@ class Test_interface(object):
 
         new_seg_mesh = self.mesh.interface(self.other_mesh)
         solution = np.array([[0, 2], [4, 2]])
-        resultat = new_seg_mesh.element["line"].connectivity
+        resultat = new_seg_mesh.element_dict["line"].connectivity
         testA = np.sum(abs(resultat - solution))
         msg = (
             "Wrong projection: returned "
@@ -74,7 +75,7 @@ class Test_interface(object):
 
         # Check result
         solution = np.array([[0, 1], [1, 5]])
-        result = new_seg_mesh.element["line"].connectivity
+        result = new_seg_mesh.element_dict["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
@@ -102,7 +103,7 @@ class Test_interface(object):
 
         # Check result
         solution = np.array([[0, 1], [1, 5]])
-        result = new_seg_mesh.element["line"].connectivity
+        result = new_seg_mesh.element_dict["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
@@ -123,7 +124,7 @@ class Test_interface(object):
 
         # Check result
         solution = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [2, 3]])
-        result = new_seg_mesh.element["line"].connectivity
+        result = new_seg_mesh.element_dict["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10

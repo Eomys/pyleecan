@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-element,,Storing connectivity,,{ElementMat},,,,
+element_dict,,Storing connectivity,,{ElementMat},,,,
 node,,Storing nodes,,NodeMat,,,,
 _is_renum,,True if renumering the nodes and elements is useful when renum method is called (saving calculation time),,bool,0,,,
 sym,,Spatial symmetry factor,,int,1,,,

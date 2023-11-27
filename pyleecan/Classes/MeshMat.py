@@ -265,7 +265,7 @@ class MeshMat(Mesh):
 
     def __init__(
         self,
-        element=-1,
+        element_dict=-1,
         node=-1,
         _is_renum=False,
         sym=1,
@@ -290,8 +290,8 @@ class MeshMat(Mesh):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "element" in list(init_dict.keys()):
-                element = init_dict["element"]
+            if "element_dict" in list(init_dict.keys()):
+                element_dict = init_dict["element_dict"]
             if "node" in list(init_dict.keys()):
                 node = init_dict["node"]
             if "_is_renum" in list(init_dict.keys()):
@@ -305,7 +305,7 @@ class MeshMat(Mesh):
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
         # Set the properties (value check and convertion are done in setter)
-        self.element = element
+        self.element_dict = element_dict
         self.node = node
         self._is_renum = _is_renum
         self.sym = sym
@@ -321,11 +321,14 @@ class MeshMat(Mesh):
         MeshMat_str = ""
         # Get the properties inherited from Mesh
         MeshMat_str += super(MeshMat, self).__str__()
-        if len(self.element) == 0:
-            MeshMat_str += "element = dict()" + linesep
-        for key, obj in self.element.items():
-            tmp = self.element[key].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshMat_str += "element[" + key + "] =" + tmp + linesep + linesep
+        if len(self.element_dict) == 0:
+            MeshMat_str += "element_dict = dict()" + linesep
+        for key, obj in self.element_dict.items():
+            tmp = (
+                self.element_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            MeshMat_str += "element_dict[" + key + "] =" + tmp + linesep + linesep
         if self.node is not None:
             tmp = self.node.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             MeshMat_str += "node = " + tmp
@@ -345,7 +348,7 @@ class MeshMat(Mesh):
         # Check the properties inherited from Mesh
         if not super(MeshMat, self).__eq__(other):
             return False
-        if other.element != self.element:
+        if other.element_dict != self.element_dict:
             return False
         if other.node != self.node:
             return False
@@ -372,20 +375,20 @@ class MeshMat(Mesh):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if (other.element is None and self.element is not None) or (
-            other.element is not None and self.element is None
+        if (other.element_dict is None and self.element_dict is not None) or (
+            other.element_dict is not None and self.element_dict is None
         ):
-            diff_list.append(name + ".element None mismatch")
-        elif self.element is None:
+            diff_list.append(name + ".element_dict None mismatch")
+        elif self.element_dict is None:
             pass
-        elif len(other.element) != len(self.element):
-            diff_list.append("len(" + name + "element)")
+        elif len(other.element_dict) != len(self.element_dict):
+            diff_list.append("len(" + name + "element_dict)")
         else:
-            for key in self.element:
+            for key in self.element_dict:
                 diff_list.extend(
-                    self.element[key].compare(
-                        other.element[key],
-                        name=name + ".element[" + str(key) + "]",
+                    self.element_dict[key].compare(
+                        other.element_dict[key],
+                        name=name + ".element_dict[" + str(key) + "]",
                         ignore_list=ignore_list,
                         is_add_value=is_add_value,
                     )
@@ -446,8 +449,8 @@ class MeshMat(Mesh):
 
         # Get size of the properties inherited from Mesh
         S += super(MeshMat, self).__sizeof__()
-        if self.element is not None:
-            for key, value in self.element.items():
+        if self.element_dict is not None:
+            for key, value in self.element_dict.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.node)
         S += getsizeof(self._is_renum)
@@ -472,19 +475,19 @@ class MeshMat(Mesh):
             keep_function=keep_function,
             **kwargs
         )
-        if self.element is None:
-            MeshMat_dict["element"] = None
+        if self.element_dict is None:
+            MeshMat_dict["element_dict"] = None
         else:
-            MeshMat_dict["element"] = dict()
-            for key, obj in self.element.items():
+            MeshMat_dict["element_dict"] = dict()
+            for key, obj in self.element_dict.items():
                 if obj is not None:
-                    MeshMat_dict["element"][key] = obj.as_dict(
+                    MeshMat_dict["element_dict"][key] = obj.as_dict(
                         type_handle_ndarray=type_handle_ndarray,
                         keep_function=keep_function,
                         **kwargs
                     )
                 else:
-                    MeshMat_dict["element"][key] = None
+                    MeshMat_dict["element_dict"][key] = None
         if self.node is None:
             MeshMat_dict["node"] = None
         else:
@@ -505,12 +508,12 @@ class MeshMat(Mesh):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.element is None:
-            element_val = None
+        if self.element_dict is None:
+            element_dict_val = None
         else:
-            element_val = dict()
-            for key, obj in self.element.items():
-                element_val[key] = obj.copy()
+            element_dict_val = dict()
+            for key, obj in self.element_dict.items():
+                element_dict_val[key] = obj.copy()
         if self.node is None:
             node_val = None
         else:
@@ -522,7 +525,7 @@ class MeshMat(Mesh):
         dimension_val = self.dimension
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            element=element_val,
+            element_dict=element_dict_val,
             node=node_val,
             _is_renum=_is_renum_val,
             sym=sym_val,
@@ -535,7 +538,7 @@ class MeshMat(Mesh):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.element = None
+        self.element_dict = None
         if self.node is not None:
             self.node._set_None()
         self._is_renum = None
@@ -544,16 +547,16 @@ class MeshMat(Mesh):
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
-    def _get_element(self):
-        """getter of element"""
-        if self._element is not None:
-            for key, obj in self._element.items():
+    def _get_element_dict(self):
+        """getter of element_dict"""
+        if self._element_dict is not None:
+            for key, obj in self._element_dict.items():
                 if obj is not None:
                     obj.parent = self
-        return self._element
+        return self._element_dict
 
-    def _set_element(self, value):
-        """setter of element"""
+    def _set_element_dict(self, value):
+        """setter of element_dict"""
         if type(value) is dict:
             for key, obj in value.items():
                 if isinstance(obj, str):  # Load from file
@@ -567,17 +570,17 @@ class MeshMat(Mesh):
                         value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "element"
+                        "pyleecan.Classes", obj.get("__class__"), "element_dict"
                     )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
-        check_var("element", value, "{ElementMat}")
-        self._element = value
+        check_var("element_dict", value, "{ElementMat}")
+        self._element_dict = value
 
-    element = property(
-        fget=_get_element,
-        fset=_set_element,
+    element_dict = property(
+        fget=_get_element_dict,
+        fset=_set_element_dict,
         doc=u"""Storing connectivity
 
         :Type: {ElementMat}

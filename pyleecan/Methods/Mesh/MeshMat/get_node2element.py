@@ -20,7 +20,10 @@ def get_node2element(self, node_indice):
 
     """
     element_indices = np.concatenate(
-        [element.get_node2element(node_indice) for element in self.element.values()]
+        [
+            element.get_node2element(node_indice)
+            for element in self.element_dict.values()
+        ]
     )
 
     return element_indices

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+import numpy as np
 import pytest
 
-from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
-import numpy as np
 
 DELTA = 1e-10
 
@@ -15,7 +15,7 @@ def test_MeshMat():
     """Test for 1 group"""
 
     mesh = MeshMat()
-    mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
+    mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
     mesh.node.add_node(np.array([0, 0]))
     mesh.node.add_node(np.array([1, 0]))

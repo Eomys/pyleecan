@@ -98,15 +98,15 @@ def get_meshsolution(
 
         mesh = MeshMat()
         mesh.label = "FEMM"
-        mesh.element["triangle"] = ElementMat(
+        mesh.element_dict["triangle"] = ElementMat(
             connectivity=listElem,
             nb_element=NbElem,
             nb_node_per_element=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
-        mesh.element["triangle"].ref_element = RefTriangle3(epsilon=1e-9)
-        mesh.element["triangle"].gauss_point = FPGNTri(nb_gauss_point=1)
-        mesh.element["triangle"].scalar_product = ScalarProductL2()
+        mesh.element_dict["triangle"].ref_element = RefTriangle3(epsilon=1e-9)
+        mesh.element_dict["triangle"].gauss_point = FPGNTri(nb_gauss_point=1)
+        mesh.element_dict["triangle"].scalar_product = ScalarProductL2()
 
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2],
@@ -128,7 +128,7 @@ def get_meshsolution(
                         if ind_i.size > 0:
                             # Store the list of indices for the ith subgroup
                             groups[name_i] = (
-                                mesh.element["triangle"].indice[ind_i].tolist()
+                                mesh.element_dict["triangle"].indice[ind_i].tolist()
                             )
                             # Concatenate all sub groups to keep the main group of rotor magnets
                             ind = np.concatenate((ind, ind_i))
@@ -137,7 +137,7 @@ def get_meshsolution(
                     ind = np.where(listElem0[:, 6] == idx)[0]
 
                 if ind.size > 0:
-                    groups[name] = mesh.element["triangle"].indice[ind].tolist()
+                    groups[name] = mesh.element_dict["triangle"].indice[ind].tolist()
     else:
         mesh = None
         groups = None

@@ -42,8 +42,8 @@ def find_element(self, points, normal_t=None):
         dist_node = np.linalg.norm(point_coord - point_rep, axis=1, keepdims=True)
         idx_closest_node = dist_node.argmin(axis=0)
 
-        for key in self.element:
-            elements = self.element[key]
+        for key in self.element_dict:
+            elements = self.element_dict[key]
             ref_element = elements.ref_element
             connect = elements.connectivity
             nb_node_per_element = elements.nb_node_per_element

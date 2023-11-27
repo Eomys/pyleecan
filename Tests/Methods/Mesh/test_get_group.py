@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
+import numpy as np
 import pytest
 
-from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.SolutionMat import SolutionMat
-import numpy as np
-
 
 DELTA = 1e-10
 
@@ -17,7 +16,7 @@ def test_MeshMat_1group():
     """unittest for 1 group"""
 
     mesh = MeshMat()
-    mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
+    mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
     mesh.node.add_node(np.array([0, 0]))
     mesh.node.add_node(np.array([1, 0]))
@@ -57,7 +56,7 @@ def test_MeshMat_2group():
     """unittest for 1 group"""
 
     mesh = MeshMat()
-    mesh.element["triangle"] = ElementMat(nb_node_per_element=3)
+    mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
     mesh.node.add_node(np.array([0, 0]))
     mesh.node.add_node(np.array([1, 0]))
@@ -77,7 +76,7 @@ def test_MeshMat_2group():
     mesh.add_element(np.array([5, 6, 7]), "triangle")
     mesh.add_element(np.array([8, 6, 7]), "triangle")
 
-    mesh.element["triangle"].indice = np.array([11, 12, 13, 98, 100, 101])
+    mesh.element_dict["triangle"].indice = np.array([11, 12, 13, 98, 100, 101])
 
     solution = SolutionMat()
     solution.field = np.array(

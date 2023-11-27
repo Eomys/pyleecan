@@ -28,17 +28,17 @@ def interface(self, other_mesh):
     new_mesh._is_renum = True
 
     # new_mesh.node = NodeMat()
-    new_mesh.element = dict()
+    new_mesh.element_dict = dict()
 
-    for key in self.element:
+    for key in self.element_dict:
         # Developer info: IDK if this code works with other than triangle elements. To be checked.
-        if self.element[key].nb_node_per_element == 3:  # Triangle case
-            new_mesh.element["line"] = ElementMat(
+        if self.element_dict[key].nb_node_per_element == 3:  # Triangle case
+            new_mesh.element_dict["line"] = ElementMat(
                 nb_node_per_element=2, gauss_point=FPGNSeg(), ref_element=RefSegmentP1()
             )
 
-            connect = self.element[key].get_connectivity()
-            connect2 = other_mesh.element[key].get_connectivity()
+            connect = self.element_dict[key].get_connectivity()
+            connect2 = other_mesh.element_dict[key].get_connectivity()
 
             nodes_tags = np.unique(connect)
             other_nodes_tags = np.unique(connect2)
@@ -47,7 +47,7 @@ def interface(self, other_mesh):
             interface_nodes_tags = np.intersect1d(nodes_tags, other_nodes_tags)
             nb_interf_nodes = len(interface_nodes_tags)
 
-            comb = combinations(range(self.element[key].nb_node_per_element), 2)
+            comb = combinations(range(self.element_dict[key].nb_node_per_element), 2)
 
             for duo in list(comb):
                 col1i = np.mod(duo[0], 3)
@@ -68,7 +68,7 @@ def interface(self, other_mesh):
                 I_target = np.where(col1_bin + col2_bin == 2)[0]
 
                 comb2 = combinations(
-                    range(other_mesh.element[key].nb_node_per_element), 2
+                    range(other_mesh.element_dict[key].nb_node_per_element), 2
                 )
                 for duo2 in list(comb2):
                     col1j = np.mod(duo2[0], 3)

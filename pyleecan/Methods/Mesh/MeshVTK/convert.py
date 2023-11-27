@@ -62,7 +62,7 @@ def convert(
             min_indice += nb_element
 
             if key == "line":
-                new_mesh.element["line"] = ElementMat(
+                new_mesh.element_dict["line"] = ElementMat(
                     nb_node_per_element=2,
                     connectivity=connect,
                     nb_element=nb_element,
@@ -72,7 +72,7 @@ def convert(
                     scalar_product=ScalarProductL2(),
                 )
             elif key == "line3":
-                new_mesh.element["line3"] = ElementMat(
+                new_mesh.element_dict["line3"] = ElementMat(
                     nb_node_per_element=3,
                     connectivity=connect,
                     nb_element=nb_element,
@@ -81,7 +81,7 @@ def convert(
                     gauss_point=None,  # TODO
                 )
             elif key == "triangle3":
-                new_mesh.element["triangle"] = ElementMat(
+                new_mesh.element_dict["triangle"] = ElementMat(
                     nb_node_per_element=3,
                     connectivity=connect,
                     nb_element=nb_element,
@@ -91,7 +91,7 @@ def convert(
                     scalar_product=ScalarProductL2(),
                 )
             elif key == "quad9":
-                new_mesh.element["quad9"] = ElementMat(
+                new_mesh.element_dict["quad9"] = ElementMat(
                     nb_node_per_element=9,
                     connectivity=connect,
                     nb_element=nb_element,
