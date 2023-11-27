@@ -13189,6 +13189,7 @@
             "SlotW27",
             "SlotW28",
             "SlotW29",
+            "SlotW30",
             "SlotW60",
             "SlotW61",
             "SlotWLSRPM"
@@ -15969,6 +15970,101 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.2
+            }
+        ]
+    },
+    "SlotW30": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "",
+        "is_internal": false,
+        "methods": [
+            "_comp_line_dict",
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_opening",
+            "get_surface_active",
+            "get_surface_opening",
+            "plot_schematics"
+        ],
+        "mother": "Slot",
+        "name": "SlotW30",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW30.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot active height.",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.006
+            },
+            {
+                "as_dict": "",
+                "desc": "Top radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "Bottom radius",
+                "max": "",
+                "min": "0",
+                "name": "R2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             }
         ]
     },

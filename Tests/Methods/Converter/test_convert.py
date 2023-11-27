@@ -20,11 +20,10 @@ class Test_converter_mot(object):
         machine = Conv.convert_to_P(path)
 
         # conversion machine in dict
-        Conv.convert_to_other(machine)
-        dict_to_other = Conv.other_dict
-        # conversoin file in dict to compare
-        convert_other_to_dict(Conv, path)
+        dict_to_other = Conv.convert_to_other(machine)
 
+        # conversoin file in dict to compare
+        Conv.convert_other_to_dict(path)
         dict_to_mot = Conv.other_dict
 
         # selection path and value in dict_to_other created after conversion, and compare this result with dict_to_mot, a file .mot convert in dict
@@ -39,15 +38,15 @@ class Test_converter_mot(object):
 
                 # compare value
                 value_mot = dict_to_mot[path_dict][path_2]
-                msg = f"{path_dict}, {path_2}"
-                if type(value) != str:
-                    assert abs(value_mot) == pytest.approx(value), msg
+                msg = f"{value} is different {value_mot}(ref)"
 
-                elif value != value_mot:
-                    raise ValueError(f"{value} is different {value_mot}")
+                if isinstance(value, str):
+                    assert value != value_mot, msg
+                else:
+                    assert abs(value_mot) == pytest.approx(value), msg
 
 
 if __name__ == "__main__":
     a = Test_converter_mot()
-    a.compare(path)
+    a.test_convert(path)
     print("Test Done")

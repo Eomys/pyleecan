@@ -237,6 +237,7 @@ from ..Classes.SlotW26 import SlotW26
 from ..Classes.SlotW27 import SlotW27
 from ..Classes.SlotW28 import SlotW28
 from ..Classes.SlotW29 import SlotW29
+from ..Classes.SlotW30 import SlotW30
 from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
 from ..Classes.SlotWLSRPM import SlotWLSRPM

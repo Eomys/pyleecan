@@ -61,6 +61,7 @@ def convert_other_to_dict(self, file_path):
 
     other_dict = {}
     for line in file:
+        # if the float is writte with "," ex :1,26   ti do conversion we need to have float writte with point ex 1.26
         line = line.replace(",", ".")
         # deleted \n in line
         line = line.strip("\n")
@@ -117,7 +118,7 @@ def convert_other_to_dict(self, file_path):
 
     self.other_dict = other_dict
     self.other_unit_dict = other_unit_dict
-    file.close
+    file.close()
 
 
 # conversion str in float
