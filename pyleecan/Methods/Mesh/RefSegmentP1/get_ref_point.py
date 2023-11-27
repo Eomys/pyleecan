@@ -38,8 +38,9 @@ def get_ref_point(self, element_coordinate, point):
 
     # ref_elem_node =  np.dot(mat_rot, elem_node_origin) / elem_lenght
 
+    # Assume that the element is in the same plane with constant z
     point_in_ref_elem = (
-        np.dot(mat_rot, point - element_coordinate[0]) / elem_lenght
+        np.dot(mat_rot, point[:2] - element_coordinate[0]) / elem_lenght
     )  # (0,0) -- (1,0)
     point_in_ref_elem[0] *= 2  # (0,0) -- (2,0)
     point_in_ref_elem[0] -= 1  # (-1,0) -- (1,0)
