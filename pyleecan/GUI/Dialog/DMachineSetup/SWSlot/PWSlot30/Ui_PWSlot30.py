@@ -155,23 +155,11 @@ class Ui_PWSlot30(object):
         self.g_wedge.setChecked(False)
         self.gridLayout_2 = QGridLayout(self.g_wedge)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.in_type = QLabel(self.g_wedge)
-        self.in_type.setObjectName(u"in_type")
-        self.in_type.setMaximumSize(QSize(50, 16777215))
-
-        self.gridLayout_2.addWidget(self.in_type, 0, 0, 1, 1)
-
-        self.c_wedge_type = QComboBox(self.g_wedge)
-        self.c_wedge_type.addItem("")
-        self.c_wedge_type.setObjectName(u"c_wedge_type")
-
-        self.gridLayout_2.addWidget(self.c_wedge_type, 0, 1, 1, 1)
-
         self.w_wedge_mat = WMatSelectV(self.g_wedge)
         self.w_wedge_mat.setObjectName(u"w_wedge_mat")
         self.w_wedge_mat.setMinimumSize(QSize(100, 0))
 
-        self.gridLayout_2.addWidget(self.w_wedge_mat, 1, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.w_wedge_mat, 0, 0, 1, 2)
 
         self.verticalLayout_3.addWidget(self.g_wedge)
 
@@ -195,8 +183,7 @@ class Ui_PWSlot30(object):
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
         QWidget.setTabOrder(self.lf_H1, self.lf_R2)
         QWidget.setTabOrder(self.lf_R2, self.g_wedge)
-        QWidget.setTabOrder(self.g_wedge, self.c_wedge_type)
-        QWidget.setTabOrder(self.c_wedge_type, self.scrollArea)
+        QWidget.setTabOrder(self.g_wedge, self.scrollArea)
 
         self.retranslateUi(PWSlot30)
 
@@ -220,9 +207,5 @@ class Ui_PWSlot30(object):
         self.in_R1.setText(QCoreApplication.translate("PWSlot30", u"R1", None))
         self.unit_R1.setText(QCoreApplication.translate("PWSlot30", u"m", None))
         self.g_wedge.setTitle(QCoreApplication.translate("PWSlot30", u"Wedge", None))
-        self.in_type.setText(QCoreApplication.translate("PWSlot30", u"Type", None))
-        self.c_wedge_type.setItemText(
-            0, QCoreApplication.translate("PWSlot30", u"Standard", None)
-        )
 
     # retranslateUi

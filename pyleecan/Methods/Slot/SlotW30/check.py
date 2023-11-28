@@ -20,6 +20,4 @@ def check(self):
     S30InnerError
         Slot Type 30 can't be used on inner lamination
     """
-
-    if not self.is_outwards():
-        raise S30InnerError("Slot Type 30 can't be used on inner lamination")
+    pass

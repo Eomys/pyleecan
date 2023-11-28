@@ -1,4 +1,4 @@
-from numpy import angle, arcsin, arctan, cos, exp, pi, sin, sqrt
+from numpy import angle, arcsin, arctan, cos, exp, pi, sin, sqrt, tan
 
 from ....Methods.Slot.SlotW30 import S30InnerError
 from ....Functions.Geometry.inter_line_line import inter_line_line
@@ -46,7 +46,7 @@ def _comp_point_coordinate(self):
         if self.R2 == 0:
             Z80 = Zc1[0] * exp(-1j * hsp) - (self.W3 / 2) * 1j
             Z80 = exp(1j * hsp) * Z80
-            Zc = Z80
+            Z8 = Z80
         else:
             Z8 = Zc1[0] * exp(-1j * hsp) - self.R2
             Z8 = exp(1j * hsp) * Z8
@@ -59,18 +59,31 @@ def _comp_point_coordinate(self):
         Zc = Zc * exp(1j * hsp)
 
         Zp6 = Z11 + 1j
-        Zc2 = inter_line_line(Z8, Zc, Z11, Zp6)
+        Zc2 = inter_line_line(Zc, Z8, Zp6, Z11)
 
         if self.R1 == 0:
-            Z100 = Zc2[0] * exp(-1j * hsp) - (self.W3 / 2) * 1j
-            Z100 = exp(1j * hsp) * Z100
+            Z100 = Zc2[0]
 
         else:
-            Z9 = Zc2[0] * exp(-1j * hsp) + self.R1
-            Z10 = Zc2[0] - self.R1 * 1j
+            Zt1 = Z8 * exp(-1j * hsp)
+            Zt1 = Zt1 - self.R1 * 1j
+            Zt1 = Zt1 * exp(1j * hsp)
 
-            Z9 = exp(1j * hsp) * Z9
-            Zc4 = Arc1(Z9, Z10, self.R1).get_center()
+            Zt2 = Zc2[0] * exp(-1j * hsp)
+            Zt2 = Zt2 - self.R1 * 1j
+            Zt2 = Zt2 * exp(1j * hsp)
+
+            Zt3 = Z11 + self.R1 + 1j
+            Zt4 = Z11 + self.R1
+
+            Zcenter = inter_line_line(Zt2, Zt1, Zt3, Zt4)
+
+            R11 = inter_line_circle(Zc, Z8, self.R1, Zcenter[0])
+            R12 = inter_line_circle(Z11, Z11 + 1j, self.R1, Zcenter[0] - 0.000000005)
+
+            Z9 = R11[0]
+            Z10 = R12[0]
+            Zc4 = Zcenter[0]
 
     # is internal
     else:
@@ -92,32 +105,62 @@ def _comp_point_coordinate(self):
         if self.R2 == 0:
             Z80 = Zc1[0] * exp(-1j * hsp) - (self.W3 / 2) * 1j
             Z80 = exp(1j * hsp) * Z80
-            Zc = Z80
+            Z8 = Z80
 
         else:
-            Z8 = Zc1[0] * exp(-1j * hsp) + self.R2
-            Z8 = exp(1j * hsp) * Z8
+            Zh5 = Zc1[0] * exp(-1j * hsp) + 1
+            Zh5 = Zh5 * exp(1j * hsp)
 
-            Z7 = Zc1[0] - self.R2 * 1j
-            Zc3 = Arc1(Z7, Z8, self.R2).get_center()
+            Zh1 = Zc1[0] * exp(-1j * hsp)
+            Zh1 = Zh1 - self.R2 * 1j
+            Zh1 = Zh1 * exp(1j * hsp)
 
-            Zc = exp(-1j * hsp) * Z8
-            Zc = Zc + 1
-            Zc = Zc * exp(1j * hsp)
-            Zc3 = Arc1(Z8, Z7, self.R2).get_center()
+            Zh2 = Zc1[0] * exp(-1j * hsp)
+            Zh2 = Zh2 - self.R2 * 1j + 1
+            Zh2 = Zh2 * exp(1j * hsp)
+
+            Zh3 = Zp3 + self.R2 + 1j
+            Zh4 = Zp3 + self.R2
+
+            Zcenter = inter_line_line(Zh2, Zh1, Zh3, Zh4)
+
+            R11 = inter_line_circle(Zc1[0], Zh5, self.R2, Zcenter[0])
+            R12 = inter_line_circle(Zp3, Zp4, self.R2, Zcenter[0] - 0.000000005)
+
+            Zc3 = Zcenter[0]
+            Z8 = R11[0]
+            Z7 = R12[0]
+
+        Zc = exp(-1j * hsp) * Z8
+        Zc = Zc + 1
+        Zc = Zc * exp(1j * hsp)
 
         Zp6 = Z11 + 1j
         Zc2 = inter_line_line(Z8, Zc, Z11, Zp6)
 
         if self.R1 == 0:
-            Z100 = Zc2[0] * exp(-1j * hsp) - (self.W3 / 2) * 1j
-            Z100 = exp(1j * hsp) * Z100
+            Z100 = Zc2[0]
 
         else:
-            Z9 = Zc2[0] * exp(-1j * hsp) - self.R1
-            Z10 = Zc2[0] - self.R1 * 1j
-            Z9 = exp(1j * hsp) * Z9
-            Zc4 = Arc1(Z10, Z9, self.R1).get_center()
+            Zt1 = Z8 * exp(-1j * hsp)
+            Zt1 = Zt1 - self.R1 * 1j
+            Zt1 = Zt1 * exp(1j * hsp)
+
+            Zt2 = Zc2[0] * exp(-1j * hsp)
+            Zt2 = Zt2 - self.R1 * 1j
+            Zt2 = Zt2 * exp(1j * hsp)
+
+            Zt3 = Z11 - self.R1 + 1j
+            Zt4 = Z11 - self.R1
+
+            Zcenter = inter_line_line(Zt2, Zt1, Zt3, Zt4)
+
+            R11 = inter_line_circle(Zc, Z8, self.R1, Zcenter[0] + 0.0000000005 * 1j)
+            R12 = inter_line_circle(Z11, Z11 + 1j, self.R1, Zcenter[0] + 0.0000000005)
+
+            Z9 = R11[0]
+            Z10 = R12[0]
+            Zc4 = Zcenter[0]
 
     point_dict = dict()
     # symetry
@@ -148,6 +191,6 @@ def _comp_point_coordinate(self):
 
     else:
         point_dict["Z80"] = Z80
-        point_dict["Z60"] = Z7.conjugate()
+        point_dict["Z60"] = Z80.conjugate()
 
     return point_dict

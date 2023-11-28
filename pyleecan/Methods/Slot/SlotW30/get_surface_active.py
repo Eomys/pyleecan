@@ -45,8 +45,7 @@ def get_surface_active(self, alpha=0, delta=0):
             line_dict["7-8"],
             line_dict["8-100"],
             line_dict["100-11"],
-            line_dict["11-12"],
-            line_dict["12-2"],
+            line_dict["11-2"],
         ]
 
     elif self.R1 != 0 and self.R2 == 0:
@@ -58,8 +57,7 @@ def get_surface_active(self, alpha=0, delta=0):
             line_dict["80-9"],
             line_dict["9-10"],
             line_dict["10-11"],
-            line_dict["11-12"],
-            line_dict["12-2"],
+            line_dict["11-2"],
         ]
 
     elif self.R1 == 0 and self.R2 == 0:
@@ -69,8 +67,7 @@ def get_surface_active(self, alpha=0, delta=0):
             line_dict["60-80"],
             line_dict["80-100"],
             line_dict["100-11"],
-            line_dict["11-12"],
-            line_dict["12-2"],
+            line_dict["11-2"],
         ]
 
     curve_list = [line for line in curve_list if line is not None]

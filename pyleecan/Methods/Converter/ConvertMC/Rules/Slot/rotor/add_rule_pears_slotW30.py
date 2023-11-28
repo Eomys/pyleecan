@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_round_slotW26(self, is_stator):
+def add_rule_pears_slotW30(self, is_stator):
     """Create and adapt all the rules related to slotW23 (lam radius,...)
     Extend rules_list within Converter object
 
@@ -49,10 +49,40 @@ def add_rule_round_slotW26(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Bar_Width_[T]"],
+            other_key_list=["[Dimensions]", "Rotor_Tooth_Width_[T]"],
+            P_obj_path=f"machine.rotor.slot.W3",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Bar_Depth_[T]"],
+            P_obj_path=f"machine.rotor.slot.H1",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Bar_Opening_Radius_[T]"],
             P_obj_path=f"machine.rotor.slot.R1",
             unit_type="m",
-            scaling_to_P=0.5,
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Bar_Corner_Radius_[T]"],
+            P_obj_path=f"machine.rotor.slot.R2",
+            unit_type="m",
+            scaling_to_P=1,
             file_name=__file__,
         )
     )

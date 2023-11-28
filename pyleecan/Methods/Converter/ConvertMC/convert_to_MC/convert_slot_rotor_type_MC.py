@@ -13,8 +13,8 @@ def convert_slot_rotor_type_MC(self):
     if slot_type == "SlotW11":
         name_slot = "Parallel_Tooth"
 
-    elif slot_type == "SlotW15":
-        name_slot = "Parallel_tooth_SqB"
+    elif slot_type == "SlotW30":
+        name_slot = "Pear"
 
     elif slot_type == "SlotW23":
         name_slot = "Rectangular"

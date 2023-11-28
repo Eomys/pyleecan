@@ -1187,7 +1187,7 @@
             "Rules.Slot.add_rule_parallel_tooth_SqB_slotW14",
             "Rules.Slot.rotor.add_rule_round_slotW26",
             "Rules.Slot.rotor.add_rule_rotor_parallel_tooth_slotW11",
-            "Rules.Slot.rotor.add_rule_pears_slotW15",
+            "Rules.Slot.rotor.add_rule_pears_slotW30",
             "Rules.Slot.rotor.add_rule_rectangular_slotW23",
             "Rules.Lamination.add_rule_lamination",
             "Rules.Lamination.add_rule_circular_duct_circular",

@@ -71,17 +71,6 @@ class PWSlot30(Gen_PWSlot30, QWidget):
         self.lf_R1.setValue(self.slot.R1)
         self.lf_R2.setValue(self.slot.R2)
 
-        # Display the main output of the slot (surface, height...)
-        self.w_out.comp_output()
-
-        # Connect the signal/slot
-        self.lf_W0.editingFinished.connect(self.set_W0)
-        self.lf_W3.editingFinished.connect(self.set_W3)
-        self.lf_H0.editingFinished.connect(self.set_H0)
-        self.lf_H1.editingFinished.connect(self.set_H1)
-        self.lf_R1.editingFinished.connect(self.set_R1)
-        self.lf_R2.editingFinished.connect(self.set_R2)
-
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
         self.w_wedge_mat.setText("Wedge Material")
@@ -93,6 +82,18 @@ class PWSlot30(Gen_PWSlot30, QWidget):
         else:
             self.w_wedge_mat.def_mat = "M400-50A"
         self.set_wedge()
+
+        # Display the main output of the slot (surface, height...)
+        self.w_out.comp_output()
+
+        # Connect the signal/slot
+        self.lf_W0.editingFinished.connect(self.set_W0)
+        self.lf_W3.editingFinished.connect(self.set_W3)
+        self.lf_H0.editingFinished.connect(self.set_H0)
+        self.lf_H1.editingFinished.connect(self.set_H1)
+        self.lf_R1.editingFinished.connect(self.set_R1)
+        self.lf_R2.editingFinished.connect(self.set_R2)
+        self.g_wedge.toggled.connect(self.set_wedge)
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""

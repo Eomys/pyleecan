@@ -1,6 +1,6 @@
 from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW15 import SlotW15
+from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.Classes.SlotW23 import SlotW23
 from pyleecan.Classes.SlotW26 import SlotW26
 
@@ -33,8 +33,8 @@ def convert_slot_rotor_type_P(self):
     elif slot_type == "Rectangular":
         self.machine.rotor.slot = SlotW23()
 
-    elif slot_type == "Pear":  # check
-        self.machine.rotor.slot = SlotW15()
+    elif slot_type == "Pear":
+        self.machine.rotor.slot = SlotW30()
 
     else:
         raise Exception("Conversion of machine doesn't exist")

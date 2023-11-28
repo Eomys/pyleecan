@@ -1,5 +1,5 @@
 from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW15 import SlotW15
+from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.Classes.SlotW23 import SlotW23
 from pyleecan.Classes.SlotW26 import SlotW26
 
@@ -25,8 +25,8 @@ def selection_slot_rotor_rules(self, is_stator):
     if isinstance(self.machine.rotor.slot, SlotW11):
         self.add_rule_rotor_parallel_tooth_slotW11(is_stator)
 
-    elif isinstance(self.machine.rotor.slot, SlotW15):
-        self.add_rule_pears_slotW15(is_stator)
+    elif isinstance(self.machine.rotor.slot, SlotW30):
+        self.add_rule_pears_slotW30(is_stator)
 
     elif isinstance(self.machine.rotor.slot, SlotW23):
         self.add_rule_rectangular_slotW23(is_stator)

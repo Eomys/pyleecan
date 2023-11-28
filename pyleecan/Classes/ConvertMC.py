@@ -200,11 +200,11 @@ except ImportError as error:
     add_rule_rotor_parallel_tooth_slotW11 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_pears_slotW15 import (
-        add_rule_pears_slotW15,
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_pears_slotW30 import (
+        add_rule_pears_slotW30,
     )
 except ImportError as error:
-    add_rule_pears_slotW15 = error
+    add_rule_pears_slotW30 = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rectangular_slotW23 import (
@@ -685,18 +685,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_rotor_parallel_tooth_slotW11 = add_rule_rotor_parallel_tooth_slotW11
-    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_pears_slotW15
-    if isinstance(add_rule_pears_slotW15, ImportError):
-        add_rule_pears_slotW15 = property(
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_pears_slotW30
+    if isinstance(add_rule_pears_slotW30, ImportError):
+        add_rule_pears_slotW30 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_pears_slotW15: "
-                    + str(add_rule_pears_slotW15)
+                    "Can't use ConvertMC method add_rule_pears_slotW30: "
+                    + str(add_rule_pears_slotW30)
                 )
             )
         )
     else:
-        add_rule_pears_slotW15 = add_rule_pears_slotW15
+        add_rule_pears_slotW30 = add_rule_pears_slotW30
     # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rectangular_slotW23
     if isinstance(add_rule_rectangular_slotW23, ImportError):
         add_rule_rectangular_slotW23 = property(
