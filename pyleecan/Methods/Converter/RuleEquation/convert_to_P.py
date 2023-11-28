@@ -1,10 +1,8 @@
-from sympy import Symbol
 from sympy.solvers import solve
-from numpy import pi
 
 
 def convert_to_P(self, other_dict, machine, other_unit_dict):
-    """Select value in other_dict and implements in machine
+    """Selects value in other_dict and implements it in machine
 
     Parameters
     ----------
@@ -24,14 +22,12 @@ def convert_to_P(self, other_dict, machine, other_unit_dict):
     for param in self.param:
         if param["src"] == "other":
             other_value = self.get_other(other_dict, param["path"], other_unit_dict)
-
             equation = equation.replace(param["variable"], str(other_value))
 
     for param in self.param:
         if param["src"] == "pyleecan":
             if not param["variable"] == "x":
                 P_value = self.get_P(param["path"], machine)
-
                 equation = equation.replace(param["variable"], str(P_value))
 
     # equation cleaning, delete space and replace + and - to delete =

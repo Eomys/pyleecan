@@ -22,16 +22,16 @@ def convert_other_to_dict(self, file_path):
 
     list_path = file_path.split(".")
     if not list_path[-1] == "mot":
-        raise NameError("the file is not a .mot, please select a .mot to convert")
+        raise NameError("The file is not a .mot, please select a .mot to convert")
     if not isfile(file_path):
-        raise Exception("Error: This file doesn't exist: " + file_path)
+        raise Exception(f"Error: This file doesn't exist: {file_path}")
     else:
         file = open(join(file_path, file_path))
 
     ####
     # .mot files are organized as follow:
     # the file is compose different part, with a title into [], and after a list of value, after restart an other part, we have a space
-    # to example
+    # Example :
     # [Dimensions]
     # Stator_Lam_Dia=130
     # Stator_Bore=80
@@ -116,7 +116,7 @@ def convert_other_to_dict(self, file_path):
 
     self.other_dict = other_dict
     self.other_unit_dict = other_unit_dict
-    file.close
+    file.close()
 
 
 # conversion str in float

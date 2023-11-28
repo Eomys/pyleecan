@@ -15,9 +15,9 @@ def convert_duct_type_MC(self, is_stator):
         lam_name_MC = "Rotor"
 
     # conversion to motor-cad
-    if (len(self.machine.rotor.axial_vent)) == 0:
+    if len(self.machine.rotor.axial_vent) == 0:
         pass
-    elif (len(self.machine.stator.axial_vent)) == 0:
+    elif len(self.machine.stator.axial_vent) == 0:
         pass
     else:
         type_duct = type(self.machine.rotor.axial_vent[0]).__name__
@@ -25,7 +25,7 @@ def convert_duct_type_MC(self, is_stator):
         for nb_duct in range(len(self.machine.rotor.axial_vent)):
             if type_duct != self.machine.rotor.axial_vent[nb_duct]:
                 self.get_logger().error(
-                    "in Motor-cad, we have just the possibility to have 1 type od duct"
+                    "A Motor-cad machine can only have one type of axial duct"
                 )
 
             if is_stator == True:
@@ -65,4 +65,4 @@ def convert_duct_type_MC(self, is_stator):
                 )
 
             else:
-                raise NameError("type of duct have not equivalent in pyleecan")
+                raise NameError("Type of duct has not equivalent in pyleecan")

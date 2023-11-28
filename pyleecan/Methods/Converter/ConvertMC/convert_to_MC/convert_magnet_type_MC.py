@@ -1,5 +1,5 @@
 def convert_magnet_type_MC(self):
-    """Selection correct magnet and implementation in dict
+    """Selects correct magnet and implements it in dict
 
     Parameters
     ----------

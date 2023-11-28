@@ -1,6 +1,5 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_arc_duct_polar(self, is_stator, duct_id):
@@ -76,7 +75,7 @@ def add_rule_arc_duct_polar(self, is_stator, duct_id):
         )
     )
 
-    if self.is_P_to_other == False:
+    if not self.is_P_to_other:
         self.rules_list.append(
             RuleEquation(
                 param=[

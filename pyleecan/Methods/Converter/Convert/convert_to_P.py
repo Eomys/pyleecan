@@ -34,6 +34,6 @@ def convert_to_P(self, file_path):
     name = list_path[-2].split("/")
     self.machine.name = name[-1]
 
-    self.get_logger().info("End of conversion, obj machine is create \n \n \n")
+    self.get_logger().info("End of conversion, obj machine is create\n\n\n")
 
     return self.machine

@@ -1,6 +1,5 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_interior_V_simple_holeM60(self, is_stator, hole_id):

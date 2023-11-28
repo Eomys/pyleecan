@@ -1,6 +1,4 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_interior_flat_web_holeM52(self, is_stator, hole_id):

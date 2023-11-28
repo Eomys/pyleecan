@@ -1,9 +1,8 @@
-from sympy import Symbol
 from sympy.solvers import solve
 
 
 def convert_to_other(self, other_dict, machine, other_unit_dict):
-    """Select value in machine and implements in other_dict
+    """Selects value in machine and implements it in other_dict
 
     Parameters
     ----------
@@ -15,8 +14,8 @@ def convert_to_other(self, other_dict, machine, other_unit_dict):
         A pyleecan machine
     other_unit_dict : dict
         dict with unit to make conversion (key: unit family, value: factor)
-
     """
+
     # we must have the same unit
     equation = self.equation
 
@@ -30,7 +29,6 @@ def convert_to_other(self, other_dict, machine, other_unit_dict):
     for param in self.param:
         if param["src"] == "pyleecan":
             P_value = self.get_P(param["path"], machine)
-
             equation = equation.replace(param["variable"], str(P_value))
 
     # equation cleaning, delete space and replace + and - to delete =
