@@ -17,17 +17,19 @@ def get_P(self, path_machine, machine):
     # select value in object machine
     value_split = path_machine.split(".")
 
-    try:
-        path = value_split[0]
-        for temp in range(1, len(value_split) - 1):
-            path = eval('path+"."+value_split[temp]')
+    # value_split[-1] is the attribut that we want to retrieve ("W1")
+    # path is the attribut chain to get the attribut ("machine.stator.slot")
+    path = value_split[0]
+    for temp in range(1, len(value_split) - 1):
+        path = path + "." + value_split[temp]
 
+    try:
         P_value = getattr(
             eval(path),
             value_split[-1],
         )
     except Exception:
-        raise Exception(
+        raise ValueError(
             f"Value equivalent at {path_machine} isn't found in obj machine"
         )
 

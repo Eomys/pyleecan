@@ -68,18 +68,6 @@
             "request": "launch",
             "program": "${file}",
             "console": "externalTerminal"
-        },
-        {
-            "name": "Python : Convertor",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/Tests/Methods/Converter/convert_start.py",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "PYTHONPATH": "${cwd}"
-            },
         }
     ]
 }

@@ -1,5 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict=None):
-    """Adapt the rule complex slotW23_H1
+    """Conversion H1 in m to slotW11
 
     Parameters
     ----------

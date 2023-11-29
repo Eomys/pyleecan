@@ -23,14 +23,5 @@ def _set_fct_name(self, value):
             fromlist=(self.fct_name),
         )
 
-        # self._fct_name = PATH_FUNCTION_RULE_COMPLEX_MOT + self.fct_name + ".py"
-
-        # with open(self._fct_name, "r", encoding=PYTHON_DEFAULT_ENCODING) as file:
-        #    exec(f.read(), globals())
-
-        # f = open(self._fct_name, "r", encoding=PYTHON_DEFAULT_ENCODING)
-        # exec(f.read(), globals())
-        # f.close()
-
         self.other_to_P = getattr(module, "other_to_P")
         self.P_to_other = getattr(module, "P_to_other")

@@ -12,11 +12,5 @@ def add_rule_lamination(rule_list, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    print("add_rule_lamination")
-
-    if is_stator == True:
-        lam_name = "stator"
-    else:
-        lam_name = "rotor"
 
     rule_list.append(RuleComplex(fct_name="add_duct_layer", folder="MotorCAD"))

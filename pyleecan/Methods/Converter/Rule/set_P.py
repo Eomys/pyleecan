@@ -20,6 +20,8 @@ def set_P(self, machine, other_value, path):
     # set value in object machine
     value_split = path.split(".")
 
+    # value_split[-1] is the attribut that we want to set ("W1")
+    # path is the attribut chain to set the attribut ("machine.stator.slot")
     path = value_split[0]
     for temp in range(1, len(value_split) - 1):
         path = eval('path+"."+value_split[temp]')

@@ -16,7 +16,7 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
         a int to know the number of duct
     """
 
-    if is_stator == True:
+    if is_stator:
         lam_name_MC = "Stator"
         lam_name_py = "stator"
     else:

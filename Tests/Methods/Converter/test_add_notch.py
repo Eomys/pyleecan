@@ -12,15 +12,16 @@ from pyleecan.Classes.SlotM19 import SlotM19
 rule_list = list()
 
 # add equation rules
+other_dict = {
+    "[Dimensions]": {
+        "PoleNotchDepth": 2,
+        "PoleNotchArc_Outer": 120,
+        "PoleNotchArc_Inner": 140,
+    }
+}
 
-other_dict = {}
-other_dict["[Dimensions]"] = {}
-other_dict["[Dimensions]"]["PoleNotchDepth"] = 2
-other_dict["[Dimensions]"]["PoleNotchArc_Outer"] = 120
-other_dict["[Dimensions]"]["PoleNotchArc_Inner"] = 140
 
-
-class Test_converter_mot(object):
+class TestComplexRuleNotch(object):
     def test_add_notch(self):
         """test rule complex"""
         machine = MachineSIPMSM()
@@ -44,6 +45,6 @@ class Test_converter_mot(object):
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestComplexRuleNotch()
     a.test_add_notch()
     print("Test Done")

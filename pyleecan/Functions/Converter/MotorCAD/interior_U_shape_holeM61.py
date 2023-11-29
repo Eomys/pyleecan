@@ -1,5 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """conversion obj machine in dict
+    """Conversion of the slot interior_U_shape (motor-cad) into the holeM61 (pyleecan)
 
     Parameters
     ----------
@@ -18,10 +18,10 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         A pyleecan machine
     """
 
-    try:
+    if isinstance(self.param_dict["hole_id"], int):
         hole_id = self.param_dict["hole_id"]
-    except:
-        ValueError("hole_id isn't found")
+    else:
+        ValueError("hole_id isn't int")
 
     self.unit_type = "m"
     other_path_list = ["[Dimensions]", f"UShape_InnerDiameter_Array[{hole_id}]"]

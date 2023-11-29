@@ -80,56 +80,30 @@ def add_rule_machine_dimension(self):
             )
         )
 
-        rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": ["[Dimensions]", "Stator_Bore"],
-                        "variable": "y",
-                    },
-                    {
-                        "src": "other",
-                        "path": ["[Dimensions]", "Airgap"],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": "machine.rotor.Rext",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="m",
-                equation="y/2-a= x ",
-                file_name=__file__,
-            )
+    rules_list.append(
+        RuleEquation(
+            param=[
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", "Stator_Bore"],
+                    "variable": "y",
+                },
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", "Airgap"],
+                    "variable": "a",
+                },
+                {
+                    "src": "pyleecan",
+                    "path": "machine.rotor.Rext",
+                    "variable": "x",
+                },
+            ],
+            unit_type="m",
+            equation="y/2-a= x ",
+            file_name=__file__,
         )
-
-    else:
-        rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": ["[Dimensions]", "Stator_Bore"],
-                        "variable": "y",
-                    },
-                    {
-                        "src": "other",
-                        "path": ["[Dimensions]", "Airgap"],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": "machine.rotor.Rext",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="m",
-                equation="y/2-a= x ",
-                file_name=__file__,
-            )
-        )
+    )
 
     # frame
     rules_list.append(

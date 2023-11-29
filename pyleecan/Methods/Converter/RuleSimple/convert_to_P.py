@@ -17,7 +17,8 @@ def convert_to_P(self, other_dict, machine, other_unit_dict):
     # The value is return in pyleecan unit (SI)
     other_value = self.get_other(other_dict, self.other_key_list, other_unit_dict)
 
-    # possibility to have str in other_value
+    # possibility to have str in other_value, if other_value is a str we have an equivalent, and we can't multiply a str.
+    # "if" it’s so as not to have this problem
     if self.scaling_to_P != 1:
         other_value = other_value * self.scaling_to_P
 

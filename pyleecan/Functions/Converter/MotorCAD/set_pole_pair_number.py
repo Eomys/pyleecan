@@ -1,5 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict=None):
-    """conversion obj machine in dict
+    """Conversion of the set_pole_pair_number
 
     Parameters
     ----------
@@ -18,7 +18,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict=None):
         A pyleecan machine
     """
     other_value = other_dict["[Dimensions]"]["Pole_Number"]
-    machine.set_pole_pair_number(int(other_value / 2))
+    machine.set_pole_pair_number(other_value // 2)
 
     return machine
 

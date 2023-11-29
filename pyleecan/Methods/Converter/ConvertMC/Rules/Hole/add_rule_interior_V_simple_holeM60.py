@@ -2,7 +2,7 @@ from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
 
 
-def add_rule_interior_V_simple_holeM60(self, is_stator, hole_id):
+def add_rule_interior_V_simple_holeM60(self, hole_id):
     """Create and adapt all the rules related to Hole
     Extend rules_list within Converter object
 

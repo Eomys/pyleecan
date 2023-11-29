@@ -7,10 +7,7 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.SlotW21 import SlotW21
 
 
-rule_list = list()
-
-
-class Test_converter_mot(object):
+class TestComplexRuleSlotW21(object):
     def test_slotW21_H1(self):
         """test rule complex"""
         machine = MachineSIPMSM()
@@ -35,6 +32,6 @@ class Test_converter_mot(object):
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestComplexRuleSlotW21()
     a.test_slotW21_H1()
     print("Test Done")

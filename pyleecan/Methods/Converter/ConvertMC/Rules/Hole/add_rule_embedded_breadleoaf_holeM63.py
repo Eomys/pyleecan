@@ -1,7 +1,7 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 
 
-def add_rule_embedded_breadleoaf_holeM63(self, is_stator, hole_id):
+def add_rule_embedded_breadleoaf_holeM63(self, hole_id):
     """Create and adapt all the rules related to Hole
     Extend rules_list within Converter object
 

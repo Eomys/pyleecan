@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     convert_to_other = error
 
+try:
+    from ..Methods.Converter.RuleEquation.solve_equation import solve_equation
+except ImportError as error:
+    solve_equation = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -61,6 +66,18 @@ class RuleEquation(Rule):
         )
     else:
         convert_to_other = convert_to_other
+    # cf Methods.Converter.RuleEquation.solve_equation
+    if isinstance(solve_equation, ImportError):
+        solve_equation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RuleEquation method solve_equation: "
+                    + str(solve_equation)
+                )
+            )
+        )
+    else:
+        solve_equation = solve_equation
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

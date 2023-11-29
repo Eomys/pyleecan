@@ -6,19 +6,17 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
 
-rule_list = list()
-
-
-# add equation rules
-
-other_dict = {}
-other_dict["[Dimensions]"] = {}
-other_dict["[Dimensions]"]["Slot_tooth"] = 15
-other_dict["[Dimensions]"]["Slot_Opening"] = 12.5
-other_dict["[Dimensions]"]["Slot_Depth"] = 72
-other_dict["[Dimensions]"]["Slot_2"] = 6.75
-other_dict["[Dimensions]"]["Slot_3"] = 6.75
-other_dict["[Dimensions]"]["Slot_4"] = 3.25
+# creating a dictionary
+other_dict = {
+    "[Dimensions]": {
+        "Slot_tooth": 15,
+        "Slot_Opening": 12.5,
+        "Slot_Depth": 72,
+        "Slot_2": 6.75,
+        "Slot_3": 6.75,
+        "Slot_4": 3.25,
+    }
+}
 
 
 class Test_converter_mot(object):
