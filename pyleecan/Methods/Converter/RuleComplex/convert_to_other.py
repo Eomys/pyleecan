@@ -1,5 +1,5 @@
 def convert_to_other(self, other_dict, machine, other_unit_dict):
-    """Select value in machine and implements in other_dict
+    """Selects value in machine and implements it in other_dict
 
     Parameters
     ----------

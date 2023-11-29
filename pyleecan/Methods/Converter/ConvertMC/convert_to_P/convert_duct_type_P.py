@@ -59,4 +59,4 @@ def convert_duct_type_P(self, is_stator):
             self.add_rule_rectangular_duct_trapeze(is_stator, duct_id)
 
     else:
-        raise NameError("type of duct have not equivalent in pyleecan")
+        raise NameError("Type of duct has not equivalent in pyleecan")

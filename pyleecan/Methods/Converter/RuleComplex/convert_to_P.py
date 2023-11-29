@@ -1,5 +1,5 @@
 def convert_to_P(self, other_dict, machine, other_unit_dict):
-    """Select value in other_dict and implements in machine
+    """Selects value in other_dict and implements it in machine
 
     Parameters
     ----------

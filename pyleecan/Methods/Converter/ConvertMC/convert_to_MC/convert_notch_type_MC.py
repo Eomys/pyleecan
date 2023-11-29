@@ -13,8 +13,8 @@ def convert_notch_type_MC(self, is_stator):
         len_nocth = len(self.machine.rotor.notch)
 
         if len_nocth > 1:
-            self.get_logger().info("Motor-CAD have just the possibility to add 1 notch")
-            self.get_logger().info("We try to add the first notch")
+            self.get_logger().info("A Motor-cad machine can only have one notch set")
+            self.get_logger().info("Only the first notch set will be added")
 
         if len_nocth > 0:
             if type(self.machine.rotor.notch[0].notch_shape).__name__ == "SlotM19":

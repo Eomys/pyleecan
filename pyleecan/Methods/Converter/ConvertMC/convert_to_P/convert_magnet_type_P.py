@@ -7,7 +7,7 @@ from pyleecan.Classes.SlotM16 import SlotM16
 
 
 def convert_magnet_type_P(self):
-    """Selection correct magnet and implementation in obj machine
+    """Selects correct magnet and implements it in obj machine
 
     Parameters
     ----------

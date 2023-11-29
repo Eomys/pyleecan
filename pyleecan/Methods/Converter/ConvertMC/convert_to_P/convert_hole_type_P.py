@@ -8,7 +8,7 @@ from pyleecan.Classes.HoleM63 import HoleM63
 
 
 def convert_hole_type_P(self):
-    """Selection correct hole and implementation in obj machine or in dict
+    """Selects correct hole and implements it in obj machine or in dict
 
     Parameters
     ----------
@@ -20,6 +20,7 @@ def convert_hole_type_P(self):
     len_hole : int
         The number of hole
     """
+
     hole_type = self.other_dict["[Design_Options]"]["BPM_Rotor"]
 
     number_hole = self.other_dict["[Dimensions]"]["Magnet_Layers"]

@@ -15,7 +15,7 @@ def convert_machine_type_P(self):
     motor_type = self.other_dict["[Calc_Options]"]["Motor_Type"]
     magnet_type = self.other_dict["[Design_Options]"]["BPM_Rotor"]
 
-    # selection type of machine and creation
+    # select machine type abd create it
     if motor_type == "BPM":
         if magnet_type in [
             "Surface_Radial",
@@ -32,8 +32,8 @@ def convert_machine_type_P(self):
     elif motor_type == "IM":
         self.machine = MachineSCIM()
 
-    # exception if machine as not an equivalent in pyleecan
     else:
+        # exception if machine as not an equivalent in pyleecan
         raise Exception("Conversion of machine doesn't exist")
 
     self.get_logger().info(

@@ -1,5 +1,5 @@
 def selection_LamSlotWind_rules(self, is_stator):
-    """Selection all step related to lamination
+    """Selection all steps related to lamination
 
     Parameters
     ----------

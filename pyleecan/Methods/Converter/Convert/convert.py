@@ -11,7 +11,7 @@ def convert(self):
     self.selection_machine_rules()
 
     # conversion rules list
-    if self.is_P_to_other == False:  # conversion to Pyleecan
+    if not self.is_P_to_other:  # conversion to Pyleecan
         for rule in self.rules_list:
             try:
                 # utilisation polymorphism to choose type rule
@@ -20,11 +20,9 @@ def convert(self):
                 )
             except Exception as e:
                 self.get_logger().error(
-                    "Error while running rule " + rule.get_name() + ":\n" + str(e)
+                    f"Error while running rule {rule.get_name()}:\n{e}"
                 )
-                raise Exception(
-                    "Error while running rule " + rule.get_name() + ":\n" + str(e)
-                )
+                raise Exception(f"Error while running rule {rule.get_name()}:\n{e}")
 
     else:  # conversion to other
         for rule in self.rules_list:
@@ -34,8 +32,6 @@ def convert(self):
                 )
             except Exception as e:
                 self.get_logger().error(
-                    "Error while running rule " + rule.get_name() + ":\n" + str(e)
+                    f"Error while running rule {rule.get_name()}:\n{e}"
                 )
-                raise Exception(
-                    "Error while running rule " + rule.get_name() + ":\n" + str(e)
-                )
+                raise Exception(f"Error while running rule {rule.get_name()}:\n{e}")

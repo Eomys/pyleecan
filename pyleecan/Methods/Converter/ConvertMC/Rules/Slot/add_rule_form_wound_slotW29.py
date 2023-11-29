@@ -1,6 +1,5 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_form_wound_slotW29(rule_list, is_stator):

@@ -2,14 +2,14 @@ from numpy import pi
 
 
 def init_other_unit(self):
-    """Selection unit and create a dict with all conversion
+    """Selects units and creates a dict with all conversion
 
     Parameters
     ----------
     self : ConvertMC
         A ConvertMC object
-
     """
+
     self.other_unit_dict = {}
 
     # set length

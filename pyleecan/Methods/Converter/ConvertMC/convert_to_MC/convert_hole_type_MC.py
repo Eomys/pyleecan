@@ -1,5 +1,5 @@
 def convert_hole_type_MC(self):
-    """Selection correct hole and implementation in dict
+    """Selects correct hole and implements it in dict
 
     Parameters
     ----------
@@ -18,7 +18,7 @@ def convert_hole_type_MC(self):
     for hole_id in range(len_hole):
         if hole_type != type(self.machine.rotor.hole[hole_id]).__name__:
             self.get_logger().error(
-                "In motor-cad, we have just the possibility to set the same ype of hole, so we select the first hole"
+                "In motor-cad, we have just the possibility to set the same type of hole, so we select the first hole"
             )
             len_hole = 1
 
