@@ -1,8 +1,8 @@
-from numpy import sin
+from numpy import sin, cos, pi, sqrt, tan
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot inset_parallel (motor-cad) into the slotM15 (pyleecan)
+    """Conversion of the slot inset_breadloaf (motor-cad) into the slotM12 (pyleecan)
 
     Parameters
     ----------
@@ -20,22 +20,32 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
+    if isinstance(self.param_dict["hole_id"], int):
+        hole_id = self.param_dict["hole_id"]
+    else:
+        ValueError("hole_id isn't int")
+
+    self.unit_type = "m"
+    other_path_list = ["[Dimensions]", "Magnet_Embed_Depth"]
+    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
     Rbo = machine.rotor.get_Rbo()
 
+    H = Rbo - H1
     self.unit_type = "ED"
     other_path_list = ["[Dimensions]", "Magnet_Arc_[ED]"]
-    W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+    W0 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    slot_width = (Rbo) * sin(W1 / 2)
-    machine.rotor.slot.W1 = 2 * slot_width
+    Rbo = machine.rotor.get_Rbo()
 
-    machine.rotor.slot.Rtopm = machine.rotor.get_Rbo()
+    W0 = H * tan(W0 / 2)
+
+    machine.rotor.hole[hole_id].W0 = W0 * 2
 
     return machine
 
 
 def P_to_other(self, machine, other_dict, other_unit_dict=None):
-    """conversion obj machine into dict
+    """conversion obj machine in dict
 
     Parameters
     ----------

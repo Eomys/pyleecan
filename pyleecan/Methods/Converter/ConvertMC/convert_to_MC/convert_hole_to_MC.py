@@ -49,8 +49,8 @@ def convert_hole_to_MC(self):
         name_hole = "Interior_U-Shape"
 
     else:
-        raise NotImplemented(
-            "Type of hole has not equivalent in Motor-CAD or has not implement"
+        raise NotImplementedError(
+            f"Type of hole {hole_type} has not equivalent or has not implement"
         )
 
     # writting in dict

@@ -1195,7 +1195,7 @@
             "Rules.Rotor_Magnet.add_rule_inset_radial_slotM11",
             "Rules.Rotor_Magnet.add_rule_inset_parallel_slotM15",
             "Rules.Rotor_Magnet.add_rule_inset_breadloaf_slotM12",
-            "selection_SIPMSM_machine_dimension",
+            "select_SIPMSM_machine_dimension",
             "Rules.Hole.add_rule_interior_U_shape_holeM61",
             "Rules.Hole.add_rule_interior_V_web_holeM57",
             "Rules.Hole.add_rule_interior_V_simple_holeM60",

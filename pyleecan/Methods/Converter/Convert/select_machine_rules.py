@@ -1,6 +1,5 @@
 from ....Classes.MachineIPMSM import MachineIPMSM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Functions.Converter.Utils.NotImplemented import NotImplemented
 
 
 def select_machine_rules(self):
@@ -28,4 +27,4 @@ def select_machine_rules(self):
         self.add_rule_machine_dimension()
         self.select_IPMSM_rules()
     else:
-        raise NotImplemented("machine is not implemented yet")
+        raise NotImplementedError("machine is not implemented yet")

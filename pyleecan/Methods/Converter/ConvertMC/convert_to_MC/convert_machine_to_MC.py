@@ -17,7 +17,9 @@ def convert_machine_to_MC(self):  # conversion to MotorCAD
         name_machine = "IM"
 
     else:
-        raise ValueError(f"Conversion of a {motor_type} machine doesn't exist")
+        raise NotImplementedError(
+            f"Machine {motor_type} has not equivalent or has not implement"
+        )
 
     self.get_logger().info(f"Conversion {motor_type} into {name_machine}")
 

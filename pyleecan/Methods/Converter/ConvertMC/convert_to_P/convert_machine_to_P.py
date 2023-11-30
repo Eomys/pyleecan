@@ -27,22 +27,25 @@ def convert_machine_to_P(self):
         ]:
             self.machine = MachineSIPMSM()
         else:
+            # "Embedded_Parallel"
+            # "Embedded_Radial"
+            # "Embedded_Breadleaof"
+            # "Interior_Flat(simple)"
+            # "Interior_Flat(web)"
+            # "Interior_V(simple)"
+            # "Interior_V(web)"
+            # "Interior_U-Shape"
+
             self.machine = MachineIPMSM()
 
     elif motor_type == "IM":
-        # "Embedded_Parallel"
-        # "Embedded_Radial"
-        # "Embedded_Breadleaof"
-        # "Interior_Flat(simple)"
-        # "Interior_Flat(web)"
-        # "Interior_V(simple)"
-        # "Interior_V(web)"
-        # "Interior_U-Shape"
         self.machine = MachineSCIM()
 
     else:
         # exception if machine as not an equivalent in pyleecan
-        raise ValueError("Conversion of machine doesn't exist")
+        raise NotImplementedError(
+            f"Machine {motor_type} has not equivalent in pyleecan or has not implement"
+        )
 
     self.get_logger().info(
         f"Conversion {motor_type} into {type(self.machine).__name__}"

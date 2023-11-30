@@ -1,6 +1,3 @@
-from pyleecan.Functions.Converter.Utils.NotImplemented import NotImplemented
-
-
 def convert_duct_to_MC(self, is_stator):
     """selection step to add rules for duct
 
@@ -24,7 +21,7 @@ def convert_duct_to_MC(self, is_stator):
         type_duct = axial_vent[0].__class__.__name__
 
         for nb_duct, duct in enumerate(axial_vent):
-            if type_duct != axial_vent[nb_duct]:
+            if type_duct != type(axial_vent[nb_duct]).__name__:
                 self.get_logger().error(
                     "A Motor-cad machine can only have one type of axial duct"
                 )
@@ -37,7 +34,7 @@ def convert_duct_to_MC(self, is_stator):
                 return
             # CircularDuct
             elif type_duct == "VentilationCirc":
-                self.add_rule_circular_duct_circular(is_stator, type_duct)
+                self.add_rule_circular_duct_circular(is_stator, nb_duct)
                 duct_MC_name = "Rotor_Circular_Ducts"
 
             # Arcduct
@@ -50,9 +47,18 @@ def convert_duct_to_MC(self, is_stator):
                 self.add_rule_rectangular_duct_trapeze(is_stator, nb_duct)
                 duct_MC_name = "Rotor_Rectangular_Ducts"
             else:
-                raise NotImplemented(
-                    f"Type of duct {type_duct} has not equivalent in pyleecan or has not implement"
+                raise NotImplementedError(
+                    f"Type of duct {type_duct} has not equivalent or has not implement"
                 )
 
-            self.other_dict["[Through_Vent]"][f"{lam_name_MC}_Duct_Type"] = duct_MC_name
+            # writting in dict
+            if "[Through_Vent]" not in self.other_dict:
+                self.other_dict["[Through_Vent]"] = {
+                    f"{lam_name_MC}_Duct_Type": duct_MC_name
+                }
+            else:
+                self.other_dict["[Through_Vent]"][
+                    f"{lam_name_MC}_Duct_Type"
+                ] = duct_MC_name
+
             self.get_logger().info(f"Conversion {type_duct} into {duct_MC_name}")

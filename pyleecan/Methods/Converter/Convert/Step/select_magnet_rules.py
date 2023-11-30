@@ -1,6 +1,7 @@
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotM12 import SlotM12
 from pyleecan.Classes.SlotM13 import SlotM13
+from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.Classes.SlotM15 import SlotM15
 from pyleecan.Classes.SlotM16 import SlotM16
 
@@ -24,8 +25,8 @@ def select_magnet_rules(self, is_stator):
         self.convert_magnet_to_P()
 
     # add the correct rule depending on the hole
-    if isinstance(self.machine.rotor.slot, SlotM11) and self.machine.rotor.slot.H0 == 0:
-        self.add_rule_surface_radial_slotM11(is_stator)
+    if isinstance(self.machine.rotor.slot, SlotM14) and self.machine.rotor.slot.H0 == 0:
+        self.add_rule_surface_radial_slotM14(is_stator)
 
     elif (
         isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 == 0

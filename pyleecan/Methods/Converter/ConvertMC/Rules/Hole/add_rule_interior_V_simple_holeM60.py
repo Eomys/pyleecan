@@ -20,6 +20,16 @@ def add_rule_interior_V_simple_holeM60(self, hole_id):
 
     rule_list.append(
         RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].Zh",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
+        RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H0",
             unit_type="m",

@@ -26,8 +26,9 @@ def convert_slot_to_MC(self):
         name_slot = "Form_Wound"
 
     else:
-        raise Exception("Conversion of machine doesn't exist")
-
+        raise NotImplementedError(
+            f"Type of slot {name_slot} has not equivalent or has not implement"
+        )
     self.get_logger().info(f"Conversion {slot_type} into {name_slot}")
 
     # writting in dict

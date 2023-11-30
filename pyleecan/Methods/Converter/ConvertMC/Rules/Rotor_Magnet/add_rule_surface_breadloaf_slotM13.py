@@ -18,6 +18,15 @@ def add_rule_surface_breadloaf_slotM13(self, is_stator):
 
     rule_list.append(
         RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+    rule_list.append(
+        RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H1",
             unit_type="m",
@@ -26,5 +35,5 @@ def add_rule_surface_breadloaf_slotM13(self, is_stator):
         )
     )
     rule_list.append(
-        RuleComplex(fct_name="surface_breadleoaf_slotM13", folder="MotorCAD")
+        RuleComplex(fct_name="surface_breadloaf_slotM13", folder="MotorCAD")
     )

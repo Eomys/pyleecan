@@ -37,8 +37,9 @@ def convert_magnet_to_MC(self):
         name_slot = "Spoke"
 
     else:
-        raise ValueError(f"Conversion of a {magnet_type} magnet doesn't exist")
-
+        raise NotImplementedError(
+            f"Type of magnet {magnet_type} has not equivalent or has not implement"
+        )
     # writting in dict
     if "[Design_Options]" not in self.other_dict:
         self.other_dict["[Design_Options]"] = {"BPM_Rotor": name_slot}

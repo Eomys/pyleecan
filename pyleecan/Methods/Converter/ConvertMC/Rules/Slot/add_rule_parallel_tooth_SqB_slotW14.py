@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_parallel_tooth_SqB_slotW14(rule_list, is_stator):
+def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
     """Create and adapt all the rules related to slotW14 (lam radius,...)
     Extend rules_list within Converter object
 
@@ -18,6 +18,18 @@ def add_rule_parallel_tooth_SqB_slotW14(rule_list, is_stator):
         lam_name = "stator"
     else:
         lam_name = "rotor"
+
+    rule_list = self.rules_list
+
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Slot_Number"],
+            P_obj_path=f"machine.{lam_name}.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
 
     rule_list.append(
         RuleSimple(

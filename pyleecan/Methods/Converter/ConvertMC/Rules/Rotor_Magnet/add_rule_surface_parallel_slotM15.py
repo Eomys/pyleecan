@@ -15,6 +15,17 @@ def add_rule_surface_parallel_slotM15(self, is_stator):
         A booleen to know, position in lamination
     """
     rule_list = self.rules_list
+
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
     rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],

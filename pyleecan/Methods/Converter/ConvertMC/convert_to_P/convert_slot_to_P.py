@@ -27,7 +27,7 @@ def convert_slot_to_P(self):
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
-    elif slot_type == "Parallel_tooth_SqB":
+    elif slot_type == "Parallel_Tooth_SqBase":
         self.machine.stator.slot = SlotW14()
         self.machine.stator.is_internal = False
 
@@ -36,23 +36,23 @@ def convert_slot_to_P(self):
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
-    elif slot_type == "Tapered_slot":
+    elif slot_type == "Tapered_Slot":
         self.machine.stator.slot = SlotW23()
-        self.machine.stator.slot.is_cstt_tooth = True
+        self.machine.stator.slot.is_cstt_tooth = False
         self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
     elif slot_type == "Form_Wound":
         self.machine.stator.slot = SlotW29()
-        self.machine.stator.slot.is_cstt_tooth = True
-        self.machine.stator.slot.H1_is_rad = True
         self.machine.stator.is_internal = False
 
     elif slot_type == "Slotless":
         self.get_logger().error("Slotless has not equivalent in Pyleecan")
 
     else:
-        raise Exception("Conversion of machine doesn't exist")
+        raise NotImplementedError(
+            f"type of slot {slot_type} has not equivalent in pyleecan or has not implement"
+        )
 
     self.get_logger().info(
         f"Conversion {slot_type} into {type(self.machine.stator.slot).__name__}"

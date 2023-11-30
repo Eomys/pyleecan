@@ -263,11 +263,11 @@ except ImportError as error:
     add_rule_inset_breadloaf_slotM12 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.selection_SIPMSM_machine_dimension import (
-        selection_SIPMSM_machine_dimension,
+    from ..Methods.Converter.ConvertMC.select_SIPMSM_machine_dimension import (
+        select_SIPMSM_machine_dimension,
     )
 except ImportError as error:
-    selection_SIPMSM_machine_dimension = error
+    select_SIPMSM_machine_dimension = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_U_shape_holeM61 import (
@@ -757,18 +757,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_inset_breadloaf_slotM12 = add_rule_inset_breadloaf_slotM12
-    # cf Methods.Converter.ConvertMC.selection_SIPMSM_machine_dimension
-    if isinstance(selection_SIPMSM_machine_dimension, ImportError):
-        selection_SIPMSM_machine_dimension = property(
+    # cf Methods.Converter.ConvertMC.select_SIPMSM_machine_dimension
+    if isinstance(select_SIPMSM_machine_dimension, ImportError):
+        select_SIPMSM_machine_dimension = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method selection_SIPMSM_machine_dimension: "
-                    + str(selection_SIPMSM_machine_dimension)
+                    "Can't use ConvertMC method select_SIPMSM_machine_dimension: "
+                    + str(select_SIPMSM_machine_dimension)
                 )
             )
         )
     else:
-        selection_SIPMSM_machine_dimension = selection_SIPMSM_machine_dimension
+        select_SIPMSM_machine_dimension = select_SIPMSM_machine_dimension
     # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_interior_U_shape_holeM61
     if isinstance(add_rule_interior_U_shape_holeM61, ImportError):
         add_rule_interior_U_shape_holeM61 = property(

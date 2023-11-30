@@ -14,7 +14,15 @@ def add_rule_rotor_parallel_tooth_slotW11(rule_list):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    print("rotor_parallel_tooth_slotW11")
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Slot_Number"],
+            P_obj_path=f"machine.rotor.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
 
     rule_list.append(RuleComplex(fct_name="rotor_slotW11", folder="MotorCAD"))
 

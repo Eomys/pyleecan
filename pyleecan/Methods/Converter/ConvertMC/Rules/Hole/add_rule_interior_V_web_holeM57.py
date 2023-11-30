@@ -19,6 +19,16 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
 
     rule_list.append(
         RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].Zh",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
+        RuleSimple(
             other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
             unit_type="m",
@@ -50,7 +60,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
     rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetPost_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].1",
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,

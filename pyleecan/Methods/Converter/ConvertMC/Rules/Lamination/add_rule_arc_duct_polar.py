@@ -1,5 +1,6 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
+from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_arc_duct_polar(self, is_stator, duct_id):
@@ -16,9 +17,10 @@ def add_rule_arc_duct_polar(self, is_stator, duct_id):
         a int to know the number of duct
     """
 
-    if is_stator == True:
+    if is_stator:
         lam_name_MC = "Stator"
         lam_name_py = "stator"
+        return
     else:
         lam_name_MC = "Rotor"
         lam_name_py = "rotor"
@@ -40,7 +42,7 @@ def add_rule_arc_duct_polar(self, is_stator, duct_id):
         RuleSimple(
             other_key_list=[
                 "[Through_Vent]",
-                f"{lam_name_MC}ArcDuctLayer_CornerRadius[{duct_id}]",
+                f"{lam_name_MC}CircularDuctLayer_OffsetAngle[{duct_id}]",
             ],
             P_obj_path=f"machine.{lam_name_py}.axial_vent[{duct_id}].Alpha0",
             unit_type="m",
@@ -75,34 +77,14 @@ def add_rule_arc_duct_polar(self, is_stator, duct_id):
         )
     )
 
-    if not self.is_P_to_other:
-        self.rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": [
-                            "[Through_Vent]",
-                            f"{lam_name_MC}ArcDuctLayer_InnerDiameter[{duct_id}]",
-                        ],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "other",
-                        "path": [
-                            "[Through_Vent]",
-                            f"{lam_name_MC}ArcDuctLayer_WebWidth[{duct_id}]",
-                        ],
-                        "variable": "y",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": f"machine.{lam_name_py}.axial_vent[{duct_id}].W1",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="m",
-                equation="cos(x)= 1 - (2*y*y / (a*a)) ",
-                file_name=__file__,
-            )
+    self.rules_list.append(
+        RuleComplex(
+            fct_name="arc_duct_polar",
+            folder="MotorCAD",
+            param_dict={
+                "duct_id": duct_id,
+                "lam_name_py": lam_name_py,
+                "lam_name_MC": lam_name_MC,
+            },
         )
+    )
