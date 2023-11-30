@@ -1,18 +1,9 @@
-from numpy import exp, pi
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
-from matplotlib.pyplot import legend
-
-from ....definitions import config_dict
 from ....Functions.init_fig import init_fig
-from ....Functions.labels import decode_label, HOLEM_LAB, LAM_LAB
-
-PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
-MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
-ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
-VENT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["VENT_COLOR"]
-VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
+from ....Functions.Plot.get_color_legend_from_surface import (
+    get_color_legend_from_surface,
+)
 
 
 def plot(
@@ -77,41 +68,30 @@ def plot(
 
     # Lamination bore
     if self.is_stator:
-        Lam_Name = "Stator"
-        lam_color = STATOR_COLOR
+        lam_name = "Stator"
     else:
-        Lam_Name = "Rotor"
-        lam_color = ROTOR_COLOR
+        lam_name = "Rotor"
 
     # List of surface to plot the lamination
+    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
-    for surf in surf_list:
-        label_dict = decode_label(surf.label)
-        if LAM_LAB in label_dict["surf_type"]:
-            patches.extend(
-                surf.get_patches(
-                    color=lam_color, is_edge_only=is_edge_only, edgecolor=edgecolor
-                )
-            )
-        elif HOLEM_LAB in label_dict["surf_type"] and not is_lam_only:
-            patches.extend(
-                surf.get_patches(
-                    color=MAGNET_COLOR, is_edge_only=is_edge_only, edgecolor=edgecolor
-                )
-            )
-        elif surf.label is not None and "Ventilation_" in surf.label:
-            patches.extend(
-                surf.get_patches(
-                    color=VENT_COLOR, edgecolor=edgecolor, is_edge_only=is_edge_only
-                )
-            )
-        else:
-            patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
-            )
 
-    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+    for surf in surf_list:
+        color, legend = get_color_legend_from_surface(surf, is_lam_only)
+
+        if color is not None:
+            patches.extend(
+                surf.get_patches(
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
+                )
+            )
+        if not is_edge_only and legend is not None and legend not in label_leg:
+            label_leg.append(legend)
+            patch_leg.append(Patch(color=color))
 
     ax.set_xlabel("(m)")
     ax.set_ylabel("(m)")
@@ -137,26 +117,16 @@ def plot(
         and self.parent is not None
         and self.parent.name not in [None, ""]
     ):
-        win_title = self.parent.name + " " + Lam_Name
+        win_title = self.parent.name + " " + lam_name
     elif win_title is None:
-        win_title = Lam_Name
+        win_title = lam_name
     manager = plt.get_current_fig_manager()
     if manager is not None:
         manager.set_window_title(win_title)
 
     # Set legend
     if not is_edge_only:
-        if self.is_stator:
-            patch_leg.append(Patch(color=STATOR_COLOR))
-            label_leg.append("Stator")
-            ax.set_title("Stator with Interior Magnet")
-        else:
-            patch_leg.append(Patch(color=ROTOR_COLOR))
-            label_leg.append("Rotor")
-            ax.set_title("Rotor with Interior Magnet")
-        if not is_lam_only:
-            patch_leg.append(Patch(color=MAGNET_COLOR))
-            label_leg.append("Magnet")
+        ax.set_title(f"{lam_name} with Interior Magnet")
         ax.legend(patch_leg, label_leg)
 
     # Clean figure

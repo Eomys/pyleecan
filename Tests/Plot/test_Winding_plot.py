@@ -18,6 +18,9 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 
+# python -m pytest ./Tests/Plot/test_Winding_plot.py
+
+
 class Test_Winding_plot(object):
     """unittest for Winding connection matrix plot"""
 
@@ -203,6 +206,7 @@ class Test_Winding_plot(object):
             machine.stator.plot(
                 is_winding_connection=True,
                 save_path=join(save_path, "test_plot_radial_" + machine_name + ".png"),
+                is_show_fig=False,
             )
 
     def test_plot_radial_transformation(self):
@@ -223,6 +227,7 @@ class Test_Winding_plot(object):
                 save_path=join(
                     save_path, "test_plot_radial_" + machine_reverse_wind.name + ".png"
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the slot shift transformation
@@ -235,6 +240,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_radial_" + machine_Nslot_shift_wind.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the reverse layer transformation
@@ -247,6 +253,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_radial_" + machine_is_reverse_layer.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the change layer transformation
@@ -259,6 +266,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_radial_" + machine_is_change_layer.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the permute B-C transformation
@@ -271,6 +279,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_radial_" + machine_is_permute_B_C.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             print(machine_name + " done")
@@ -292,10 +301,12 @@ class Test_Winding_plot(object):
                 save_path=join(
                     save_path, "test_plot_linear_" + machine_name + "_max_sym_.png"
                 ),
+                is_show_fig=False,
             )
             machine.stator.winding.plot_linear(
                 is_max_sym=False,
                 save_path=join(save_path, "test_plot_linear_" + machine_name + ".png"),
+                is_show_fig=False,
             )
             print(machine_name + " done")
 
@@ -316,6 +327,7 @@ class Test_Winding_plot(object):
                 save_path=join(
                     save_path, "test_plot_linear_" + machine_reverse_wind.name + ".png"
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the slot shift transformation
@@ -328,6 +340,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_linear_" + machine_Nslot_shift_wind.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the reverse layer transformation
@@ -340,6 +353,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_linear_" + machine_is_reverse_layer.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             # Plotting the machine with its winding after applying the permute B-C transformation
@@ -352,6 +366,7 @@ class Test_Winding_plot(object):
                     save_path,
                     "test_plot_linear_" + machine_is_permute_B_C.name + ".png",
                 ),
+                is_show_fig=False,
             )
 
             print(machine_name + " done")

@@ -106,7 +106,6 @@ class Test_OP_matrix_meth(object):
 
 # To run it without pytest
 if __name__ == "__main__":
-
     a = Test_OP_matrix_meth()
     a.test_OP_matrix_out_of_order()
     a.test_OP_matrix_convert()

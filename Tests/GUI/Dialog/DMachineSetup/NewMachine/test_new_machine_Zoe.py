@@ -129,6 +129,8 @@ class TestNewMachineZoe(object):
         self.widget.w_step.lf_RRext.setText("0.0837")
         self.widget.w_step.lf_RRext.editingFinished.emit()
         self.widget.w_step.g_shaft.setChecked(True)
+        self.widget.w_step.lf_Lshaft.setText("0.17")
+        self.widget.w_step.lf_Lshaft.editingFinished.emit()
         assert self.widget.w_step.lf_RRint.isEnabled()
         self.widget.w_step.lf_RRint.setText("0.0125")
         self.widget.w_step.lf_RRint.editingFinished.emit()
@@ -138,6 +140,7 @@ class TestNewMachineZoe(object):
         assert self.widget.machine.stator.Rint == pytest.approx(0.0845)
         assert self.widget.machine.rotor.Rext == pytest.approx(0.0837)
         assert self.widget.machine.rotor.Rint == pytest.approx(0.0125)
+        assert self.widget.machine.shaft.Lshaft == pytest.approx(0.17)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.025 [m]"
         assert (
             self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 0.8 [mm]"
@@ -417,7 +420,11 @@ class TestNewMachineZoe(object):
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C: 0.019 [Ohm]"
+            == "Phase resistance at 20°C: 0.019 [Ohm]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_RwindLL.text()
+            == "Line-to-line resistance at 20°C: 0.037 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
@@ -634,7 +641,11 @@ class TestNewMachineZoe(object):
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C: 0.34 [Ohm]"
+            == "Phase resistance at 20°C: 0.34 [Ohm]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_RwindLL.text()
+            == "Line-to-line resistance at 20°C: 0.67 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
@@ -706,7 +717,7 @@ class TestNewMachineZoe(object):
             self.widget.w_step.tab_machine.tab_param.item(6, 0).text()
             == "Machine total mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "53.68 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "54.32 kg"
         assert (
             self.widget.w_step.tab_machine.tab_param.item(7, 0).text()
             == "Stator lamination mass"
@@ -730,7 +741,9 @@ class TestNewMachineZoe(object):
         assert (
             self.widget.w_step.tab_machine.tab_param.item(11, 0).text() == "Shaft mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0.6384 kg"
+        )
         assert self.widget.w_step.tab_machine.tab_param.rowCount() == 12
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()

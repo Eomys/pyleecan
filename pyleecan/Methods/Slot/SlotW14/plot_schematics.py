@@ -27,6 +27,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
@@ -44,6 +45,8 @@ def plot_schematics(
         A SlotW14 object
     is_default : bool
         True: plot default schematics, else use current slot values
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -51,7 +54,7 @@ def plot_schematics(
     is_add_main_line : bool
         True to display "main lines" (slot opening and 0x axis)
     type_add_active : int
-        0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges
+        0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: 4: type_active =3 and wedge_type = 1
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
@@ -67,30 +70,75 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
-    # Use some default parameter
-    if is_default:
-        slot = type(self)(Zs=12, W0=30e-3, W3=35e-3, H0=15e-3, H1=15e-3, H3=50e-3)
+    if type_add_active == 4 and is_default:  # type_wedge = 1
+        slot = type(self)(
+            Zs=12,
+            W0=30e-3,
+            W3=35e-3,
+            H0=15e-3,
+            H1=15e-3,
+            H3=50e-3,
+            wedge_type=1,
+        )
         lam = LamSlot(
             Rint=0.135, Rext=0.25, is_internal=False, is_stator=True, slot=slot
         )
-        return slot.plot_schematics(
-            is_default=False,
-            is_add_point_label=is_add_point_label,
-            is_add_schematics=is_add_schematics,
-            is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
-            save_path=save_path,
-            is_show_fig=is_show_fig,
-            fig=fig,
-            ax=ax,
+        if is_return_default:
+            return lam
+        else:
+            return slot.plot_schematics(
+                is_default=False,
+                is_return_default=False,
+                is_add_point_label=is_add_point_label,
+                is_add_schematics=is_add_schematics,
+                is_add_main_line=is_add_main_line,
+                type_add_active=3,
+                save_path=save_path,
+                is_show_fig=is_show_fig,
+                fig=fig,
+                ax=ax,
+            )
+
+    # Use some default parameter
+    if is_default:
+        slot = type(self)(
+            Zs=12,
+            W0=30e-3,
+            W3=35e-3,
+            H0=15e-3,
+            H1=15e-3,
+            H3=50e-3,
+            wedge_type=0,
         )
+        lam = LamSlot(
+            Rint=0.135, Rext=0.25, is_internal=False, is_stator=True, slot=slot
+        )
+        if is_return_default:
+            return lam
+        else:
+            return slot.plot_schematics(
+                is_default=False,
+                is_return_default=False,
+                is_add_point_label=is_add_point_label,
+                is_add_schematics=is_add_schematics,
+                is_add_main_line=is_add_main_line,
+                type_add_active=type_add_active,
+                save_path=save_path,
+                is_show_fig=is_show_fig,
+                fig=fig,
+                ax=ax,
+            )
     else:
         # Getting the main plot
         if self.parent is None:
             raise ParentMissingError("Error: The slot is not inside a Lamination")
         lam = self.parent
+
         fig, ax = lam.plot(
             alpha=pi / self.Zs, is_show_fig=False, fig=fig, ax=ax
         )  # center slot on Ox axis
@@ -116,6 +164,7 @@ def plot_schematics(
         # Adding schematics
         if is_add_schematics:
             # W0
+
             line = Segment(point_dict["Z2"], point_dict["Z8"])
             line.plot(
                 fig=fig,
@@ -262,6 +311,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

@@ -34,10 +34,8 @@ def interface(self, other_mesh):
     new_mesh.cell = dict()
 
     for key in self.cell:
-
         # Developer info: IDK if this code works with other than triangle cells. To be checked.
         if self.cell[key].nb_node_per_cell == 3:  # Triangle case
-
             new_mesh.cell["line"] = CellMat(nb_node_per_cell=2)
             interp = Interpolation()
             interp.gauss_point = FPGNSeg()

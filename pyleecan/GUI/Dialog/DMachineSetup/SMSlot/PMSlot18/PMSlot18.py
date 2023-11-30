@@ -22,7 +22,7 @@ class PMSlot18(Gen_PMSlot18, QWidget):
     slot_name = "Ring Magnet"
     slot_type = SlotM18
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -31,6 +31,8 @@ class PMSlot18(Gen_PMSlot18, QWidget):
             A PMSlot18 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -38,35 +40,44 @@ class PMSlot18(Gen_PMSlot18, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
-        self.lf_Hmag.unit = "m"
+        self.lf_H0.unit = "m"
         # Set unit name (m ou mm)
         wid_list = [
-            self.unit_Hmag,
+            self.unit_H0,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
-        self.lf_Hmag.setValue(self.slot.Hmag)
+        self.lf_H0.setValue(self.slot.H0)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
-        # Connect the signal
-        self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+        # Setup the widgets according to current values
+        self.w_mag.update(lamination, self.material_dict)
 
-    def set_Hmag(self):
-        """Signal to update the value of Hmag according to the line edit
+        # Connect the signal
+        self.lf_H0.editingFinished.connect(self.set_H0)
+        self.w_mag.saveNeeded.connect(self.emit_save)
+
+    def set_H0(self):
+        """Signal to update the value of H0 according to the line edit
 
         Parameters
         ----------
         self : PMSlot18
             A PMSlot18 object
         """
-        self.slot.Hmag = self.lf_Hmag.value()
+        self.slot.H0 = self.lf_H0.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod
@@ -85,8 +96,8 @@ class PMSlot18(Gen_PMSlot18, QWidget):
         """
 
         # Check that everything is set
-        if lam.slot.Hmag is None:
-            return "You must set Hmag !"
+        if lam.slot.H0 is None:
+            return "You must set H0 !"
 
         # Constraints
         try:

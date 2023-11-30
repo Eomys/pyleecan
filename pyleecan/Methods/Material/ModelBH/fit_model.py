@@ -62,7 +62,6 @@ def fit_model(self, BH):
 
     # Either imposed from method call or calculated from Bmax
     if Hmax is not None:
-
         added_H = np.linspace(H[-1], Hmax, iteration)
         new_H = np.hstack((H, added_H))
         new_B = self.BH_func(new_H, param1, param2)

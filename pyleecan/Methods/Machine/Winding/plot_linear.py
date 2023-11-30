@@ -151,7 +151,6 @@ def plot_linear(
     for idx_phase, phase in enumerate(head):
         coils = list()  # list of points that constitutes the coils of a phase
         for coil in phase:
-
             # Step 2-2-1: Building 6 points to have the following coil pattern
             #        P1
             #       /  \

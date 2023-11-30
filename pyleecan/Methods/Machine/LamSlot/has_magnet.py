@@ -12,4 +12,8 @@ def has_magnet(self):
         True if LamSlot has magnets
     """
 
-    return hasattr(self, "magnet")
+    return (
+        hasattr(self, "magnet")
+        or hasattr(self, "magnet_north")
+        or hasattr(self, "magnet_south")
+    )

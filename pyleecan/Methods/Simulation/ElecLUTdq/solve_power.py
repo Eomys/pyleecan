@@ -60,7 +60,6 @@ def solve_power(self, LUT, Rs):
         else int(self.n_Iq * self.n_interp / (self.n_Id + self.n_Iq))
     )
     while abs(delta_Pem) > delta_Pem_max and niter_Pem < Nmax:
-
         # Refine Id/Iq mesh
         Id_vect = np.linspace(Id_min, Id_max, Nd)
         Iq_vect = np.linspace(Iq_min, Iq_max, Nq)

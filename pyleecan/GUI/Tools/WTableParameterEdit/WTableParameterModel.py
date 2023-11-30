@@ -26,7 +26,6 @@ HEADER_HEIGHT_HINT = 20
 
 
 class WTableParameterModel(QAbstractTableModel):
-
     dataChanged = Signal()
 
     def __init__(self, obj):

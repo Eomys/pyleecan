@@ -111,6 +111,9 @@ class TestNotcheAddition(object):
         notche_wid.w_notch.lf_H0.editingFinished.emit()
         assert notche_wid.w_notch.lf_W0.value() == W0
         notche_wid.w_notch.lf_W0.editingFinished.emit()
+        # No key by default
+        assert not notche_wid.w_notch.g_key.isChecked()
+        assert notche_wid.w_notch.notch_obj.key_mat is None
         # Checking plot/preview function
         notche_wid.b_plot.clicked.emit()
         self.widget.w_step.notches_win.b_plot.clicked.emit()

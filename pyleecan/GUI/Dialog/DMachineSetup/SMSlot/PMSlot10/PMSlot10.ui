@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotM10.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotM10_mag_int_rotor.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -77,9 +77,9 @@
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.15094pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; text-decoration: underline;&quot;&gt;Constraints :&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Wmag &amp;lt;= W0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;W1 &amp;lt;= W0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="textInteractionFlags">
         <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -111,21 +111,55 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>446</height>
+        <height>450</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="WWSlotMag" name="w_mag" native="true"/>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="g_key">
+         <property name="title">
+          <string>Key</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="9" column="0" colspan="2">
+           <widget class="WMatSelectV" name="w_key_mat" native="true"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QLabel" name="in_Wmag">
+         <item row="4" column="0">
+          <widget class="QLabel" name="in_H1">
            <property name="text">
-            <string>Wmag</string>
+            <string>H1</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="unit_Wmag">
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_W1">
+           <property name="text">
+            <string>W1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_W0"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_W1"/>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="unit_H1">
            <property name="text">
             <string>[m]</string>
            </property>
@@ -146,44 +180,31 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QLabel" name="unit_H0">
+          <widget class="QLabel" name="unit_W1">
            <property name="text">
             <string>[m]</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="4" column="1">
+          <widget class="FloatEdit" name="lf_H1"/>
+         </item>
+         <item row="1" column="0">
           <widget class="QLabel" name="in_H0">
            <property name="text">
             <string>H0</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="unit_Hmag">
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_H0"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_H0">
            <property name="text">
             <string>[m]</string>
            </property>
           </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_W0"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="in_Hmag">
-           <property name="text">
-            <string>Hmag</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="FloatEdit" name="lf_H0"/>
-         </item>
-         <item row="3" column="1">
-          <widget class="FloatEdit" name="lf_Hmag"/>
-         </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_Wmag"/>
          </item>
         </layout>
        </item>
@@ -221,13 +242,26 @@ p, li { white-space: pre-wrap; }
    <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>WWSlotMag</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WMatSelectV</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>g_key</tabstop>
   <tabstop>lf_W0</tabstop>
-  <tabstop>lf_Wmag</tabstop>
   <tabstop>lf_H0</tabstop>
-  <tabstop>lf_Hmag</tabstop>
+  <tabstop>lf_W1</tabstop>
+  <tabstop>lf_H1</tabstop>
   <tabstop>txt_constraint</tabstop>
+  <tabstop>scrollArea</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

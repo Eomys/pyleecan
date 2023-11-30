@@ -10,6 +10,7 @@ from ......Classes.LamSlot import LamSlot
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.PMSlot19 import PMSlot19
 from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
 from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Ui_WNotch import Ui_WNotch
 from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
@@ -21,7 +22,7 @@ class WNotch(Ui_WNotch, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, parent, index):
+    def __init__(self, parent, index, material_dict=None):
         """Initialize the GUI according to lamination
 
         Parameters
@@ -29,9 +30,11 @@ class WNotch(Ui_WNotch, QWidget):
         self : WNotch
             A WNotch object
         parent :
-            A parent object containing the lamination to edit
+            A parent widget containing the lamination to edit
         index : int
             Index of the notch to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -47,6 +50,7 @@ class WNotch(Ui_WNotch, QWidget):
             Rint=self.obj.Rint,
             Rext=self.obj.Rext,
         )
+        self.material_dict = material_dict
         self.lam_notch.slot = self.obj.notch[index].notch_shape
         self.index = index
         self.parent = parent
@@ -76,7 +80,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.err_msg = None
 
         # Adapt the GUI to the current machine
-        self.wid_list = [PMSlot10, PMSlot11, WSlotCirc, PWSlotUD]
+        self.wid_list = [PMSlot10, PMSlot11, WSlotCirc, PMSlot19, PWSlotUD]
 
         self.type_list = [wid.slot_type for wid in self.wid_list]
         self.name_list = [wid.notch_name for wid in self.wid_list]
@@ -101,7 +105,8 @@ class WNotch(Ui_WNotch, QWidget):
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
             lamination=self.lam_notch,
-            is_notch=True,
+            notch_obj=self.obj.notch[index],
+            material_dict=self.material_dict,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -166,6 +171,8 @@ class WNotch(Ui_WNotch, QWidget):
             A WNotch object
         c_index : int
             Index of the selected notch type in the combobox
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Save the notch
@@ -188,7 +195,8 @@ class WNotch(Ui_WNotch, QWidget):
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[c_index](
             lamination=self.lam_notch,
-            is_notch=True,
+            notch_obj=self.obj.notch[self.index],
+            material_dict=self.material_dict,
         )
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
@@ -219,16 +227,5 @@ class WNotch(Ui_WNotch, QWidget):
         error : str
             Error message (return None if no error)
         """
-
-        if not isinstance(self.w_notch, PWSlotUD):
-            # Check that the user did not define a notch a dimension equal to 0
-            if self.w_notch.lf_W0.value() is None:
-                return "You must set W0 !"
-            elif self.w_notch.lf_W0.value() <= 0:
-                return "W0 must be higher than 0"
-            if self.w_notch.lf_H0.value() is None:
-                return "You must set H0 !"
-            if self.w_notch.lf_H0.value() <= 0:
-                return "H0 must be higher than 0"
 
         return self.w_notch.check(self.lam_notch)

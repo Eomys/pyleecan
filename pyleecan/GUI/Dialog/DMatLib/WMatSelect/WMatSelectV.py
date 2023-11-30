@@ -4,7 +4,7 @@ from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
 from PySide2.QtWidgets import (
     QGroupBox,
     QMessageBox,
-    QDialog,
+    QApplication,
     QComboBox,
     QVBoxLayout,
     QPushButton,
@@ -12,6 +12,7 @@ from PySide2.QtWidgets import (
 )
 from .....Classes.Machine import Machine
 from PySide2.QtCore import Signal
+from PySide2.QtGui import QPalette
 
 
 class WMatSelectV(QGroupBox):
@@ -58,6 +59,15 @@ class WMatSelectV(QGroupBox):
         self.b_matlib.setObjectName("b_matlib")
         self.b_matlib.setText("Edit Materials")
         self.verticalLayout.addWidget(self.b_matlib)
+
+        # To have grey title when disabled
+        palette = QPalette()
+        palette.setColor(
+            QPalette.Disabled,
+            QPalette.WindowText,
+            QApplication.palette().color(QPalette.Disabled, QPalette.WindowText),
+        )
+        self.setPalette(palette)
 
         # Create the property of the widget
         self.current_dialog = None  # DMatLib widget

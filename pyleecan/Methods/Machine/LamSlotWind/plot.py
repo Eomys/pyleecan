@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from swat_em import datamodel
 from numpy import sqrt
 
-from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB, WEDGE_LAB
+from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
@@ -11,13 +11,11 @@ from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
 from ....Classes.WindingUD import WindingUD
+from ....Functions.Plot.get_color_legend_from_surface import (
+    get_color_legend_from_surface,
+)
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
-ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
-if "WEDGE_COLOR" not in config_dict["PLOT"]["COLOR_DICT"]:
-    config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"] = "y"
-WEDGE_COLOR = config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"]
 PLUS_HATCH = "++"
 MINUS_HATCH = ".."
 
@@ -97,11 +95,6 @@ def plot(
     style = "Simple, tail_width=2, head_width=8, head_length=12"
     kw = dict(arrowstyle=style, linewidth=0.8, edgecolor="k")
 
-    if self.is_stator:
-        color_lam = STATOR_COLOR
-    else:
-        color_lam = ROTOR_COLOR
-
     # If the winding is user defined, we can not plot the radial pattern
     if isinstance(self.winding, WindingUD):
         is_winding_connection = False
@@ -140,18 +133,10 @@ def plot(
         wind_mat = None
         qs = 1
 
+    patch_leg, label_leg = list(), list()
     for surf in surf_list:
         label_dict = decode_label(surf.label)
-        if LAM_LAB in label_dict["surf_type"]:
-            patches = surf.get_patches(
-                color_lam, is_edge_only=is_edge_only, edgecolor=edgecolor
-            )
-            # Add transparency to stator lamination when arrows are added
-            if head is not None and self.is_stator:
-                # Only adding transparency to the first surface as the second is a white circle
-                patches[0]._alpha = 0.2
-            patches.extend(patches)
-        elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
+        if WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             if not is_lam_only:
                 color, sign = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
                 if sign == "+" and is_add_sign:
@@ -168,12 +153,20 @@ def plot(
                         edgecolor=edgecolor,
                     )
                 )
-        elif WEDGE_LAB in label_dict["surf_type"] and not is_lam_only:
-            patches.extend(surf.get_patches(WEDGE_COLOR, is_edge_only=is_edge_only))
         else:
-            patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
-            )
+            color, legend = get_color_legend_from_surface(surf, is_lam_only)
+
+            if color is not None:
+                patches.extend(
+                    surf.get_patches(
+                        color=color,
+                        is_edge_only=is_edge_only,
+                        edgecolor=edgecolor,
+                    )
+                )
+            if not is_edge_only and legend is not None and legend not in label_leg:
+                label_leg.append(legend)
+                patch_leg.append(Patch(color=color))
 
     # Adding arrows between slots for winding radial pattern
     if head is not None:
@@ -307,9 +300,16 @@ def plot(
                 patches.append(line)
 
     if is_display:
-
         # Display the result
-        (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+        (fig, ax, patch_leg_1, label_leg_1) = init_fig(
+            fig=fig, ax=ax, shape="rectangle"
+        )
+
+        # Merge patch_leg, label_leg
+        for l, p in zip(label_leg_1, patch_leg_1):
+            if l not in label_leg:
+                label_leg.append(l)
+                patch_leg.append(p)
 
         ax.set_xlabel("[m]")
         ax.set_ylabel("[m]")
@@ -352,67 +352,44 @@ def plot(
         if not is_edge_only:
             if is_winding_connection:
                 if self.is_stator and "Stator" not in label_leg:
-                    patch_leg.append(Patch(color=STATOR_COLOR))
-                    label_leg.append("Stator")
                     title = "Stator winding radial pattern"
                 elif not self.is_stator and "Rotor" not in label_leg:
-                    patch_leg.append(Patch(color=ROTOR_COLOR))
-                    label_leg.append("Rotor")
                     title = "Rotor winding radial pattern"
             elif is_lam_only:
                 if self.is_stator and "Stator" not in label_leg:
-                    patch_leg.append(Patch(color=STATOR_COLOR))
-                    label_leg.append("Stator")
                     title = "Stator Lamination"
                 elif not self.is_stator and "Rotor" not in label_leg:
-                    patch_leg.append(Patch(color=ROTOR_COLOR))
-                    label_leg.append("Rotor")
                     title = "Rotor Lamination"
             else:
                 if self.is_stator and "Stator" not in label_leg:
-                    patch_leg.append(Patch(color=STATOR_COLOR))
-                    label_leg.append("Stator")
                     title = "Stator with winding"
                 elif not self.is_stator and "Rotor" not in label_leg:
-                    patch_leg.append(Patch(color=ROTOR_COLOR))
-                    label_leg.append("Rotor")
                     title = "Rotor with winding"
 
             ax.set_title(title)
-            # Add the wedges legend only if needed
-            if (
-                self.slot is not None
-                and self.slot.wedge_mat is not None
-                and not is_lam_only
-            ):
-                patch_leg.append(Patch(color=WEDGE_COLOR))
-                label_leg.append("Wedge")
+
             # Add the winding legend only if needed
-            if not is_lam_only:
-                if isinstance(self.winding, WindingSC):
-                    patch_leg.append(Patch(color=PHASE_COLORS[0]))
-                    label_leg.append(prefix + "Bar")
-                elif self.winding is not None:
-                    if is_add_sign:
-                        if "Phase +" not in label_leg:
-                            # Adding + and - in the legend as separate patch
-                            patch_leg.append(Patch(color="w", hatch=PLUS_HATCH))
-                            patch_leg[-1].set_edgecolor("k")
-                            label_leg.append("Phase +")
+            if not is_lam_only and self.winding is not None:
+                if is_add_sign:
+                    if "Phase +" not in label_leg:
+                        # Adding + and - in the legend as separate patch
+                        patch_leg.append(Patch(color="w", hatch=PLUS_HATCH))
+                        patch_leg[-1].set_edgecolor("k")
+                        label_leg.append("Phase +")
 
-                        if "Phase -" not in label_leg:
-                            # Adding + and - legend
-                            patch_leg.append(Patch(color="w", hatch=MINUS_HATCH))
-                            patch_leg[-1].set_edgecolor("k")
-                            label_leg.append("Phase -")
+                    if "Phase -" not in label_leg:
+                        # Adding + and - legend
+                        patch_leg.append(Patch(color="w", hatch=MINUS_HATCH))
+                        patch_leg[-1].set_edgecolor("k")
+                        label_leg.append("Phase -")
 
-                    phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
-                    for ii in range(qs):
-                        if not phase_name[ii] in label_leg:
-                            # Avoid adding twice the same label
-                            index = ii % len(PHASE_COLORS)
-                            patch_leg.append(Patch(color=PHASE_COLORS[index]))
-                            label_leg.append(phase_name[ii])
+                phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
+                for ii in range(qs):
+                    if not phase_name[ii] in label_leg:
+                        # Avoid adding twice the same label
+                        index = ii % len(PHASE_COLORS)
+                        patch_leg.append(Patch(color=PHASE_COLORS[index]))
+                        label_leg.append(phase_name[ii])
 
             if is_legend:
                 ax.legend(

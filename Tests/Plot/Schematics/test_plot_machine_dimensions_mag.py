@@ -46,7 +46,7 @@ class Test_plot_dimensions_mag(object):
         rotor = LamSlotMag(
             Rint=0.2, Rext=stator.Rint - airgap, is_stator=False, is_internal=True
         )
-        rotor.slot = SlotM11(Zs=8, W0=pi / 8, Wmag=pi / 8, H0=0, Hmag=0.05)
+        rotor.slot = SlotM11(Zs=8, W0=pi / 8, W1=pi / 8, H0=0, H1=0.05)
         lam_list = [rotor, stator]
         shaft = Shaft(Drsh=rotor.Rint * 2)
         test_obj = MachineUD(frame=frame, lam_list=lam_list, shaft=shaft)
@@ -193,7 +193,7 @@ class Test_plot_dimensions_mag(object):
         rotor = LamSlotMag(
             Rint=0, Rext=stator.Rint - airgap, is_stator=False, is_internal=True
         )
-        rotor.slot = SlotM11(Zs=8, W0=pi / 8, Wmag=pi / 8, H0=0, Hmag=0.05)
+        rotor.slot = SlotM11(Zs=8, W0=pi / 8, W1=pi / 8, H0=0, H1=0.05)
         lam_list = [rotor, stator]
         test_obj = MachineUD(frame=frame, lam_list=lam_list)
         # Plot
@@ -310,7 +310,7 @@ class Test_plot_dimensions_mag(object):
             remove(file_path)
         # Machine definition
         rotor = LamSlotMag(Rint=0.55, Rext=1, is_stator=False, is_internal=False)
-        rotor.slot = SlotM11(Zs=8, W0=pi / 8, Wmag=pi / 8, H0=0, Hmag=0.05)
+        rotor.slot = SlotM11(Zs=8, W0=pi / 8, W1=pi / 8, H0=0, H1=0.05)
         airgap = 0.15
         stator = Lamination(
             Rint=0, Rext=rotor.Rint - airgap, is_stator=True, is_internal=True

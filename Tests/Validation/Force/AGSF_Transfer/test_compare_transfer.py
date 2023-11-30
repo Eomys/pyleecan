@@ -193,6 +193,5 @@ def test_Benchmark():
 
 
 if __name__ == "__main__":
-
     # out, out2 = test_IPMSM()
     out3, out4, out5 = test_Benchmark()

@@ -59,6 +59,11 @@ class WCondOut(QGroupBox):
         self.layout.addWidget(self.out_Rwind)
         self.out_Rwind.setToolTip("Phase winding resistance at 20°C")
 
+        self.out_RwindLL = QLabel(self)
+        self.out_RwindLL.setObjectName("out_RwindLL")
+        self.layout.addWidget(self.out_RwindLL)
+        self.out_RwindLL.setToolTip("Line-to-line winding resistance at 20°C")
+
     def comp_output(self):
         """Update the Output with the computed values
 
@@ -81,7 +86,8 @@ class WCondOut(QGroupBox):
         K_txt = self.tr("Fill factor: ")
         MLT_txt = "Mean Length Turn: "
         Mwind_txt = "Winding mass: "
-        Rwind_txt = "Winding resistance at 20°C: "
+        Rwind_txt = "Phase resistance at 20°C: "
+        RwindLL_txt = "Line-to-line resistance at 20°C: "
 
         # Compute all the needed output as string
         try:
@@ -116,8 +122,12 @@ class WCondOut(QGroupBox):
             Mwind = "?"
         try:
             Rwind = format(lam.comp_resistance_wind(T=20), ".2g")
+            RwindLL = format(
+                2 * lam.comp_resistance_wind(T=20), ".2g"
+            )  # *2 for star connection, *2/3 for delta connection /!\
         except Exception:  # Unable to compute MLT
             Rwind = "?"
+            RwindLL = "?"
 
         # Update the GUI to display the Output
         self.out_Sslot.setText(Sslot_txt + Sslot + " [" + self.u.get_m2_name() + "]")
@@ -128,3 +138,4 @@ class WCondOut(QGroupBox):
         self.out_MLT.setText(MLT_txt + MLT + " [" + self.u.get_m_name() + "]")
         self.out_Mwind.setText(Mwind_txt + Mwind + " [kg]")
         self.out_Rwind.setText(Rwind_txt + Rwind + " [Ohm]")
+        self.out_RwindLL.setText(RwindLL_txt + RwindLL + " [Ohm]")

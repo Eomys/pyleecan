@@ -19,7 +19,7 @@ class Ui_PHoleM57(object):
     def setupUi(self, PHoleM57):
         if not PHoleM57.objectName():
             PHoleM57.setObjectName(u"PHoleM57")
-        PHoleM57.resize(1099, 491)
+        PHoleM57.resize(1164, 491)
         PHoleM57.setMinimumSize(QSize(0, 0))
         PHoleM57.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PHoleM57)
@@ -34,7 +34,7 @@ class Ui_PHoleM57(object):
         self.img_slot.setMinimumSize(QSize(0, 0))
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM57.png")
+            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM57_mag_int_rotor.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)

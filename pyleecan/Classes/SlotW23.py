@@ -28,6 +28,11 @@ except ImportError as error:
     _comp_point_coordinate = error
 
 try:
+    from ..Methods.Slot.SlotW23._set_W3 import _set_W3
+except ImportError as error:
+    _set_W3 = error
+
+try:
     from ..Methods.Slot.SlotW23._comp_W import _comp_W
 except ImportError as error:
     _comp_W = error
@@ -36,11 +41,6 @@ try:
     from ..Methods.Slot.SlotW23.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
-
-try:
-    from ..Methods.Slot.SlotW23.build_geometry_active import build_geometry_active
-except ImportError as error:
-    build_geometry_active = error
 
 try:
     from ..Methods.Slot.SlotW23.check import check
@@ -92,6 +92,18 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotW23.get_H1 import get_H1
+except ImportError as error:
+    get_H1 = error
+
+try:
+    from ..Methods.Slot.SlotW23.plot_schematics_constant_tooth import (
+        plot_schematics_constant_tooth,
+    )
+except ImportError as error:
+    plot_schematics_constant_tooth = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -127,6 +139,15 @@ class SlotW23(Slot):
         )
     else:
         _comp_point_coordinate = _comp_point_coordinate
+    # cf Methods.Slot.SlotW23._set_W3
+    if isinstance(_set_W3, ImportError):
+        _set_W3 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW23 method _set_W3: " + str(_set_W3))
+            )
+        )
+    else:
+        _set_W3 = _set_W3
     # cf Methods.Slot.SlotW23._comp_W
     if isinstance(_comp_W, ImportError):
         _comp_W = property(
@@ -147,18 +168,6 @@ class SlotW23(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW23.build_geometry_active
-    if isinstance(build_geometry_active, ImportError):
-        build_geometry_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotW23 method build_geometry_active: "
-                    + str(build_geometry_active)
-                )
-            )
-        )
-    else:
-        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotW23.check
     if isinstance(check, ImportError):
         check = property(
@@ -271,6 +280,27 @@ class SlotW23(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotW23.get_H1
+    if isinstance(get_H1, ImportError):
+        get_H1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW23 method get_H1: " + str(get_H1))
+            )
+        )
+    else:
+        get_H1 = get_H1
+    # cf Methods.Slot.SlotW23.plot_schematics_constant_tooth
+    if isinstance(plot_schematics_constant_tooth, ImportError):
+        plot_schematics_constant_tooth = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW23 method plot_schematics_constant_tooth: "
+                    + str(plot_schematics_constant_tooth)
+                )
+            )
+        )
+    else:
+        plot_schematics_constant_tooth = plot_schematics_constant_tooth
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -278,15 +308,15 @@ class SlotW23(Slot):
 
     def __init__(
         self,
-        W0=0.003,
-        H0=0.003,
-        H1=0,
-        W1=0.013,
-        H2=0.02,
-        W2=0.01,
-        W3=0.01,
+        W0=None,
+        H0=None,
+        H1=None,
+        W1=None,
+        H2=None,
+        W2=None,
         H1_is_rad=False,
         is_cstt_tooth=False,
+        W3=None,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
@@ -320,12 +350,12 @@ class SlotW23(Slot):
                 H2 = init_dict["H2"]
             if "W2" in list(init_dict.keys()):
                 W2 = init_dict["W2"]
-            if "W3" in list(init_dict.keys()):
-                W3 = init_dict["W3"]
             if "H1_is_rad" in list(init_dict.keys()):
                 H1_is_rad = init_dict["H1_is_rad"]
             if "is_cstt_tooth" in list(init_dict.keys()):
                 is_cstt_tooth = init_dict["is_cstt_tooth"]
+            if "W3" in list(init_dict.keys()):
+                W3 = init_dict["W3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
@@ -339,9 +369,9 @@ class SlotW23(Slot):
         self.W1 = W1
         self.H2 = H2
         self.W2 = W2
-        self.W3 = W3
         self.H1_is_rad = H1_is_rad
         self.is_cstt_tooth = is_cstt_tooth
+        self.W3 = W3
         # Call Slot init
         super(SlotW23, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -359,9 +389,9 @@ class SlotW23(Slot):
         SlotW23_str += "W1 = " + str(self.W1) + linesep
         SlotW23_str += "H2 = " + str(self.H2) + linesep
         SlotW23_str += "W2 = " + str(self.W2) + linesep
-        SlotW23_str += "W3 = " + str(self.W3) + linesep
         SlotW23_str += "H1_is_rad = " + str(self.H1_is_rad) + linesep
         SlotW23_str += "is_cstt_tooth = " + str(self.is_cstt_tooth) + linesep
+        SlotW23_str += "W3 = " + str(self.W3) + linesep
         return SlotW23_str
 
     def __eq__(self, other):
@@ -385,11 +415,11 @@ class SlotW23(Slot):
             return False
         if other.W2 != self.W2:
             return False
-        if other.W3 != self.W3:
-            return False
         if other.H1_is_rad != self.H1_is_rad:
             return False
         if other.is_cstt_tooth != self.is_cstt_tooth:
+            return False
+        if other.W3 != self.W3:
             return False
         return True
 
@@ -486,19 +516,6 @@ class SlotW23(Slot):
                 diff_list.append(name + ".W2" + val_str)
             else:
                 diff_list.append(name + ".W2")
-        if (
-            other._W3 is not None
-            and self._W3 is not None
-            and isnan(other._W3)
-            and isnan(self._W3)
-        ):
-            pass
-        elif other._W3 != self._W3:
-            if is_add_value:
-                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
-                diff_list.append(name + ".W3" + val_str)
-            else:
-                diff_list.append(name + ".W3")
         if other._H1_is_rad != self._H1_is_rad:
             if is_add_value:
                 val_str = (
@@ -523,6 +540,19 @@ class SlotW23(Slot):
                 diff_list.append(name + ".is_cstt_tooth" + val_str)
             else:
                 diff_list.append(name + ".is_cstt_tooth")
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -540,9 +570,9 @@ class SlotW23(Slot):
         S += getsizeof(self.W1)
         S += getsizeof(self.H2)
         S += getsizeof(self.W2)
-        S += getsizeof(self.W3)
         S += getsizeof(self.H1_is_rad)
         S += getsizeof(self.is_cstt_tooth)
+        S += getsizeof(self.W3)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -568,9 +598,9 @@ class SlotW23(Slot):
         SlotW23_dict["W1"] = self.W1
         SlotW23_dict["H2"] = self.H2
         SlotW23_dict["W2"] = self.W2
-        SlotW23_dict["W3"] = self.W3
         SlotW23_dict["H1_is_rad"] = self.H1_is_rad
         SlotW23_dict["is_cstt_tooth"] = self.is_cstt_tooth
+        SlotW23_dict["W3"] = self.W3
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW23_dict["__class__"] = "SlotW23"
@@ -586,9 +616,9 @@ class SlotW23(Slot):
         W1_val = self.W1
         H2_val = self.H2
         W2_val = self.W2
-        W3_val = self.W3
         H1_is_rad_val = self.H1_is_rad
         is_cstt_tooth_val = self.is_cstt_tooth
+        W3_val = self.W3
         Zs_val = self.Zs
         if self.wedge_mat is None:
             wedge_mat_val = None
@@ -603,9 +633,9 @@ class SlotW23(Slot):
             W1=W1_val,
             H2=H2_val,
             W2=W2_val,
-            W3=W3_val,
             H1_is_rad=H1_is_rad_val,
             is_cstt_tooth=is_cstt_tooth_val,
+            W3=W3_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
             is_bore=is_bore_val,
@@ -621,9 +651,9 @@ class SlotW23(Slot):
         self.W1 = None
         self.H2 = None
         self.W2 = None
-        self.W3 = None
         self.H1_is_rad = None
         self.is_cstt_tooth = None
+        self.W3 = None
         # Set to None the properties inherited from Slot
         super(SlotW23, self)._set_None()
 
@@ -741,25 +771,6 @@ class SlotW23(Slot):
         """,
     )
 
-    def _get_W3(self):
-        """getter of W3"""
-        return self._W3
-
-    def _set_W3(self, value):
-        """setter of W3"""
-        check_var("W3", value, "float", Vmin=0)
-        self._W3 = value
-
-    W3 = property(
-        fget=_get_W3,
-        fset=_set_W3,
-        doc=u"""Tooth width
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
     def _get_H1_is_rad(self):
         """getter of H1_is_rad"""
         return self._H1_is_rad
@@ -793,5 +804,19 @@ class SlotW23(Slot):
         doc=u"""True: use W3 to define the slot, False: use W2 and W1
 
         :Type: bool
+        """,
+    )
+
+    def _get_W3(self):
+        """getter of W3"""
+        return self._W3
+
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Tooth width
+
+        :Type: float
+        :min: 0
         """,
     )

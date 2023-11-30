@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import PySide2.QtCore
+from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 from PySide2.QtGui import QPixmap
@@ -8,6 +9,8 @@ from ......Classes.SlotW23 import SlotW23
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.Gen_PWSlot23 import Gen_PWSlot23
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
+
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -47,7 +50,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.lf_W2.unit = "m"
         self.lf_W3.unit = "m"
         self.lf_H0.unit = "m"
-        self.lf_H1.unit = "m"
         self.lf_H2.unit = "m"
 
         # Set unit name (m ou mm)
@@ -57,7 +59,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             self.unit_W2,
             self.unit_W3,
             self.unit_H0,
-            self.unit_H1,
             self.unit_H2,
         ]
         for wid in wid_list:
@@ -66,25 +67,38 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_H0.setValue(self.slot.H0)
-        self.lf_H1.setValue(self.slot.H1)
         self.lf_H2.setValue(self.slot.H2)
+
         if self.slot.W3 is None:
             self.lf_W3.clear()
-            self.is_cst_tooth.setChecked(False)
             self.lf_W3.setEnabled(False)
+            self.lf_W1.setEnabled(True)
+            self.lf_W2.setEnabled(True)
+
             # No W3 => Constant slot
             self.lf_W1.setValue(self.slot.W1)
             self.lf_W2.setValue(self.slot.W2)
+
         else:  # Cste tooth
             self.lf_W3.setValue(self.slot.W3)
             # W3 is set => constant Tooth so W1 and W2 should be disabled
             self.is_cst_tooth.setChecked(True)
-            self.slot.W1 = None
-            self.slot.W2 = None
+
             self.lf_W1.clear()
             self.lf_W2.clear()
+            self.lf_W3.setEnabled(True)
             self.lf_W1.setEnabled(False)
             self.lf_W2.setEnabled(False)
+
+            self.slot.W1 = None
+            self.slot.W2 = None
+
+        if self.slot.H1_is_rad is None:
+            self.slot.H1_is_rad = False
+        if self.slot.H1_is_rad:
+            self.lf_H1.setValue(self.slot.H1)
+        else:  # convert m unit
+            self.lf_H1.setValue(gui_option.unit.get_m(self.slot.H1))
 
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
@@ -98,6 +112,16 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             self.w_wedge_mat.def_mat = "M400-50A"
         self.set_wedge()
 
+        # Update the unit combobox with the current m unit name
+        self.c_H1_unit.clear()
+        self.c_H1_unit.addItems(
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[°]"]
+        )
+        if self.slot.H1_is_rad:
+            self.c_H1_unit.setCurrentIndex(1)  # Rad
+        else:
+            self.c_H1_unit.setCurrentIndex(0)  # m
+
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
@@ -108,26 +132,10 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.lf_W3.editingFinished.connect(self.set_W3)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_H1.editingFinished.connect(self.set_H1)
+        self.c_H1_unit.currentIndexChanged.connect(self.set_H1_unit)
         self.lf_H2.editingFinished.connect(self.set_H2)
         self.is_cst_tooth.toggled.connect(self.set_is_cst_tooth)
         self.g_wedge.toggled.connect(self.set_wedge)
-
-    def set_wedge(self):
-        """Setup the slot wedge according to the GUI"""
-        if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
-            self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
-            )
-            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
-        else:
-            self.w_wedge_mat.hide()
-            self.slot.wedge_mat = None
-            self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
-            )
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -202,8 +210,32 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self : PWSlot23
             A PWSlot23 object
         """
-        self.slot.H1 = self.lf_H1.value()
+        if self.lf_H1.value() is not None:
+            if self.c_H1_unit.currentIndex() == 0:  # m or mm
+                self.slot.H1 = gui_option.unit.set_m(self.lf_H1.value())
+            elif self.c_H1_unit.currentIndex() == 1:  # rad
+                self.slot.H1 = self.lf_H1.value()
+            else:  # °
+                self.slot.H1 = self.lf_H1.value() / 180 * pi
+        else:
+            self.slot.H1 = None
         self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_H1_unit(self, value):
+        """Signal to update the value of H1_unit according to the combobox
+
+        Parameters
+        ----------
+        self : PWSlot23
+            A PWSlot23 object
+        value : int
+            current index of the combobox
+        """
+        self.slot.H1_is_rad = bool(value)
+        if self.lf_H1.text() != "":
+            self.set_H1()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -220,6 +252,41 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
+    def update_schematics(self):
+        """Select the correct schematics according to wedge and constant tooth/slot"""
+        if self.g_wedge.isChecked():
+            if self.is_cst_tooth.isChecked():
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotW23_wedge_full_ext_stator_constant_tooth"])
+                )
+
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotW23_wedge_full_ext_stator"])
+                )
+
+        else:
+            if self.is_cst_tooth.isChecked():
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotW23_wind_ext_stator_constant_tooth"])
+                )
+            else:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW23_wind_ext_stator"]))
+
+    def set_wedge(self):
+        """Setup the slot wedge according to the GUI"""
+        if self.g_wedge.isChecked():
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+
+        else:
+            self.slot.wedge_mat = None
+
+        # Select the correct schematics
+        self.update_schematics()
+
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
     def set_is_cst_tooth(self, is_checked):
         """Signal to set the correct mode (constant tooth or slot) according to
         the checkbox
@@ -231,20 +298,24 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         is_checked : bool
             State of the checkbox
         """
+
+        self.slot.is_cstt_tooth = is_checked
         if is_checked:
             self.slot.W1 = None
             self.slot.W2 = None
-            self.lf_W1.clear()
-            self.lf_W2.clear()
             self.lf_W1.setEnabled(False)
             self.lf_W2.setEnabled(False)
             self.lf_W3.setEnabled(True)
+
         else:
             self.slot.W3 = None
-            self.lf_W3.clear()
             self.lf_W3.setEnabled(False)
             self.lf_W1.setEnabled(True)
             self.lf_W2.setEnabled(True)
+
+        # Select the correct schematics
+        self.update_schematics()
+
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

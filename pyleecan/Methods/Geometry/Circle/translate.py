@@ -32,6 +32,9 @@ def translate(self, Zt):
             "The point must be a complex number or int or float"
         )
 
+    if Zt == 0:
+        return  # Nothing to do
+
     # check if the Circle is correct
     self.check()
 

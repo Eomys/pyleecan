@@ -2632,6 +2632,10 @@
             "HoleM54",
             "HoleM57",
             "HoleM58",
+            "HoleM60",
+            "HoleM61",
+            "HoleM62",
+            "HoleM63",
             "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
@@ -3680,6 +3684,428 @@
             }
         ]
     },
+    "HoleM60": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "remove_magnet",
+            "comp_surface_magnet_id",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM60",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM60.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Hole angular width",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Hole width",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "HoleM61": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M61",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "remove_magnet",
+            "comp_surface_magnet_id",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM61",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM61.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Distance beetween two Hole",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance beetween the lamination bore and top of the slot",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Third Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_2",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourth Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_3",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "HoleM62": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M62",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "plot_schematics_radial",
+            "remove_magnet",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict",
+            "comp_surface_magnet_id",
+            "comp_surface"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM62",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM62.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Length or Angle Opening",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m/rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "W0  unit, 0 for m, 1 for rad",
+                "max": "",
+                "min": "",
+                "name": "W0_is_rad",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "HoleM63": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M63",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "plot_schematics_top_flat",
+            "remove_magnet",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict",
+            "comp_surface_magnet_id",
+            "comp_surface"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM63",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM63.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Length or Angle Opening",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m/rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "top flat = 1, if curve top_flat = 0 ",
+                "max": "",
+                "min": "",
+                "name": "top_flat",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMLSRPM": {
         "constants": [
             {
@@ -3808,6 +4234,10 @@
             "HoleM53",
             "HoleM57",
             "HoleM58",
+            "HoleM60",
+            "HoleM61",
+            "HoleM62",
+            "HoleM63",
             "HoleMLSRPM",
             "HoleUD"
         ],
@@ -5395,7 +5825,9 @@
             }
         ],
         "daughters": [
+            "LamSlotM",
             "LamSlotMag",
+            "LamSlotMagNS",
             "LamSlotWind",
             "LamSquirrelCage",
             "LamSquirrelCageMag"
@@ -5434,6 +5866,52 @@
             }
         ]
     },
+    "LamSlotM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "LamSlotMag",
+            "LamSlotMagNS"
+        ],
+        "desc": "Lamination with Slot for Magnets",
+        "is_internal": false,
+        "methods": [
+            "comp_angle_d_axis",
+            "get_dim_active",
+            "get_magnet_number",
+            "plot"
+        ],
+        "mother": "LamSlot",
+        "name": "LamSlotM",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotM.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])",
+                "max": "",
+                "min": "",
+                "name": "mur_lin_matrix",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Matrix to enforce a different magnet remanence induction at 20degC for each magnet layer (shape: [Nrad, Ntan, Zs])",
+                "max": "",
+                "min": "",
+                "name": "Brm20_matrix",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "LamSlotMag": {
         "constants": [
             {
@@ -5448,15 +5926,13 @@
             "build_geometry",
             "check",
             "comp_masses",
-            "comp_radius_mec",
             "comp_surfaces",
             "comp_volumes",
-            "plot",
-            "comp_angle_d_axis",
-            "get_magnet_number",
+            "get_all_mag_obj",
+            "get_magnet_by_label",
             "set_Lmag"
         ],
-        "mother": "LamSlot",
+        "mother": "LamSlotM",
         "name": "LamSlotMag",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
@@ -5469,6 +5945,66 @@
                 "name": "magnet",
                 "type": "Magnet",
                 "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "LamSlotMagNS": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Slot for Magnets with uneven north/south",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_masses",
+            "comp_periodicity_geo",
+            "comp_periodicity_spatial",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_all_mag_obj",
+            "get_magnet_by_label",
+            "get_slot_desc_list",
+            "set_Lmag"
+        ],
+        "mother": "LamSlotM",
+        "name": "LamSlotMagNS",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMagNS.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "North Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet_north",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "South Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet_south",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "South slot of the lamination",
+                "max": "",
+                "min": "",
+                "name": "slot_south",
+                "type": "Slot",
+                "unit": "",
                 "value": ""
             }
         ]
@@ -5487,7 +6023,6 @@
         "is_internal": false,
         "methods": [
             "check",
-            "comp_radius_mec",
             "comp_surfaces",
             "get_pole_pair_number",
             "plot",
@@ -5756,7 +6291,9 @@
             "LamHole",
             "LamHoleNS",
             "LamSlot",
+            "LamSlotM",
             "LamSlotMag",
+            "LamSlotMagNS",
             "LamSlotMulti",
             "LamSlotMultiWind",
             "LamSlotWind",
@@ -5796,7 +6333,8 @@
             "build_radius_lines",
             "build_radius_desc",
             "has_slot",
-            "plot_preview_notch"
+            "plot_preview_notch",
+            "has_key"
         ],
         "mother": "",
         "name": "Lamination",
@@ -6730,7 +7268,7 @@
                 "max": "",
                 "min": "",
                 "name": "rotor",
-                "type": "LamSlotMag",
+                "type": "LamSlotM",
                 "unit": "",
                 "value": ""
             },
@@ -8772,18 +9310,31 @@
         "daughters": [
             "NotchEvenDist"
         ],
-        "desc": "Abstract class for notches",
+        "desc": "",
         "is_internal": false,
         "methods": [
             "get_Rbo",
             "get_Ryoke",
-            "is_outwards"
+            "is_outwards",
+            "has_key",
+            "get_label"
         ],
         "mother": "",
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": []
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "The material of the key (if None, no key to add)",
+                "max": "",
+                "min": "",
+                "name": "key_mat",
+                "type": "Material",
+                "unit": "",
+                "value": null
+            }
+        ]
     },
     "NotchEvenDist": {
         "constants": [
@@ -8798,7 +9349,9 @@
         "methods": [
             "comp_surface",
             "comp_periodicity_spatial",
-            "get_notch_desc_list"
+            "get_notch_desc_list",
+            "build_geometry_key",
+            "get_key_Ox_radius"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -12257,6 +12810,8 @@
             "SlotM16",
             "SlotM17",
             "SlotM18",
+            "SlotM18_2",
+            "SlotM19",
             "SlotUD",
             "SlotUD2",
             "SlotW10",
@@ -12308,7 +12863,9 @@
             "is_outwards",
             "plot",
             "plot_active",
-            "set_label"
+            "set_label",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "",
         "name": "Slot",
@@ -12621,7 +13178,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM10",
@@ -12636,7 +13194,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -12646,27 +13204,27 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             }
         ]
     },
@@ -12694,7 +13252,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM11",
@@ -12709,7 +13269,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -12719,27 +13279,27 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet angular width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "rad",
-                "value": 0.0122
+                "value": 0
             },
             {
                 "as_dict": "",
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": 0
             }
         ]
     },
@@ -12767,7 +13327,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM12",
@@ -12799,7 +13360,7 @@
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
@@ -12809,7 +13370,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -12840,7 +13401,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM13",
@@ -12872,7 +13434,7 @@
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
@@ -12882,7 +13444,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -12923,7 +13485,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM14",
@@ -12955,7 +13519,7 @@
                 "desc": "Magnet angular width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "rad",
                 "value": 0.0122
@@ -12965,7 +13529,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13006,7 +13570,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM15",
@@ -13038,7 +13603,7 @@
                 "desc": "Magnet width",
                 "max": "",
                 "min": "0",
-                "name": "Wmag",
+                "name": "W1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
@@ -13048,7 +13613,7 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H1",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
@@ -13161,7 +13726,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM17",
@@ -13193,7 +13760,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM18",
@@ -13205,10 +13774,129 @@
                 "desc": "Magnet Height",
                 "max": "",
                 "min": "0",
-                "name": "Hmag",
+                "name": "H0",
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
+            }
+        ]
+    },
+    "SlotM18_2": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Double Polar Ring magnet",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active",
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active",
+            "build_geometry_active"
+        ],
+        "mother": "Slot",
+        "name": "SlotM18_2",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM18_2.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Height of the magnet near the bore",
+                "max": "",
+                "min": "0",
+                "name": "H0_bore",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "Height of the magnet near the airgap",
+                "max": "",
+                "min": "0",
+                "name": "H0_gap",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            }
+        ]
+    },
+    "SlotM19": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "trapezoidal  Slot with trapezoidal magnet with polar top",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active",
+            "plot_schematics",
+            "check"
+        ],
+        "mother": "Slot",
+        "name": "SlotM19",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM19.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Slot/magnet width. (top)",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot/magnet width. (bottom)",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0
             }
         ]
     },
@@ -13475,6 +14163,8 @@
         "methods": [
             "_comp_line_dict",
             "_comp_point_coordinate",
+            "_set_W3",
+            "_comp_W",
             "build_geometry",
             "check",
             "comp_angle_opening",
@@ -13486,7 +14176,8 @@
             "get_H1",
             "get_surface_active",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "plot_schematics_constant_tooth"
         ],
         "mother": "Slot",
         "name": "SlotW11",
@@ -13501,7 +14192,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13511,7 +14202,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13521,7 +14212,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": 0
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13541,7 +14232,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.013
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13551,7 +14242,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.02
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13561,7 +14252,27 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.01
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True: use W3 to define the slot, False: use W2 and W1",
+                "max": "",
+                "min": "",
+                "name": "is_cstt_tooth",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13571,7 +14282,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": null
             }
         ]
     },
@@ -13794,7 +14505,9 @@
             "comp_surface",
             "comp_surface_active",
             "comp_surface_opening",
+            "comp_surface_wedge",
             "get_surface_active",
+            "get_surface_wedge",
             "get_surface_opening",
             "plot_schematics"
         ],
@@ -13842,6 +14555,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "selection type wedge",
+                "max": "",
+                "min": "0",
+                "name": "wedge_type",
+                "type": "int",
+                "unit": "-",
+                "value": 0.0
             },
             {
                 "as_dict": "",
@@ -14247,9 +14970,9 @@
         "methods": [
             "_comp_line_dict",
             "_comp_point_coordinate",
+            "_set_W3",
             "_comp_W",
             "build_geometry",
-            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -14259,7 +14982,9 @@
             "comp_surface_opening",
             "get_surface_active",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "get_H1",
+            "plot_schematics_constant_tooth"
         ],
         "mother": "Slot",
         "name": "SlotW23",
@@ -14274,7 +14999,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14284,7 +15009,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14294,7 +15019,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": 0
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14304,7 +15029,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.013
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14314,7 +15039,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.02
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14324,17 +15049,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.01
-            },
-            {
-                "as_dict": "",
-                "desc": "Tooth width",
-                "max": "",
-                "min": "0",
-                "name": "W3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.01
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14355,6 +15070,16 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
             }
         ]
     },
@@ -14804,8 +15529,10 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
+            "comp_surface_wedge",
             "comp_surface_opening",
             "get_surface_active",
+            "get_surface_wedge",
             "get_surface_opening",
             "plot_schematics"
         ],
@@ -14853,6 +15580,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.015
+            },
+            {
+                "as_dict": "",
+                "desc": "selection type wedge",
+                "max": "",
+                "min": "0",
+                "name": "wedge_type",
+                "type": "int",
+                "unit": "-",
+                "value": 0.0
             },
             {
                 "as_dict": "",
@@ -15661,7 +16398,8 @@
             "draw_FEMM",
             "plot",
             "split_line",
-            "is_inside"
+            "is_inside",
+            "intersect_line"
         ],
         "mother": "",
         "name": "Surface",

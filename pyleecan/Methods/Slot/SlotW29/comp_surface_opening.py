@@ -16,6 +16,7 @@ def comp_surface_opening(self):
         Slot opening surface [m**2]
 
     """
+
     Rbo = self.get_Rbo()
 
     S0 = self.H0 * self.W0
@@ -26,7 +27,15 @@ def comp_surface_opening(self):
     Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
 
     # Because Slamination = S - Zs * Sslot
-    if self.is_outwards():
-        return S0 + S1 - Sarc
-    else:
-        return S0 + S1 + Sarc
+    # Selection type Wedge
+    if self.wedge_type == 0:
+        if self.is_outwards():
+            return S1 + S0 - Sarc
+        else:
+            return S1 + S0 + Sarc
+
+    if self.wedge_type == 1:
+        if self.is_outwards():
+            return S0 - Sarc
+        else:
+            return S0 + Sarc

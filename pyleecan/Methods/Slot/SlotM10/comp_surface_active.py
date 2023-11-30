@@ -16,4 +16,4 @@ def comp_surface_active(self):
 
     """
 
-    return self.Hmag * self.Wmag
+    return self.H1 * self.W1

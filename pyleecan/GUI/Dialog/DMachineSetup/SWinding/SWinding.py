@@ -206,6 +206,8 @@ class SWinding(Gen_SWinding, QWidget):
             self.si_qs.hide()
             self.b_generate.hide()
             self.b_import.show()
+            self.b_plot_linear.setEnabled(False)
+            self.b_plot_radial.setEnabled(False)
         else:
             self.in_Ntcoil.show()
             self.in_coil_pitch.show()
@@ -216,6 +218,8 @@ class SWinding(Gen_SWinding, QWidget):
             self.si_qs.show()
             self.b_generate.show()
             self.b_import.hide()
+            self.b_plot_linear.setEnabled(True)
+            self.b_plot_radial.setEnabled(True)
 
     def show_layer_widget(self):
         # Coil pitch (or coil span)

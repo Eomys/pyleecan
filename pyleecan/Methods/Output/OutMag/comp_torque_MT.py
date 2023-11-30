@@ -25,7 +25,6 @@ def comp_torque_MT(self):
         and "radial" in B.components.keys()
         and "tangential" in B.components.keys()
     ):
-
         machine = self.parent.simu.machine
 
         # Load airgap Maxwell Stress Tensor

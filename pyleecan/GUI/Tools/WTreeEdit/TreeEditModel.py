@@ -13,7 +13,6 @@ parent(), rowCount(), columnCount(), and data(). ... in all read-only models ...
 
 
 class TreeEditModel(QAbstractItemModel):
-
     objChanged = Signal(object)
     dataChanged = Signal(object, object)
 
@@ -70,7 +69,6 @@ class TreeEditModel(QAbstractItemModel):
 
         # create the object properties
         for prop, prop_name, prop_type, index in props:
-
             # pyleecan type properties
             if prop_type in self._class_dict:
                 self.setupModelData(prop, name=prop_name, index=index, parent=viewItem)

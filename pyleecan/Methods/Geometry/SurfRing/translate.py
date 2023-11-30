@@ -16,6 +16,8 @@ def translate(self, Zt):
     -------
     None
     """
+    if Zt == 0:
+        return  # Nothing to do
     # Check if the Surface is correct
     self.check()
 

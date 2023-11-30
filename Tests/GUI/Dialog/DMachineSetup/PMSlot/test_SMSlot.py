@@ -5,22 +5,18 @@ import matplotlib.pyplot as plt
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from numpy import pi
+import mock
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotMagNS import LamSlotMagNS
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotM12 import SlotM12
-from pyleecan.Classes.SlotM13 import SlotM13
-from pyleecan.Classes.SlotM14 import SlotM14
-from pyleecan.Classes.SlotM15 import SlotM15
-from pyleecan.Classes.SlotM16 import SlotM16
-from pyleecan.Classes.SlotM17 import SlotM17
-from pyleecan.Classes.SlotM18 import SlotM18
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
@@ -30,6 +26,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.PMSlot19 import PMSlot19
 import pytest
 from Tests.GUI import gui_option  # Set unit as [m]
 
@@ -41,11 +38,16 @@ class TestSMSlot(object):
         test_obj = MachineSIPMSM()
         # For comp_output compatibility
         test_obj.stator = LamSlotWind(Rint=0.95, Rext=0.99)
-        test_obj.rotor = LamSlotMag(Rint=0.1, Rext=0.9)
-        test_obj.rotor.slot = SlotM11(
-            Zs=8, W0=pi / 24, H0=5e-3, Wmag=pi / 24, Hmag=3e-3
+        test_obj.rotor = LamSlotMagNS(Rint=0.1, Rext=0.9)
+        test_obj.rotor.slot = SlotM11(Zs=8, W0=pi / 24, H0=5e-3, W1=pi / 24, H1=3e-3)
+        test_obj.rotor.slot_south = SlotM12(
+            W0=0.0122,
+            H0=0.001,
+            W1=0.0122,
+            H1=0.001,
+            Zs=36,
         )
-        test_obj.rotor.magnet.mat_type.name = "test3"
+        test_obj.rotor.magnet_north.mat_type.name = "test3"
 
         material_dict = {LIB_KEY: list(), MACH_KEY: list()}
         material_dict[LIB_KEY] = [
@@ -60,7 +62,6 @@ class TestSMSlot(object):
         self.widget = SMSlot(
             machine=test_obj, material_dict=material_dict, is_stator=False
         )
-        self.widget.is_test = True
         self.test_obj = test_obj
 
     @classmethod
@@ -79,113 +80,92 @@ class TestSMSlot(object):
 
     def test_init(self):
         """Check that the GUI initialize correctly"""
-        # To remember to update after adding a new type
-        assert self.widget.c_slot_type.count() == 9
-
-        assert self.widget.c_slot_type.currentIndex() == 1
-        assert self.widget.c_slot_type.currentText() == "Polar Magnet"
-        assert isinstance(self.widget.w_slot, PMSlot11)
-        assert self.widget.w_mat.in_mat_type.text() == "mat_mag:"
-        assert self.widget.w_mat.c_mat_type.count() == 3
-        assert self.widget.w_mat.c_mat_type.currentIndex() == 2
         assert (
-            self.widget.w_slot.w_out.out_wind_surface.text()
-            == "Active surface: 0.0003521 [m²]"
+            self.widget.out_Slot_pitch.text()
+            == "p = 4 / Slot pitch = 45 [°] (0.7854 [rad])"
+        )
+        assert self.widget.c_NS_type.currentIndex() == 1
+        assert self.widget.tab_slot.count() == 2
+        assert self.widget.tab_slot.currentIndex() == 0
+        assert self.widget.tab_slot.widget(0).c_slot_type.currentIndex() == 1
+        assert (
+            self.widget.tab_slot.widget(0).c_slot_type.currentText() == "Polar Magnet"
+        )
+        assert self.widget.tab_slot.widget(1).c_slot_type.currentIndex() == 2
+        assert (
+            self.widget.tab_slot.widget(1).c_slot_type.currentText()
+            == "Rectangular Magnet with polar top"
         )
 
-    def test_set_material(self):
-        """Check that you can change the material"""
-        self.widget.w_mat.c_mat_type.setCurrentIndex(0)
-        assert self.test_obj.rotor.magnet.mat_type.name == "test1"
-        assert self.test_obj.rotor.magnet.mat_type.elec.rho == 0.31
+    def test_change_pole_distribution(self):
+        """Check that the widget is able to change pole distribution"""
+        # Uneven => Even
+        previous_slot = self.widget.obj.slot
+        self.widget.c_NS_type.setCurrentIndex(0)
+        # Check that the lamination is well updated
+        assert isinstance(self.widget.obj, LamSlotMag) == True
+        assert isinstance(self.widget.obj.slot, type(previous_slot)) == True
+        # Check that tab widget is well updated
+        assert self.widget.tab_slot.count() == 1
 
-    def test_set_type_magnetization(self):
-        """Check that you can change tha magnetization"""
-        # type_magnetization set test
-        self.widget.c_type_magnetization.setCurrentIndex(2)
-        assert self.test_obj.rotor.magnet.type_magnetization == 2
-        self.widget.c_type_magnetization.setCurrentIndex(0)
-        assert self.test_obj.rotor.magnet.type_magnetization == 0
+        # Even => Uneven
+        previous_slot = self.widget.obj.slot
+        self.widget.c_NS_type.setCurrentIndex(1)
+        # Check that the lamination is well updated
+        assert isinstance(self.widget.obj, LamSlotMagNS) == True
+        assert isinstance(self.widget.obj.slot, type(previous_slot)) == True
+        assert isinstance(self.widget.obj.slot_south, type(previous_slot)) == True
+        # Check that tab widget is well updated
+        assert self.widget.tab_slot.count() == 2
 
-    def test_set_type_10(self):
-        """Check that the Widget is able to set Magnet type 10"""
-        self.widget.c_slot_type.setCurrentIndex(0)
-        assert type(self.widget.w_slot) == PMSlot10
-        assert self.widget.c_slot_type.currentText() == "Rectangular Magnet"
-        assert type(self.test_obj.rotor.slot) == SlotM10
+    def test_update_slot_type(self):
+        """Check that the slot is well updated in the lamination when it changed in the tab (for uneven case)"""
+        # For North Pole
+        self.widget.tab_slot.setCurrentIndex(0)
+        self.widget.tab_slot.widget(0).c_slot_type.setCurrentIndex(9)
+        assert self.widget.obj.slot == self.widget.tab_slot.widget(0).lam.slot
+        # For South Pole
+        self.widget.tab_slot.setCurrentIndex(1)
+        self.widget.tab_slot.widget(1).c_slot_type.setCurrentIndex(9)
+        assert self.widget.obj.slot_south == self.widget.tab_slot.widget(1).lam.slot
 
-    def test_set_type_11(self):
-        """Check that the Widget is able to set Magnet type 11"""
-        self.widget.c_slot_type.setCurrentIndex(1)
-        assert type(self.widget.w_slot) == PMSlot11
-        assert self.widget.c_slot_type.currentText() == "Polar Magnet"
-        assert type(self.test_obj.rotor.slot) == SlotM11
+    def test_check(self):
+        """Check the error message when plotting"""
+        # Introduce an error in slot of North Pole
+        assert self.widget.test_err_msg is None
+        W0 = self.widget.tab_slot.widget(0).w_slot.lf_W0.value()
+        self.widget.tab_slot.widget(0).w_slot.lf_W0.setValue(None)
+        self.widget.tab_slot.widget(0).w_slot.lf_W0.editingFinished.emit()
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.b_plot.clicked.emit()
+        assert "North Pole: You must set W0 !" in self.widget.test_err_msg
+        # Revert error for next test
+        self.widget.tab_slot.widget(0).w_slot.lf_W0.setValue(W0 * 2)
+        self.widget.tab_slot.widget(0).w_slot.lf_W0.editingFinished.emit()
+        self.widget.test_err_msg = None
 
-    def test_set_type_12(self):
-        """Check that the Widget is able to set Magnet type 12"""
-        self.widget.c_slot_type.setCurrentIndex(2)
-        assert type(self.widget.w_slot) == PMSlot12
-        assert (
-            self.widget.c_slot_type.currentText() == "Rectangular Magnet with polar top"
-        )
-        assert type(self.test_obj.rotor.slot) == SlotM12
-
-    def test_set_type_13(self):
-        """Check that the Widget is able to set Magnet type 13"""
-        self.widget.c_slot_type.setCurrentIndex(3)
-        assert type(self.widget.w_slot) == PMSlot13
-        assert (
-            self.widget.c_slot_type.currentText()
-            == "Rectangular Magnet with curved top"
-        )
-        assert type(self.test_obj.rotor.slot) == SlotM13
-
-    def test_set_type_14(self):
-        """Check that the Widget is able to set Magnet type 14"""
-        self.widget.c_slot_type.setCurrentIndex(4)
-        assert type(self.widget.w_slot) == PMSlot14
-        assert self.widget.c_slot_type.currentText() == "Polar Magnet with curved top"
-        assert type(self.test_obj.rotor.slot) == SlotM14
-
-    def test_set_type_15(self):
-        """Check that the Widget is able to set Magnet type 15"""
-        self.widget.c_slot_type.setCurrentIndex(5)
-        assert type(self.widget.w_slot) == PMSlot15
-        assert (
-            self.widget.c_slot_type.currentText()
-            == "Polar Magnet with curved top and parallel sides"
-        )
-        assert type(self.test_obj.rotor.slot) == SlotM15
-
-    def test_set_type_16(self):
-        """Check that the Widget is able to set Magnet type 16"""
-        self.widget.c_slot_type.setCurrentIndex(6)
-        assert type(self.widget.w_slot) == PMSlot16
-        assert self.widget.c_slot_type.currentText() == "Spoke Rectangular Magnet"
-        assert type(self.test_obj.rotor.slot) == SlotM16
-
-    def test_set_type_17(self):
-        """Check that the Widget is able to set Magnet type 17"""
-        self.widget.c_slot_type.setCurrentIndex(7)
-        assert type(self.widget.w_slot) == PMSlot17
-        assert (
-            self.widget.c_slot_type.currentText()
-            == "Cylindrical magnet (no lamination)"
-        )
-        assert type(self.test_obj.rotor.slot) == SlotM17
-
-    def test_set_type_18(self):
-        """Check that the Widget is able to set Magnet type 18"""
-        self.widget.c_slot_type.setCurrentIndex(8)
-        assert type(self.widget.w_slot) == PMSlot18
-        assert self.widget.c_slot_type.currentText() == "Ring Magnet"
-        assert type(self.test_obj.rotor.slot) == SlotM18
+        # Introduce an error in slot of South Pole
+        assert self.widget.test_err_msg is None
+        self.widget.tab_slot.widget(1).w_slot.lf_W0.setValue(None)
+        self.widget.tab_slot.widget(1).w_slot.lf_W0.editingFinished.emit()
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.b_plot.clicked.emit()
+        assert "South Pole: You must set W0 !" in self.widget.test_err_msg
 
 
 if __name__ == "__main__":
     a = TestSMSlot()
     a.setup_class()
     a.setup_method()
-    a.test_plot_schematics()
+    a.test_init()
+    # a.test_change_pole_distribution()
+    # a.test_update_slot_type()
+    a.test_check()
     a.teardown_class()
     print("Done")

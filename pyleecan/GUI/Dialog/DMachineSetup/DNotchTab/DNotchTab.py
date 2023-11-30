@@ -22,7 +22,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, machine, is_stator=False):
+    def __init__(self, machine, is_stator=False, material_dict=None):
         """Initialize the widget according to machine
 
         Parameters
@@ -31,10 +31,10 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             A DNotchTab widget
         machine : Machine
             current machine to edit
-        material_dict: dict
-            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
@@ -45,6 +45,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Saving arguments
         self.machine = machine.copy()
         self.is_stator = is_stator
+        self.material_dict = material_dict
 
         # String storing the last error message (used in test)
         self.err_msg = None
@@ -101,14 +102,20 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         if notch is None:
             self.obj.notch.append(
                 NotchEvenDist(
-                    alpha=0, notch_shape=SlotM10(Zs=self.obj.get_Zs(), W0=None, H0=None)
+                    alpha=0,
+                    key_mat=None,
+                    notch_shape=SlotM10(
+                        Zs=self.obj.get_Zs(),
+                        W0=None,
+                        H0=None,
+                    ),
                 )
             )
             notch = self.obj.notch[-1]
             notch_index = len(self.obj.notch) - 1
         else:
             notch_index = idx_notch
-        tab = WNotch(self, index=notch_index)
+        tab = WNotch(self, index=notch_index, material_dict=self.material_dict)
         tab.saveNeeded.connect(self.emit_save)
         self.tab_notch.addTab(tab, "Notch Set " + str(notch_index + 1))
 

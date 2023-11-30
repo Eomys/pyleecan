@@ -22,21 +22,21 @@ def _comp_point_coordinate(self):
 
     Z1 = Rbo * exp(-1j * alpha)
 
-    alpha_lim = 2 * arcsin(self.Wmag * 0.5 / self.Rtopm)  # Angle of the top arc
+    alpha_lim = 2 * arcsin(self.W1 * 0.5 / self.Rtopm)  # Angle of the top arc
     H_top_arc = self.Rtopm * (1 - cos(alpha_lim / 2))  # Heiht of the top arc
     if self.is_outwards():
         Z2 = Z1 + self.H0
     else:  # inward slot
         Z2 = Z1 - self.H0
-    ZM1 = Z2.real - 1j * self.Wmag / 2
+    ZM1 = Z2.real - 1j * self.W1 / 2
     if self.is_outwards():
-        ZM0 = Z2.real - self.Hmag
+        ZM0 = Z2.real - self.H1
         Zc = ZM0 + self.Rtopm
-        ZM2 = ZM1 - self.Hmag + H_top_arc
+        ZM2 = ZM1 - self.H1 + H_top_arc
     else:  # inward slot
-        ZM0 = Z2.real + self.Hmag
+        ZM0 = Z2.real + self.H1
         Zc = ZM0 - self.Rtopm
-        ZM2 = ZM1 + self.Hmag - H_top_arc
+        ZM2 = ZM1 + self.H1 - H_top_arc
 
     point_dict = dict()
     point_dict["Z1"] = Z1

@@ -16,7 +16,6 @@ def get_Phi_dqh_mag(self):
     """
 
     if self.Phi_dqh_mag is None:
-
         # Find Id=Iq=0
         ii = self.get_index_open_circuit()
 

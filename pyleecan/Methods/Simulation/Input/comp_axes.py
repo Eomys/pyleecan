@@ -124,7 +124,6 @@ def comp_axes(
 
     # Get time axis
     if "time" in axes_list:
-
         # Check if Time is already in input dict of axes
         if axes_dict_in is not None and "time" in axes_dict_in:
             Time_in = axes_dict_in["time"]
@@ -139,11 +138,12 @@ def comp_axes(
 
     # Get angle axis
     if "angle" in axes_list:
-
         # Airgap radius
         try:
             Rag = machine.comp_Rgap_mec()
-        except Exception:  # Case where rotor is not defined yet (Rag is only used for angle axis normalization)
+        except (
+            Exception
+        ):  # Case where rotor is not defined yet (Rag is only used for angle axis normalization)
             Rag = 1
 
         # Check if Angle is already in input dict of axes
@@ -159,7 +159,6 @@ def comp_axes(
         axes_dict["angle"] = Angle
 
     if "phase_S" in axes_list:
-
         # Check if Phase is already in input dict of axes
         stator_label = "phase_" + machine.stator.get_label()
         if axes_dict_in is not None and stator_label in axes_dict_in:
@@ -175,7 +174,6 @@ def comp_axes(
             axes_dict[stator_label] = Phase
 
     if "phase_R" in axes_list:
-
         # Check if Phase is already in input dict of axes
         rotor_label = "phase_" + machine.rotor.get_label()
         if axes_dict_in is not None and rotor_label in axes_dict_in:

@@ -3,6 +3,7 @@
 from meshio import read
 from os import remove
 
+
 # TODO investigate on indices, also compare with MeshMat get_cell
 def get_cell(self, indices=None):
     """Return the cells (connectivities).

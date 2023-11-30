@@ -23,7 +23,6 @@ def get_normals(self, indices=None, loc="center"):
     surf = self.get_surf()
 
     if loc == "center":
-
         normals = surf.cell_normals
 
     elif loc == "point":

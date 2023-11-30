@@ -68,9 +68,19 @@ except ImportError as error:
     comp_surface_opening = error
 
 try:
+    from ..Methods.Slot.SlotW14.comp_surface_wedge import comp_surface_wedge
+except ImportError as error:
+    comp_surface_wedge = error
+
+try:
     from ..Methods.Slot.SlotW14.get_surface_active import get_surface_active
 except ImportError as error:
     get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW14.get_surface_wedge import get_surface_wedge
+except ImportError as error:
+    get_surface_wedge = error
 
 try:
     from ..Methods.Slot.SlotW14.get_surface_opening import get_surface_opening
@@ -204,6 +214,18 @@ class SlotW14(Slot):
         )
     else:
         comp_surface_opening = comp_surface_opening
+    # cf Methods.Slot.SlotW14.comp_surface_wedge
+    if isinstance(comp_surface_wedge, ImportError):
+        comp_surface_wedge = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW14 method comp_surface_wedge: "
+                    + str(comp_surface_wedge)
+                )
+            )
+        )
+    else:
+        comp_surface_wedge = comp_surface_wedge
     # cf Methods.Slot.SlotW14.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -216,6 +238,18 @@ class SlotW14(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW14.get_surface_wedge
+    if isinstance(get_surface_wedge, ImportError):
+        get_surface_wedge = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW14 method get_surface_wedge: "
+                    + str(get_surface_wedge)
+                )
+            )
+        )
+    else:
+        get_surface_wedge = get_surface_wedge
     # cf Methods.Slot.SlotW14.get_surface_opening
     if isinstance(get_surface_opening, ImportError):
         get_surface_opening = property(
@@ -250,6 +284,7 @@ class SlotW14(Slot):
         H0=0.001,
         H1=0.0015,
         H3=0.0122,
+        wedge_type=0,
         W3=0.0122,
         Zs=36,
         wedge_mat=None,
@@ -280,6 +315,8 @@ class SlotW14(Slot):
                 H1 = init_dict["H1"]
             if "H3" in list(init_dict.keys()):
                 H3 = init_dict["H3"]
+            if "wedge_type" in list(init_dict.keys()):
+                wedge_type = init_dict["wedge_type"]
             if "W3" in list(init_dict.keys()):
                 W3 = init_dict["W3"]
             if "Zs" in list(init_dict.keys()):
@@ -293,6 +330,7 @@ class SlotW14(Slot):
         self.H0 = H0
         self.H1 = H1
         self.H3 = H3
+        self.wedge_type = wedge_type
         self.W3 = W3
         # Call Slot init
         super(SlotW14, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
@@ -309,6 +347,7 @@ class SlotW14(Slot):
         SlotW14_str += "H0 = " + str(self.H0) + linesep
         SlotW14_str += "H1 = " + str(self.H1) + linesep
         SlotW14_str += "H3 = " + str(self.H3) + linesep
+        SlotW14_str += "wedge_type = " + str(self.wedge_type) + linesep
         SlotW14_str += "W3 = " + str(self.W3) + linesep
         return SlotW14_str
 
@@ -328,6 +367,8 @@ class SlotW14(Slot):
         if other.H1 != self.H1:
             return False
         if other.H3 != self.H3:
+            return False
+        if other.wedge_type != self.wedge_type:
             return False
         if other.W3 != self.W3:
             return False
@@ -400,6 +441,18 @@ class SlotW14(Slot):
                 diff_list.append(name + ".H3" + val_str)
             else:
                 diff_list.append(name + ".H3")
+        if other._wedge_type != self._wedge_type:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._wedge_type)
+                    + ", other="
+                    + str(other._wedge_type)
+                    + ")"
+                )
+                diff_list.append(name + ".wedge_type" + val_str)
+            else:
+                diff_list.append(name + ".wedge_type")
         if (
             other._W3 is not None
             and self._W3 is not None
@@ -428,6 +481,7 @@ class SlotW14(Slot):
         S += getsizeof(self.H0)
         S += getsizeof(self.H1)
         S += getsizeof(self.H3)
+        S += getsizeof(self.wedge_type)
         S += getsizeof(self.W3)
         return S
 
@@ -452,6 +506,7 @@ class SlotW14(Slot):
         SlotW14_dict["H0"] = self.H0
         SlotW14_dict["H1"] = self.H1
         SlotW14_dict["H3"] = self.H3
+        SlotW14_dict["wedge_type"] = self.wedge_type
         SlotW14_dict["W3"] = self.W3
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -466,6 +521,7 @@ class SlotW14(Slot):
         H0_val = self.H0
         H1_val = self.H1
         H3_val = self.H3
+        wedge_type_val = self.wedge_type
         W3_val = self.W3
         Zs_val = self.Zs
         if self.wedge_mat is None:
@@ -479,6 +535,7 @@ class SlotW14(Slot):
             H0=H0_val,
             H1=H1_val,
             H3=H3_val,
+            wedge_type=wedge_type_val,
             W3=W3_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
@@ -493,6 +550,7 @@ class SlotW14(Slot):
         self.H0 = None
         self.H1 = None
         self.H3 = None
+        self.wedge_type = None
         self.W3 = None
         # Set to None the properties inherited from Slot
         super(SlotW14, self)._set_None()
@@ -569,6 +627,25 @@ class SlotW14(Slot):
         doc=u"""Tooth height
 
         :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_wedge_type(self):
+        """getter of wedge_type"""
+        return self._wedge_type
+
+    def _set_wedge_type(self, value):
+        """setter of wedge_type"""
+        check_var("wedge_type", value, "int", Vmin=0)
+        self._wedge_type = value
+
+    wedge_type = property(
+        fget=_get_wedge_type,
+        fset=_set_wedge_type,
+        doc=u"""selection type wedge
+
+        :Type: int
         :min: 0
         """,
     )

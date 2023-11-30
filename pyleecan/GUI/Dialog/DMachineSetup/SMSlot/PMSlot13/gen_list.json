@@ -10,10 +10,10 @@
     },
     {
         "cls": "SlotM13",
-        "name": "Wmag",
+        "name": "W1",
         "widget": [
-            "in_Wmag",
-            "lf_Wmag"
+            "in_W1",
+            "lf_W1"
         ],
         "xls": "Slot"
     },
@@ -37,10 +37,10 @@
     },
     {
         "cls": "SlotM13",
-        "name": "Hmag",
+        "name": "H1",
         "widget": [
-            "in_Hmag",
-            "lf_Hmag"
+            "in_H1",
+            "lf_H1"
         ],
         "xls": "Slot"
     }

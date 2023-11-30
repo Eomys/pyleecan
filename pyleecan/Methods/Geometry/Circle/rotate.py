@@ -26,6 +26,8 @@ def rotate(self, angle):
     if not isinstance(angle, float) and not isinstance(angle, int):
         raise AngleRotationCircleError("The angle must be a float or int ")
 
+    if angle == 0:
+        return  # Nothing to do
     # check if Circle is correct"
     self.check()
 

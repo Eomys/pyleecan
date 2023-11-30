@@ -21,7 +21,6 @@ def get_fund_harm(self, data):
     """
 
     if data.symbol in ["B", "AGSF", "Is", "Phi_{wind}"]:
-
         # Init output dict
         fund_harm = dict()
 

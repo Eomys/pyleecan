@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-rotor,,Machine's Rotor,,LamSlotMag,,,
-stator,,Machine's Stator,,Lamination,,,
-,
-Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Machine,MachineSync,check,VERSION,1,Inset and Surface Permanent Magnet Synchronous Machine
-,,get_machine_type,,,
+rotor,,Machine's Rotor,,LamSlotM,,,,
+stator,,Machine's Stator,,Lamination,,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Machine,MachineSync,check,VERSION,1,Inset and Surface Permanent Magnet Synchronous Machine,,,
+,,get_machine_type,,,,,,

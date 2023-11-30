@@ -29,10 +29,10 @@ def plot(
     y_list = [[a * 180 / pi for a in angle_list]]
     linestyle_list = ["solid"]
 
-    LamSlotMag = import_class("pyleecan.Classes", "LamSlotMag")
-    LamHole = import_class("pyleecan.Classes", "LamHole")
+    LamSlotM = import_class("pyleecan.Classes", "LamSlotM")
+    LamH = import_class("pyleecan.Classes", "LamH")
 
-    if isinstance(self.parent, (LamSlotMag, LamHole)):
+    if isinstance(self.parent, (LamSlotM, LamH)):
         legend_list.append("Rotor d-axis")
         y_list.append([0 for z in z_list])
         linestyle_list.append("dashed")

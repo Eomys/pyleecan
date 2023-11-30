@@ -44,9 +44,6 @@ class SSkew(Ui_SSkew, QWidget):
         sp_retain = self.tab_angle.sizePolicy()
         sp_retain.setRetainSizeWhenHidden(True)
         self.tab_angle.setSizePolicy(sp_retain)
-        self.label_deg.hide()
-        self.in_slot_pitch.hide()
-        self.tab_angle.hide()
         sp_retain = self.sb_nslice.sizePolicy()
         sp_retain.setRetainSizeWhenHidden(True)
         self.sb_nslice.setSizePolicy(sp_retain)
@@ -163,11 +160,6 @@ class SSkew(Ui_SSkew, QWidget):
         """Hide / show widget depending on parameters"""
 
         if self.g_activate.isChecked():
-
-            # Show common widgets
-            self.cb_type.show()
-            self.cb_step.show()
-
             if self.is_step:
                 self.cb_type.setEnabled(True)
             else:
@@ -182,9 +174,6 @@ class SSkew(Ui_SSkew, QWidget):
             self.cb_type.setCurrentIndex(self.type_skew_list.index(self.type_skew))
 
             self.w_viewer.show()
-            self.in_type.show()
-            self.in_step.show()
-            self.tab_angle.show()
 
             if self.is_step:
                 # step skew
@@ -222,23 +211,12 @@ class SSkew(Ui_SSkew, QWidget):
 
         else:
             # Hide all widgets
-            self.cb_step.hide()
-            self.cb_type.hide()
             size = self.sb_nslice.sizePolicy()
             size.setRetainSizeWhenHidden(False)
             self.sb_nslice.setSizePolicy(size)
-            self.sb_nslice.hide()
-            self.lf_angle.hide()
-            self.in_type.hide()
-            self.in_step.hide()
             size = self.label_segments.sizePolicy()
             size.setRetainSizeWhenHidden(False)
             self.label_segments.setSizePolicy(size)
-            self.label_segments.hide()
-            self.label_rate.hide()
-            self.label_deg.hide()
-            self.in_slot_pitch.hide()
-            self.tab_angle.hide()
             self.w_viewer.axes.clear()
             self.w_viewer.draw()
             self.w_viewer.hide()

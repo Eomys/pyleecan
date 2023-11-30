@@ -7,6 +7,7 @@ import numpy as np
 
 DEBUG = True
 
+
 # =============================================================================
 class MachinePlotWidget(QtWidgets.QGroupBox):
     def __init__(self, parent, label="", *args, **kwargs):

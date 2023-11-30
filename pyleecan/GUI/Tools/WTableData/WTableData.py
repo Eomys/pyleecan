@@ -14,7 +14,6 @@ class DTableData(QDialog):
 
 
 class WTableData(QTableView):
-
     dataChanged = Signal()
 
     def __init__(self, data=zeros((1, 1)), editable=False):
@@ -32,7 +31,6 @@ class WTableData(QTableView):
 
 
 class TableModelNumpy(QAbstractTableModel):
-
     dataChanged = Signal()
 
     def __init__(self, data, editable=False):
@@ -83,7 +81,6 @@ class TableModelNumpy(QAbstractTableModel):
 
 
 class TableModelList(QAbstractTableModel):
-
     dataChanged = Signal()
 
     def __init__(self, data, editable=False):

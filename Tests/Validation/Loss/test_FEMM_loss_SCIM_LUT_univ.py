@@ -390,6 +390,5 @@ def test_FEMM_loss_SCIM_with_param():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     # out = test_FEMM_loss_SCIM()
     out = test_FEMM_loss_SCIM_with_param()

@@ -7,6 +7,10 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW14 import S14_Rbo1CheckError
 
+from pyleecan.Functions.load import load
+from os.path import join
+from pyleecan.definitions import DATA_DIR
+
 # For AlmostEqual
 DELTA = 1e-4
 
@@ -14,7 +18,13 @@ slotW14_test = list()
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rext=0.1325)
-lam.slot = SlotW14(H0=5e-3, H1=5e-3, H3=25e-3, W0=5e-3, W3=10e-3)
+lam.slot = SlotW14(
+    H0=5e-3,
+    H1=5e-3,
+    H3=25e-3,
+    W0=5e-3,
+    W3=10e-3,
+)
 slotW14_test.append(
     {
         "test_obj": lam,
@@ -28,7 +38,14 @@ slotW14_test.append(
 
 # Outward Slot
 lam = LamSlot(is_internal=False, Rint=0.1325)
-lam.slot = SlotW14(H0=5e-3, H1=5e-3, H3=25e-3, W0=5e-3, W3=10e-3)
+lam.slot = SlotW14(
+    H0=5e-3,
+    H1=5e-3,
+    H3=25e-3,
+    W0=5e-3,
+    W3=10e-3,
+    wedge_type=0,
+)
 slotW14_test.append(
     {
         "test_obj": lam,
@@ -40,6 +57,52 @@ slotW14_test.append(
     }
 )
 
+lam = LamSlot(is_internal=True, Rext=0.1325)
+lam.slot = SlotW14(
+    H0=5e-3,
+    H1=5e-3,
+    H3=25e-3,
+    W0=5e-3,
+    W3=10e-3,
+    wedge_type=1,
+)
+slotW14_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00029443833868045136,
+        "Aw": 0.08445503,
+        "SW_exp": 2.28378e-4,
+        "SO_exp": 2.5078624749995704e-05,
+        "H_exp": 0.03486507,
+        "SWedge_exp": 4.098099249328862e-05,
+    }
+)
+
+# Outward Slot
+lam = LamSlot(
+    is_internal=False,
+    Rint=0.1325,
+)
+lam.slot = SlotW14(
+    H0=5e-3,
+    H1=5e-3,
+    H3=25e-3,
+    W0=5e-3,
+    W3=10e-3,
+    wedge_type=1,
+)
+slotW14_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0005079029472254,
+        "Aw": 0.108324,
+        "SW_exp": 4.332517e-4,
+        "SO_exp": 2.49213752500043e-05,
+        "H_exp": 0.03572334,
+        "SWedge_exp": 4.972985884588103e-05,
+    }
+)
+
 
 class Test_SlotW14_meth(object):
     """pytest for SlotW14 methods"""
@@ -47,7 +110,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_schematics(self, test_dict):
         """Check that the schematics is correct"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         point_dict = test_obj.slot._comp_point_coordinate()
 
         # Check width
@@ -80,7 +143,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_build_geometry_active(self, test_dict):
         """Check that the active geometry is correctly split"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
 
         # Check label
@@ -116,7 +179,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         result = test_obj.slot.comp_surface()
 
         a = result
@@ -129,9 +192,45 @@ class Test_SlotW14_meth(object):
         assert abs((a - b) / a - 0) < 1e-5, msg
 
     @pytest.mark.parametrize("test_dict", slotW14_test)
+    def test_comp_surface_wedge(self, test_dict):
+        """Check that the computation of the surface is correct"""
+        test_obj = test_dict["test_obj"].copy()
+        slot = test_obj.slot
+
+        if test_obj.slot.wedge_type == 1:
+            M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+            slot.wedge_mat = M400
+            result = test_obj.slot.comp_surface_wedge()
+
+            a = result
+            b = test_dict["SWedge_exp"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < DELTA, msg
+
+            # Check that the analytical method returns the same result as the numerical one
+            b = Slot.comp_surface_wedges(test_obj.slot)
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < 1e-5, msg
+
+        if test_obj.slot.wedge_type == 0:
+            M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+            slot.wedge_mat = M400
+            result = test_obj.slot.comp_surface_wedge()
+
+            a = result
+            b = test_dict["SO_exp"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < DELTA, msg
+
+            # Check that the analytical method returns the same result as the numerical one
+            b = Slot.comp_surface_wedges(test_obj.slot)
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < 1e-5, msg
+
+    @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_surface_active(self, test_dict):
         """Check that the computation of the winding surface is correct"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         result = test_obj.slot.comp_surface_active()
 
         a = result
@@ -146,7 +245,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_surface_opening(self, test_dict):
         """Check that the computation of the opening surface is correct"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         result = test_obj.slot.comp_surface_opening()
 
         a = result
@@ -162,7 +261,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         result = test_obj.slot.comp_height()
 
         a = result
@@ -177,7 +276,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_angle_opening(self, test_dict):
         """Check that the computation of the average opening angle iscorrect"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
@@ -188,7 +287,7 @@ class Test_SlotW14_meth(object):
     @pytest.mark.parametrize("test_dict", slotW14_test)
     def test_comp_angle_active_eq(self, test_dict):
         """Check that the computation of the average angle is correct"""
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
         result = test_obj.slot.comp_angle_active_eq()
 
         a = result
@@ -217,4 +316,5 @@ if __name__ == "__main__":
         a.test_build_geometry_active(test_dict)
         a.test_comp_angle_opening(test_dict)
         a.test_comp_angle_active_eq(test_dict)
+        a.test_comp_surface_wedge(test_dict)
         print("Done")

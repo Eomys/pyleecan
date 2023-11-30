@@ -230,6 +230,5 @@ def test_EM_Railway_Traction_varslip():
 
 
 if __name__ == "__main__":
-
     # out = test_EM_Railway_Traction_maxwell_current_enforced()
     out = test_EM_Railway_Traction_varslip()

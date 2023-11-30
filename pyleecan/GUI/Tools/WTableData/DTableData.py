@@ -12,7 +12,6 @@ from PySide2.QtCore import Signal
 
 
 class DTableData(Ui_DTableData, QDialog):
-
     saveNeeded = Signal()
 
     def __init__(

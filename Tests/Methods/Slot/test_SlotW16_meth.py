@@ -6,6 +6,8 @@ from numpy import ndarray, arcsin, pi, angle
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW16 import S16OutterError
+import matplotlib.pyplot as plt
+from pyleecan.Classes.Arc1 import Arc1
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -19,9 +21,9 @@ lam.slot = SlotW16(Zs=8, H0=5e-3, H2=30e-3, R1=5e-3, W0=pi / 12, W3=10e-3)
 slotW16_test.append(
     {
         "test_obj": lam,
-        "S_exp": 2.508259e-3,
-        "Aw": 0.6927673,
-        "SW_exp": 2.33808e-3,
+        "S_exp": 0.0029208336939601474,
+        "Aw": 0.8150115827824299,
+        "SW_exp": 0.0027506640918907002,
         "SO_exp": 0.000170169,
         "H_exp": 3.5e-2,
     }
@@ -38,6 +40,20 @@ slotW16_wrong_test.append(
         "SW_exp": 2.33808e-3,
         "SO_exp": 6.60596e-05,
         "H_exp": 3.5e-2,
+    }
+)
+
+# Small H0/W0/R1
+lam = LamSlot(is_internal=True, Rint=0.04, Rext=0.0746, is_stator=False)
+lam.slot = SlotW16(Zs=76, H0=0.0008, H2=0.0172, R1=1e-6, W0=0.00001, W3=0.00299)
+slotW16_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 9.278655434664112e-05,
+        "Aw": 0.08273823008510589,
+        "SW_exp": 9.278596074664111e-05,
+        "SO_exp": 5.935999999999972e-10,
+        "H_exp": 0.018,
     }
 )
 
@@ -87,13 +103,22 @@ class Test_SlotW16_meth(object):
         test_obj = test_dict["test_obj"]
         surf_list = test_obj.slot.build_geometry_active(Nrad=3, Ntan=2)
 
-        # Check label
-        assert surf_list[0].label == "Stator_Winding_R0-T0-S0"
-        assert surf_list[1].label == "Stator_Winding_R1-T0-S0"
-        assert surf_list[2].label == "Stator_Winding_R2-T0-S0"
-        assert surf_list[3].label == "Stator_Winding_R0-T1-S0"
-        assert surf_list[4].label == "Stator_Winding_R1-T1-S0"
-        assert surf_list[5].label == "Stator_Winding_R2-T1-S0"
+        if test_obj.is_stator == False:
+            # Check label
+            assert surf_list[0].label == "Rotor_Winding_R0-T0-S0"
+            assert surf_list[1].label == "Rotor_Winding_R1-T0-S0"
+            assert surf_list[2].label == "Rotor_Winding_R2-T0-S0"
+            assert surf_list[3].label == "Rotor_Winding_R0-T1-S0"
+            assert surf_list[4].label == "Rotor_Winding_R1-T1-S0"
+            assert surf_list[5].label == "Rotor_Winding_R2-T1-S0"
+        else:
+            # Check label
+            assert surf_list[0].label == "Stator_Winding_R0-T0-S0"
+            assert surf_list[1].label == "Stator_Winding_R1-T0-S0"
+            assert surf_list[2].label == "Stator_Winding_R2-T0-S0"
+            assert surf_list[3].label == "Stator_Winding_R0-T1-S0"
+            assert surf_list[4].label == "Stator_Winding_R1-T1-S0"
+            assert surf_list[5].label == "Stator_Winding_R2-T1-S0"
         # Check tangential position
         assert surf_list[0].point_ref.imag < 0
         assert surf_list[1].point_ref.imag < 0

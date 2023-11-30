@@ -8,6 +8,8 @@ from ......Classes.SlotW16 import SlotW16
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot16.Gen_PWSlot16 import Gen_PWSlot16
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
+
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -87,17 +89,13 @@ class PWSlot16(Gen_PWSlot16, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
             self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW16_wedge_full.png")
+                QPixmap(pixmap_dict["SlotW16_wedge_full_int_stator"])
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
-            self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
-            self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW16_wind.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW16_wind_int_stator"]))
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

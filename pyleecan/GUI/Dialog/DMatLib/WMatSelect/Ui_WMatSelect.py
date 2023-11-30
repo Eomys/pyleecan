@@ -16,7 +16,7 @@ class Ui_WMatSelect(object):
     def setupUi(self, WMatSelect):
         if not WMatSelect.objectName():
             WMatSelect.setObjectName(u"WMatSelect")
-        WMatSelect.resize(283, 30)
+        WMatSelect.resize(738, 40)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

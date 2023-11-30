@@ -17,6 +17,9 @@ def comp_surface_active(self):
         Slot inner surface for winding [m**2]
 
     """
+    if self.is_cstt_tooth and (self.W1 is None or self.W2 is None):
+        # Compute W1 and W2 to match W3 tooth constraint
+        self._comp_W()
 
     Rbo = self.get_Rbo()
 
