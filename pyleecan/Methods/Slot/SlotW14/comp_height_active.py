@@ -17,7 +17,7 @@ def comp_height_active(self):
         Height of the winding area [m]
 
     """
-
+    H1 = self.get_H1()
     Rbo = self.get_Rbo()
 
     # alpha is the angle to rotate P0 so ||P1,P10|| = W0
@@ -27,9 +27,9 @@ def comp_height_active(self):
     Harc = Rbo * (1 - cos(alpha / 2))
 
     if self.is_outwards():
-        R1 = Rbo - Harc + self.H0 + self.H1
+        R1 = Rbo - Harc + self.H0 + H1
     else:
-        R1 = Rbo + Harc - self.H0 - self.H1
+        R1 = Rbo + Harc - self.H0 - H1
 
     theta1 = arcsin(self.W3 * 0.5 / R1) * 2
     hsp = pi / self.Zs
@@ -39,10 +39,10 @@ def comp_height_active(self):
 
     if self.is_outwards():
         Z8 = Z9 + self.H0
-        Z7 = Z8 + self.H1 - (W1 - self.W0) * 1j / 2
+        Z7 = Z8 + H1 - (W1 - self.W0) * 1j / 2
     else:
         Z8 = Z9 - self.H0
-        Z7 = Z8 - self.H1 - (W1 - self.W0) * 1j / 2
+        Z7 = Z8 - H1 - (W1 - self.W0) * 1j / 2
 
     # Rotate Z7 to get the tooth parallel to Ox
     Z7r = Z7 * exp(1j * hsp)

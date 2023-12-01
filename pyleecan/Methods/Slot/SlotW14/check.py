@@ -25,14 +25,15 @@ def check(self):
     """
 
     Rbo = self.get_Rbo()
+    H1 = self.get_H1()
 
     if self.W0 * 0.5 / Rbo >= 1:
         raise S14_Rbo0CheckError("You must have W0/2 < Rbo")
 
     if self.is_outwards():
-        R1 = Rbo + self.H0 + self.H1
+        R1 = Rbo + self.H0 + H1
     else:
-        R1 = Rbo - self.H0 - self.H1
+        R1 = Rbo - self.H0 - H1
 
     if self.W3 * 0.5 / R1 >= 1:
         raise S14_Rbo1CheckError(

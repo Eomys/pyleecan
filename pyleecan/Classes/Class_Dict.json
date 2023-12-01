@@ -14863,7 +14863,8 @@
             "get_surface_active",
             "get_surface_wedge",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "get_H1"
         ],
         "mother": "Slot",
         "name": "SlotW14",
@@ -14892,13 +14893,13 @@
             },
             {
                 "as_dict": "",
-                "desc": "Slot intermediate height.",
+                "desc": "height or angle  (See Schematics)",
                 "max": "",
                 "min": "0",
                 "name": "H1",
                 "type": "float",
-                "unit": "m",
-                "value": 0.0015
+                "unit": "m/rad",
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -14929,6 +14930,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "H1 unit, 0 for m, 1 for rad",
+                "max": "",
+                "min": "",
+                "name": "H1_is_rad",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },

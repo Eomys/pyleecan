@@ -18,13 +18,13 @@ def comp_surface_opening(self):
         Slot opening surface [m**2]
 
     """
-
+    H1 = self.get_H1()
     Rbo = self.get_Rbo()
     point_dict = self._comp_point_coordinate()
     Z7 = point_dict["Z7"]
     W1 = abs(Z7.imag) * 2
 
-    S1 = (W1 + self.W0) * self.H1 / 2
+    S1 = (W1 + self.W0) * H1 / 2
     S0 = self.W0 * self.H0
 
     # The bottom is an arc

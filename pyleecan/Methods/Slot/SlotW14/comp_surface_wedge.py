@@ -23,8 +23,9 @@ def comp_surface_wedge(self):
         return self.comp_surface_opening()
 
     if self.wedge_type == 1:
+        H1 = self.get_H1()
         point_dict = self._comp_point_coordinate()
         Z7 = point_dict["Z7"]
         W1 = abs(Z7.imag) * 2
 
-        return (W1 + self.W0) * self.H1 / 2
+        return (W1 + self.W0) * H1 / 2
