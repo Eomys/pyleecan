@@ -51,7 +51,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         RuleSimple(
             other_key_list=["[Dimensions]", f"PoleVAngle_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
-            unit_type="rad",
+            unit_type="deg",
             scaling_to_P=1,
             file_name=__file__,
         )
@@ -59,7 +59,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetPost_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"VShapeMagnetPost_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
             unit_type="m",
             scaling_to_P=1,
@@ -69,9 +69,9 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
 
     rule_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetVWidth_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"VShapeMagnetSegments_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
-            unit_type="rad",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )

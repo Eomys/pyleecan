@@ -30,6 +30,7 @@ def convert_slot_to_P(self):
     elif slot_type == "Parallel_Tooth_SqBase":
         self.machine.stator.slot = SlotW14()
         self.machine.stator.is_internal = False
+        self.machine.stator.slot.H1_is_rad = True
 
     elif slot_type == "Parallel_Slot":
         self.machine.stator.slot = SlotW21()

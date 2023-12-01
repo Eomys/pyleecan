@@ -83,7 +83,7 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
                 },
                 {
                     "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H2",
+                    "path": f"machine.{lam_name}.slot.H3",
                     "variable": "x",
                 },
                 {

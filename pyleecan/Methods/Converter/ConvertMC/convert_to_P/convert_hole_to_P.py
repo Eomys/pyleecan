@@ -47,17 +47,24 @@ def convert_hole_to_P(self):
         self.machine.rotor.hole.append(HoleM63())
         self.machine.rotor.hole[0].top_flat = True
 
-    elif hole_type == "Interior_Flat_Web" or hole_type == "Interior_VShape":
+    elif hole_type == "Interior_Flat_Web":
         self.machine.rotor.hole.append(HoleM52())
         self.machine.rotor.hole[0].H2 = 0
+
+    elif hole_type == "Interior_VSimple":
+        number_hole = self.other_dict["[Dimensions]"]["VMagnet_Layers"]
+        for hole_id in range(number_hole):
+            self.machine.rotor.hole.append(HoleM60())
+
+    elif hole_type == "Interior_VShape":
+        number_hole = self.other_dict["[Dimensions]"]["VMagnet_Layers"]
+        for hole_id in range(number_hole):
+            self.machine.rotor.hole.append(HoleM57())
 
     else:
         for hole_id in range(number_hole):
             if hole_type == "Interior_VSimple":
                 self.machine.rotor.hole.append(HoleM60())
-
-            elif hole_type == "Interior_VWeb":
-                self.machine.rotor.hole.append(HoleM57())
 
             elif hole_type == "Interior_UShape":
                 self.machine.rotor.hole.append(HoleM61())

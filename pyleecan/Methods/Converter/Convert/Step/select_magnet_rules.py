@@ -38,9 +38,7 @@ def select_magnet_rules(self, is_stator):
     ):
         self.add_rule_surface_breadloaf_slotM13(is_stator)
 
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM11) and self.machine.rotor.slot.H0 != 0
-    ):
+    elif isinstance(self.machine.rotor.slot, SlotM11):
         self.add_rule_inset_radial_slotM11(is_stator)
 
     elif (
