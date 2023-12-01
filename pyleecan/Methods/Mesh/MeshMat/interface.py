@@ -9,7 +9,7 @@ from ....Classes.FPGNSeg import FPGNSeg
 from ....Classes.RefSegmentP1 import RefSegmentP1
 
 
-def interface(self, other_mesh):
+def interface(self, other_mesh: "MeshMat") -> "MeshMat":
     """Define a MeshMat object corresponding to the exact intersection between two meshes (nodes must be in both meshes).
 
     Parameters

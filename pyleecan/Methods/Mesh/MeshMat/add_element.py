@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from typing import Union
+
+from numpy.typing import ArrayLike
 
 
-def add_element(self, node_indices, element_type):
+def add_element(self, node_indices: ArrayLike, element_type: str) -> Union[int, None]:
     """Add a new element defined by node indices and element type.
 
     Parameters

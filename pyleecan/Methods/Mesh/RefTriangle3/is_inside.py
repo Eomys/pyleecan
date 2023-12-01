@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-from numpy import dot
+from typing import Optional, Tuple
+
+from numpy import dot, ndarray
 
 
-def is_inside(self, node, point, normal_t=None):
+def is_inside(
+    self, node: ndarray, point: ndarray, normal_t: Optional[ndarray] = None
+) -> Tuple[bool, float, float]:
     """Check if a point is inside the element defined by the nodes.
 
     Parameters

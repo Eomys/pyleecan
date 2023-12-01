@@ -7,7 +7,6 @@ from ....Classes.ElementMat import ElementMat
 from ....Classes.FPGNSeg import FPGNSeg
 from ....Classes.FPGNTri import FPGNTri
 from ....Classes.Mesh import Mesh
-from ....Classes.MeshMat import MeshMat
 from ....Classes.NodeMat import NodeMat
 from ....Classes.RefLine3 import RefLine3
 from ....Classes.RefQuad9 import RefQuad9
@@ -42,6 +41,8 @@ def convert(
         new_mesh = self.copy()
         new_mesh.node.coordinate *= scale
     elif meshtype == "MeshMat":
+        from ....Classes.MeshMat import MeshMat
+
         new_mesh = MeshMat(dimension=self.dimension)
 
         connect_all = self.get_element()[0]

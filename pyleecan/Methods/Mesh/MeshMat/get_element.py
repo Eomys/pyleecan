@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from collections import Iterable
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
+from ....Classes.ElementMat import ElementMat
 
-def _check_element_name(element_mat_dict, element_name):
+
+def _check_element_name(
+    element_mat_dict: Dict[str, ElementMat], element_name: Union[List[str], str]
+) -> List[str]:
     if isinstance(element_name, str):
         element_name = [element_name]
     elif len(element_name) == 0:
@@ -19,7 +24,11 @@ def _check_element_name(element_mat_dict, element_name):
     return element_name
 
 
-def get_element(self, element_indices=None, element_name=[]):
+def get_element(
+    self,
+    element_indices: Optional[List[int]] = None,
+    element_name: Union[List[str], str] = [],
+) -> Tuple[Dict[str, np.ndarray], int, Dict[str, np.ndarray]]:
     """Return the connectivity for one selected element
 
     Parameters

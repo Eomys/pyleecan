@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from numpy import abs, array, newaxis
+from numpy import abs, array, ndarray, newaxis
 
 
-def get_element_area(self, element_coordinate):
+def get_element_area(self, element_coordinate: ndarray) -> ndarray:
     """Return the area of the elements.
     https://en.wikipedia.org/wiki/Shoelace_formula
 

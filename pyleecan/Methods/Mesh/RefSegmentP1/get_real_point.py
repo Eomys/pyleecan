@@ -3,7 +3,9 @@
 import numpy as np
 
 
-def get_real_point(self, element_coordinate, ref_pt, nb_ref_pt=1):
+def get_real_point(
+    self, element_coordinate: np.ndarray, ref_pt: np.ndarray, nb_ref_pt: int = 1
+) -> np.ndarray:
     """Return the coordinates in the element of a point in the reference element.
 
     Parameters

@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def get_normal(self, element_coordinate):
+def get_normal(self, element_coordinate: np.ndarray) -> np.ndarray:
     """Return the normal vector.
 
     Parameters

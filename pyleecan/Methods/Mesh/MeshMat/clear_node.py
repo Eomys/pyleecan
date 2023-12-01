@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import copy
+
+import numpy as np
 
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
@@ -23,11 +24,11 @@ def clear_node(self):
     node_indice_init = self.get_node_indice()
     connect_dict, *_ = self.get_element()
 
-    node_indice = []
-    for key in connect_dict:
-        node_indice.extend(np.unique(connect_dict[key]))
+    # Extract index of use nodes in elements
+    node_indice = np.unique(
+        [np.unique(connectivity) for connectivity in connect_dict.values()]
+    )
 
-    node_indice = np.unique(node_indice)
     common, _, index2 = np.intersect1d(
         node_indice, node_indice_init, return_indices=True
     )

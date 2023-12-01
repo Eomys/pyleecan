@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def grad_shape_function(self, point):
+def grad_shape_function(self, point: np.ndarray) -> np.ndarray:
     """Return the gradient of linear shape functions in reference triangle for a given point"""
 
     values = np.zeros([2, 3], dtype=float)

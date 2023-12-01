@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def get_node2element(self, node_indice):
+def get_node2element(self, node_indice: int) -> np.ndarray:
     """Return all element indices of elements containing a node.
 
     Parameters
@@ -15,7 +15,7 @@ def get_node2element(self, node_indice):
 
     Returns
     -------
-    node_to_element: ndarray
+    element_indices: ndarray
         Indices of elements containing the node
 
     """

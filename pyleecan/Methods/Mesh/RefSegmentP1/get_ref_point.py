@@ -3,7 +3,9 @@
 import numpy as np
 
 
-def get_ref_point(self, element_coordinate, point):
+def get_ref_point(
+    self, element_coordinate: np.ndarray, point: np.ndarray
+) -> np.ndarray:
     """Return the coordinate of the equivalent point in the ref element (-1,0) -- (1,0)
 
     Parameters

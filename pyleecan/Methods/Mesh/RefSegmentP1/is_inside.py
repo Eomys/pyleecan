@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from typing import Optional, Tuple
+
 import numpy as np
 
 
-def is_inside(self, element_coordinate, point, normal_t=None):
+def is_inside(
+    self,
+    element_coordinate: np.ndarray,
+    point: np.ndarray,
+    normal_t: Optional[np.ndarray] = None,
+) -> Tuple[bool, float, float]:
     """Check if a point is inside the element.
 
     Parameters

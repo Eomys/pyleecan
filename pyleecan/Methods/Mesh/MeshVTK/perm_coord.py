@@ -41,15 +41,14 @@ def perm_coord(
     nodemat = NodeMat(coordinate=mesh_mat_node, nb_node=nb_node)
 
     # 2. create ElementMat
-    elementMat = ElementMat()
     elementMatDict = dict()
 
     for key in mesh_mat_element[0]:
-        elementMat = ElementMat(
+        element_mat = ElementMat(
             connectivity=mesh_mat_element[0][key],
             nb_element=len(mesh_mat_element[0][key]),
         )
-        elementMatDict[key] = elementMat
+        elementMatDict[key] = element_mat
 
     # 3. create MeshMat
     meshmat = MeshMat(element_dict=elementMatDict, node=nodemat)

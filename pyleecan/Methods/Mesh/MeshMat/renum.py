@@ -4,7 +4,6 @@ import copy
 import numpy as np
 
 from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
 
 
 def renum(self):

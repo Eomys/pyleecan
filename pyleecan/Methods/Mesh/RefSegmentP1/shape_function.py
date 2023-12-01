@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from typing import Tuple
+
 import numpy as np
 
 
-def shape_function(self, points):
+def shape_function(self, points: np.ndarray) -> Tuple[np.ndarray, int]:
     """Return the values of linear shape functions in reference 2 node segment for a given point
 
     Parameters

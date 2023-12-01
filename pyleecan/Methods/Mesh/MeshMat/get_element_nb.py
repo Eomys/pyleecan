@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-def get_element_nb(self):
+def get_element_nb(self) -> int:
     """Return the total number of element of all kind
 
     Parameters

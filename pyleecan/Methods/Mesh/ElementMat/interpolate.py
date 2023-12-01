@@ -3,7 +3,9 @@
 import numpy as np
 
 
-def interpolate(self, point, node_coord, field):
+def interpolate(
+    self, point: np.ndarray, node_coord: np.ndarray, field: np.ndarray
+) -> np.ndarray:
     """Return interpolated value of the field in a element
 
     Parameters

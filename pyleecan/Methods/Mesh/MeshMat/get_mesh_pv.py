@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from os import makedirs, remove
-from os.path import isdir, split, dirname
+from os.path import dirname, isdir, split
+from typing import List, Optional
 
 import meshio
 import pyvista as pv
+from pyvista.core.pointset import UnstructuredGrid
 
 from pyleecan.definitions import RESULT_DIR
 
 
-def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
+def get_mesh_pv(
+    self, path: str = RESULT_DIR + "/temp.vtk", indices: Optional[List[int]] = None
+) -> UnstructuredGrid:
     """Return the pyvista mesh object (or submesh).
 
     Parameters
