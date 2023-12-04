@@ -12,7 +12,6 @@ def add_rule_machine_dimension(self):
         A ConvertMC object
     """
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Bore"],
@@ -22,7 +21,6 @@ def add_rule_machine_dimension(self):
             file_name=__file__,
         )
     )
-
 
     self.rules_list.append(
         RuleSimple(
@@ -46,7 +44,6 @@ def add_rule_machine_dimension(self):
         )
     )
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Shaft_Dia"],
@@ -58,7 +55,6 @@ def add_rule_machine_dimension(self):
     )
 
     if self.is_P_to_other == True:
-
         self.rules_list.append(
             RuleEquation(
                 param=[
@@ -84,11 +80,6 @@ def add_rule_machine_dimension(self):
             )
         )
 
-        self.rules_list.append(
-        )
-    )
-
-    else:
     else:
         self.rules_list.append(
             RuleEquation(
@@ -127,7 +118,6 @@ def add_rule_machine_dimension(self):
         )
     )
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Lam_Dia"],
@@ -137,7 +127,6 @@ def add_rule_machine_dimension(self):
             file_name=__file__,
         )
     )
-
 
     self.rules_list.append(
         RuleSimple(

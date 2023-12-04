@@ -5,7 +5,7 @@ from pyleecan.Classes.SlotW23 import SlotW23
 from pyleecan.Classes.SlotW26 import SlotW26
 
 
-def convert_slot_rotor_type_P(self):
+def convert_slot_rotor_to_P(self):
     """Selection correct slot and implementation in obj machine
 
     Parameters
@@ -24,6 +24,8 @@ def convert_slot_rotor_type_P(self):
     # set the slot in obj machine, and add particularity
     if slot_type == "Parallel_Tooth":
         self.machine.rotor.slot = SlotW11()
+        self.machine.rotor.slot.is_cstt_tooth = True
+        self.machine.rotor.slot.H1_is_rad = True
 
     elif slot_type == "Round":
         self.machine.rotor.slot = SlotW26()
@@ -32,6 +34,7 @@ def convert_slot_rotor_type_P(self):
 
     elif slot_type == "Rectangular":
         self.machine.rotor.slot = SlotW23()
+        self.machine.rotor.slot.H1_is_rad = True
 
     elif slot_type == "Pear":
         self.machine.rotor.slot = SlotW30()

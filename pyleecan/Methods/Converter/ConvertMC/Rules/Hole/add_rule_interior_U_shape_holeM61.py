@@ -26,7 +26,7 @@ def add_rule_interior_U_shape_holeM61(self, hole_id):
             file_name=__file__,
         )
     )
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Magnet_Thickness"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",

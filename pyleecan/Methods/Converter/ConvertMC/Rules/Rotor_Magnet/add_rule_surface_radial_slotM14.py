@@ -23,7 +23,7 @@ def add_rule_surface_radial_slotM14(self, is_stator):
             file_name=__file__,
         )
     )
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
             P_obj_path=f"machine.rotor.slot.W0",

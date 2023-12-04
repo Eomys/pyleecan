@@ -14,7 +14,6 @@ def add_rule_surface_breadloaf_slotM13(self, is_stator):
         A booleen to know, position in lamination
     """
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
@@ -24,7 +23,7 @@ def add_rule_surface_breadloaf_slotM13(self, is_stator):
             file_name=__file__,
         )
     )
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H1",

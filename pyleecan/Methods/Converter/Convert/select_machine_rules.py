@@ -18,7 +18,6 @@ def select_machine_rules(self):
     # add rule present in all machine
     self.add_rule_machine_type()
 
-
     # selection motor_type
     if isinstance(self.machine, MachineSIPMSM):
         # particularity for SIPMSM with airgap, changement rule machine dimension
@@ -31,7 +30,7 @@ def select_machine_rules(self):
 
     elif isinstance(self.machine, MachineSCIM):
         self.add_rule_machine_dimension()
-        self.selection_SCIM_rules()
+        self.select_SCIM_rules()
 
     else:
         raise NotImplementedError("machine is not implemented yet")

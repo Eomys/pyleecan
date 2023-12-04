@@ -3,7 +3,6 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-
 def add_rule_tapered_slot_slotW23(self, is_stator):
     """Create and adapt all the rules related to slotW23 (lam radius,...)
     Extend rules_list within Converter object
@@ -16,12 +15,10 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
         A booleen to know, position in lamination
     """
 
-
     if is_stator == True:
         lam_name = "stator"
     else:
         lam_name = "rotor"
-
 
     self.rules_list.append(
         RuleSimple(
@@ -33,7 +30,7 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -43,10 +40,8 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
         )
     )
 
-
     self.rules_list.append(
         RuleSimple(
-
             other_key_list=["[Dimensions]", "Slot_Width_Top"],
             P_obj_path=f"machine.{lam_name}.slot.W1",
             unit_type="m",
@@ -54,7 +49,6 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
             file_name=__file__,
         )
     )
-
 
     self.rules_list.append(
         RuleSimple(
@@ -66,7 +60,6 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
         )
     )
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
@@ -76,7 +69,6 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
             file_name=__file__,
         )
     )
-
 
     self.rules_list.append(
         RuleSimple(
@@ -88,7 +80,7 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
             P_obj_path=f"machine.{lam_name}.slot.H1",
@@ -97,9 +89,3 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
             file_name=__file__,
         )
     )
-
-
-   
-
-
-

@@ -35,4 +35,3 @@ def select_slot_rules(self, is_stator):
         self.add_rule_tapered_slot_slotW23(is_stator)
     elif isinstance(slot, SlotW29):
         self.add_rule_form_wound_slotW29(is_stator)
-

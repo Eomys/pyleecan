@@ -12,7 +12,6 @@ def add_rule_machine_dimension_surface_magnet(self):
         A ConvertMC object
     """
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Bore"],

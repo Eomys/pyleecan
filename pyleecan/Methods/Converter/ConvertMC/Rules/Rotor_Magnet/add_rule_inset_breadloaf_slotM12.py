@@ -15,10 +15,6 @@ def add_rule_inset_breadloaf_slotM12(self, is_stator):
         A booleen to know, position in lamination
     """
 
-
-    self.rule_list.append(
-
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
@@ -28,7 +24,6 @@ def add_rule_inset_breadloaf_slotM12(self, is_stator):
             file_name=__file__,
         )
     )
-
 
     self.rules_list.append(
         RuleSimple(
@@ -40,4 +35,6 @@ def add_rule_inset_breadloaf_slotM12(self, is_stator):
         )
     )
 
-    rule_list.append(RuleComplex(fct_name="inset_breadloaf_slotM12", folder="MotorCAD"))
+    self.rules_list.append(
+        RuleComplex(fct_name="inset_breadloaf_slotM12", folder="MotorCAD")
+    )

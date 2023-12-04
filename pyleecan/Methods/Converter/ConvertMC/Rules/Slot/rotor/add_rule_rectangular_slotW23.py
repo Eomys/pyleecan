@@ -39,6 +39,16 @@ def add_rule_rectangular_slotW23(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
+            other_key_list=["[Dimensions]", "Bar_Width_[T]"],
+            P_obj_path=f"machine.rotor.slot.W1",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Opening_Depth_[T]"],
             P_obj_path=f"machine.rotor.slot.H0",
             unit_type="m",
@@ -61,16 +71,6 @@ def add_rule_rectangular_slotW23(self, is_stator):
         RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Depth_[T]"],
             P_obj_path=f"machine.rotor.slot.H2",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "Bar_Width_[T]"],
-            P_obj_path=f"machine.rotor.slot.W1",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,

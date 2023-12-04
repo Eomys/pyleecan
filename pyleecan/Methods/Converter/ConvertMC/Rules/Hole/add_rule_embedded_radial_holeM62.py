@@ -25,7 +25,7 @@ def add_rule_embedded_radial_holeM62(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Magnet_Arc_[ED]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",

@@ -25,7 +25,7 @@ def add_rule_inset_radial_slotM11(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
             P_obj_path=f"machine.rotor.slot.W0",

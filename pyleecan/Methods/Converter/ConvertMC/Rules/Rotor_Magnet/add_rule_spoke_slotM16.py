@@ -23,7 +23,7 @@ def add_rule_spoke_slotM16(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Opening"],
             P_obj_path=f"machine.rotor.slot.W0",

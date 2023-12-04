@@ -35,7 +35,6 @@ def add_rule_surface_parallel_slotM15(self, is_stator):
         )
     )
 
-
     self.rules_list.append(
         RuleComplex(fct_name="surface_parallel_slotM15", folder="MotorCAD")
     )

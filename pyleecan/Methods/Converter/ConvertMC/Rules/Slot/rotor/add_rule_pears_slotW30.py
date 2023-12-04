@@ -49,7 +49,7 @@ def add_rule_pears_slotW30(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Rotor_Tooth_Width_[T]"],
+            other_key_list=["[Dimensions]", "Rotor_Tooth_Width_T"],
             P_obj_path=f"machine.rotor.slot.W3",
             unit_type="m",
             scaling_to_P=1,
@@ -69,7 +69,7 @@ def add_rule_pears_slotW30(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Bar_Opening_Radius_[T]"],
+            other_key_list=["[Dimensions]", "BarT_Opening_Radius"],
             P_obj_path=f"machine.rotor.slot.R1",
             unit_type="m",
             scaling_to_P=1,
@@ -79,7 +79,7 @@ def add_rule_pears_slotW30(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Bar_Corner_Radius_[T]"],
+            other_key_list=["[Dimensions]", "BarT_Opening_Radius"],
             P_obj_path=f"machine.rotor.slot.R2",
             unit_type="m",
             scaling_to_P=1,

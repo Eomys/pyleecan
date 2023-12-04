@@ -1,4 +1,4 @@
-def convert_slot_rotor_type_MC(self):
+def convert_slot_rotor_to_MC(self):
     """Selection correct slot and implementation in dict
 
     Parameters

@@ -25,7 +25,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
