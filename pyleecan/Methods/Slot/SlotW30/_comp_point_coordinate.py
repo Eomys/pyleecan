@@ -41,49 +41,70 @@ def _comp_point_coordinate(self):
         Zp3 = Z12.real + self.H0 + self.H1
         Zp4 = Z12.real + self.H0 + self.H1 + 1j
 
-        Zc1 = inter_line_line(Zp1, Zp2, Zp3, Zp4)
-
         if self.R2 == 0:
-            Z80 = Zc1[0] * exp(-1j * hsp) - (self.W3 / 2) * 1j
-            Z80 = exp(1j * hsp) * Z80
-            Z8 = Z80
+            Zc1 = inter_line_line(Zp1, Zp2, Zp3, Zp4)
+            Z80 = Zc1[0]
+
         else:
-            Z8 = Zc1[0] * exp(-1j * hsp) - self.R2
-            Z8 = exp(1j * hsp) * Z8
+            ZR1 = Rbo * exp(1j * hsp)
+            ZR2 = 2 * Rbo * exp(1j * hsp)
+            ZR1 = ZR1 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R2 * 1j
+            ZR2 = ZR2 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R2 * 1j
 
-            Z7 = Zc1[0] - self.R2 * 1j
-            Zc3 = Arc1(Z7, Z8, self.R2).get_center()
+            ZR1 = ZR1 * exp(1j * hsp)
+            ZR2 = ZR2 * exp(1j * hsp)
 
-        Zc = exp(-1j * hsp) * Z8
-        Zc = Zc - 1
-        Zc = Zc * exp(1j * hsp)
+            ZR3 = Z12.real + self.H0 + self.H1 - self.R2
+            ZR4 = Z12.real + self.H0 + self.H1 - self.R2 + 1j
 
+            ZcenterR2 = inter_line_line(ZR2, ZR1, ZR3, ZR4)
+
+            Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0])
+            Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0])
+
+            if not len(Z8) > 0:
+                Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0] - 1e-6)
+
+            if not len(Z7) > 0:
+                Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0] + 1e-6)
+
+            Z8 = Z8[0]
+            Z7 = Z7[0]
+            Zc3 = ZcenterR2[0]
+
+        Zp5 = Z11
         Zp6 = Z11 + 1j
-        Zc2 = inter_line_line(Zc, Z8, Zp6, Z11)
 
         if self.R1 == 0:
+            Zc2 = inter_line_line(Zp5, Zp6, Zp1, Zp2)
             Z100 = Zc2[0]
 
         else:
-            Zt1 = Z8 * exp(-1j * hsp)
-            Zt1 = Zt1 - self.R1 * 1j
-            Zt1 = Zt1 * exp(1j * hsp)
+            Zt1 = Rbo * exp(1j * hsp)
+            Zt2 = 2 * Rbo * exp(1j * hsp)
+            Zt1 = Zt1 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R1 * 1j
+            Zt2 = Zt2 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R1 * 1j
 
-            Zt2 = Zc2[0] * exp(-1j * hsp)
-            Zt2 = Zt2 - self.R1 * 1j
+            Zt1 = Zt1 * exp(1j * hsp)
             Zt2 = Zt2 * exp(1j * hsp)
 
-            Zt3 = Z11 + self.R1 + 1j
-            Zt4 = Z11 + self.R1
+            Zt3 = Z12.real + self.H0 + self.R1
+            Zt4 = Z12.real + self.H0 + self.R1 + 1j
 
-            Zcenter = inter_line_line(Zt2, Zt1, Zt3, Zt4)
+            ZcenterR1 = inter_line_line(Zt2, Zt1, Zt3, Zt4)
 
-            R11 = inter_line_circle(Zc, Z8, self.R1, Zcenter[0])
-            R12 = inter_line_circle(Z11, Z11 + 1j, self.R1, Zcenter[0] - 0.000000005)
+            Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0])
+            Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0])
 
-            Z9 = R11[0]
-            Z10 = R12[0]
-            Zc4 = Zcenter[0]
+            if not len(Z9) > 0:
+                Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0] + 1e-6 * 1j)
+
+            if not len(Z10) > 0:
+                Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0] - 1e-6)
+
+            Z9 = Z9[0]
+            Z10 = Z10[0]
+            Zc4 = ZcenterR1[0]
 
     # is internal
     else:
@@ -100,67 +121,70 @@ def _comp_point_coordinate(self):
         Zp3 = Z12.real - self.H0 - self.H1
         Zp4 = Z12.real - self.H0 - self.H1 + 1j
 
-        Zc1 = inter_line_line(Zp1, Zp2, Zp3, Zp4)
-
         if self.R2 == 0:
-            Z80 = Zc1[0] * exp(-1j * hsp) - (self.W3 / 2) * 1j
-            Z80 = exp(1j * hsp) * Z80
-            Z8 = Z80
+            Zc1 = inter_line_line(Zp1, Zp2, Zp3, Zp4)
+            Z80 = Zc1[0]
 
         else:
-            Zh5 = Zc1[0] * exp(-1j * hsp) + 1
-            Zh5 = Zh5 * exp(1j * hsp)
+            ZR1 = Rbo * exp(1j * hsp)
+            ZR2 = 2 * Rbo * exp(1j * hsp)
+            ZR1 = ZR1 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R2 * 1j
+            ZR2 = ZR2 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R2 * 1j
 
-            Zh1 = Zc1[0] * exp(-1j * hsp)
-            Zh1 = Zh1 - self.R2 * 1j
-            Zh1 = Zh1 * exp(1j * hsp)
+            ZR1 = ZR1 * exp(1j * hsp)
+            ZR2 = ZR2 * exp(1j * hsp)
 
-            Zh2 = Zc1[0] * exp(-1j * hsp)
-            Zh2 = Zh2 - self.R2 * 1j + 1
-            Zh2 = Zh2 * exp(1j * hsp)
+            ZR3 = Z12.real - self.H0 - self.H1 + self.R2
+            ZR4 = Z12.real - self.H0 - self.H1 + self.R2 + 1j
 
-            Zh3 = Zp3 + self.R2 + 1j
-            Zh4 = Zp3 + self.R2
+            ZcenterR2 = inter_line_line(ZR2, ZR1, ZR3, ZR4)
 
-            Zcenter = inter_line_line(Zh2, Zh1, Zh3, Zh4)
+            Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0])
+            Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0])
 
-            R11 = inter_line_circle(Zc1[0], Zh5, self.R2, Zcenter[0])
-            R12 = inter_line_circle(Zp3, Zp4, self.R2, Zcenter[0] - 0.000000005)
+            if not len(Z8) > 0:
+                Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0] + 1e-6 * 1j)
 
-            Zc3 = Zcenter[0]
-            Z8 = R11[0]
-            Z7 = R12[0]
+            if not len(Z7) > 0:
+                Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0] - 1e-6)
 
-        Zc = exp(-1j * hsp) * Z8
-        Zc = Zc + 1
-        Zc = Zc * exp(1j * hsp)
+            Z8 = Z8[0]
+            Z7 = Z7[0]
+            Zc3 = ZcenterR2[0]
 
+        Zp5 = Z11
         Zp6 = Z11 + 1j
-        Zc2 = inter_line_line(Z8, Zc, Z11, Zp6)
 
         if self.R1 == 0:
+            Zc2 = inter_line_line(Zp5, Zp6, Zp1, Zp2)
             Z100 = Zc2[0]
 
         else:
-            Zt1 = Z8 * exp(-1j * hsp)
-            Zt1 = Zt1 - self.R1 * 1j
-            Zt1 = Zt1 * exp(1j * hsp)
+            Zt1 = Rbo * exp(1j * hsp)
+            Zt2 = 2 * Rbo * exp(1j * hsp)
+            Zt1 = Zt1 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R1 * 1j
+            Zt2 = Zt2 * exp(-1j * hsp) - (self.W3 / 2) * 1j - self.R1 * 1j
 
-            Zt2 = Zc2[0] * exp(-1j * hsp)
-            Zt2 = Zt2 - self.R1 * 1j
+            Zt1 = Zt1 * exp(1j * hsp)
             Zt2 = Zt2 * exp(1j * hsp)
 
-            Zt3 = Z11 - self.R1 + 1j
-            Zt4 = Z11 - self.R1
+            Zt3 = Z12.real - self.H0 - self.R1
+            Zt4 = Z12.real - self.H0 - self.R1 + 1j
 
-            Zcenter = inter_line_line(Zt2, Zt1, Zt3, Zt4)
+            ZcenterR1 = inter_line_line(Zt2, Zt1, Zt3, Zt4)
 
-            R11 = inter_line_circle(Zc, Z8, self.R1, Zcenter[0] + 0.0000000005 * 1j)
-            R12 = inter_line_circle(Z11, Z11 + 1j, self.R1, Zcenter[0] + 0.0000000005)
+            Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0])
+            Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0])
 
-            Z9 = R11[0]
-            Z10 = R12[0]
-            Zc4 = Zcenter[0]
+            if not len(Z9) > 0:
+                Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0] + 1e-6 * 1j)
+
+            if not len(Z10) > 0:
+                Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0] + 1e-6)
+
+            Z9 = Z9[0]
+            Z10 = Z10[0]
+            Zc4 = ZcenterR1[0]
 
     point_dict = dict()
     # symetry
