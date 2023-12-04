@@ -30,14 +30,14 @@ class Test_converter_machine(object):
             "parallel_tooth_SqB_Surface_radial",
             "tapered_slot_inset_radial_2_rectangular_duct",
             "VF_Manatee_Hairpin_winding",
-            "SCIM_pear",
             
-            "SCIM_round",
-            "SCIM_parallel_tooth",
         """
 
         path_list = [
+            "SCIM_pear",
             "SCIM_rectangular",
+            "SCIM_round",
+            "SCIM_parallel_tooth",
         ]
 
         for path in path_list:
@@ -51,7 +51,7 @@ class Test_converter_machine(object):
             machine.save(
                 f"/Users/LAP17\Documents/machine_MC_P/file_json/{machine.name}"
             )
-            machine.stator.plot()
+
             machine.plot()
             machine2 = load(
                 f"/Users\LAP17\Documents/machine_MC_P/file_json/{machine.name}.json"
