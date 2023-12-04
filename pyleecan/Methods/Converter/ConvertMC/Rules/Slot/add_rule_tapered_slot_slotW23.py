@@ -14,7 +14,6 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    self.rules_list = self.rules_list
 
     if is_stator == True:
         lam_name = "stator"
