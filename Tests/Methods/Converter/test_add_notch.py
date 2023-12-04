@@ -9,8 +9,6 @@ from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.SlotM19 import SlotM19
 
 
-rule_list = list()
-
 # add equation rules
 other_dict = {
     "[Dimensions]": {

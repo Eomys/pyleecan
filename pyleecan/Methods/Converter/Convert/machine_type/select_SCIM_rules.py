@@ -7,4 +7,4 @@ def select_SCIM_rules(self):
         A ConvertMC object
 
     """
-    raise NotImplemented("SCIM, not yet defined")
+    raise NotImplementedError("SCIM, not yet defined")

@@ -10,4 +10,4 @@ def select_slot_rotor_rules(self, is_stator):
 
     """
 
-    raise NotImplemented("slot_rotor, not yet defined")
+    raise NotImplementedError("slot_rotor, not yet defined")

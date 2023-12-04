@@ -2,12 +2,6 @@
 
 import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
-from pyleecan.Methods.Converter.ConvertMC.convert_to_P.convert_other_to_dict import (
-    convert_other_to_dict,
-)
-
-
-path = "EMD240_v16.mot"
 
 
 class Test_converter_mot(object):
@@ -49,5 +43,5 @@ class Test_converter_mot(object):
 
 if __name__ == "__main__":
     a = Test_converter_mot()
-    a.compare(path)
+    a.test_convert()
     print("Test Done")

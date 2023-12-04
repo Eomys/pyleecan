@@ -53,6 +53,8 @@ def convert_duct_to_P(self, is_stator):
 
         # RectangularDuct
         elif type_duct == f"{lam_name}_Rect_Ducts" or type_duct == "Rect_Ducts":
+            # Error convert is not Implemented
+            self.get_logger().info("Not Implemented")
             return
             Ventilation_class = VentilationTrap
             rule = self.add_rule_rectangular_duct_trapeze
