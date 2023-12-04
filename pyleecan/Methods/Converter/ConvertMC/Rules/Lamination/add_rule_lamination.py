@@ -1,5 +1,3 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
@@ -14,11 +12,5 @@ def add_rule_lamination(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    print("add_rule_lamination")
-
-    if is_stator == True:
-        lam_name = "stator"
-    else:
-        lam_name = "rotor"
 
     self.rules_list.append(RuleComplex(fct_name="add_duct_layer", folder="MotorCAD"))

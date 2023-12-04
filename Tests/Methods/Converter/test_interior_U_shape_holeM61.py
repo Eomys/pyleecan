@@ -7,18 +7,17 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM61 import HoleM61
 
 
-rule_list = list()
-
 # add equation rules
+other_dict = {
+    "[Dimensions]": {
+        "UShape_InnerDiameter_Array[0]": 4,
+        "UMagnet_Length_Outer_Array[0]": 0,
+        "UMagnet_Length_Inner_Array[0]": 0,
+    }
+}
 
-other_dict = {}
-other_dict["[Dimensions]"] = {}
-other_dict["[Dimensions]"]["UShape_InnerDiameter_Array[0]"] = 4
-other_dict["[Dimensions]"]["UMagnet_Length_Outer_Array[0]"] = 0
-other_dict["[Dimensions]"]["UMagnet_Length_Inner_Array[0]"] = 0
 
-
-class Test_converter_mot(object):
+class TestComplexRuleHoleM61(object):
     def test_interior_U_shape_holeM61(self):
         """test rule complex"""
         machine = MachineIPMSM()
@@ -44,6 +43,6 @@ class Test_converter_mot(object):
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestComplexRuleHoleM61()
     a.test_interior_U_shape_holeM61()
     print("Test Done")

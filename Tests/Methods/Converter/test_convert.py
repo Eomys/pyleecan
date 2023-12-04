@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-# -*- coding: utf-8 -*-
 
 import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
@@ -15,16 +15,17 @@ class Test_converter_mot(object):
         """check if dict are equal"""
         path = "/Users\LAP17\Documents\pyleecan\pyleecan\Methods\Converter\ConvertMC\Matlab_Test_2.mot"
 
-        Conv = ConvertMC()
+        conv = ConvertMC()
         # conversion file in machine
-        machine = Conv.convert_to_P(path)
+        machine = conv.convert_to_P(path)
 
         # conversion machine in dict
-        dict_to_other = Conv.convert_to_other(machine)
-
+        conv.convert_to_other(machine)
+        dict_to_other = conv.other_dict
         # conversoin file in dict to compare
-        Conv.convert_other_to_dict(path)
-        dict_to_mot = Conv.other_dict
+        conv.convert_other_to_dict(path)
+
+        dict_to_mot = conv.other_dict
 
         # selection path and value in dict_to_other created after conversion, and compare this result with dict_to_mot, a file .mot convert in dict
         for path_dict in dict_to_other:
@@ -38,15 +39,16 @@ class Test_converter_mot(object):
 
                 # compare value
                 value_mot = dict_to_mot[path_dict][path_2]
-                msg = f"{value} is different {value_mot}(ref)"
-
-                if isinstance(value, str):
-                    assert value != value_mot, msg
-                else:
+                msg = f"{value} is different {value_mot} (ref)"
+                if not isinstance(value, str):
                     assert abs(value_mot) == pytest.approx(value), msg
+
+                elif value != value_mot:
+                    raise ValueError(f"{value} is different {value_mot} (ref)")
 
 
 if __name__ == "__main__":
     a = Test_converter_mot()
-    a.test_convert(path)
+    a.compare(path)
     print("Test Done")
+

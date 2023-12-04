@@ -17,7 +17,7 @@ other_dict["[Dimensions]"]["Magnet_Thickness"] = 4
 other_dict["[Dimensions]"]["Magnet_Arc_[ED]"] = 120
 
 
-class Test_converter_mot(object):
+class TestComplexRuleSlotM15(object):
     def test_inset_parallel_slotM15(self):
         """test rule complex"""
         machine = MachineSIPMSM()
@@ -35,6 +35,6 @@ class Test_converter_mot(object):
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestComplexRuleSlotM15()
     a.test_inset_parallel_slotM15()
     print("Test Done")

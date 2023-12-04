@@ -1,6 +1,5 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_circular_duct_circular(self, is_stator, duct_id):
@@ -17,9 +16,10 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
         a int to know the number of duct
     """
 
-    if is_stator == True:
+    if is_stator:
         lam_name_MC = "Stator"
         lam_name_py = "stator"
+        return
     else:
         lam_name_MC = "Rotor"
         lam_name_py = "rotor"
@@ -76,7 +76,7 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
         )
     )
 
-    if self.is_P_to_other == False:
+    if not self.is_P_to_other:
         self.rules_list.append(
             RuleEquation(
                 param=[
@@ -100,7 +100,7 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
                     },
                 ],
                 unit_type="",
-                equation="pi/a= x+b",
+                equation="(pi/a= x+b)",
                 file_name=__file__,
             )
         )

@@ -15,6 +15,17 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
         A booleen to know, position in lamination
     """
 
+    rule_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Slot_Number"],
+            P_obj_path=f"machine.rotor.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Rotor_Bars"],
@@ -35,6 +46,7 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
         )
     )
 
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Rotor_Tooth_Width"],
@@ -44,6 +56,7 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
             file_name=__file__,
         )
     )
+
 
     self.rules_list.append(
         RuleSimple(
@@ -55,6 +68,7 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
         )
     )
 
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Corner_Radius[T]"],
@@ -64,6 +78,7 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
             file_name=__file__,
         )
     )
+
 
     self.rules_list.append(
         RuleSimple(
@@ -75,7 +90,9 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
         )
     )
 
+
     self.rules_list.append(RuleComplex(fct_name="rotor_slotW11_H1", folder="MotorCAD"))
+
 
     self.rules_list.append(
         RuleEquation(
@@ -102,4 +119,4 @@ def add_rule_rotor_parallel_tooth_slotW11(self):
         )
     )
 
-    return self.rules_list
+

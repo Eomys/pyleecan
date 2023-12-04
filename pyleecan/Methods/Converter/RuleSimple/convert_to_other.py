@@ -1,5 +1,5 @@
 def convert_to_other(self, other_dict, machine, other_unit_dict):
-    """Select value in machine and implements in other_dict
+    """Selects value in machine and implements it in other_dict
 
     Parameters
     ----------
@@ -15,7 +15,8 @@ def convert_to_other(self, other_dict, machine, other_unit_dict):
 
     P_value = self.get_P(self.P_obj_path, machine)
 
-    # possibility to have str in other_value and conversion
+    # possibility to have str in other_value, if other_value is a str we have an equivalent, and we can't multiply a str.
+    # "if" it’s so as not to have this problem
     if self.scaling_to_P != 1:
         P_value = P_value / self.scaling_to_P
 

@@ -20,6 +20,6 @@ def save_as_other_file(path_save, other_dict):
     other_dict : dict
         dict use to convert in the conrrect version
     """
-    file = open("Tests//Methods//Converter" + "//" + path_save, "x")
-    json.dump(other_dict, file)
-    file.close()
+    with open("Tests//Methods//Converter" + "//" + path_save, "x") as file:
+        json.dump(other_dict, file)
+        file.close()

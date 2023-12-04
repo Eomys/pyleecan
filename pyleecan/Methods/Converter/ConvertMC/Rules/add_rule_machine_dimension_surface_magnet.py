@@ -1,6 +1,5 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_machine_dimension_surface_magnet(self):
@@ -12,6 +11,7 @@ def add_rule_machine_dimension_surface_magnet(self):
     self : ConvertMC
         A ConvertMC object
     """
+
 
     self.rules_list.append(
         RuleSimple(
@@ -84,7 +84,7 @@ def add_rule_machine_dimension_surface_magnet(self):
             )
         )
 
-    if self.is_P_to_other == False:
+    if not self.is_P_to_other:
         self.rules_list.append(
             RuleEquation(
                 param=[

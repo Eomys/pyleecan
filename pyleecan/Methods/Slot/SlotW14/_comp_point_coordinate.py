@@ -20,13 +20,14 @@ def _comp_point_coordinate(self):
     # alpha is the angle to rotate P0 so ||P1,P9|| = W0
     alpha = arcsin(self.W0 / (2 * Rbo))
     Harc = float(Rbo * (1 - cos(alpha)))
+    H1 = self.get_H1()
 
     Z1 = Rbo * exp(-1j * alpha)
     if self.is_outwards():
-        R1 = Rbo - Harc + self.H0 + self.H1
+        R1 = Rbo - Harc + self.H0 + H1
         Z2 = Z1 + self.H0
     else:
-        R1 = Rbo - Harc - self.H0 - self.H1
+        R1 = Rbo - Harc - self.H0 - H1
         Z2 = Z1 - self.H0
     # In the slot ref: Z3=x7+j*y7 with x7 = R1
     # In the tooth ref: Zt7 = xt7 + j*yt7 with yt7 = W3/2

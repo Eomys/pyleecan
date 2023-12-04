@@ -2,7 +2,7 @@ from numpy import sqrt, exp, cos, arctan
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """conversion obj machine in dict
+    """Conversion of the slot surface_radial (motor-cad) into the slotM14 (pyleecan)
 
     Parameters
     ----------
@@ -29,7 +29,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     self.unit_type = "m"
-    other_path_list = ["[Dimensions]", "Magnet_Reduction"]
+    other_path_list = ["[Dimensions]", "MagnetReduction"]
     Red = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     Rbo = machine.rotor.get_Rbo()

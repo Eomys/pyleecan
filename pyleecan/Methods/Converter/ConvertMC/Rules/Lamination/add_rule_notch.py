@@ -14,6 +14,7 @@ def add_rule_notch(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
+    # MC has just the possibility to have notch rotor
 
     self.rules_list.append(
         RuleSimple(

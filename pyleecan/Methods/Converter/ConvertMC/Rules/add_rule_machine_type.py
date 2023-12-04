@@ -1,4 +1,3 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 

@@ -1,9 +1,7 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_interior_V_web_holeM57(self, is_stator, hole_id):
+def add_rule_interior_V_web_holeM57(self, hole_id):
     """Create and adapt all the rules related to Hole
     Extend rules_list within Converter object
 
@@ -18,6 +16,16 @@ def add_rule_interior_V_web_holeM57(self, is_stator, hole_id):
     """
 
     self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].Zh",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
@@ -41,7 +49,7 @@ def add_rule_interior_V_web_holeM57(self, is_stator, hole_id):
         RuleSimple(
             other_key_list=["[Dimensions]", f"PoleVAngle_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
-            unit_type="rad",
+            unit_type="deg",
             scaling_to_P=1,
             file_name=__file__,
         )
@@ -49,8 +57,8 @@ def add_rule_interior_V_web_holeM57(self, is_stator, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetPost_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].1",
+            other_key_list=["[Dimensions]", f"VShapeMagnetPost_Array[{hole_id}]"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -59,9 +67,9 @@ def add_rule_interior_V_web_holeM57(self, is_stator, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetVWidth_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"VShapeMagnetSegments_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
-            unit_type="rad",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )

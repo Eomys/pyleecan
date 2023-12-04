@@ -9,6 +9,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot14.Gen_PWSlot14 import Gen_PWSlot14
 from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
+from numpy import pi
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -47,7 +48,6 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.lf_W0.unit = "m"
         self.lf_W3.unit = "m"
         self.lf_H0.unit = "m"
-        self.lf_H1.unit = "m"
         self.lf_H3.unit = "m"
 
         # Set unit name (m ou mm)
@@ -55,7 +55,6 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             self.unit_W0,
             self.unit_W3,
             self.unit_H0,
-            self.unit_H1,
             self.unit_H3,
         ]
         for wid in wid_list:
@@ -65,7 +64,12 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.lf_W0.setValue(self.slot.W0)
         self.lf_W3.setValue(self.slot.W3)
         self.lf_H0.setValue(self.slot.H0)
-        self.lf_H1.setValue(self.slot.H1)
+        if self.slot.H1_is_rad is None:
+            self.slot.H1_is_rad = False
+        if self.slot.H1_is_rad:
+            self.lf_H1.setValue(self.slot.H1)
+        else:  # convert m unit
+            self.lf_H1.setValue(gui_option.unit.get_m(self.slot.H1))
         self.lf_H3.setValue(self.slot.H3)
 
         # Wedge setup
@@ -79,6 +83,16 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         else:
             self.w_wedge_mat.def_mat = "M400-50A"
         self.set_wedge()
+
+        # Update the unit combobox with the current m unit name
+        self.c_H1_unit.clear()
+        self.c_H1_unit.addItems(
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[°]"]
+        )
+        if self.slot.H1_is_rad:
+            self.c_H1_unit.setCurrentIndex(1)  # Rad
+        else:
+            self.c_H1_unit.setCurrentIndex(0)  # m
 
         # Update the combobox
         self.c_wedge_type.clear()
@@ -97,6 +111,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.lf_W3.editingFinished.connect(self.set_W3)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_H1.editingFinished.connect(self.set_H1)
+        self.c_H1_unit.currentIndexChanged.connect(self.set_H1_unit)
         self.lf_H3.editingFinished.connect(self.set_H3)
         self.g_wedge.toggled.connect(self.set_wedge)
         self.c_wedge_type.currentIndexChanged.connect(self.set_type_wedge)
@@ -118,14 +133,12 @@ class PWSlot14(Gen_PWSlot14, QWidget):
 
     def set_type_wedge(self):
         if self.c_wedge_type.currentIndex() == 1:
-
             self.img_slot.setPixmap(
                 QPixmap(pixmap_dict["SlotW14_wedge_type_1_ext_stator"])
             )
             self.slot.wedge_type = 1
 
         if self.c_wedge_type.currentIndex() == 0:
-
             self.img_slot.setPixmap(
                 QPixmap(pixmap_dict["SlotW14_wedge_full_ext_stator"])
             )
@@ -174,15 +187,39 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.saveNeeded.emit()
 
     def set_H1(self):
-        """Signal to update the value of H0 according to the line edit
+        """Signal to update the value of H1 according to the line edit
 
         Parameters
         ----------
         self : PWSlot14
             A PWSlot14 object
         """
-        self.slot.H1 = self.lf_H1.value()
+        if self.lf_H1.value() is not None:
+            if self.c_H1_unit.currentIndex() == 0:  # m or mm
+                self.slot.H1 = gui_option.unit.set_m(self.lf_H1.value())
+            elif self.c_H1_unit.currentIndex() == 1:  # rad
+                self.slot.H1 = self.lf_H1.value()
+            else:  # °
+                self.slot.H1 = self.lf_H1.value() / 180 * pi
+        else:
+            self.slot.H1 = None
         self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_H1_unit(self, value):
+        """Signal to update the value of H1_unit according to the combobox
+
+        Parameters
+        ----------
+        self : PWSlot14
+            A PWSlot14 object
+        value : int
+            current index of the combobox
+        """
+        self.slot.H1_is_rad = bool(value)
+        if self.lf_H1.text() != "":
+            self.set_H1()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

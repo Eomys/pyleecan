@@ -1,5 +1,4 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
@@ -16,6 +15,15 @@ def add_rule_surface_radial_slotM14(self, is_stator):
     """
 
     self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+    rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
             P_obj_path=f"machine.rotor.slot.W0",

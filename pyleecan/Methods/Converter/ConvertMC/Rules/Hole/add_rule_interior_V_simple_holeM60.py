@@ -1,9 +1,8 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_interior_V_simple_holeM60(self, is_stator, hole_id):
+def add_rule_interior_V_simple_holeM60(self, hole_id):
     """Create and adapt all the rules related to Hole
     Extend rules_list within Converter object
 
@@ -18,6 +17,16 @@ def add_rule_interior_V_simple_holeM60(self, is_stator, hole_id):
     """
 
     self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"Pole_Number"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].Zh",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H0",

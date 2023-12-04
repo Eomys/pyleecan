@@ -2,7 +2,7 @@ from numpy import sqrt, cos, arctan
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """conversion obj machine in dict
+    """Conversion of the slot surface_parallel (motor-cad) into the slotM15 (pyleecan)
 
     Parameters
     ----------

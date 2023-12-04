@@ -2,7 +2,7 @@ from numpy import sin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """conversion obj machine in dict
+    """Conversion of the slot inset_breadloaf (motor-cad) into the slotM12 (pyleecan)
 
     Parameters
     ----------
@@ -30,9 +30,16 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     Rbo = machine.rotor.get_Rbo()
 
-    slot_width = (Rbo + H1) * sin(W1 / 2)
+    slot_width = (Rbo - H1) * sin(W1 / 2)
     machine.rotor.slot.W1 = 2 * slot_width
     machine.rotor.slot.W0 = 2 * slot_width
+    machine.rotor.slot.H0 = H1
+
+    point_dict = machine.rotor.slot._comp_point_coordinate()
+    Z1 = point_dict["ZM1"]
+    Z2 = point_dict["ZM2"]
+
+    machine.rotor.slot.H0 = abs(Z2 - Z1)
 
     return machine
 

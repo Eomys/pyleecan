@@ -1,6 +1,5 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_form_wound_slotW29(self, is_stator):
@@ -20,7 +19,18 @@ def add_rule_form_wound_slotW29(self, is_stator):
     else:
         lam_name = "rotor"
 
+
     self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Slot_Number"],
+            P_obj_path=f"machine.{lam_name}.slot.Zs",
+            unit_type="",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    rule_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -30,12 +40,13 @@ def add_rule_form_wound_slotW29(self, is_stator):
         )
     )
 
+
     self.rules_list.append(
         RuleEquation(
             param=[
                 {
                     "src": "other",
-                    "path": ["[Dimensions]", "Wedge_Inset"],
+                    "path": ["[Dimensions]", "FormWound_WedgeInset"],
                     "variable": "y",
                 },
                 {
@@ -55,6 +66,7 @@ def add_rule_form_wound_slotW29(self, is_stator):
         )
     )
 
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Width"],
@@ -65,9 +77,11 @@ def add_rule_form_wound_slotW29(self, is_stator):
         )
     )
 
+
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Wedge_Depth"],
+
+            other_key_list=["[Dimensions]", "FormWound_WedgeDepth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
             unit_type="m",
             scaling_to_P=1,
@@ -75,15 +89,18 @@ def add_rule_form_wound_slotW29(self, is_stator):
         )
     )
 
+
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Wedge_Thickeness"],
+
+            other_key_list=["[Dimensions]", "FormWound_WedgeThickness"],
             P_obj_path=f"machine.{lam_name}.slot.H1",
-            unit_type="deg",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
     )
+
 
     self.rules_list.append(
         RuleEquation(
@@ -95,12 +112,12 @@ def add_rule_form_wound_slotW29(self, is_stator):
                 },
                 {
                     "src": "other",
-                    "path": ["[Dimensions]", "Wedge_Thickness"],
+                    "path": ["[Dimensions]", "FormWound_WedgeThickness"],
                     "variable": "a",
                 },
                 {
                     "src": "other",
-                    "path": ["[Dimensions]", "Wedge_Depth"],
+                    "path": ["[Dimensions]", "FormWound_WedgeDepth"],
                     "variable": "b",
                 },
                 {
@@ -115,4 +132,4 @@ def add_rule_form_wound_slotW29(self, is_stator):
         )
     )
 
-    return self.rules_list
+

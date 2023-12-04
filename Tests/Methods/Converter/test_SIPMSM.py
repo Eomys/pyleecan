@@ -2,33 +2,40 @@
 
 import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.VentilationCirc import VentilationCirc
+from pyleecan.Classes.HoleM60 import HoleM60
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.SlotW21 import SlotW21
 
 
-class Test_converter_mot(object):
+class TestConverterSIPMSM(object):
     def test_SIPMSM(self):
         """check if SIPMSM is correct define"""
         path = "/Users\LAP17\Documents/Documentation motor-CAD/fichier.mot/various_mot_files/VF_Manatee_Hairpin_winding.mot"
 
-        Conv = ConvertMC()
+        conv = ConvertMC()
         # conversion file in machine
-        machine = Conv.convert_to_P(path)
+        machine = conv.convert_to_P(path)
 
-        assert type(machine).__name__ == "MachineIPMSM"
+        assert isinstance(machine, MachineIPMSM)
 
         # rotor
-        assert type(machine.rotor).__name__ == "LamHole"
+        assert isinstance(machine.rotor, LamHole)
 
-        assert type(machine.rotor.axial_vent[0]).__name__ == "VentilationCirc"
-        assert type(machine.rotor.axial_vent[1]).__name__ == "VentilationCirc"
-        assert type(machine.rotor.hole[0]).__name__ == "HoleM60"
-        assert type(machine.rotor.hole[1]).__name__ == "HoleM60"
+        assert isinstance(machine.rotor.axial_vent[0], VentilationCirc)
+        assert isinstance(machine.rotor.axial_vent[1], VentilationCirc)
+
+        assert isinstance(machine.rotor.hole[0], HoleM60)
+        assert isinstance(machine.rotor.hole[1], HoleM60)
 
         # stator
-        assert type(machine.stator).__name__ == "LamSlotWind"
-        assert type(machine.stator.slot).__name__ == "SlotW21"
+        assert isinstance(machine.stator, LamSlotWind)
+        assert isinstance(machine.stator.slot, SlotW21)
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestConverterSIPMSM()
     a.test_SIPMSM()
     print("Test Done")

@@ -28,119 +28,102 @@ except ImportError as error:
     convert_to_P = error
 
 try:
-    from ..Methods.Converter.Convert.convert import convert
-except ImportError as error:
-    convert = error
-
-try:
-    from ..Methods.Converter.Convert.selection_LamSlotWind_rules import (
-        selection_LamSlotWind_rules,
+    from ..Methods.Converter.Convert.select_LamSlotWind_rules import (
+        select_LamSlotWind_rules,
     )
 except ImportError as error:
-    selection_LamSlotWind_rules = error
+    select_LamSlotWind_rules = error
 
 try:
-    from ..Methods.Converter.Convert.selection_machine_rules import (
-        selection_machine_rules,
+    from ..Methods.Converter.Convert.select_machine_rules import select_machine_rules
+except ImportError as error:
+    select_machine_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_slot_rotor_rules import (
+        select_slot_rotor_rules,
     )
 except ImportError as error:
-    selection_machine_rules = error
+    select_slot_rotor_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_slot_rotor_rules import (
-        selection_slot_rotor_rules,
+    from ..Methods.Converter.Convert.Step.select_slot_rules import select_slot_rules
+except ImportError as error:
+    select_slot_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_lamination_rules import (
+        select_lamination_rules,
     )
 except ImportError as error:
-    selection_slot_rotor_rules = error
+    select_lamination_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_slot_rules import (
-        selection_slot_rules,
+    from ..Methods.Converter.Convert.Step.select_winding_rules import (
+        select_winding_rules,
     )
 except ImportError as error:
-    selection_slot_rules = error
+    select_winding_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_lamination_rules import (
-        selection_lamination_rules,
+    from ..Methods.Converter.Convert.Step.select_conductor_rules import (
+        select_conductor_rules,
     )
 except ImportError as error:
-    selection_lamination_rules = error
+    select_conductor_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_winding_rules import (
-        selection_winding_rules,
+    from ..Methods.Converter.Convert.Step.select_hole_rules import select_hole_rules
+except ImportError as error:
+    select_hole_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_pole_rules import select_pole_rules
+except ImportError as error:
+    select_pole_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_magnet_rules import select_magnet_rules
+except ImportError as error:
+    select_magnet_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_skew_rules import select_skew_rules
+except ImportError as error:
+    select_skew_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_bar_rules import select_bar_rules
+except ImportError as error:
+    select_bar_rules = error
+
+try:
+    from ..Methods.Converter.Convert.machine_type.select_SIPMSM_rules import (
+        select_SIPMSM_rules,
     )
 except ImportError as error:
-    selection_winding_rules = error
+    select_SIPMSM_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_conductor_rules import (
-        selection_conductor_rules,
+    from ..Methods.Converter.Convert.machine_type.select_IPMSM_rules import (
+        select_IPMSM_rules,
     )
 except ImportError as error:
-    selection_conductor_rules = error
+    select_IPMSM_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_hole_rules import (
-        selection_hole_rules,
+    from ..Methods.Converter.Convert.machine_type.select_SCIM_rules import (
+        select_SCIM_rules,
     )
 except ImportError as error:
-    selection_hole_rules = error
+    select_SCIM_rules = error
 
 try:
-    from ..Methods.Converter.Convert.Step.selection_pole_rules import (
-        selection_pole_rules,
+    from ..Methods.Converter.Convert.machine_type.select_WRSM_rules import (
+        select_WRSM_rules,
     )
 except ImportError as error:
-    selection_pole_rules = error
-
-try:
-    from ..Methods.Converter.Convert.Step.selection_magnet_rules import (
-        selection_magnet_rules,
-    )
-except ImportError as error:
-    selection_magnet_rules = error
-
-try:
-    from ..Methods.Converter.Convert.Step.selection_skew_rules import (
-        selection_skew_rules,
-    )
-except ImportError as error:
-    selection_skew_rules = error
-
-try:
-    from ..Methods.Converter.Convert.Step.selection_bar_rules import selection_bar_rules
-except ImportError as error:
-    selection_bar_rules = error
-
-try:
-    from ..Methods.Converter.Convert.machine_type.selection_SIPMSM_rules import (
-        selection_SIPMSM_rules,
-    )
-except ImportError as error:
-    selection_SIPMSM_rules = error
-
-try:
-    from ..Methods.Converter.Convert.machine_type.selection_IPMSM_rules import (
-        selection_IPMSM_rules,
-    )
-except ImportError as error:
-    selection_IPMSM_rules = error
-
-try:
-    from ..Methods.Converter.Convert.machine_type.selection_SCIM_rules import (
-        selection_SCIM_rules,
-    )
-except ImportError as error:
-    selection_SCIM_rules = error
-
-try:
-    from ..Methods.Converter.Convert.machine_type.selection_WRSM_rules import (
-        selection_WRSM_rules,
-    )
-except ImportError as error:
-    selection_WRSM_rules = error
+    select_WRSM_rules = error
 
 try:
     from ..Methods.Converter.Convert.save_as_other_file import save_as_other_file
@@ -181,207 +164,198 @@ class Convert(FrozenClass):
         )
     else:
         convert_to_P = convert_to_P
-    # cf Methods.Converter.Convert.convert
-    if isinstance(convert, ImportError):
-        convert = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Convert method convert: " + str(convert))
-            )
-        )
-    else:
-        convert = convert
-    # cf Methods.Converter.Convert.selection_LamSlotWind_rules
-    if isinstance(selection_LamSlotWind_rules, ImportError):
-        selection_LamSlotWind_rules = property(
+    # cf Methods.Converter.Convert.select_LamSlotWind_rules
+    if isinstance(select_LamSlotWind_rules, ImportError):
+        select_LamSlotWind_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_LamSlotWind_rules: "
-                    + str(selection_LamSlotWind_rules)
+                    "Can't use Convert method select_LamSlotWind_rules: "
+                    + str(select_LamSlotWind_rules)
                 )
             )
         )
     else:
-        selection_LamSlotWind_rules = selection_LamSlotWind_rules
-    # cf Methods.Converter.Convert.selection_machine_rules
-    if isinstance(selection_machine_rules, ImportError):
-        selection_machine_rules = property(
+        select_LamSlotWind_rules = select_LamSlotWind_rules
+    # cf Methods.Converter.Convert.select_machine_rules
+    if isinstance(select_machine_rules, ImportError):
+        select_machine_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_machine_rules: "
-                    + str(selection_machine_rules)
+                    "Can't use Convert method select_machine_rules: "
+                    + str(select_machine_rules)
                 )
             )
         )
     else:
-        selection_machine_rules = selection_machine_rules
-    # cf Methods.Converter.Convert.Step.selection_slot_rotor_rules
-    if isinstance(selection_slot_rotor_rules, ImportError):
-        selection_slot_rotor_rules = property(
+        select_machine_rules = select_machine_rules
+    # cf Methods.Converter.Convert.Step.select_slot_rotor_rules
+    if isinstance(select_slot_rotor_rules, ImportError):
+        select_slot_rotor_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_slot_rotor_rules: "
-                    + str(selection_slot_rotor_rules)
+                    "Can't use Convert method select_slot_rotor_rules: "
+                    + str(select_slot_rotor_rules)
                 )
             )
         )
     else:
-        selection_slot_rotor_rules = selection_slot_rotor_rules
-    # cf Methods.Converter.Convert.Step.selection_slot_rules
-    if isinstance(selection_slot_rules, ImportError):
-        selection_slot_rules = property(
+        select_slot_rotor_rules = select_slot_rotor_rules
+    # cf Methods.Converter.Convert.Step.select_slot_rules
+    if isinstance(select_slot_rules, ImportError):
+        select_slot_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_slot_rules: "
-                    + str(selection_slot_rules)
+                    "Can't use Convert method select_slot_rules: "
+                    + str(select_slot_rules)
                 )
             )
         )
     else:
-        selection_slot_rules = selection_slot_rules
-    # cf Methods.Converter.Convert.Step.selection_lamination_rules
-    if isinstance(selection_lamination_rules, ImportError):
-        selection_lamination_rules = property(
+        select_slot_rules = select_slot_rules
+    # cf Methods.Converter.Convert.Step.select_lamination_rules
+    if isinstance(select_lamination_rules, ImportError):
+        select_lamination_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_lamination_rules: "
-                    + str(selection_lamination_rules)
+                    "Can't use Convert method select_lamination_rules: "
+                    + str(select_lamination_rules)
                 )
             )
         )
     else:
-        selection_lamination_rules = selection_lamination_rules
-    # cf Methods.Converter.Convert.Step.selection_winding_rules
-    if isinstance(selection_winding_rules, ImportError):
-        selection_winding_rules = property(
+        select_lamination_rules = select_lamination_rules
+    # cf Methods.Converter.Convert.Step.select_winding_rules
+    if isinstance(select_winding_rules, ImportError):
+        select_winding_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_winding_rules: "
-                    + str(selection_winding_rules)
+                    "Can't use Convert method select_winding_rules: "
+                    + str(select_winding_rules)
                 )
             )
         )
     else:
-        selection_winding_rules = selection_winding_rules
-    # cf Methods.Converter.Convert.Step.selection_conductor_rules
-    if isinstance(selection_conductor_rules, ImportError):
-        selection_conductor_rules = property(
+        select_winding_rules = select_winding_rules
+    # cf Methods.Converter.Convert.Step.select_conductor_rules
+    if isinstance(select_conductor_rules, ImportError):
+        select_conductor_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_conductor_rules: "
-                    + str(selection_conductor_rules)
+                    "Can't use Convert method select_conductor_rules: "
+                    + str(select_conductor_rules)
                 )
             )
         )
     else:
-        selection_conductor_rules = selection_conductor_rules
-    # cf Methods.Converter.Convert.Step.selection_hole_rules
-    if isinstance(selection_hole_rules, ImportError):
-        selection_hole_rules = property(
+        select_conductor_rules = select_conductor_rules
+    # cf Methods.Converter.Convert.Step.select_hole_rules
+    if isinstance(select_hole_rules, ImportError):
+        select_hole_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_hole_rules: "
-                    + str(selection_hole_rules)
+                    "Can't use Convert method select_hole_rules: "
+                    + str(select_hole_rules)
                 )
             )
         )
     else:
-        selection_hole_rules = selection_hole_rules
-    # cf Methods.Converter.Convert.Step.selection_pole_rules
-    if isinstance(selection_pole_rules, ImportError):
-        selection_pole_rules = property(
+        select_hole_rules = select_hole_rules
+    # cf Methods.Converter.Convert.Step.select_pole_rules
+    if isinstance(select_pole_rules, ImportError):
+        select_pole_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_pole_rules: "
-                    + str(selection_pole_rules)
+                    "Can't use Convert method select_pole_rules: "
+                    + str(select_pole_rules)
                 )
             )
         )
     else:
-        selection_pole_rules = selection_pole_rules
-    # cf Methods.Converter.Convert.Step.selection_magnet_rules
-    if isinstance(selection_magnet_rules, ImportError):
-        selection_magnet_rules = property(
+        select_pole_rules = select_pole_rules
+    # cf Methods.Converter.Convert.Step.select_magnet_rules
+    if isinstance(select_magnet_rules, ImportError):
+        select_magnet_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_magnet_rules: "
-                    + str(selection_magnet_rules)
+                    "Can't use Convert method select_magnet_rules: "
+                    + str(select_magnet_rules)
                 )
             )
         )
     else:
-        selection_magnet_rules = selection_magnet_rules
-    # cf Methods.Converter.Convert.Step.selection_skew_rules
-    if isinstance(selection_skew_rules, ImportError):
-        selection_skew_rules = property(
+        select_magnet_rules = select_magnet_rules
+    # cf Methods.Converter.Convert.Step.select_skew_rules
+    if isinstance(select_skew_rules, ImportError):
+        select_skew_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_skew_rules: "
-                    + str(selection_skew_rules)
+                    "Can't use Convert method select_skew_rules: "
+                    + str(select_skew_rules)
                 )
             )
         )
     else:
-        selection_skew_rules = selection_skew_rules
-    # cf Methods.Converter.Convert.Step.selection_bar_rules
-    if isinstance(selection_bar_rules, ImportError):
-        selection_bar_rules = property(
+        select_skew_rules = select_skew_rules
+    # cf Methods.Converter.Convert.Step.select_bar_rules
+    if isinstance(select_bar_rules, ImportError):
+        select_bar_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_bar_rules: "
-                    + str(selection_bar_rules)
+                    "Can't use Convert method select_bar_rules: "
+                    + str(select_bar_rules)
                 )
             )
         )
     else:
-        selection_bar_rules = selection_bar_rules
-    # cf Methods.Converter.Convert.machine_type.selection_SIPMSM_rules
-    if isinstance(selection_SIPMSM_rules, ImportError):
-        selection_SIPMSM_rules = property(
+        select_bar_rules = select_bar_rules
+    # cf Methods.Converter.Convert.machine_type.select_SIPMSM_rules
+    if isinstance(select_SIPMSM_rules, ImportError):
+        select_SIPMSM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_SIPMSM_rules: "
-                    + str(selection_SIPMSM_rules)
+                    "Can't use Convert method select_SIPMSM_rules: "
+                    + str(select_SIPMSM_rules)
                 )
             )
         )
     else:
-        selection_SIPMSM_rules = selection_SIPMSM_rules
-    # cf Methods.Converter.Convert.machine_type.selection_IPMSM_rules
-    if isinstance(selection_IPMSM_rules, ImportError):
-        selection_IPMSM_rules = property(
+        select_SIPMSM_rules = select_SIPMSM_rules
+    # cf Methods.Converter.Convert.machine_type.select_IPMSM_rules
+    if isinstance(select_IPMSM_rules, ImportError):
+        select_IPMSM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_IPMSM_rules: "
-                    + str(selection_IPMSM_rules)
+                    "Can't use Convert method select_IPMSM_rules: "
+                    + str(select_IPMSM_rules)
                 )
             )
         )
     else:
-        selection_IPMSM_rules = selection_IPMSM_rules
-    # cf Methods.Converter.Convert.machine_type.selection_SCIM_rules
-    if isinstance(selection_SCIM_rules, ImportError):
-        selection_SCIM_rules = property(
+        select_IPMSM_rules = select_IPMSM_rules
+    # cf Methods.Converter.Convert.machine_type.select_SCIM_rules
+    if isinstance(select_SCIM_rules, ImportError):
+        select_SCIM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_SCIM_rules: "
-                    + str(selection_SCIM_rules)
+                    "Can't use Convert method select_SCIM_rules: "
+                    + str(select_SCIM_rules)
                 )
             )
         )
     else:
-        selection_SCIM_rules = selection_SCIM_rules
-    # cf Methods.Converter.Convert.machine_type.selection_WRSM_rules
-    if isinstance(selection_WRSM_rules, ImportError):
-        selection_WRSM_rules = property(
+        select_SCIM_rules = select_SCIM_rules
+    # cf Methods.Converter.Convert.machine_type.select_WRSM_rules
+    if isinstance(select_WRSM_rules, ImportError):
+        select_WRSM_rules = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Convert method selection_WRSM_rules: "
-                    + str(selection_WRSM_rules)
+                    "Can't use Convert method select_WRSM_rules: "
+                    + str(select_WRSM_rules)
                 )
             )
         )
     else:
-        selection_WRSM_rules = selection_WRSM_rules
+        select_WRSM_rules = select_WRSM_rules
     # cf Methods.Converter.Convert.save_as_other_file
     if isinstance(save_as_other_file, ImportError):
         save_as_other_file = property(

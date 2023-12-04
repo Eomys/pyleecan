@@ -1,5 +1,5 @@
 def get_other(self, other_dict, other_path_list, other_unit_dict):
-    """Select value in other_dict
+    """Select value in other_dict and change the value to be in SI
 
     Parameters
     ----------
@@ -8,7 +8,7 @@ def get_other(self, other_dict, other_path_list, other_unit_dict):
     other_dict : dict
         dict with all other param
     other_path_list : list
-        list with path to set value
+        list with path to set value ( ["[Dimensions]", "Pole_Arc"])
     other_unit_dict : dict
         dict with unit to make conversion (key: unit family, value: factor)
 
@@ -21,14 +21,13 @@ def get_other(self, other_dict, other_path_list, other_unit_dict):
 
     try:
         # selection correct value in other_dict
-        dict_temp = other_dict
         for temp in other_path_list:
-            dict_temp = dict_temp[temp]
+            other_dict = other_dict[temp]
     except Exception:
-        raise Exception(
+        raise ValueError(
             f"Value equivalent at {other_path_list} isn't found in other_dict"
         )
 
-    other_value = dict_temp * unit
+    other_value = other_dict * unit
 
     return other_value  # return in SI

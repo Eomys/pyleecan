@@ -10,14 +10,19 @@ from pyleecan.Classes.SlotM12 import SlotM12
 rule_list = list()
 
 # add equation rules
-
+other_dict = {
+    "[Dimensions]": {
+        "Magnet_Thickness": 4,
+        "Magnet_Arc_[ED]": 120,
+    }
+}
 other_dict = {}
 other_dict["[Dimensions]"] = {}
 other_dict["[Dimensions]"]["Magnet_Thickness"] = 4
 other_dict["[Dimensions]"]["Magnet_Arc_[ED]"] = 120
 
 
-class Test_converter_mot(object):
+class TestComplexRuleSlotM12(object):
     def test_inset_breadloaf_slotM12(self):
         """test rule complex"""
         machine = MachineSIPMSM()
@@ -35,6 +40,6 @@ class Test_converter_mot(object):
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestComplexRuleSlotM12()
     a.test_inset_breadloaf_slotM12()
     print("Test Done")

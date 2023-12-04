@@ -6,15 +6,17 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
-rule_list = list()
 
-# add equation rules
-other_dict = {}
-other_dict["[Dimensions]"] = {}
-other_dict["[Dimensions]"]["Pole_Number"] = 6
+# creating a dictionary
+
+other_dict = {
+    "[Dimensions]": {
+        "Pole_Number": 6,
+    }
+}
 
 
-class Test_converter_mot(object):
+class TestComplexRulePolePairNumber(object):
     def test_set_pole_pair_number(self):
         """test rule complex"""
         machine = MachineSIPMSM()
@@ -31,6 +33,6 @@ class Test_converter_mot(object):
 
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
+    a = TestComplexRulePolePairNumber()
     a.test_set_pole_pair_number()
     print("Done")
