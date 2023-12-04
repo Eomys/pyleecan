@@ -9,15 +9,11 @@ def add_rule_interior_flat_web_holeM52(self, hole_id):
     ----------
     self : ConvertMC
         A ConvertMC object
-    is_stator : Bool
-        A booleen to know, position in lamination
     hole_id : int
         A int to know the number of hole
     """
 
-    rule_list = self.rules_list
-
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].Zh",
@@ -27,7 +23,7 @@ def add_rule_interior_flat_web_holeM52(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Bridge_Thickness"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H0",
@@ -37,7 +33,7 @@ def add_rule_interior_flat_web_holeM52(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
@@ -47,7 +43,7 @@ def add_rule_interior_flat_web_holeM52(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Width"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
@@ -57,7 +53,7 @@ def add_rule_interior_flat_web_holeM52(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Web_Thickness"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W3",

@@ -9,15 +9,11 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
     ----------
     self : ConvertMC
         A ConvertMC object
-    is_stator : Bool
-        A booleen to know, position in lamination
     hole_id : int
         A int to know the number of hole
     """
 
-    rule_list = self.rules_list
-
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].Zh",
@@ -27,7 +23,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
@@ -37,7 +33,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H2",
@@ -47,7 +43,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"PoleVAngle_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
@@ -57,7 +53,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"VShapeMagnetPost_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
@@ -67,7 +63,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"VShapeMagnetSegments_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
@@ -77,7 +73,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"WebThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W3",
@@ -87,7 +83,7 @@ def add_rule_interior_V_web_holeM57(self, hole_id):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"MagnetBarWidth_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W4",

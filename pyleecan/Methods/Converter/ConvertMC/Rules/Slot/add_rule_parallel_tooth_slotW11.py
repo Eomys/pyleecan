@@ -5,7 +5,7 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 
 def add_rule_parallel_tooth_slotW11(self, is_stator):
     """Create and adapt all the rules related to slotW11 (lam radius,...)
-    Extend rules_list within Converter object
+    Extend self.rules_list within Converter object
 
     Parameters
     ----------
@@ -20,9 +20,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
     else:
         lam_name = "rotor"
 
-    rules_list = self.rules_list
-
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Number"],
             P_obj_path=f"machine.{lam_name}.slot.Zs",
@@ -32,7 +30,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Opening"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
@@ -42,7 +40,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W3",
@@ -52,7 +50,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
@@ -62,7 +60,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Corner_Radius"],
             P_obj_path=f"machine.{lam_name}.slot.R1",
@@ -73,7 +71,7 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
     )
 
     if not self.is_P_to_other:
-        rules_list.append(
+        self.rules_list.append(
             RuleSimple(
                 other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
                 P_obj_path=f"machine.{lam_name}.slot.H1",
@@ -83,9 +81,9 @@ def add_rule_parallel_tooth_slotW11(self, is_stator):
             )
         )
 
-        rules_list.append(RuleComplex(fct_name="slotW11_H1", folder="MotorCAD"))
+        self.rules_list.append(RuleComplex(fct_name="slotW11_H1", folder="MotorCAD"))
 
-        rules_list.append(
+        self.rules_list.append(
             RuleEquation(
                 param=[
                     {

@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_inset_radial_slotM11(self, is_stator):
+def add_rule_inset_radial_slotM11(self):
     """Create and adapt all the rules related to slotM11
     Extend rules_list within Converter object
 
@@ -14,9 +14,8 @@ def add_rule_inset_radial_slotM11(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    rule_list = self.rules_list
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
             P_obj_path=f"machine.rotor.slot.Zs",
@@ -26,7 +25,7 @@ def add_rule_inset_radial_slotM11(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
             P_obj_path=f"machine.rotor.slot.W0",
@@ -36,7 +35,7 @@ def add_rule_inset_radial_slotM11(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
             P_obj_path=f"machine.rotor.slot.W1",
@@ -46,7 +45,7 @@ def add_rule_inset_radial_slotM11(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H1",
@@ -56,7 +55,7 @@ def add_rule_inset_radial_slotM11(self, is_stator):
         )
     )
 
-    rule_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H0",
