@@ -2,7 +2,7 @@ from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_breadloaf_slotM13(self, is_stator):
+def add_rule_surface_breadloaf_slotM13(self):
     """Create and adapt all the rules related to slotM13
     Extend rules_list within Converter object
 
@@ -14,6 +14,7 @@ def add_rule_surface_breadloaf_slotM13(self, is_stator):
         A booleen to know, position in lamination
     """
 
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
@@ -23,6 +24,7 @@ def add_rule_surface_breadloaf_slotM13(self, is_stator):
             file_name=__file__,
         )
     )
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],

@@ -89,3 +89,5 @@ def add_rule_tapered_slot_slotW23(self, is_stator):
             file_name=__file__,
         )
     )
+
+

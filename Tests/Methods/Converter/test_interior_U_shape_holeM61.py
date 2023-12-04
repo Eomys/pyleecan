@@ -7,7 +7,6 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM61 import HoleM61
 
 
-# add equation rules
 other_dict = {
     "[Dimensions]": {
         "UShape_InnerDiameter_Array[0]": 4,

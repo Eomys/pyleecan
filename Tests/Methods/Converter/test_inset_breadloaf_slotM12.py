@@ -7,19 +7,12 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM12 import SlotM12
 
 
-rule_list = list()
-
-# add equation rules
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 4,
         "Magnet_Arc_[ED]": 120,
     }
 }
-other_dict = {}
-other_dict["[Dimensions]"] = {}
-other_dict["[Dimensions]"]["Magnet_Thickness"] = 4
-other_dict["[Dimensions]"]["Magnet_Arc_[ED]"] = 120
 
 
 class TestComplexRuleSlotM12(object):

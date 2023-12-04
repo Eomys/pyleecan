@@ -2,7 +2,7 @@ from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_radial_slotM14(self, is_stator):
+def add_rule_surface_radial_slotM14(self):
     """Create and adapt all the rules related to slotM14
     Extend rules_list within Converter object
 
@@ -13,7 +13,6 @@ def add_rule_surface_radial_slotM14(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],

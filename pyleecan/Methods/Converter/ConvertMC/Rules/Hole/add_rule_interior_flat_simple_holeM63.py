@@ -11,8 +11,6 @@ def add_rule_interior_flat_simple_holeM63(self, hole_id):
     ----------
     self : ConvertMC
         A ConvertMC object
-    is_stator : Bool
-        A booleen to know, position in lamination
     hole_id : int
         A int to know the number of hole
     """

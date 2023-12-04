@@ -1,7 +1,7 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 
 
-def add_rule_spoke_slotM16(self, is_stator):
+def add_rule_spoke_slotM16(self):
     """Create and adapt all the rules related to slotM16
     Extend rules_list within Converter object
 
