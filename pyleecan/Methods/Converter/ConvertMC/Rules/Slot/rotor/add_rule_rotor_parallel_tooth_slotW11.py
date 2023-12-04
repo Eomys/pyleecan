@@ -6,7 +6,6 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 def add_rule_rotor_parallel_tooth_slotW11(self, is_stator):
     """Create and adapt all the rules related to slotW11 (lam radius,...)
     Extend rules_list within Converter object
-
     Parameters
     ----------
     self : ConvertMC
@@ -26,7 +25,6 @@ def add_rule_rotor_parallel_tooth_slotW11(self, is_stator):
             file_name=__file__,
         )
     )
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Opening_[T]"],
@@ -76,17 +74,6 @@ def add_rule_rotor_parallel_tooth_slotW11(self, is_stator):
             file_name=__file__,
         )
     )
-    """
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "Bar_Depth_[T]"],
-            P_obj_path=f"machine.rotor.slot.H2",
-            unit_type="deg",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-    """
 
     if not self.is_P_to_other:
         self.rules_list.append(
@@ -122,6 +109,3 @@ def add_rule_rotor_parallel_tooth_slotW11(self, is_stator):
                 file_name=__file__,
             )
         )
-
-    else:
-        print("error type conversion to tooth_tip_depth_H1 is not in rad ")

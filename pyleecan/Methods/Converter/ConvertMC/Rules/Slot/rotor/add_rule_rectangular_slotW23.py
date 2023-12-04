@@ -6,7 +6,6 @@ from pyleecan.Classes.RuleComplex import RuleComplex
 def add_rule_rectangular_slotW23(self, is_stator):
     """Create and adapt all the rules related to slotW23
     Extend rules_list within Converter object
-
     Parameters
     ----------
     self : ConvertMC
@@ -26,7 +25,6 @@ def add_rule_rectangular_slotW23(self, is_stator):
             file_name=__file__,
         )
     )
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Opening_[T]"],
@@ -76,7 +74,6 @@ def add_rule_rectangular_slotW23(self, is_stator):
             file_name=__file__,
         )
     )
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Bar_Width_[T]"],
