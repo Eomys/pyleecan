@@ -56,7 +56,7 @@ def check(self):
         if self.W1 < self.W0:
             raise S11_W01CheckError("You must have W0 <= W1")
 
-    if not self.W1 is None or not self.W2 is None:
+    if not self.W2 is None:
         if 2 * self.R1 > self.W2 and (not self.W2 is None or not self.R1 is None):
             raise S11_RWCheckError("You must have 2*R1 <= W2")
 
