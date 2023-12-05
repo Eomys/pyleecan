@@ -14,7 +14,6 @@ def add_rule_surface_breadloaf_slotM13(self):
         A booleen to know, position in lamination
     """
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],

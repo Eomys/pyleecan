@@ -19,7 +19,6 @@ def add_rule_form_wound_slotW29(self, is_stator):
     else:
         lam_name = "rotor"
 
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Slot_Number"],
@@ -29,7 +28,6 @@ def add_rule_form_wound_slotW29(self, is_stator):
             file_name=__file__,
         )
     )
-
 
     self.rules_list.append(
         RuleSimple(

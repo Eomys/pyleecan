@@ -30,6 +30,7 @@ from pyleecan.Classes.SlotW29 import SlotW29
 from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.Classes.SlotW60 import SlotW60
 from pyleecan.Classes.SlotW61 import SlotW61
+from pyleecan.Classes.SlotW62 import SlotW62
 from pyleecan.Classes.SlotWLSRPM import SlotWLSRPM
 
 from pyleecan.Classes.HoleM50 import HoleM50
@@ -95,6 +96,7 @@ SlotW_list = [
     SlotW30(),
     SlotW60(),
     SlotW61(),
+    SlotW62(),
     SlotWLSRPM(),
 ]
 
@@ -586,10 +588,10 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_plot(plot_test[23])
-    a.test_plot_point(plot_test[23])
-    a.test_plot(plot_test[34])
-    a.test_plot_point(plot_test[34])
+    a.test_plot(plot_test[35])
+    a.test_plot_point(plot_test[35])
+    a.test_plot(plot_test[37])
+    a.test_plot_point(plot_test[37])
     #
 
     # for plot in plot_test:
