@@ -22,7 +22,7 @@ def _comp_point_coordinate(self):
 
     alpha2 = arcsin(self.W1 / (2 * Rbo))
     # Harct = float(Rbo * (1 - cos(alpha2)))
-    Harct = Rbo - sqrt((Rbo**2 - (self.W1 / 2) ** 2))
+    Harct = Rbo - sqrt((Rbo ** 2 - (self.W1 / 2) ** 2))
 
     Rm = Rbo - self.H1 - self.H0 - Harct
     # alpha is the angle to rotate Z0 so ||Z1,Z8|| = W0
