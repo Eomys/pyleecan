@@ -590,10 +590,10 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_plot(plot_test[38])
-    a.test_plot_point(plot_test[38])
-    # a.test_plot(plot_test[37])
-    # a.test_plot_point(plot_test[37])
+    a.test_plot(plot_test[41])
+    a.test_plot_point(plot_test[41])
+    a.test_plot(plot_test[19])
+    # a.test_plot_point(plot_test[18])
     #
 
     # for plot in plot_test:
