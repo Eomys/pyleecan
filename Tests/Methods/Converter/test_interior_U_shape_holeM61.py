@@ -7,18 +7,17 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM61 import HoleM61
 
 
-other_dict = {
-    "[Dimensions]": {
-        "UShape_InnerDiameter_Array[0]": 4,
-        "UMagnet_Length_Outer_Array[0]": 0,
-        "UMagnet_Length_Inner_Array[0]": 0,
-    }
-}
-
-
 class TestComplexRuleHoleM61(object):
     def test_interior_U_shape_holeM61(self):
         """test rule complex"""
+        other_dict = {
+            "[Dimensions]": {
+                "UShape_InnerDiameter_Array[0]": 4,
+                "UMagnet_Length_Outer_Array[0]": 0,
+                "UMagnet_Length_Inner_Array[0]": 0,
+            }
+        }
+
         machine = MachineIPMSM()
         machine.rotor = LamHole()
         machine.rotor.hole.append(HoleM61())
