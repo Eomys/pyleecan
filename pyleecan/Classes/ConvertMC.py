@@ -60,6 +60,13 @@ except ImportError as error:
     convert_hole_to_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_pole_to_P import (
+        convert_pole_to_P,
+    )
+except ImportError as error:
+    convert_pole_to_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_P.convert_duct_to_P import (
         convert_duct_to_P,
     )
@@ -114,6 +121,13 @@ try:
     )
 except ImportError as error:
     convert_hole_to_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_pole_to_MC import (
+        convert_pole_to_MC,
+    )
+except ImportError as error:
+    convert_pole_to_MC = error
 
 try:
     from ..Methods.Converter.ConvertMC.convert_to_MC.convert_duct_to_MC import (
@@ -367,6 +381,20 @@ try:
 except ImportError as error:
     add_rule_embedded_radial_holeM62 = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW62 import (
+        add_rule_parallel_tooth_slotW62,
+    )
+except ImportError as error:
+    add_rule_parallel_tooth_slotW62 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW61 import (
+        add_rule_salient_pole_slotW61,
+    )
+except ImportError as error:
+    add_rule_salient_pole_slotW61 = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -450,6 +478,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_hole_to_P = convert_hole_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_pole_to_P
+    if isinstance(convert_pole_to_P, ImportError):
+        convert_pole_to_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_pole_to_P: "
+                    + str(convert_pole_to_P)
+                )
+            )
+        )
+    else:
+        convert_pole_to_P = convert_pole_to_P
     # cf Methods.Converter.ConvertMC.convert_to_P.convert_duct_to_P
     if isinstance(convert_duct_to_P, ImportError):
         convert_duct_to_P = property(
@@ -546,6 +586,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_hole_to_MC = convert_hole_to_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_pole_to_MC
+    if isinstance(convert_pole_to_MC, ImportError):
+        convert_pole_to_MC = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_pole_to_MC: "
+                    + str(convert_pole_to_MC)
+                )
+            )
+        )
+    else:
+        convert_pole_to_MC = convert_pole_to_MC
     # cf Methods.Converter.ConvertMC.convert_to_MC.convert_duct_to_MC
     if isinstance(convert_duct_to_MC, ImportError):
         convert_duct_to_MC = property(
@@ -979,6 +1031,30 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_embedded_radial_holeM62 = add_rule_embedded_radial_holeM62
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW62
+    if isinstance(add_rule_parallel_tooth_slotW62, ImportError):
+        add_rule_parallel_tooth_slotW62 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_tooth_slotW62: "
+                    + str(add_rule_parallel_tooth_slotW62)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_tooth_slotW62 = add_rule_parallel_tooth_slotW62
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW61
+    if isinstance(add_rule_salient_pole_slotW61, ImportError):
+        add_rule_salient_pole_slotW61 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_salient_pole_slotW61: "
+                    + str(add_rule_salient_pole_slotW61)
+                )
+            )
+        )
+    else:
+        add_rule_salient_pole_slotW61 = add_rule_salient_pole_slotW61
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

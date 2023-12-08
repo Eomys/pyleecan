@@ -87,7 +87,7 @@ def plot_schematics_constant_tooth(
             R1=20e-3,
         )
         lam = LamSlot(
-            Rint=0.135, Rext=0.3, is_internal=True, is_stator=False, slot=slot
+            Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
         )
         if is_return_default:
             return lam

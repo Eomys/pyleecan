@@ -77,10 +77,10 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(
-            Zs=8, H0=10e-3, W0=20e-3, H1=10e-3, H2=40e-3, W1=50e-3, W2=25e-3, R1=10e-3
+            Zs=8, H0=10e-3, W0=20e-3, H1=10e-3, H2=40e-3, W1=40e-3, W2=50e-3, R1=5e-3
         )
         lam = LamSlot(
-            Rint=0.135, Rext=0.3, is_internal=True, is_stator=False, slot=slot
+            Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
         )
         if is_return_default:
             return lam

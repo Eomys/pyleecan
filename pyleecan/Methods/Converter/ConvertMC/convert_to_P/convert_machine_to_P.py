@@ -1,6 +1,7 @@
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.MachineSCIM import MachineSCIM
+from pyleecan.Classes.MachineWRSM import MachineWRSM
 
 
 def convert_machine_to_P(self):
@@ -40,6 +41,9 @@ def convert_machine_to_P(self):
 
     elif motor_type == "IM":
         self.machine = MachineSCIM()
+
+    elif motor_type == "SYNC":
+        self.machine = MachineWRSM()
 
     else:
         # exception if machine as not an equivalent in pyleecan

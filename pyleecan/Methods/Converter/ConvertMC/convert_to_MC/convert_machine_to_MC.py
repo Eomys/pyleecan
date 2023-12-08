@@ -19,6 +19,9 @@ def convert_machine_to_MC(self):  # conversion to MotorCAD
     elif motor_type == "MachineSCIM":
         name_machine = "IM"
 
+    elif motor_type == "MachineWRSM":
+        name_machine = "SYNC"
+
     else:
         raise NotImplementedError(
             f"Machine {motor_type} has not equivalent or has not implement"
