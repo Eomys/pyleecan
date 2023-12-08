@@ -9,16 +9,17 @@ from pyleecan.Classes.SlotW11 import SlotW11
 
 # creating a dictionary
 
-other_dict = {
-    "[Dimensions]": {
-        "Pole_Number": 6,
-    }
-}
-
 
 class TestComplexRulePolePairNumber(object):
     def test_set_pole_pair_number(self):
         """test rule complex"""
+
+        other_dict = {
+            "[Dimensions]": {
+                "Pole_Number": 6,
+            }
+        }
+
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
