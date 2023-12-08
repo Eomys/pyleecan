@@ -11,7 +11,7 @@ other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 4,
         "Magnet_Arc_[ED]": 120,
-        "Magnet_Reduction": 1,
+        "MagnetReduction": 1,
     }
 }
 
