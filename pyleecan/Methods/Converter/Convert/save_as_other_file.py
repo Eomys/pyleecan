@@ -1,4 +1,5 @@
 import json
+from os import path
 
 """
 def selection_file():
@@ -20,6 +21,5 @@ def save_as_other_file(path_save, other_dict):
     other_dict : dict
         dict use to convert in the conrrect version
     """
-    with open("Tests//Methods//Converter" + "//" + path_save, "x") as file:
+    with open(path.join("Tests", "Methods", "Converter", path_save), "x") as file:
         json.dump(other_dict, file)
-        file.close()

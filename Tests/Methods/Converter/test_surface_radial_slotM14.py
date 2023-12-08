@@ -6,9 +6,6 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM14 import SlotM14
 
-
-rule_list = list()
-
 # add equation rules
 other_dict = {
     "[Dimensions]": {

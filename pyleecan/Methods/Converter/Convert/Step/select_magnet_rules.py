@@ -7,7 +7,7 @@ from pyleecan.Classes.SlotM16 import SlotM16
 
 
 def select_magnet_rules(self, is_stator):
-    """selection step to add rules for magnet and convert the magnet
+    """select step to add rules for magnet and convert the magnet
 
     Parameters
     ----------

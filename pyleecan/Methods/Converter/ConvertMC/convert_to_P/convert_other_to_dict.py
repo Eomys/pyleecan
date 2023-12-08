@@ -22,7 +22,7 @@ def convert_other_to_dict(self, file_path):
 
     list_path = file_path.split(".")
     if not list_path[-1] == "mot":
-        raise NameError("The file is not a .mot, please select a .mot to convert")
+        raise ValueError("The file is not a .mot, please select a .mot to convert")
     if not isfile(file_path):
         raise ValueError(f"Error: This file doesn't exist: {file_path}")
     else:
@@ -115,7 +115,6 @@ def convert_other_to_dict(self, file_path):
 
             self.other_dict = other_dict
             self.other_unit_dict = other_unit_dict
-            file.close()
 
 
 # conversion str in float

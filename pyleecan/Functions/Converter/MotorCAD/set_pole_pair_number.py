@@ -44,10 +44,10 @@ def P_to_other(self, machine, other_dict, other_unit_dict=None):
     """
 
     pole_pair_number = machine.get_pole_pair_number() * 2
+
     if not "[Dimensions]" in other_dict:
         other_dict["[Dimensions]"] = {}
-        other_dict["[Dimensions]"]["Pole_Number"] = pole_pair_number
 
-    else:
-        other_dict["[Dimensions]"]["Pole_Number"] = pole_pair_number
+    other_dict["[Dimensions]"]["Pole_Number"] = pole_pair_number
+
     return other_dict

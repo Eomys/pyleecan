@@ -6,7 +6,7 @@ PATH_FUNCTION_RULE_COMPLEX_MOT = "pyleecan\Functions\Converter\MotorCAD\\"
 
 
 def _set_fct_name(self, value):
-    """finf the path of function
+    """find the path of functions
 
     Parameters
     ----------

@@ -1,5 +1,5 @@
 def select_pole_rules(self, is_stator):
-    """selection step to add rules for pole
+    """select step to add rules for pole
 
     Parameters
     ----------
