@@ -12,7 +12,7 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_glyph_pv(
-    p,
+    pv_plotter,
     mesh_pv,
     vect_field,
     is_point_arrow,
@@ -23,7 +23,7 @@ def plot_glyph_pv(
 
     Parameters
     ----------
-    p : pyvista.Plotter
+    pv_plotter : pyvista.Plotter
         a pyvista plotting object
     mesh_pv : UnstructuredGrid
         a pyvista mesh object
@@ -57,4 +57,4 @@ def plot_glyph_pv(
         centers2.vectors = surf["field"] * factor
         arrows_plt = centers2.arrows
 
-    p.add_mesh(arrows_plt, color="red")
+    pv_plotter.add_mesh(arrows_plt, color="red")

@@ -1,7 +1,24 @@
-from numpy import real, max as np_max, abs as np_abs, hstack, zeros
+from typing import Tuple
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from numpy import abs as np_abs
+from numpy import hstack
+from numpy import max as np_max
+from numpy import ndarray, real, zeros
+from pyvista import PolyData, UnstructuredGrid
+
+from ....Classes.MeshSolution import MeshSolution
 
 
-def get_arrows_plt(mesh_pv, field, meshsol, factor, is_point_arrow, phase=1):
+def get_arrows_plt(
+    mesh_pv: UnstructuredGrid,
+    field: ndarray,
+    meshsol: MeshSolution,
+    factor: float,
+    is_point_arrow: bool,
+    phase: complex = 1 + 0j,
+) -> Tuple[PolyData, float]:
     """Create a pyvista arrow plot
 
     Parameters
@@ -29,7 +46,7 @@ def get_arrows_plt(mesh_pv, field, meshsol, factor, is_point_arrow, phase=1):
 
     vect_field = real(field * phase)
 
-    # Compute factor
+    # Compute default factor if needed
     if factor is None:
         factor = 0.2 * np_max(np_abs(mesh_pv.bounds)) / np_max(np_abs(vect_field))
 

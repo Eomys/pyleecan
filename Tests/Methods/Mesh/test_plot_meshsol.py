@@ -31,7 +31,7 @@ def _gen_mesh_solution():
     mesh.node.add_node([0, -1, 1])
     mesh.node.add_node([0.707, -0.707, 1])
 
-    mesh.element["quad"] = ElementMat(nb_node_per_element=4)
+    mesh.element_dict["quad"] = ElementMat(nb_node_per_element=4)
     mesh.add_element([0, 8, 9, 1], "quad")
     mesh.add_element([1, 9, 10, 2], "quad")
     mesh.add_element([2, 10, 11, 3], "quad")
@@ -40,7 +40,7 @@ def _gen_mesh_solution():
     mesh.add_element([5, 13, 14, 6], "quad")
     mesh.add_element([6, 14, 15, 7], "quad")
     mesh.add_element([7, 15, 8, 0], "quad")
-    mesh.element["quad"].indice = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+    mesh.element_dict["quad"].indice = np.array([1, 2, 3, 4, 5, 6, 7, 8])
 
     alpha = np.arange(8) * 2 * np.pi / 8
     k = -2
