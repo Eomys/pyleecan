@@ -7,7 +7,7 @@ def solve_equation(self, other_dict, machine, other_unit_dict, is_P_to_other):
     else:
         name_var = "y"
 
-    # we must have the same unit
+    # we must have the same unit for all parameters used in equation
     equation = self.equation
 
     for param in self.param:
@@ -27,7 +27,6 @@ def solve_equation(self, other_dict, machine, other_unit_dict, is_P_to_other):
     equation = equation.split("=")
 
     equation = equation[0] + "-(" + equation[1] + ")"
-    # result = eval(equation)
 
     value = solve(equation)
     # value return a list of equation, all equations are first order so just one solution

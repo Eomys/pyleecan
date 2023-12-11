@@ -17,8 +17,7 @@ def add_rule_circular_duct_circular(self, is_stator, duct_id):
     """
 
     if is_stator:
-        lam_name_MC = "Stator"
-        lam_name_py = "stator"
+        self.get_logger().info("stator_duct, not implemented")
         return
     else:
         lam_name_MC = "Rotor"

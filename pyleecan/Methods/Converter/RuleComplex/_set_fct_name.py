@@ -1,8 +1,8 @@
 from ....Functions.path_tools import abs_file_path
 from ntpath import basename
 
-PYTHON_DEFAULT_ENCODING = "utf-8-sig"
-PATH_FUNCTION_RULE_COMPLEX_MOT = "pyleecan\Functions\Converter\MotorCAD\\"
+# PYTHON_DEFAULT_ENCODING = "utf-8-sig"
+# PATH_FUNCTION_RULE_COMPLEX_MOT = "pyleecan\Functions\Converter\MotorCAD\\"
 
 
 def _set_fct_name(self, value):

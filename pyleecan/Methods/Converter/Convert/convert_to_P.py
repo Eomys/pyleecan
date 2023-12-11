@@ -42,7 +42,6 @@ def convert_to_P(self, file_path):
                 self.other_dict, self.machine, self.other_unit_dict
             )
         except Exception as e:
-            self.get_logger().error(f"Error while running rule {rule.get_name()}:\n{e}")
             raise ConvertionError(f"Error while running rule {rule.get_name()}:\n{e}")
 
     # add name for machine

@@ -67,53 +67,53 @@ except ImportError as error:
     convert_notch_to_P = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
+    from ..Methods.Converter.ConvertMC.convert_to_other.init_other_unit import (
         init_other_unit,
     )
 except ImportError as error:
     init_other_unit = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_slot_to_MC import (
-        convert_slot_to_MC,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_slot_to_other import (
+        convert_slot_to_other,
     )
 except ImportError as error:
-    convert_slot_to_MC = error
+    convert_slot_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_machine_to_MC import (
-        convert_machine_to_MC,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_machine_to_other import (
+        convert_machine_to_other,
     )
 except ImportError as error:
-    convert_machine_to_MC = error
+    convert_machine_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_magnet_to_MC import (
-        convert_magnet_to_MC,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_magnet_to_other import (
+        convert_magnet_to_other,
     )
 except ImportError as error:
-    convert_magnet_to_MC = error
+    convert_magnet_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_hole_to_MC import (
-        convert_hole_to_MC,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_hole_to_other import (
+        convert_hole_to_other,
     )
 except ImportError as error:
-    convert_hole_to_MC = error
+    convert_hole_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_duct_to_MC import (
-        convert_duct_to_MC,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_duct_to_other import (
+        convert_duct_to_other,
     )
 except ImportError as error:
-    convert_duct_to_MC = error
+    convert_duct_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_notch_to_MC import (
-        convert_notch_to_MC,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_notch_to_other import (
+        convert_notch_to_other,
     )
 except ImportError as error:
-    convert_notch_to_MC = error
+    convert_notch_to_other = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -420,7 +420,7 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_P = convert_notch_to_P
-    # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
+    # cf Methods.Converter.ConvertMC.convert_to_other.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
             fget=lambda x: raise_(
@@ -432,78 +432,78 @@ class ConvertMC(Convert):
         )
     else:
         init_other_unit = init_other_unit
-    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_slot_to_MC
-    if isinstance(convert_slot_to_MC, ImportError):
-        convert_slot_to_MC = property(
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_slot_to_other
+    if isinstance(convert_slot_to_other, ImportError):
+        convert_slot_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_slot_to_MC: "
-                    + str(convert_slot_to_MC)
+                    "Can't use ConvertMC method convert_slot_to_other: "
+                    + str(convert_slot_to_other)
                 )
             )
         )
     else:
-        convert_slot_to_MC = convert_slot_to_MC
-    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_machine_to_MC
-    if isinstance(convert_machine_to_MC, ImportError):
-        convert_machine_to_MC = property(
+        convert_slot_to_other = convert_slot_to_other
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_machine_to_other
+    if isinstance(convert_machine_to_other, ImportError):
+        convert_machine_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_machine_to_MC: "
-                    + str(convert_machine_to_MC)
+                    "Can't use ConvertMC method convert_machine_to_other: "
+                    + str(convert_machine_to_other)
                 )
             )
         )
     else:
-        convert_machine_to_MC = convert_machine_to_MC
-    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_magnet_to_MC
-    if isinstance(convert_magnet_to_MC, ImportError):
-        convert_magnet_to_MC = property(
+        convert_machine_to_other = convert_machine_to_other
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_magnet_to_other
+    if isinstance(convert_magnet_to_other, ImportError):
+        convert_magnet_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_magnet_to_MC: "
-                    + str(convert_magnet_to_MC)
+                    "Can't use ConvertMC method convert_magnet_to_other: "
+                    + str(convert_magnet_to_other)
                 )
             )
         )
     else:
-        convert_magnet_to_MC = convert_magnet_to_MC
-    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_hole_to_MC
-    if isinstance(convert_hole_to_MC, ImportError):
-        convert_hole_to_MC = property(
+        convert_magnet_to_other = convert_magnet_to_other
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_hole_to_other
+    if isinstance(convert_hole_to_other, ImportError):
+        convert_hole_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_hole_to_MC: "
-                    + str(convert_hole_to_MC)
+                    "Can't use ConvertMC method convert_hole_to_other: "
+                    + str(convert_hole_to_other)
                 )
             )
         )
     else:
-        convert_hole_to_MC = convert_hole_to_MC
-    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_duct_to_MC
-    if isinstance(convert_duct_to_MC, ImportError):
-        convert_duct_to_MC = property(
+        convert_hole_to_other = convert_hole_to_other
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_duct_to_other
+    if isinstance(convert_duct_to_other, ImportError):
+        convert_duct_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_duct_to_MC: "
-                    + str(convert_duct_to_MC)
+                    "Can't use ConvertMC method convert_duct_to_other: "
+                    + str(convert_duct_to_other)
                 )
             )
         )
     else:
-        convert_duct_to_MC = convert_duct_to_MC
-    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_notch_to_MC
-    if isinstance(convert_notch_to_MC, ImportError):
-        convert_notch_to_MC = property(
+        convert_duct_to_other = convert_duct_to_other
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_notch_to_other
+    if isinstance(convert_notch_to_other, ImportError):
+        convert_notch_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_notch_to_MC: "
-                    + str(convert_notch_to_MC)
+                    "Can't use ConvertMC method convert_notch_to_other: "
+                    + str(convert_notch_to_other)
                 )
             )
         )
     else:
-        convert_notch_to_MC = convert_notch_to_MC
+        convert_notch_to_other = convert_notch_to_other
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(

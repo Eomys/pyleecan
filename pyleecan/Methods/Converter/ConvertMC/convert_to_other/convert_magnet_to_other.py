@@ -1,4 +1,4 @@
-def convert_magnet_to_MC(self):
+def convert_magnet_to_other(self):
     """Selects correct magnet and implements it in dict
 
     Parameters

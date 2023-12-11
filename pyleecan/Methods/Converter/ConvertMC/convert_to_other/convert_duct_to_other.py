@@ -1,4 +1,4 @@
-def convert_duct_to_MC(self, is_stator):
+def convert_duct_to_other(self, is_stator):
     """selection step to add rules for duct
 
     Parameters

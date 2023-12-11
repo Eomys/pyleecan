@@ -118,19 +118,19 @@ def convert_other_to_dict(self, file_path):
             file.close()
 
 
-# conversion str in float
-def isfloat(str):
+# conversion value in float
+def isfloat(value):
     try:
-        float(str)
+        float(value)
         return True
     except ValueError:
         return False
 
 
-# conversion str in int
-def isint(str):
+# conversion value in int
+def isint(value):
     try:
-        int(str)
+        int(value)
         return True
     except ValueError:
         return False

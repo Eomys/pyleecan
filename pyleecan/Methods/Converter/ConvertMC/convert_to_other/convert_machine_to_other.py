@@ -1,4 +1,4 @@
-def convert_machine_to_MC(self):  # conversion to MotorCAD
+def convert_machine_to_other(self):  # conversion to MotorCAD
     """Update other_dict with the correct machine type
 
     Parameters

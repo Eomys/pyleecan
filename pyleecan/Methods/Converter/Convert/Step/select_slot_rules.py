@@ -19,7 +19,7 @@ def select_slot_rules(self, is_stator):
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:
-        self.convert_slot_to_MC()
+        self.convert_slot_to_other()
     else:
         self.convert_slot_to_P()
 

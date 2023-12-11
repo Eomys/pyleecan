@@ -42,4 +42,4 @@ def add_rule_notch(self, is_stator):
         )
     )
 
-    self.rules_list.append(RuleComplex(fct_name="add_notch", folder="MotorCAD"))
+    self.rules_list.append(RuleComplex(fct_name="add_notch_slotM19", folder="MotorCAD"))

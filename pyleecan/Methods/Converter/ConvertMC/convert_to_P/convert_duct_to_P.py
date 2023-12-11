@@ -16,10 +16,9 @@ def convert_duct_to_P(self, is_stator):
     """
     # selection of lamination
     if is_stator == True:
+        self.get_logger().info("stator_duct, not implemented")
         return
-        lam_name_type = "Stator"
-        lam_name = ""
-        axial_vent = self.machine.stator.axial_vent
+
     else:
         lam_name_type = "Rotor"
         lam_name = "Rotor"

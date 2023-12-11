@@ -1,4 +1,4 @@
-def convert_hole_to_MC(self):
+def convert_hole_to_other(self):
     """Selects correct hole and implements it in dict
 
     Parameters

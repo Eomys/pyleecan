@@ -19,7 +19,7 @@ def select_magnet_rules(self, is_stator):
     """
     # set the machine or dict with the corect conversion of magnet to
     if self.is_P_to_other:
-        self.convert_magnet_to_MC()
+        self.convert_magnet_to_other()
 
     else:
         self.convert_magnet_to_P()

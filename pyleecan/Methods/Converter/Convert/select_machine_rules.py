@@ -11,7 +11,7 @@ def select_machine_rules(self):
     """
     # selection machine type, with implementation in obj machine or in dict
     if self.is_P_to_other:
-        self.convert_machine_to_MC()
+        self.convert_machine_to_other()
     else:
         self.convert_machine_to_P()
     # add rule present in all machine

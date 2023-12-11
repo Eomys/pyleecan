@@ -21,7 +21,7 @@ def select_hole_rules(self, is_stator):
         raise ValueError("Hole are just in rotor")
 
     if self.is_P_to_other:
-        self.convert_hole_to_MC()
+        self.convert_hole_to_other()
 
     else:
         self.convert_hole_to_P()

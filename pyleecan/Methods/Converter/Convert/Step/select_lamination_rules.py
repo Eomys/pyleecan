@@ -16,5 +16,5 @@ def select_lamination_rules(self, is_stator):
         self.convert_notch_to_P(is_stator)
 
     else:
-        self.convert_duct_to_MC(is_stator)
-        self.convert_notch_to_MC(is_stator)
+        self.convert_duct_to_other(is_stator)
+        self.convert_notch_to_other(is_stator)
