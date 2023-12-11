@@ -1,3 +1,7 @@
+from .....Classes.MachineSIPMSM import MachineSIPMSM
+from .....Classes.MachineIPMSM import MachineIPMSM
+
+
 def convert_machine_to_other(self):  # conversion to MotorCAD
     """Update other_dict with the correct machine type
 
@@ -10,10 +14,10 @@ def convert_machine_to_other(self):  # conversion to MotorCAD
     motor_type = type(self.machine).__name__
 
     # selection type of machine
-    if motor_type == "MachineSIPMSM":
+    if isinstance(self.machine, MachineSIPMSM):
         name_machine = "BPM"
 
-    elif motor_type == "MachineIPMSM":
+    elif isinstance(self.machine, MachineIPMSM):
         name_machine = "IM"
 
     else:

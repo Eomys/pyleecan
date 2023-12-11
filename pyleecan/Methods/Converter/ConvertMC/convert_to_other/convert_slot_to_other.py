@@ -6,6 +6,10 @@ def convert_slot_to_other(self):
     self : ConvertMC
         A ConvertMC object
     """
+
+    # Single type
+    # Signle set
+
     # conversion to pyleecan
     slot_type = type(self.machine.stator.slot).__name__
 

@@ -17,6 +17,9 @@ def select_hole_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
+
+    # Commenter ce quil se passe quand multi set (to_P et to_other)
+
     if is_stator:
         raise ValueError("Hole are just in rotor")
 
