@@ -30,7 +30,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     slot_width = (Rbo) * sin(W1 / 2)
     machine.rotor.slot.W1 = 2 * slot_width
 
-    #Set Rtopm
+    # Set Rtopm
     machine.rotor.slot.Rtopm = Rbo
 
     return machine

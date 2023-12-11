@@ -20,13 +20,12 @@ def convert_duct_to_P(self, is_stator):
         return
 
     else:
-        lam_name_type = "Rotor"
         lam_name = "Rotor"
         axial_vent = self.machine.rotor.axial_vent
 
     # selection type layers
-    if f"{lam_name_type}_Duct_Type" in self.other_dict["[Through_Vent]"]:
-        type_duct = self.other_dict["[Through_Vent]"][f"{lam_name_type}_Duct_Type"]
+    if f"{lam_name}_Duct_Type" in self.other_dict["[Through_Vent]"]:
+        type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}_Duct_Type"]
     else:
         type_duct = f"No_{lam_name}_Ducts"
 
@@ -39,7 +38,6 @@ def convert_duct_to_P(self, is_stator):
         # CircularDuct
         if type_duct == f"{lam_name}_Circ_Ducts" or type_duct == "Circ_Ducts":
             Ventilation_class = VentilationCirc
-            rule = self.add_rule_circular_duct_circular
 
         # Shaft_spoke
         elif type_duct == f"{lam_name}_Shaft_Spoke_Ducts":
@@ -48,15 +46,13 @@ def convert_duct_to_P(self, is_stator):
         # Arcduct
         elif type_duct == f"{lam_name}_Arc_Ducts":
             Ventilation_class = VentilationPolar
-            rule = self.add_rule_arc_duct_polar
 
         # RectangularDuct
         elif type_duct == f"{lam_name}_Rect_Ducts" or type_duct == "Rect_Ducts":
             # Error convert is not Implemented
-            self.get_logger().info("Not Implemented")
+            self.get_logger().info("Rect_Ducts, Not Implemented")
             return
-            Ventilation_class = VentilationTrap
-            rule = self.add_rule_rectangular_duct_trapeze
+            # Ventilation_class = VentilationTrap
 
         else:
             raise NotImplementedError(
@@ -65,7 +61,6 @@ def convert_duct_to_P(self, is_stator):
 
         for duct_id in range(number_duct):
             axial_vent.append(Ventilation_class())
-            rule(is_stator, duct_id)
             self.get_logger().info(
                 f"Conversion {type_duct} into {Ventilation_class.__name__}"
             )

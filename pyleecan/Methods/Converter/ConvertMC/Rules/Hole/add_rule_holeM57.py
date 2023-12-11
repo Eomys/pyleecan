@@ -1,8 +1,7 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
 
 
-def add_rule_interior_V_simple_holeM60(self, hole_id):
+def add_rule_holeM57(self, hole_id):
     """Create and adapt all the rules related to Hole
     Extend rules_list within Converter object
 
@@ -26,8 +25,8 @@ def add_rule_interior_V_simple_holeM60(self, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].H0",
+            other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -37,7 +36,7 @@ def add_rule_interior_V_simple_holeM60(self, hole_id):
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].H1",
+            P_obj_path=f"machine.rotor.hole[{hole_id}].H2",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -56,7 +55,7 @@ def add_rule_interior_V_simple_holeM60(self, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"MagnetBarWidth_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"VShapeMagnetPost_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
             unit_type="m",
             scaling_to_P=1,
@@ -65,34 +64,29 @@ def add_rule_interior_V_simple_holeM60(self, hole_id):
     )
 
     self.rules_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", f"VSimpleWidth_Array[{hole_id}]"],
-                    "variable": "y",
-                },
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
-                    "variable": "a",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.rotor.hole[{hole_id}].W2",
-                    "variable": "x",
-                },
-            ],
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"VShapeMagnetSegments_Array[{hole_id}]"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
             unit_type="m",
-            equation="y+a = x",
+            scaling_to_P=1,
             file_name=__file__,
         )
     )
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"VSimpleMagnetPost_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"WebThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W3",
+            unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", f"MagnetBarWidth_Array[{hole_id}]"],
+            P_obj_path=f"machine.rotor.hole[{hole_id}].W4",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,

@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_arc_duct_polar(self, is_stator, duct_id):
+def add_rule_ventilationPolar(self, is_stator, duct_id):
     """Create and adapt all the rules related to lamination (lam radius,...)
     Extend rules_list within Converter object
 

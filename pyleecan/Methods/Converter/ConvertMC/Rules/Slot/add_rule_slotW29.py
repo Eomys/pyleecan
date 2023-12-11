@@ -1,10 +1,9 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
-    """Create and adapt all the rules related to slotW14 (lam radius,...)
+def add_rule_slotW29(self, is_stator):
+    """Create and adapt all the rules related to slotW29 (lam radius,...)
     Extend rules_list within Converter object
 
     Parameters
@@ -14,6 +13,7 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
+
     if is_stator == True:
         lam_name = "stator"
     else:
@@ -31,7 +31,7 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Slot_Opening"],
+            other_key_list=["[Dimensions]", "Slot_Width"],
             P_obj_path=f"machine.{lam_name}.slot.W0",
             unit_type="m",
             scaling_to_P=1,
@@ -40,9 +40,34 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
     )
 
     self.rules_list.append(
+        RuleEquation(
+            param=[
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", "FormWound_WedgeInset"],
+                    "variable": "y",
+                },
+                {
+                    "src": "other",
+                    "path": ["[Dimensions]", "Slot_Width"],
+                    "variable": "a",
+                },
+                {
+                    "src": "pyleecan",
+                    "path": f"machine.{lam_name}.slot.W1",
+                    "variable": "x",
+                },
+            ],
+            unit_type="m",
+            equation="y+a = x",
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Tooth_Width"],
-            P_obj_path=f"machine.{lam_name}.slot.W3",
+            other_key_list=["[Dimensions]", "Slot_Width"],
+            P_obj_path=f"machine.{lam_name}.slot.W2",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -51,7 +76,7 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Tooth_Tip_Depth"],
+            other_key_list=["[Dimensions]", "FormWound_WedgeDepth"],
             P_obj_path=f"machine.{lam_name}.slot.H0",
             unit_type="m",
             scaling_to_P=1,
@@ -61,15 +86,13 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", "Tooth_Tip_Angle"],
+            other_key_list=["[Dimensions]", "FormWound_WedgeThickness"],
             P_obj_path=f"machine.{lam_name}.slot.H1",
-            unit_type="deg",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
     )
-
-    self.rules_list.append(RuleComplex(fct_name="slotW14_H1", folder="MotorCAD"))
 
     self.rules_list.append(
         RuleEquation(
@@ -80,23 +103,23 @@ def add_rule_parallel_tooth_SqB_slotW14(self, is_stator):
                     "variable": "y",
                 },
                 {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H3",
-                    "variable": "x",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H1",
+                    "src": "other",
+                    "path": ["[Dimensions]", "FormWound_WedgeThickness"],
                     "variable": "a",
                 },
                 {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H0",
+                    "src": "other",
+                    "path": ["[Dimensions]", "FormWound_WedgeDepth"],
                     "variable": "b",
+                },
+                {
+                    "src": "pyleecan",
+                    "path": f"machine.{lam_name}.slot.H2",
+                    "variable": "x",
                 },
             ],
             unit_type="m",
-            equation="y = x+a+b",
+            equation="y+b+a = x",
             file_name=__file__,
         )
     )

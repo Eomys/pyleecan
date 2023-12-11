@@ -3,8 +3,8 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_surface_parallel_slotM15(self):
-    """Create and adapt all the rules related to slotM15
+def add_rule_slotM12(self):
+    """Create and adapt all the rules related to slotM12
     Extend rules_list within Converter object
 
     Parameters
@@ -36,5 +36,5 @@ def add_rule_surface_parallel_slotM15(self):
     )
 
     self.rules_list.append(
-        RuleComplex(fct_name="surface_parallel_slotM15", folder="MotorCAD")
+        RuleComplex(fct_name="inset_breadloaf_slotM12", folder="MotorCAD")
     )

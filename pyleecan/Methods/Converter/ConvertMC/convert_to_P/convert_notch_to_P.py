@@ -13,6 +13,7 @@ def convert_notch_to_P(self, is_stator):
     is_stator : bool
         True slot is in stator, False slot is in rotor
     """
+    # MC has not notch in stator
     if is_stator == False:
         if "PoleNotchDepth" in self.other_dict["[Dimensions]"]:
             Notch_depth = self.other_dict["[Dimensions]"]["PoleNotchDepth"]
@@ -24,7 +25,6 @@ def convert_notch_to_P(self, is_stator):
             self.machine.rotor.notch.append(Notch())
             self.machine.rotor.notch[0] = NotchEvenDist()
             self.machine.rotor.notch[0].notch_shape = SlotM19()
-            self.add_rule_notch(is_stator)
 
             self.get_logger().info("Add notch for rotor")
             self.get_logger().warning("Approximation of notch for slotM19")

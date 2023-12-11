@@ -1,7 +1,7 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
 
 
-def add_rule_rectangular_duct_trapeze(self, is_stator, duct_id):
+def add_rule_ventilationTrap(self, is_stator, duct_id):
     """Create and adapt all the rules related to duct
     Extend rules_list within Converter object
 

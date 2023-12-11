@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_tapered_slot_slotW23(self, is_stator):
+def add_rule_slotW23(self, is_stator):
     """Create and adapt all the rules related to slotW23 (lam radius,...)
     Extend rules_list within Converter object
 

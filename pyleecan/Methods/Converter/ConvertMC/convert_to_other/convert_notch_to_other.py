@@ -13,7 +13,7 @@ def convert_notch_to_other(self, is_stator):
     """
 
     # Single type
-    # Signle set
+    # Single set
 
     if is_stator:
         len_nocth = len(self.machine.stator.notch)

@@ -26,28 +26,28 @@ def select_magnet_rules(self, is_stator):
 
     # add the correct rule depending on the hole
     if isinstance(self.machine.rotor.slot, SlotM14) and self.machine.rotor.slot.H0 == 0:
-        self.add_rule_surface_radial_slotM14()
+        self.add_rule_slotM14()
 
     elif (
         isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 == 0
     ):
-        self.add_rule_surface_parallel_slotM15()
+        self.add_rule_slotM15_H0_0()
 
     elif (
         isinstance(self.machine.rotor.slot, SlotM13) and self.machine.rotor.slot.H0 == 0
     ):
-        self.add_rule_surface_breadloaf_slotM13()
+        self.add_rule_slotM13()
 
     elif isinstance(self.machine.rotor.slot, SlotM11):
-        self.add_rule_inset_radial_slotM11()
+        self.add_rule_slotM11()
 
     elif (
         isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 != 0
     ):
-        self.add_rule_inset_parallel_slotM15()
+        self.add_rule_slotM15()
 
     elif isinstance(self.machine.rotor.slot, SlotM12):
-        self.add_rule_inset_breadloaf_slotM12()
+        self.add_rule_slotM12()
 
     elif isinstance(self.machine.rotor.slot, SlotM16):
-        self.add_rule_spoke_slotM16()
+        self.add_rule_slotM16()

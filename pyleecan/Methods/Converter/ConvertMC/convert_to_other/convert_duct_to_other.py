@@ -1,3 +1,8 @@
+from .....Classes.VentilationCirc import VentilationCirc
+from .....Classes.VentilationPolar import VentilationPolar
+from .....Classes.VentilationTrap import VentilationTrap
+
+
 def convert_duct_to_other(self, is_stator):
     """selects step to add rules for duct
 
@@ -23,43 +28,35 @@ def convert_duct_to_other(self, is_stator):
     if len(axial_vent) == 0:
         return
 
-    type_duct = axial_vent[0].__class__.__name__
+    elif len(axial_vent) > 1:
+        for nb_duct, duct in enumerate(axial_vent):
+            if axial_vent[0] != duct:
+                self.get_logger().error(
+                    "A Motor-cad machine can only have one type of axial duct"
+                )
+                break
 
-    for nb_duct, duct in enumerate(axial_vent):
-        if type_duct != type(duct).__name__:
-            self.get_logger().error(
-                "A Motor-cad machine can only have one type of axial duct"
-            )
-            continue
+    # selection type duct, single type in Motor-CAD
+    if isinstance(axial_vent[0], VentilationCirc):
+        # CircularDuct
+        duct_MC_name = "Rotor_Circular_Ducts"
 
-        type_duct = type(duct).__name__
+    elif isinstance(axial_vent[0], VentilationPolar):
+        # Arcduct
+        duct_MC_name = "Rotor_Arc_Ducts"
 
-        # selection of number and type layers
-        if type_duct == "VentilationCirc":
-            # CircularDuct
-            self.add_rule_circular_duct_circular(is_stator, nb_duct)
-            duct_MC_name = "Rotor_Circular_Ducts"
+    elif isinstance(axial_vent[0], VentilationTrap):
+        # RectangularDuct
+        duct_MC_name = "Rotor_Rectangular_Ducts"
+    else:
+        raise NotImplementedError(
+            f"Type of duct {axial_vent[0].__name__} has not equivalent or has not implement"
+        )
 
-        elif type_duct == "VentilationPolar":
-            # Arcduct
-            self.add_rule_arc_duct_polar(is_stator, nb_duct)
-            duct_MC_name = "Rotor_Arc_Ducts"
+    # writting in dict
+    if "[Through_Vent]" not in self.other_dict:
+        self.other_dict["[Through_Vent]"] = {f"{lam_name_MC}_Duct_Type": duct_MC_name}
+    else:
+        self.other_dict["[Through_Vent]"][f"{lam_name_MC}_Duct_Type"] = duct_MC_name
 
-        elif type_duct == "VentilationTrap":
-            # RectangularDuct
-            self.add_rule_rectangular_duct_trapeze(is_stator, nb_duct)
-            duct_MC_name = "Rotor_Rectangular_Ducts"
-        else:
-            raise NotImplementedError(
-                f"Type of duct {type_duct} has not equivalent or has not implement"
-            )
-
-        # writting in dict
-        if "[Through_Vent]" not in self.other_dict:
-            self.other_dict["[Through_Vent]"] = {
-                f"{lam_name_MC}_Duct_Type": duct_MC_name
-            }
-        else:
-            self.other_dict["[Through_Vent]"][f"{lam_name_MC}_Duct_Type"] = duct_MC_name
-
-        self.get_logger().info(f"Conversion {type_duct} into {duct_MC_name}")
+    self.get_logger().info(f"Conversion {axial_vent[0].__name__} into {duct_MC_name}")

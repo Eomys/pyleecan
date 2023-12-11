@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_notch(self, is_stator):
+def add_rule_notch_slotM19(self, is_stator, nb_notch):
     """Create and adapt all the rules related to lamination (lam radius,...)
     Extend rules_list within Converter object
 
@@ -13,8 +13,11 @@ def add_rule_notch(self, is_stator):
         A ConvertMC object
     is_stator : Bool
         A booleen to know, position in lamination
+    nb_notch : int
+        number oh notch
     """
     # MC has just the possibility to have notch rotor
+    # MC has just the possibility to have 1 notch
 
     self.rules_list.append(
         RuleSimple(

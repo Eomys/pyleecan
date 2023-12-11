@@ -98,6 +98,16 @@ except ImportError as error:
     select_bar_rules = error
 
 try:
+    from ..Methods.Converter.Convert.Step.select_duct_rules import select_duct_rules
+except ImportError as error:
+    select_duct_rules = error
+
+try:
+    from ..Methods.Converter.Convert.Step.select_notch_rules import select_notch_rules
+except ImportError as error:
+    select_notch_rules = error
+
+try:
     from ..Methods.Converter.Convert.machine_type.select_SIPMSM_rules import (
         select_SIPMSM_rules,
     )
@@ -303,6 +313,30 @@ class Convert(FrozenClass):
         )
     else:
         select_bar_rules = select_bar_rules
+    # cf Methods.Converter.Convert.Step.select_duct_rules
+    if isinstance(select_duct_rules, ImportError):
+        select_duct_rules = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method select_duct_rules: "
+                    + str(select_duct_rules)
+                )
+            )
+        )
+    else:
+        select_duct_rules = select_duct_rules
+    # cf Methods.Converter.Convert.Step.select_notch_rules
+    if isinstance(select_notch_rules, ImportError):
+        select_notch_rules = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method select_notch_rules: "
+                    + str(select_notch_rules)
+                )
+            )
+        )
+    else:
+        select_notch_rules = select_notch_rules
     # cf Methods.Converter.Convert.machine_type.select_SIPMSM_rules
     if isinstance(select_SIPMSM_rules, ImportError):
         select_SIPMSM_rules = property(
