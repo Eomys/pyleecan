@@ -29,5 +29,5 @@ def solve_equation(self, other_dict, machine, other_unit_dict, is_P_to_other):
     equation = equation[0] + "-(" + equation[1] + ")"
 
     value = solve(equation)
-    # value return a list of equation, all equations are first order so just one solution
+    # value return a list of equation, all equations are first order so have only one solution
     return float(value[0])

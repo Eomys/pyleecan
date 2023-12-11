@@ -6,7 +6,7 @@ from ntpath import basename
 
 
 def _set_fct_name(self, value):
-    """finf the path of function
+    """find the path of functions
 
     Parameters
     ----------

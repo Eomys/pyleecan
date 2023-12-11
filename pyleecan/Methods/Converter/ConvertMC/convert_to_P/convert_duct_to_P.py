@@ -60,7 +60,7 @@ def convert_duct_to_P(self, is_stator):
 
         else:
             raise NotImplementedError(
-                f"Type of duct {type_duct} has not equivalent in pyleecan or has not implement"
+                f"Type of duct {type_duct} has any equivalent in pyleecan or has not been implemented"
             )
 
         for duct_id in range(number_duct):

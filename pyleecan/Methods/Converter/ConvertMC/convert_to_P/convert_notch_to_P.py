@@ -4,7 +4,7 @@ from pyleecan.Classes.SlotM19 import SlotM19
 
 
 def convert_notch_to_P(self, is_stator):
-    """selection step to add rules for notch
+    """select step to add rules for notch
 
     Parameters
     ----------

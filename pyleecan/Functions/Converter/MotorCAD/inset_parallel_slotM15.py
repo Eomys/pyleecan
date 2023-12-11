@@ -26,9 +26,11 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     other_path_list = ["[Dimensions]", "Magnet_Arc_[ED]"]
     W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
+    # Set W1
     slot_width = (Rbo) * sin(W1 / 2)
     machine.rotor.slot.W1 = 2 * slot_width
 
+    #Set Rtopm
     machine.rotor.slot.Rtopm = Rbo
 
     return machine
