@@ -27,10 +27,10 @@ def select_pole_rules(self, is_stator):
     slot = self.machine.rotor.slot
     # add the correct rule depending on the pole
     if isinstance(slot, SlotW62):
-        self.add_rule_salient_pole_slotW61()
+        self.add_rule_salient_pole_slotW62()
 
     elif isinstance(slot, SlotW63):
-        self.add_rule_parallel_tooth_slotW62()
+        self.add_rule_parallel_tooth_slotW63()
 
     elif isinstance(slot, SlotW29):
         self.add_rule_parallel_slot_slotW29()

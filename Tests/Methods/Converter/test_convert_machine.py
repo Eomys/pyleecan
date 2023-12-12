@@ -13,11 +13,11 @@ class Test_converter_machine(object):
         f = open("/Users\LAP17\AppData\Roaming\pyleecan/Pyleecan.log", "w")
         f.close()
 
-        machine2 = load(
-            f"/Users\LAP17\AppData\Roaming\pyleecan\Machine/Renault_Zoe.json"
-        )
-
         """
+            
+        """
+
+        path_list = [
             "interor_V(web)",
             "EMD240_v16",
             "form_wound_inset_parallel_arc_duct",
@@ -34,10 +34,14 @@ class Test_converter_machine(object):
             "parallel_tooth_SqB_Surface_radial",
             "tapered_slot_inset_radial_2_rectangular_duct",
             "VF_Manatee_Hairpin_winding",
-        
-        """
-
-        path_list = ["WRSM_salient_pole"]
+            "SCIM_parallel_tooth",
+            "SCIM_pear",
+            "SCIM_rectangular",
+            "SCIM_round",
+            "WRSM_salient_pole",
+            "WRSM_parallel_tooth",
+            "WRSM_parallel_slot",
+        ]
 
         for path in path_list:
             conv = ConvertMC()
@@ -47,17 +51,19 @@ class Test_converter_machine(object):
             machine.stator.winding.conductor = CondType12()
             machine.stator.winding.conductor.Nwppc = 13
 
-            machine.save(
-                f"/Users/LAP17\Documents/machine_MC_P/file_json/{machine.name}"
-            )
-            machine2.plot()
-            machine.stator.plot()
             machine.plot()
-            machine2 = load(
-                f"/Users\LAP17\Documents/machine_MC_P/file_json/{machine.name}.json"
+            machine.save(
+                f"/Users/LAP17/Documents/machine_MC_P/file_json/{machine.name}"
             )
 
-            assert machine.compare(machine2)
+            machine2 = load(
+                f"/Users/LAP17/Documents/machine_MC_P/file_json/{machine.name}.json"
+            )
+
+            l = machine.compare(machine2)
+
+            if len(l) != 0:
+                raise ValueError("Machine isn't equivalent")
 
         print("Done")
 

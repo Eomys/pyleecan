@@ -30,7 +30,7 @@ def convert_pole_to_P(self):
 
     elif pole_type == "Sync_Parallel_Slot":
         self.machine.rotor.slot = SlotW29()
-        self.machine.rotor.slot.H0 = 0
+        self.machine.rotor.slot.H1 = 0
         self.get_logger().info("Approximation for tip angle, not possible in pyleecan")
 
     else:

@@ -382,18 +382,25 @@ except ImportError as error:
     add_rule_embedded_radial_holeM62 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW62 import (
-        add_rule_parallel_tooth_slotW62,
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW63 import (
+        add_rule_parallel_tooth_slotW63,
     )
 except ImportError as error:
-    add_rule_parallel_tooth_slotW62 = error
+    add_rule_parallel_tooth_slotW63 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW61 import (
-        add_rule_salient_pole_slotW61,
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW62 import (
+        add_rule_salient_pole_slotW62,
     )
 except ImportError as error:
-    add_rule_salient_pole_slotW61 = error
+    add_rule_salient_pole_slotW62 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_slot_slotW29 import (
+        add_rule_parallel_slot_slotW29,
+    )
+except ImportError as error:
+    add_rule_parallel_slot_slotW29 = error
 
 
 from numpy import isnan
@@ -1031,30 +1038,42 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_embedded_radial_holeM62 = add_rule_embedded_radial_holeM62
-    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW62
-    if isinstance(add_rule_parallel_tooth_slotW62, ImportError):
-        add_rule_parallel_tooth_slotW62 = property(
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW63
+    if isinstance(add_rule_parallel_tooth_slotW63, ImportError):
+        add_rule_parallel_tooth_slotW63 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_parallel_tooth_slotW62: "
-                    + str(add_rule_parallel_tooth_slotW62)
+                    "Can't use ConvertMC method add_rule_parallel_tooth_slotW63: "
+                    + str(add_rule_parallel_tooth_slotW63)
                 )
             )
         )
     else:
-        add_rule_parallel_tooth_slotW62 = add_rule_parallel_tooth_slotW62
-    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW61
-    if isinstance(add_rule_salient_pole_slotW61, ImportError):
-        add_rule_salient_pole_slotW61 = property(
+        add_rule_parallel_tooth_slotW63 = add_rule_parallel_tooth_slotW63
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW62
+    if isinstance(add_rule_salient_pole_slotW62, ImportError):
+        add_rule_salient_pole_slotW62 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_salient_pole_slotW61: "
-                    + str(add_rule_salient_pole_slotW61)
+                    "Can't use ConvertMC method add_rule_salient_pole_slotW62: "
+                    + str(add_rule_salient_pole_slotW62)
                 )
             )
         )
     else:
-        add_rule_salient_pole_slotW61 = add_rule_salient_pole_slotW61
+        add_rule_salient_pole_slotW62 = add_rule_salient_pole_slotW62
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_slot_slotW29
+    if isinstance(add_rule_parallel_slot_slotW29, ImportError):
+        add_rule_parallel_slot_slotW29 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_slot_slotW29: "
+                    + str(add_rule_parallel_slot_slotW29)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_slot_slotW29 = add_rule_parallel_slot_slotW29
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
