@@ -81,6 +81,13 @@ except ImportError as error:
     convert_notch_to_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_other import (
+        convert_conductor_to_other,
+    )
+except ImportError as error:
+    convert_conductor_to_other = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
         init_other_unit,
     )
@@ -142,6 +149,13 @@ try:
     )
 except ImportError as error:
     convert_notch_to_MC = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_MC.convert_conductor_to_other import (
+        convert_conductor_to_other,
+    )
+except ImportError as error:
+    convert_conductor_to_other = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -402,6 +416,13 @@ try:
 except ImportError as error:
     add_rule_parallel_slot_slotW29 = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Winding.add_rule_winding import (
+        add_rule_winding,
+    )
+except ImportError as error:
+    add_rule_winding = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -521,6 +542,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_P = convert_notch_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_other
+    if isinstance(convert_conductor_to_other, ImportError):
+        convert_conductor_to_other = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_conductor_to_other: "
+                    + str(convert_conductor_to_other)
+                )
+            )
+        )
+    else:
+        convert_conductor_to_other = convert_conductor_to_other
     # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
@@ -629,6 +662,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_MC = convert_notch_to_MC
+    # cf Methods.Converter.ConvertMC.convert_to_MC.convert_conductor_to_other
+    if isinstance(convert_conductor_to_other, ImportError):
+        convert_conductor_to_other = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_conductor_to_other: "
+                    + str(convert_conductor_to_other)
+                )
+            )
+        )
+    else:
+        convert_conductor_to_other = convert_conductor_to_other
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(
@@ -1074,6 +1119,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_parallel_slot_slotW29 = add_rule_parallel_slot_slotW29
+    # cf Methods.Converter.ConvertMC.Rules.Winding.add_rule_winding
+    if isinstance(add_rule_winding, ImportError):
+        add_rule_winding = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_winding: "
+                    + str(add_rule_winding)
+                )
+            )
+        )
+    else:
+        add_rule_winding = add_rule_winding
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

@@ -34,13 +34,12 @@ class Test_converter_machine(object):
             "SCIM_pear",
             "SCIM_rectangular",
             "SCIM_round",
-            
+            "WRSM_parallel_tooth",
+            "WRSM_parallel_slot",
         """
 
         path_list = [
             "WRSM_salient_pole",
-            "WRSM_parallel_tooth",
-            "WRSM_parallel_slot",
         ]
 
         for path in path_list:

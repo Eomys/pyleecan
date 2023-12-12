@@ -7,6 +7,6 @@ def select_winding_rules(self, is_stator):
         A ConvertMC object
     is_stator : bool
         True slot is in stator, False slot is in rotor
-
     """
-    self.get_logger().info("winding, not implemented")
+
+    self.add_rule_winding()
