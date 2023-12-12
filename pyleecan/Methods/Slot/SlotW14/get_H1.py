@@ -20,7 +20,6 @@ def get_H1(self):
 
     # H1 in rad
     if self.H1_is_rad:
-        # ëcreation slot with H1 = 0
         Rbo = self.get_Rbo()
         hssp = pi / self.Zs
 
