@@ -14,7 +14,6 @@ def add_rule_holeM62(self, hole_id):
     hole_id : int
         A int to know the number of hole
     """
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", f"Pole_Number"],
@@ -45,12 +44,24 @@ def add_rule_holeM62(self, hole_id):
         )
     )
 
-    self.rules_list.append(
-        RuleComplex(
-            fct_name="embedded_parallel_holeM62",
-            folder="MotorCAD",
-            param_dict={
-                "hole_id": hole_id,
-            },
+    if not self.machine.rotor.hole[hole_id].W0_is_rad:
+        self.rules_list.append(
+            RuleComplex(
+                fct_name="embedded_parallel_holeM62",
+                folder="MotorCAD",
+                param_dict={
+                    "hole_id": hole_id,
+                },
+            )
         )
-    )
+
+    else:
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=["[Dimensions]", f"Magnet_Arc_[ED]"],
+                P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
+                unit_type="ED",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
+        )

@@ -25,17 +25,13 @@ def select_magnet_rules(self, is_stator):
         self.convert_magnet_to_P()
 
     # add the correct rule depending on the hole
-    if isinstance(self.machine.rotor.slot, SlotM14) and self.machine.rotor.slot.H0 == 0:
+    if isinstance(self.machine.rotor.slot, SlotM14):
         self.add_rule_slotM14()
 
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 == 0
-    ):
+    elif isinstance(self.machine.rotor.slot, SlotM15):
         self.add_rule_slotM15_H0_0()
 
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM13) and self.machine.rotor.slot.H0 == 0
-    ):
+    elif isinstance(self.machine.rotor.slot, SlotM13):
         self.add_rule_slotM13()
 
     elif isinstance(self.machine.rotor.slot, SlotM11):

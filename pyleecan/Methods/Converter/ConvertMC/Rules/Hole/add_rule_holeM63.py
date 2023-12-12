@@ -45,12 +45,24 @@ def add_rule_holeM63(self, hole_id):
         )
     )
 
-    self.rules_list.append(
-        RuleComplex(
-            fct_name="embedded_breadloaf_holeM63",
-            folder="MotorCAD",
-            param_dict={
-                "hole_id": hole_id,
-            },
+    if self.machine.rotor.hole[hole_id].top_flat == False:
+        self.rules_list.append(
+            RuleComplex(
+                fct_name="embedded_breadloaf_holeM63",
+                folder="MotorCAD",
+                param_dict={
+                    "hole_id": hole_id,
+                },
+            )
         )
-    )
+
+    else:
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=["[Dimensions]", f"Magnet_Width"],
+                P_obj_path=f"machine.rotor.hole[{hole_id}].W0",
+                unit_type="m",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
+        )

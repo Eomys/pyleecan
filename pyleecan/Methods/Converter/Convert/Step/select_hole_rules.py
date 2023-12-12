@@ -31,16 +31,10 @@ def select_hole_rules(self, is_stator):
 
     for hole_id, hole in enumerate(self.machine.rotor.hole):
         # add the correct rule depending on the hole
-        if isinstance(hole, HoleM62) and not hole.W0_is_rad:
+        if isinstance(hole, HoleM62):
             self.add_rule_holeM62(hole_id)
 
-        elif isinstance(hole, HoleM62) and hole.W0_is_rad:
-            self.add_rule_holeM62_radial(hole_id)
-
-        elif isinstance(hole, HoleM63) and hole.top_flat == True:
-            self.add_rule_holeM63_top_flat(hole_id)
-
-        elif isinstance(hole, HoleM63) and hole.top_flat == False:
+        elif isinstance(hole, HoleM63):
             self.add_rule_holeM63(hole_id)
 
         elif isinstance(hole, HoleM61):
