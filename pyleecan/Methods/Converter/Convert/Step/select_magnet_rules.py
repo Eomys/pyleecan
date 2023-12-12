@@ -29,18 +29,13 @@ def select_magnet_rules(self, is_stator):
         self.add_rule_slotM14()
 
     elif isinstance(self.machine.rotor.slot, SlotM15):
-        self.add_rule_slotM15_H0_0()
+        self.add_rule_slotM15()
 
     elif isinstance(self.machine.rotor.slot, SlotM13):
         self.add_rule_slotM13()
 
     elif isinstance(self.machine.rotor.slot, SlotM11):
         self.add_rule_slotM11()
-
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 != 0
-    ):
-        self.add_rule_slotM15()
 
     elif isinstance(self.machine.rotor.slot, SlotM12):
         self.add_rule_slotM12()
