@@ -13,7 +13,7 @@ def select_duct_rules(self, is_stator):
     is_stator : bool
         True slot is in stator, False slot is in rotor
     """
-    # selection of number and to layers
+    # selection of number and add in machine
     if self.is_P_to_other:
         self.convert_duct_to_other(is_stator)
     else:
@@ -24,7 +24,7 @@ def select_duct_rules(self, is_stator):
     else:
         axial_vent = self.machine.rotor.axial_vent
 
-    # selection of number and type layers
+    # add rules based on the number of duct in the machine
     for nb_duct, duct in enumerate(axial_vent):
         if isinstance(duct, VentilationCirc):
             self.add_rule_ventilationCirc(is_stator, nb_duct)

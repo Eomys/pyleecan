@@ -34,7 +34,6 @@ def convert_duct_to_P(self, is_stator):
         self.get_logger().debug(f"No duct to convert at {lam_name}")
 
     else:
-        number_duct = self.other_dict["[Through_Vent]"][f"{lam_name}CircularDuctLayers"]
         # CircularDuct
         if type_duct == f"{lam_name}_Circ_Ducts" or type_duct == "Circ_Ducts":
             Ventilation_class = VentilationCirc
@@ -59,6 +58,7 @@ def convert_duct_to_P(self, is_stator):
                 f"Type of duct {type_duct} has any equivalent in pyleecan or has not been implemented"
             )
 
+        number_duct = self.other_dict["[Through_Vent]"][f"{lam_name}CircularDuctLayers"]
         for duct_id in range(number_duct):
             axial_vent.append(Ventilation_class())
             self.get_logger().info(

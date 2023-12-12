@@ -11,6 +11,7 @@ def select_notch_rules(self, is_stator):
     is_stator : bool
         True slot is in stator, False slot is in rotor
     """
+    # selection of number and add in machine
     if self.is_P_to_other:
         self.convert_notch_to_other(is_stator)
     else:
@@ -21,6 +22,7 @@ def select_notch_rules(self, is_stator):
     else:
         notch = self.machine.rotor.notch
 
+    # add rules based on the number of notch in the machine
     for nb_notch, notch in enumerate(notch):
         if isinstance(notch.notch_shape, SlotM19):
             self.add_rule_notch_slotM19(is_stator, nb_notch)
