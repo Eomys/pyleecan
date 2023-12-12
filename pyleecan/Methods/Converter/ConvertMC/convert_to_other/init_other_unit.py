@@ -21,7 +21,7 @@ def init_other_unit(self):
 
     # conversion electrical degree
     pole_pair_number = self.machine.get_pole_pair_number()
-    self.other_unit_dict["ED"] = (2 / pole_pair_number / 2) * (pi / 180)
+    self.other_unit_dict["ED"] = (4 / pole_pair_number) * (pi / 180)
 
     self.other_unit_dict[None] = 1  # No unit => No scale
     self.other_unit_dict[""] = 1  # No unit => No scale

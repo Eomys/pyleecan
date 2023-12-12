@@ -20,9 +20,6 @@ def convert_hole_to_other(self):
         The number of hole
     """
 
-    # Single type
-    # Multi set (handle in select_hole_rules) (only for a few type)
-
     # conversion to motor-cad
     hole = self.machine.rotor.hole[0]
     hole_type = type(hole).__name__

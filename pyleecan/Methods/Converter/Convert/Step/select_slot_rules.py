@@ -6,7 +6,7 @@ from pyleecan.Classes.SlotW29 import SlotW29
 
 
 def select_slot_rules(self, is_stator):
-    """select step to add rules for slot and converts slot
+    """selects step to add rules for slot and converts slot
 
     Parameters
     ----------
@@ -17,8 +17,12 @@ def select_slot_rules(self, is_stator):
 
     """
 
-    # Single set
-    # Single type
+    # In Pyleecan :
+    #   Single set of slot
+    #   Single type of slot
+    # In Motor-Cad :
+    #   Single set of slot
+    #   Single type of slot
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:

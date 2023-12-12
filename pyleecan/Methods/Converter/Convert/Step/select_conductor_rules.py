@@ -1,5 +1,5 @@
 def select_conductor_rules(self, is_stator):
-    """selection step to add rules for conductor
+    """selects step to add rules for conductor
 
     Parameters
     ----------

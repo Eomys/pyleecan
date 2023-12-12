@@ -1,6 +1,5 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
 from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
+from pyleecan.Classes.RuleSimple import RuleSimple
 
 
 def add_rule_holeM63_top_flat(self, hole_id):

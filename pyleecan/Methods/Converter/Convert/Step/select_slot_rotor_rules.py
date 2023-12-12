@@ -1,5 +1,5 @@
 def select_slot_rotor_rules(self, is_stator):
-    """selection step to add rules for slot rotor
+    """selects step to add rules for slot rotor
 
     Parameters
     ----------

@@ -15,9 +15,6 @@ def convert_magnet_to_other(self):
         A ConvertMC object
     """
 
-    # Single type
-    # Signle set
-
     # conversion to Motor-CAD
     slot = self.machine.rotor.slot
     magnet_type = type(slot).__name__

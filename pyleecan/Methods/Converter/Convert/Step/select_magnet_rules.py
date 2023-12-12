@@ -17,7 +17,15 @@ def select_magnet_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
-    # set the machine or dict with the corect conversion of magnet to
+
+    # In Pyleecan :
+    #   Multiple set of notch
+    #   Multiple type of notch
+    # In Motor-Cad :
+    #   Single set of notch
+    #   Single type of notch
+
+    # set the machine or dict with the corect conversion of magnet
     if self.is_P_to_other:
         self.convert_magnet_to_other()
 
@@ -25,29 +33,25 @@ def select_magnet_rules(self, is_stator):
         self.convert_magnet_to_P()
 
     # add the correct rule depending on the hole
-    if isinstance(self.machine.rotor.slot, SlotM14) and self.machine.rotor.slot.H0 == 0:
-        self.add_rule_slotM14()
-
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 == 0
-    ):
-        self.add_rule_slotM15_H0_0()
-
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM13) and self.machine.rotor.slot.H0 == 0
-    ):
-        self.add_rule_slotM13()
-
-    elif isinstance(self.machine.rotor.slot, SlotM11):
+    if isinstance(self.machine.rotor.slot, SlotM11):
         self.add_rule_slotM11()
-
-    elif (
-        isinstance(self.machine.rotor.slot, SlotM15) and self.machine.rotor.slot.H0 != 0
-    ):
-        self.add_rule_slotM15()
 
     elif isinstance(self.machine.rotor.slot, SlotM12):
         self.add_rule_slotM12()
+
+    elif isinstance(self.machine.rotor.slot, SlotM13):
+        if self.machine.rotor.slot.H0 == 0:
+            self.add_rule_slotM13()
+
+    elif isinstance(self.machine.rotor.slot, SlotM14):
+        if self.machine.rotor.slot.H0 == 0:
+            self.add_rule_slotM14()
+
+    elif isinstance(self.machine.rotor.slot, SlotM15):
+        if self.machine.rotor.slot.H0 == 0:
+            self.add_rule_slotM15_H0_0()
+        else:
+            self.add_rule_slotM15()
 
     elif isinstance(self.machine.rotor.slot, SlotM16):
         self.add_rule_slotM16()
