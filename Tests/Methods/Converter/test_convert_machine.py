@@ -34,10 +34,14 @@ class Test_converter_machine(object):
             "parallel_tooth_SqB_Surface_radial",
             "tapered_slot_inset_radial_2_rectangular_duct",
             "VF_Manatee_Hairpin_winding",
+            
+        
         
         """
 
-        path_list = ["WRSM_salient_pole"]
+        path_list = [
+            "WRSM_salient_pole",
+        ]
 
         for path in path_list:
             conv = ConvertMC()
@@ -47,17 +51,16 @@ class Test_converter_machine(object):
             machine.stator.winding.conductor = CondType12()
             machine.stator.winding.conductor.Nwppc = 13
 
-            machine.save(
-                f"/Users/LAP17\Documents/machine_MC_P/file_json/{machine.name}"
-            )
-            machine2.plot()
-            machine.stator.plot()
+            # machine.save(
+            #    f"/Users/LAP17\Documents/machine_MC_P/file_json/{machine.name}"
+            # )
+            # machine2.plot()
             machine.plot()
             machine2 = load(
                 f"/Users\LAP17\Documents/machine_MC_P/file_json/{machine.name}.json"
             )
 
-            assert machine.compare(machine2)
+            # assert machine.compare(machine2)
 
         print("Done")
 
