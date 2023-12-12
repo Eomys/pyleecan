@@ -24,7 +24,7 @@ def select_magnet_rules(self, is_stator):
     else:
         self.convert_magnet_to_P()
 
-    # add the correct rule depending on the hole
+    # add the correct rule depending on the rotor
     if isinstance(self.machine.rotor.slot, SlotM14):
         self.add_rule_slotM14()
 

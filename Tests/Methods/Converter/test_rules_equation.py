@@ -6,20 +6,21 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
 
-# creating a dictionary
-other_dict = {
-    "[Dimensions]": {
-        "Slot_tooth": 15,
-        "Slot_Opening": 12.5,
-        "Slot_Depth": 72,
-        "Slot_2": 6.75,
-        "Slot_3": 6.75,
-        "Slot_4": 3.25,
-    }
-}
-
-
 class Test_converter_mot(object):
+    @staticmethod
+    def setup_class(cls):
+        # other_dict of Motror-CAD converter
+        cls.other_dict = {
+            "[Dimensions]": {
+                "Slot_tooth": 15,
+                "Slot_Opening": 12.5,
+                "Slot_Depth": 72,
+                "Slot_2": 6.75,
+                "Slot_3": 6.75,
+                "Slot_4": 3.25,
+            }
+        }
+
     def test_rule_equation_0(self):
         """test rule equation"""
         machine = MachineSIPMSM()
@@ -50,7 +51,9 @@ class Test_converter_mot(object):
             equation="y/3 = b +2*x",
         )
 
-        machine = rule.convert_to_P(other_dict, machine, other_unit_dict={"m": 1 / 3})
+        machine = rule.convert_to_P(
+            self.other_dict, machine, other_unit_dict={"m": 1 / 3}
+        )
         msg = f"{machine.stator.slot.H2}, should be equal at 2.0"
         assert abs(machine.stator.slot.H2) == pytest.approx(2.0), msg
 
@@ -104,7 +107,7 @@ class Test_converter_mot(object):
             equation="(y/3 - e )/f +d  = b +2*x -a ",
         )
 
-        machine = rule.convert_to_P(other_dict, machine, other_unit_dict={"m": 1})
+        machine = rule.convert_to_P(self.other_dict, machine, other_unit_dict={"m": 1})
         msg = machine.stator.slot.W1
         assert abs(machine.stator.slot.W1) == pytest.approx(31.9326923076923), msg
 

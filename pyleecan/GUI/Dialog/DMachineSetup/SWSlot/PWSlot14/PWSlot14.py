@@ -217,11 +217,13 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         value : int
             current index of the combobox
         """
+        H1_is_rad_old = self.slot.H1_is_rad
         self.slot.H1_is_rad = bool(value)
         if self.lf_H1.text() != "":
             self.set_H1()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+        if H1_is_rad_old != self.slot.H1_is_rad:
+            self.saveNeeded.emit()
 
     def set_H3(self):
         """Signal to update the value of H3 according to the line edit
