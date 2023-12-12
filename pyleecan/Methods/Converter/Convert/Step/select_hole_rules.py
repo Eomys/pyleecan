@@ -33,9 +33,24 @@ def select_hole_rules(self, is_stator):
     else:
         self.convert_hole_to_P()
 
-    for hole_id, hole in enumerate(self.machine.rotor.hole):
+    # The counter solve the case where self.machine.rotor.hole = [HoleM62, HoleM57, HoleM62]
+    hole_id = 0
+    for hole in self.machine.rotor.hole:
+        # Ensure that all the added rules are for the same slot type
+        if not isinstance(hole, hole[0].__class__):
+            continue
+
         # add the correct rule depending on the hole
-        if isinstance(hole, HoleM52):
+        if isinstance(hole, HoleM62):
+            self.add_rule_holeM62(hole_id)
+
+        elif isinstance(hole, HoleM63):
+            self.add_rule_holeM63(hole_id)
+
+        elif isinstance(hole, HoleM61):
+            self.add_rule_holeM61(hole_id)
+
+        elif isinstance(hole, HoleM52):
             self.add_rule_holeM52(hole_id)
 
         elif isinstance(hole, HoleM57):
@@ -44,17 +59,7 @@ def select_hole_rules(self, is_stator):
         elif isinstance(hole, HoleM60):
             self.add_rule_holeM60(hole_id)
 
-        elif isinstance(hole, HoleM61):
-            self.add_rule_holeM61(hole_id)
+        elif isinstance(hole, HoleM57):
+            self.add_rule_holeM57(hole_id)
 
-        elif isinstance(hole, HoleM62):
-            if hole.W0_is_rad:
-                self.add_rule_holeM62_radial(hole_id)
-            else:
-                self.add_rule_holeM62(hole_id)
-
-        elif isinstance(hole, HoleM63):
-            if hole.top_flat:
-                self.add_rule_holeM63_top_flat(hole_id)
-            else:
-                self.add_rule_holeM63(hole_id)
+        hole_id += 1
