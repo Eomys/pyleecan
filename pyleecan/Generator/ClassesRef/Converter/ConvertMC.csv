@@ -53,5 +53,6 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,Rules.Hole.add_rule_embedded_breadleoaf_holeM63,,,,,,
 ,,Rules.Hole.add_rule_embedded_parallel_holeM62,,,,,,
 ,,Rules.Hole.add_rule_embedded_radial_holeM62,,,,,,
-,,Rules.Pole.add_rule_parallel_tooth_slotW62,,,,,,
-,,Rules.Pole.add_rule_salient_pole_slotW61,,,,,,
+,,Rules.Pole.add_rule_parallel_tooth_slotW63,,,,,,
+,,Rules.Pole.add_rule_salient_pole_slotW62,,,,,,
+,,Rules.Pole.add_rule_parallel_slot_slotW29,,,,,,

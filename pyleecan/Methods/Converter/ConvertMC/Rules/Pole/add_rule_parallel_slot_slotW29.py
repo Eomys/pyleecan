@@ -72,28 +72,3 @@ def add_rule_parallel_slot_slotW29(self):
             file_name=__file__,
         )
     )
-
-    self.rules_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Pole_Tip_Width"],
-                    "variable": "y",
-                },
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Pole_Width"],
-                    "variable": "a",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.rotor.slot.W1",
-                    "variable": "x",
-                },
-            ],
-            unit_type="m",
-            equation="2*y + a = x",
-            file_name=__file__,
-        )
-    )
