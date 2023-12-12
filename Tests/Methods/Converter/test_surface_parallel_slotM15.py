@@ -8,7 +8,7 @@ from pyleecan.Classes.SlotM15 import SlotM15
 
 
 slotM15_test = list()
-
+# Common values
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 4,
@@ -26,6 +26,7 @@ slotM15_test.append(
     }
 )
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,
@@ -40,6 +41,42 @@ slotM15_test.append(
         "W1": 0.5217791949266818,
         "W0": 0.5104022927682093,
         "Rtopm": 0.8437532376408229,
+    }
+)
+
+# Magnet_Reduction = Magnet_Thickness max
+other_dict = {
+    "[Dimensions]": {
+        "Magnet_Thickness": 8,
+        "Magnet_Arc_[ED]": 120,
+        "Magnet_Reduction": 8,
+    }
+}
+
+# Magnet_Reduction = 0, no reduction
+slotM15_test.append(
+    {
+        "other_dict": other_dict,
+        "W1": 0.5217791949266818,
+        "W0": 0.5104022927682093,
+        "Rtopm": 0.8248165743381716,
+    }
+)
+
+other_dict = {
+    "[Dimensions]": {
+        "Magnet_Thickness": 8,
+        "Magnet_Arc_[ED]": 120,
+        "Magnet_Reduction": 0,
+    }
+}
+
+slotM15_test.append(
+    {
+        "other_dict": other_dict,
+        "W1": 0.5217791949266818,
+        "W0": 0.5104022927682093,
+        "Rtopm": 1.0080000000000011,
     }
 )
 

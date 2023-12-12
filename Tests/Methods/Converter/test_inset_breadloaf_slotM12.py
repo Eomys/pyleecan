@@ -8,6 +8,7 @@ from pyleecan.Classes.SlotM12 import SlotM12
 
 slotM12_test = list()
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 4,
@@ -18,6 +19,7 @@ slotM12_test.append(
     {"other_dict": other_dict, "W1": 0.5155675378442213, "W0": 0.5155675378442213}
 )
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,

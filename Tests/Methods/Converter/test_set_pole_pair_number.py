@@ -14,6 +14,7 @@ class TestComplexRulePolePairNumber(object):
     def test_set_pole_pair_number(self):
         """test rule complex"""
 
+        # Common values
         other_dict = {
             "[Dimensions]": {
                 "Pole_Number": 6,

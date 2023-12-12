@@ -11,6 +11,7 @@ from pyleecan.Classes.SlotM19 import SlotM19
 
 notch_l = list()
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "PoleNotchDepth": 2,
@@ -22,6 +23,7 @@ notch_l.append(
     {"other_dict": other_dict, "W1": 0.5176380902050414, "W0": 0.601411599008546}
 )
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "PoleNotchDepth": 2,
