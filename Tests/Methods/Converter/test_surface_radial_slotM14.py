@@ -7,8 +7,6 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM14 import SlotM14
 
 
-rule_list = list()
-
 slotM14_test = list()
 
 other_dict = {

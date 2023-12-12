@@ -7,9 +7,6 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
 
-# creating a dictionary
-
-
 class TestComplexRulePolePairNumber(object):
     def test_set_pole_pair_number(self):
         """test rule complex"""
