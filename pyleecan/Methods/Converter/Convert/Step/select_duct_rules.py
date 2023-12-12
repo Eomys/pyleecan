@@ -25,7 +25,11 @@ def select_duct_rules(self, is_stator):
         axial_vent = self.machine.rotor.axial_vent
 
     # add rules based on the number of duct in the machine
-    for nb_duct, duct in enumerate(axial_vent):
+    nb_duct = 0
+    for duct in axial_vent:
+        if not isinstance(duct, axial_vent[0].__class__):
+            continue
+
         if isinstance(duct, VentilationCirc):
             self.add_rule_ventilationCirc(is_stator, nb_duct)
 
@@ -34,3 +38,5 @@ def select_duct_rules(self, is_stator):
 
         elif isinstance(duct, VentilationTrap):
             self.add_rule_ventilationTrap(is_stator, nb_duct)
+
+        nb_duct += 1

@@ -29,8 +29,12 @@ def select_hole_rules(self, is_stator):
     else:
         self.convert_hole_to_P()
 
-    for hole_id, hole in enumerate(self.machine.rotor.hole):
+    hole_id = 0
+    for hole in self.machine.rotor.hole:
         # add the correct rule depending on the hole
+        if not isinstance(hole, hole[0].__class__):
+            continue
+
         if isinstance(hole, HoleM62):
             self.add_rule_holeM62(hole_id)
 
@@ -48,3 +52,5 @@ def select_hole_rules(self, is_stator):
 
         elif isinstance(hole, HoleM57):
             self.add_rule_holeM57(hole_id)
+
+        hole_id += 1
