@@ -3,7 +3,7 @@ from numpy import pi
 
 
 def convert_other_to_dict(self, file_path):
-    """convert file .mot into dict and creation other_unit_dict
+    """converts file .mot into dict and creates other_unit_dict
 
     Parameters
     ----------
