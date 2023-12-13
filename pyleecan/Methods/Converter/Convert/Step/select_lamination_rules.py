@@ -1,5 +1,5 @@
 def select_lamination_rules(self, is_stator):
-    """selection step to add rules for lamination
+    """selects step to add rules for lamination
 
     Parameters
     ----------

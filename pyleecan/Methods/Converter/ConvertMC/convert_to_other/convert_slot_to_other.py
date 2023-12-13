@@ -1,5 +1,12 @@
+from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW14 import SlotW14
+from .....Classes.SlotW21 import SlotW21
+from .....Classes.SlotW23 import SlotW23
+from .....Classes.SlotW29 import SlotW29
+
+
 def convert_slot_to_other(self):
-    """Selection correct slot and implementation in dict
+    """Selects correct slot and implements it in dict
 
     Parameters
     ----------
@@ -7,26 +14,24 @@ def convert_slot_to_other(self):
         A ConvertMC object
     """
 
-    # Single type
-    # Signle set
-
     # conversion to pyleecan
-    slot_type = type(self.machine.stator.slot).__name__
+    slot = self.machine.stator.slot
+    slot_type = type(slot).__name__
 
     # selection type of Slot
-    if slot_type == "SlotW11":
+    if isinstance(slot, SlotW11):
         name_slot = "Parallel_Tooth"
 
-    elif slot_type == "SlotW14":
+    elif isinstance(slot, SlotW14):
         name_slot = "Parallel_tooth_SqB"
 
-    elif slot_type == "SlotW21":
+    elif isinstance(slot, SlotW21):
         name_slot = "Parallel_Slot"
 
-    elif slot_type == "SlotW23":
+    elif isinstance(slot, SlotW23):
         name_slot = "Tapered_slot"
 
-    elif slot_type == "SlotW29":
+    elif isinstance(slot, SlotW29):
         name_slot = "Form_Wound"
 
     else:

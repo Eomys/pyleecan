@@ -16,9 +16,6 @@ def add_rule_notch_slotM19(self, is_stator, nb_notch):
     nb_notch : int
         number oh notch
     """
-    # MC has just the possibility to have notch rotor
-    # MC has just the possibility to have 1 notch
-
     self.rules_list.append(
         RuleSimple(
             other_key_list=[

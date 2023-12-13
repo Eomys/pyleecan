@@ -114,4 +114,6 @@ def add_rule_slotW11(self, is_stator):
         )
 
     else:
-        print("error type conversion to tooth_tip_depth_H1 is not in rad ")
+        raise ValueError(
+            "Conversion of tooth_tip_depth_H1 impossible because it is not in rad"
+        )

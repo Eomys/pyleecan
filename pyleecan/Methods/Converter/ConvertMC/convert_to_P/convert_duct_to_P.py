@@ -16,12 +16,11 @@ def convert_duct_to_P(self, is_stator):
     """
     # selection of lamination
     if is_stator == True:
-        self.get_logger().info("stator_duct, not implemented")
+        self.get_logger().info("Stator duct are not implemented")
         return
 
-    else:
-        lam_name = "Rotor"
-        axial_vent = self.machine.rotor.axial_vent
+    lam_name = "Rotor"
+    axial_vent = self.machine.rotor.axial_vent
 
     # selection type layers
     if f"{lam_name}_Duct_Type" in self.other_dict["[Through_Vent]"]:
@@ -58,9 +57,11 @@ def convert_duct_to_P(self, is_stator):
                 f"Type of duct {type_duct} has any equivalent in pyleecan or has not been implemented"
             )
 
+        # Duplication of the sets
         number_duct = self.other_dict["[Through_Vent]"][f"{lam_name}CircularDuctLayers"]
         for duct_id in range(number_duct):
             axial_vent.append(Ventilation_class())
-            self.get_logger().info(
-                f"Conversion {type_duct} into {Ventilation_class.__name__}"
-            )
+
+        self.get_logger().info(
+            f"Conversion {type_duct} into {number_duct} {Ventilation_class.__name__}"
+        )

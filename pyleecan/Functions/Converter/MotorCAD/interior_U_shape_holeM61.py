@@ -1,6 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot interior_U_shape (motor-cad) into the holeM61 (pyleecan)
-
+    """Converts interior_U_shape motor-cad slot into pyleecan holeM61
     Parameters
     ----------
     self : ConvertMC

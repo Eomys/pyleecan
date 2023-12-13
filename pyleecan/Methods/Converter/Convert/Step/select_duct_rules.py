@@ -4,7 +4,7 @@ from .....Classes.VentilationTrap import VentilationTrap
 
 
 def select_duct_rules(self, is_stator):
-    """selection step to add rules for duct
+    """selects step to add rules for duct
 
     Parameters
     ----------
@@ -13,6 +13,14 @@ def select_duct_rules(self, is_stator):
     is_stator : bool
         True slot is in stator, False slot is in rotor
     """
+
+    # In Pyleecan :
+    #   Multiple set of notch
+    #   Multiple type of notch
+    # In Motor-Cad :
+    #   Multi set of notch
+    #   Single type of notch
+
     # selection of number and add in machine
     if self.is_P_to_other:
         self.convert_duct_to_other(is_stator)
@@ -25,18 +33,18 @@ def select_duct_rules(self, is_stator):
         axial_vent = self.machine.rotor.axial_vent
 
     # add rules based on the number of duct in the machine
-    nb_duct = 0
+    duct_id = 0
     for duct in axial_vent:
         if not isinstance(duct, axial_vent[0].__class__):
             continue
 
         if isinstance(duct, VentilationCirc):
-            self.add_rule_ventilationCirc(is_stator, nb_duct)
+            self.add_rule_ventilationCirc(is_stator, duct_id)
 
         elif isinstance(duct, VentilationPolar):
-            self.add_rule_ventilationPolar(is_stator, nb_duct)
+            self.add_rule_ventilationPolar(is_stator, duct_id)
 
         elif isinstance(duct, VentilationTrap):
-            self.add_rule_ventilationTrap(is_stator, nb_duct)
+            self.add_rule_ventilationTrap(is_stator, duct_id)
 
-        nb_duct += 1
+        duct_id += 1

@@ -2,7 +2,7 @@ from numpy import sin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot inset_breadloaf (motor-cad) into the slotM12 (pyleecan)
+    """Converts motor-cad inset_breadloaf slot into pyleecanc slotM12
 
     Parameters
     ----------

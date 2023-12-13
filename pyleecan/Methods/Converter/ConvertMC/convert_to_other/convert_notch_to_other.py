@@ -12,9 +12,6 @@ def convert_notch_to_other(self, is_stator):
         True slot is in stator, False slot is in rotor
     """
 
-    # Single type
-    # Single set
-
     if is_stator:
         len_nocth = len(self.machine.stator.notch)
     else:
@@ -35,9 +32,7 @@ def convert_notch_to_other(self, is_stator):
             self.get_logger().warning("Approximation of notch for slotM19")
 
         else:
-            self.get_logger().error(
-                "just the slotM19 has the possibility to have a conversion"
-            )
+            self.get_logger().error("Only the slotM19 can be converted")
 
     else:
-        self.get_logger().error("Motor-CAD have not possibility to add notch in stator")
+        self.get_logger().error("Motor-CAD machine can't have stator notch")

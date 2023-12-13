@@ -2,7 +2,7 @@ from .....Classes.SlotM19 import SlotM19
 
 
 def select_notch_rules(self, is_stator):
-    """selection step to add rules for notch
+    """selects step to add rules for notch
 
     Parameters
     ----------
@@ -11,6 +11,13 @@ def select_notch_rules(self, is_stator):
     is_stator : bool
         True slot is in stator, False slot is in rotor
     """
+    # In Pyleecan :
+    #   Multiple set of notch
+    #   Multiple type of notch
+    # In Motor-Cad :
+    #   Single set of notch
+    #   Single type of notch
+
     # selection of number and add in machine
     if self.is_P_to_other:
         self.convert_notch_to_other(is_stator)
@@ -26,3 +33,5 @@ def select_notch_rules(self, is_stator):
     for nb_notch, notch in enumerate(notch):
         if isinstance(notch.notch_shape, SlotM19):
             self.add_rule_notch_slotM19(is_stator, nb_notch)
+        else:
+            self.get_logger().error("Only rules for slotM19 are defined")

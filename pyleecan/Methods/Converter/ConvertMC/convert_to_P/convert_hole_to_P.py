@@ -71,13 +71,13 @@ def convert_hole_to_P(self):
             f"Type of hole {hole_type} has not equivalent in pyleecan or has not implement"
         )
 
+    # writing exception/approximation for Hole
+    if isinstance(self.machine.rotor.hole[0], HoleM60):
+        self.get_logger().warning(f"HoleM60 : Approximation for W3, Magnet_Post")
+
+    if isinstance(self.machine.rotor.hole[0], HoleM63):
+        self.get_logger().warning(f"HoleM63 : Approximation for W0")
+
     self.get_logger().info(
         f"Conversion {hole_type} into {type(self.machine.rotor.hole[0]).__name__}"
     )
-
-    # writing exception/approximation for Hole
-    if isinstance(self.machine.rotor.hole[0], HoleM60):
-        self.get_logger().warning(f"Approximation for W3, Magnet_Post")
-
-    if isinstance(self.machine.rotor.hole[0], HoleM63):
-        self.get_logger().warning(f"Approximation for W0")

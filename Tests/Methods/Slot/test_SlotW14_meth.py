@@ -2,7 +2,7 @@
 import pytest
 
 from pyleecan.Classes.SlotW14 import SlotW14
-from numpy import ndarray, arcsin, pi
+from numpy import arcsin, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW14 import S14_Rbo1CheckError

@@ -29,8 +29,8 @@ def convert_duct_to_other(self, is_stator):
         return
 
     elif len(axial_vent) > 1:
-        for nb_duct, duct in enumerate(axial_vent):
-            if axial_vent[0] != duct:
+        for duct in axial_vent:
+            if isinstance(duct, axial_vent[0].__class__):
                 self.get_logger().error(
                     "A Motor-cad machine can only have one type of axial duct"
                 )
