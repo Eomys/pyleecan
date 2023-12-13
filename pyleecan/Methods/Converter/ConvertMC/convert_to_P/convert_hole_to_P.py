@@ -23,8 +23,7 @@ def convert_hole_to_P(self):
 
     hole_type = self.other_dict["[Design_Options]"]["BPM_Rotor"]
 
-    number_hole = self.other_dict["[Dimensions]"]["Magnet_Layers"]
-
+    # Motor-CAD cannot have 2 different types of holes
     # initialisation to set the hole in rotor
     self.machine.rotor = LamHole()
     self.machine.rotor.is_stator = False
@@ -51,6 +50,7 @@ def convert_hole_to_P(self):
         self.machine.rotor.hole.append(HoleM52())
         self.machine.rotor.hole[0].H2 = 0
 
+    # possibility to have many set for the same Hole
     elif hole_type == "Interior_VSimple":
         number_hole = self.other_dict["[Dimensions]"]["VMagnet_Layers"]
         for hole_id in range(number_hole):
@@ -61,26 +61,23 @@ def convert_hole_to_P(self):
         for hole_id in range(number_hole):
             self.machine.rotor.hole.append(HoleM57())
 
-    else:
+    elif hole_type == "Interior_UShape":
+        number_hole = self.other_dict["[Dimensions]"]["Magnet_Layers"]
         for hole_id in range(number_hole):
-            if hole_type == "Interior_VSimple":
-                self.machine.rotor.hole.append(HoleM60())
+            self.machine.rotor.hole.append(HoleM61())
 
-            elif hole_type == "Interior_UShape":
-                self.machine.rotor.hole.append(HoleM61())
+    else:
+        raise NotImplementedError(
+            f"Type of hole {hole_type} has not equivalent in pyleecan or has not implement"
+        )
 
-            else:
-                raise NotImplementedError(
-                    f"Type of hole {hole_type} has not equivalent in pyleecan or has not implement"
-                )
+    # writing exception/approximation for Hole
+    if isinstance(self.machine.rotor.hole[0], HoleM60):
+        self.get_logger().warning(f"HoleM60 : Approximation for W3, Magnet_Post")
+
+    if isinstance(self.machine.rotor.hole[0], HoleM63):
+        self.get_logger().warning(f"HoleM63 : Approximation for W0")
 
     self.get_logger().info(
         f"Conversion {hole_type} into {type(self.machine.rotor.hole[0]).__name__}"
     )
-
-    # writing exception/approximation for Hole
-    if type(self.machine.rotor.hole[0]).__name__ == "HoleM60":
-        self.get_logger().warning(f"Approximation for W3, Magnet_Post")
-
-    if type(self.machine.rotor.hole[0]).__name__ == "HoleM63":
-        self.get_logger().warning(f"Approximation for W0")

@@ -1,6 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot interior_U_shape (motor-cad) into the holeM61 (pyleecan)
-
+    """Converts interior_U_shape motor-cad slot into pyleecan holeM61
     Parameters
     ----------
     self : ConvertMC
@@ -29,13 +28,16 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     Rbo = machine.rotor.get_Rbo()
 
+    # Set H0
     machine.rotor.hole[hole_id].H0 = Rbo - H1 / 2
 
+    # Set W2
     other_path_list = ["[Dimensions]", f"UMagnet_Length_Outer_Array[{hole_id}]"]
     H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
     if H1 == 0:
         machine.rotor.hole[hole_id].W2 = None
 
+    # Set W1
     other_path_list = ["[Dimensions]", f"UMagnet_Length_Inner_Array[{hole_id}]"]
     H2 = self.get_other(other_dict, other_path_list, other_unit_dict)
     if H2 == 0:

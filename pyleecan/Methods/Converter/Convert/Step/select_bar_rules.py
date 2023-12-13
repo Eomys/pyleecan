@@ -1,5 +1,5 @@
 def select_bar_rules(self, is_stator):
-    """selection step to add bar rules
+    """selects step to add bar rules
 
     Parameters
     ----------

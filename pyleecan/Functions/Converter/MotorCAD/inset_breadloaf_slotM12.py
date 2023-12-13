@@ -2,7 +2,7 @@ from numpy import sin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot inset_breadloaf (motor-cad) into the slotM12 (pyleecan)
+    """Converts motor-cad inset_breadloaf slot into pyleecanc slotM12
 
     Parameters
     ----------
@@ -30,6 +30,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     Rbo = machine.rotor.get_Rbo()
 
+    # We set H0, to be able to call the comp_point_coordiante and obtain the true value of H0
     slot_width = (Rbo - H1) * sin(W1 / 2)
     machine.rotor.slot.W1 = 2 * slot_width
     machine.rotor.slot.W0 = 2 * slot_width

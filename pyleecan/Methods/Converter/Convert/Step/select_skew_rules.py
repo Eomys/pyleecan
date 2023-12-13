@@ -1,5 +1,5 @@
 def select_skew_rules(self, is_stator):
-    """selection step to add rules for skew
+    """selects step to add rules for skew
 
     Parameters
     ----------

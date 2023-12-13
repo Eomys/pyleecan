@@ -2,7 +2,7 @@ from numpy import sqrt, cos, arcsin, exp
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot surface_breadloaf (motor-cad) into the slotM13 (pyleecan)
+    """Converts the surface_breadloaf motor-cad slot into pyleecan slotM13
 
     Parameters
     ----------

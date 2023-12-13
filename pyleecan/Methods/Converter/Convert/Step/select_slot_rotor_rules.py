@@ -15,6 +15,12 @@ def select_slot_rotor_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
+    # In Pyleecan :
+    #   Single set of slot
+    #   Single type of slot
+    # In Motor-Cad :
+    #   Single set of slot
+    #   Multiple type of slot (possibility to have 2 slot)
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:
@@ -25,10 +31,10 @@ def select_slot_rotor_rules(self, is_stator):
     slot = self.machine.rotor.slot
     # add the correct rule depending on the slot
     if isinstance(slot, SlotW11):
-        self.add_rule_rotor_parallel_tooth_slotW11(is_stator)
+        self.add_rule_rotor_slotW11(is_stator)
     elif isinstance(slot, SlotW23):
-        self.add_rule_rectangular_slotW23(is_stator)
+        self.add_rule_rotor_slotW23(is_stator)
     elif isinstance(slot, SlotW26):
-        self.add_rule_round_slotW26(is_stator)
+        self.add_rule_rotor_slotW26(is_stator)
     elif isinstance(slot, SlotW30):
-        self.add_rule_pears_slotW30(is_stator)
+        self.add_rule_rotor_slotW30(is_stator)

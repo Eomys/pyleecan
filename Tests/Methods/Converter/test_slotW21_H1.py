@@ -10,6 +10,8 @@ from pyleecan.Classes.SlotW21 import SlotW21
 class TestComplexRuleSlotW21(object):
     def test_slotW21_H1(self):
         """test rule complex"""
+
+        # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
         machine.stator = LamSlot()
         machine.stator.slot = SlotW21()
@@ -22,13 +24,16 @@ class TestComplexRuleSlotW21(object):
         machine.stator.slot.H2 = 0.033118584
         machine.stator.slot.H1_is_rad = True
 
+        # Define and apply the slot rule
         rule = RuleComplex(fct_name="slotW21_H1", folder="MotorCAD")
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
             other_dict={}, machine=machine, other_unit_dict={"deg": pi / 180}
         )
 
-        assert machine.stator.slot.H1 == pytest.approx(0.0016197751905438619)
+        excepted_value = 0.001619775
+        msg = f"{machine.stator.slot.H1} expected {excepted_value}"
+        assert machine.stator.slot.H1 == pytest.approx(excepted_value), msg
 
 
 if __name__ == "__main__":

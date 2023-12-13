@@ -6,7 +6,6 @@ from pyleecan.Classes.SlotW30 import SlotW30
 from numpy import ndarray, arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods.Slot.SlotW30 import S30InnerError
 
 # For AlmostEqual
 DELTA = 1e-4
