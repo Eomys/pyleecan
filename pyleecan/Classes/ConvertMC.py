@@ -186,32 +186,32 @@ except ImportError as error:
     add_rule_slotW23 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_pears_slotW30 import (
-        add_rule_pears_slotW30,
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW30 import (
+        add_rule_rotor_slotW30,
     )
 except ImportError as error:
-    add_rule_pears_slotW30 = error
+    add_rule_rotor_slotW30 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rectangular_slotW23 import (
-        add_rule_rectangular_slotW23,
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW23 import (
+        add_rule_rotor_slotW23,
     )
 except ImportError as error:
-    add_rule_rectangular_slotW23 = error
+    add_rule_rotor_slotW23 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_parallel_tooth_slotW11 import (
-        add_rule_rotor_parallel_tooth_slotW11,
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11 import (
+        add_rule_rotor_slotW11,
     )
 except ImportError as error:
-    add_rule_rotor_parallel_tooth_slotW11 = error
+    add_rule_rotor_slotW11 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_round_slotW26 import (
-        add_rule_round_slotW26,
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW26 import (
+        add_rule_rotor_slotW26,
     )
 except ImportError as error:
-    add_rule_round_slotW26 = error
+    add_rule_rotor_slotW26 = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_ventilationCirc import (
@@ -633,54 +633,54 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_slotW23 = add_rule_slotW23
-    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_pears_slotW30
-    if isinstance(add_rule_pears_slotW30, ImportError):
-        add_rule_pears_slotW30 = property(
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW30
+    if isinstance(add_rule_rotor_slotW30, ImportError):
+        add_rule_rotor_slotW30 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_pears_slotW30: "
-                    + str(add_rule_pears_slotW30)
+                    "Can't use ConvertMC method add_rule_rotor_slotW30: "
+                    + str(add_rule_rotor_slotW30)
                 )
             )
         )
     else:
-        add_rule_pears_slotW30 = add_rule_pears_slotW30
-    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rectangular_slotW23
-    if isinstance(add_rule_rectangular_slotW23, ImportError):
-        add_rule_rectangular_slotW23 = property(
+        add_rule_rotor_slotW30 = add_rule_rotor_slotW30
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW23
+    if isinstance(add_rule_rotor_slotW23, ImportError):
+        add_rule_rotor_slotW23 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_rectangular_slotW23: "
-                    + str(add_rule_rectangular_slotW23)
+                    "Can't use ConvertMC method add_rule_rotor_slotW23: "
+                    + str(add_rule_rotor_slotW23)
                 )
             )
         )
     else:
-        add_rule_rectangular_slotW23 = add_rule_rectangular_slotW23
-    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_parallel_tooth_slotW11
-    if isinstance(add_rule_rotor_parallel_tooth_slotW11, ImportError):
-        add_rule_rotor_parallel_tooth_slotW11 = property(
+        add_rule_rotor_slotW23 = add_rule_rotor_slotW23
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11
+    if isinstance(add_rule_rotor_slotW11, ImportError):
+        add_rule_rotor_slotW11 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_rotor_parallel_tooth_slotW11: "
-                    + str(add_rule_rotor_parallel_tooth_slotW11)
+                    "Can't use ConvertMC method add_rule_rotor_slotW11: "
+                    + str(add_rule_rotor_slotW11)
                 )
             )
         )
     else:
-        add_rule_rotor_parallel_tooth_slotW11 = add_rule_rotor_parallel_tooth_slotW11
-    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_round_slotW26
-    if isinstance(add_rule_round_slotW26, ImportError):
-        add_rule_round_slotW26 = property(
+        add_rule_rotor_slotW11 = add_rule_rotor_slotW11
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW26
+    if isinstance(add_rule_rotor_slotW26, ImportError):
+        add_rule_rotor_slotW26 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_round_slotW26: "
-                    + str(add_rule_round_slotW26)
+                    "Can't use ConvertMC method add_rule_rotor_slotW26: "
+                    + str(add_rule_rotor_slotW26)
                 )
             )
         )
     else:
-        add_rule_round_slotW26 = add_rule_round_slotW26
+        add_rule_rotor_slotW26 = add_rule_rotor_slotW26
     # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_ventilationCirc
     if isinstance(add_rule_ventilationCirc, ImportError):
         add_rule_ventilationCirc = property(

@@ -37,7 +37,7 @@ def select_hole_rules(self, is_stator):
     hole_id = 0
     for hole in self.machine.rotor.hole:
         # Ensure that all the added rules are for the same slot type
-        if not isinstance(hole, hole[0].__class__):
+        if not isinstance(hole, self.machine.rotor.hole[0].__class__):
             continue
 
         # add the correct rule depending on the hole
