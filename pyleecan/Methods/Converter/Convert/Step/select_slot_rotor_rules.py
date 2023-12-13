@@ -15,6 +15,12 @@ def select_slot_rotor_rules(self, is_stator):
         True slot is in stator, False slot is in rotor
 
     """
+    # In Pyleecan :
+    #   Single set of slot
+    #   Single type of slot
+    # In Motor-Cad :
+    #   Single set of slot
+    #   Multiple type of slot (possibility to have 2 slot)
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:
