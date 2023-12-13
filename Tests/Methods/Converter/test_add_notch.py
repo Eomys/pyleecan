@@ -43,11 +43,10 @@ class TestComplexRuleNotch(object):
         other_dict = test_dict["other_dict"]
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
-        machine.rotor.notch.append(Notch())
-        machine.rotor.notch[0] = NotchEvenDist()
+        machine.rotor.notch.append(NotchEvenDist())
         machine.rotor.notch[0].notch_shape = SlotM19()
 
-        rule = RuleComplex(fct_name="add_notch", folder="MotorCAD")
+        rule = RuleComplex(fct_name="add_notch_slotM19", folder="MotorCAD")
         p = 8  # number of pole
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
