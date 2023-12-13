@@ -59,6 +59,7 @@ slotW14_test.append(
     }
 )
 
+# H1 rad
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW14(
     H0=5e-3,
@@ -77,6 +78,49 @@ slotW14_test.append(
         "SW_exp": 0.0004109465804555589,
         "SO_exp": 2.5352278220310933e-05,
         "H_exp": 0.0307307210,
+    }
+)
+
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW14(
+    H0=5e-3,
+    H1=0,
+    H3=25e-3,
+    W0=5e-3,
+    W3=10e-3,
+    wedge_type=0,
+    H1_is_rad=True,
+)
+slotW14_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00043566418141197945,
+        "Aw": 0.10628246802,
+        "SW_exp": 0.0004107428061619,
+        "SO_exp": 2.4921375250004305e-05,
+        "H_exp": 0.0306850757,
+    }
+)
+
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW14(
+    H0=5e-3,
+    H1=pi / 4,
+    H3=25e-3,
+    W0=5e-3,
+    W3=10e-3,
+    wedge_type=1,
+    H1_is_rad=True,
+)
+slotW14_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0005073025572861639,
+        "Aw": 0.1083080950696,
+        "SW_exp": 0.00043306999862850,
+        "SO_exp": 2.49213752500043e-05,
+        "H_exp": 0.03568270305258159,
+        "SWedge_exp": 4.931118340765717e-05,
     }
 )
 
@@ -346,6 +390,20 @@ class Test_SlotW14_meth(object):
         b = 0.0004373180612594603
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW14(
+            H0=1e-3,
+            H1=0,
+            H1_is_rad=True,
+            W0=12e-3,
+            W3=10e-3,
+        )
+
+        a = lam.slot.get_H1()
+        b = 0
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b)) < DELTA, msg
 
 
 if __name__ == "__main__":
