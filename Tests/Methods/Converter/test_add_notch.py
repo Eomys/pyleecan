@@ -50,7 +50,7 @@ class TestComplexRuleNotch(object):
         machine.rotor.notch[0].notch_shape = SlotM19()
 
         # Define and apply the slot rule
-        rule = RuleComplex(fct_name="add_notch", folder="MotorCAD")
+        rule = RuleComplex(fct_name="add_notch_slotM19", folder="MotorCAD")
         p = 8  # number of pole
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
