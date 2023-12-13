@@ -35,7 +35,9 @@ class Ui_PVentTrap(object):
         self.img_vent.setMinimumSize(QSize(410, 300))
         self.img_vent.setMaximumSize(QSize(16777215, 16777215))
         self.img_vent.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/LamParam/VentilationTrap.png")
+            QPixmap(
+                u":/images/images/MachineSetup/LamParam/VentilationTrap_empty_int_rotor.png"
+            )
         )
         self.img_vent.setScaledContents(False)
         self.img_vent.setAlignment(Qt.AlignCenter)

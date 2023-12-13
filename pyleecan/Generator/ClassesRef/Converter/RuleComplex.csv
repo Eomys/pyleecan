@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+fct_name,-,fonction name to convert,0,str,None,,,
+folder,-,name source,0,str,None,,,
+param_dict,-,dict to pass param ,0,dict,{},,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,Rule,convert_to_P,VERSION,1,complex rules,,,
+,,convert_to_other,,,,,,
+,,_set_fct_name,,,,,,

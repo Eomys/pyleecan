@@ -15,7 +15,7 @@ from pyleecan.Methods import ParentMissingError
 Mag11_test = list()
 # Internal Slot surface
 lam = LamSlotMag(is_internal=True, Rext=0.5)
-lam.slot = SlotM11(Hmag=1, Wmag=pi / 4, H0=0, W0=pi / 4, Zs=4)
+lam.slot = SlotM11(H1=1, W1=pi / 4, H0=0, W0=pi / 4, Zs=4)
 Mag11_test.append(
     {
         "test_obj": lam,
@@ -29,7 +29,7 @@ Mag11_test.append(
 
 # Internal Slot inset
 lam = LamSlotMag(is_internal=True, Rext=0.5)
-lam.slot = SlotM11(Hmag=20e-3, Wmag=pi / 4, H0=40e-3, W0=pi / 4, Zs=4)
+lam.slot = SlotM11(H1=20e-3, W1=pi / 4, H0=40e-3, W0=pi / 4, Zs=4)
 Mag11_test.append(
     {
         "test_obj": lam,
@@ -43,7 +43,7 @@ Mag11_test.append(
 
 # Outward Slot inset
 lam = LamSlotMag(is_internal=False, Rint=0.1325)
-lam.slot = SlotM11(Hmag=8e-3, Wmag=pi / 12, H0=5e-3, W0=pi / 10, Zs=8)
+lam.slot = SlotM11(H1=8e-3, W1=pi / 12, H0=5e-3, W0=pi / 10, Zs=8)
 Mag11_test.append(
     {
         "test_obj": lam,

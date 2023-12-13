@@ -2,7 +2,6 @@
 
 from matplotlib.pyplot import subplots
 import mpl_toolkits.mplot3d
-from numpy import array
 
 
 def init_fig(fig=None, ax=None, shape="default", is_3d=False):

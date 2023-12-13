@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+param,-,dict all parameters,0,list,None,,,
+equation,-,conversion paramter to pyleecan (Y are always on other side, X are always on Pyleecan side),str,None,,,
+file_name,-,"use just to debug, give name of file",0,str,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,Rule,convert_to_P,VERSION,1,simple rules,,,
+,,convert_to_other,,,,,,
+,,solve_equation,,,,,,

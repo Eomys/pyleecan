@@ -29,6 +29,7 @@ from pyleecan.Functions.Plot import dict_2D
 
 from pyleecan.definitions import DATA_DIR
 
+
 # python -m pytest ./Tests/Validation/Magnetics/test_FEMM_periodicity.py
 @pytest.mark.long_5s
 @pytest.mark.long_1m
@@ -784,10 +785,10 @@ def test_Ring_Magnet():
 def test_Ring_Magnet_2():
     """Check that a machine with 2 Ring magnet can be simulated with sym"""
     machine = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
-    Hmag = machine.rotor.slot.Hmag
+    H0 = machine.rotor.slot.H0
     machine.rotor.slot = SlotM18_2(init_dict=machine.rotor.slot.as_dict())
-    machine.rotor.slot.Hmag_bore = machine.rotor.Rext - machine.rotor.Rint - Hmag
-    machine.rotor.slot.Hmag_gap = Hmag
+    machine.rotor.slot.H0_bore = machine.rotor.Rext - machine.rotor.Rint - H0
+    machine.rotor.slot.H0_gap = H0
     machine.rotor.Rext = machine.rotor.Rint
 
     mur_lin = machine.rotor.magnet.mat_type.mag.mur_lin

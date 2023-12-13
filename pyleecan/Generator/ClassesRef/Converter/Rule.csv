@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+unit_type,-,unit,0,str,m,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,,set_P,VERSION,1,abstract class for rules,,,
+,,get_P,,,,,,
+,,set_other,,,,,,
+,,get_other,,,,,,
+,,get_name,,,,,,

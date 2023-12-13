@@ -19,10 +19,10 @@
     },
     {
         "cls": "SlotM19",
-        "name": "Hmag",
+        "name": "H0",
         "widget": [
-            "in_Hmag",
-            "lf_Hmag"
+            "in_H0",
+            "lf_H0"
         ],
         "xls": "Slot"
     }

@@ -149,6 +149,12 @@ plot_test.append(
 )
 plot_test.append(
     {
+        "test_obj": SlotM10(),
+        "type_add_active": 5,
+    }
+)
+plot_test.append(
+    {
         "test_obj": SlotM11(),
         "type_add_active": 2,
         "is_default": 2,
@@ -159,6 +165,12 @@ plot_test.append(
         "test_obj": SlotM11(),
         "type_add_active": 5,
         "is_default": 2,
+    }
+)
+plot_test.append(
+    {
+        "test_obj": SlotM11(),
+        "type_add_active": 5,
     }
 )
 
@@ -572,8 +584,8 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_plot(plot_test[53])
-    a.test_plot_point(plot_test[53])
+    a.test_plot(plot_test[3])
+    a.test_plot_point(plot_test[3])
     a.test_plot(plot_test[54])
     a.test_plot_point(plot_test[54])
     a.test_plot(plot_test[56])

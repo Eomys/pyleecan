@@ -22,11 +22,11 @@ def _comp_point_coordinate(self):
     ZM1 = Rbo * exp(-1j * sp / 2)
 
     if self.is_outwards():
-        ZM2 = (Rbo - self.Hmag_bore) * exp(-1j * sp / 2)
-        ZM3 = (Rbo - self.Hmag_bore - self.Hmag_gap) * exp(-1j * sp / 2)
+        ZM2 = (Rbo - self.H0_bore) * exp(-1j * sp / 2)
+        ZM3 = (Rbo - self.H0_bore - self.H0_gap) * exp(-1j * sp / 2)
     else:  # inward slot
-        ZM2 = (Rbo + self.Hmag_bore) * exp(-1j * sp / 2)
-        ZM3 = (Rbo + self.Hmag_bore + self.Hmag_gap) * exp(-1j * sp / 2)
+        ZM2 = (Rbo + self.H0_bore) * exp(-1j * sp / 2)
+        ZM3 = (Rbo + self.H0_bore + self.H0_gap) * exp(-1j * sp / 2)
 
     point_dict = dict()
     point_dict["Z1"] = Z1

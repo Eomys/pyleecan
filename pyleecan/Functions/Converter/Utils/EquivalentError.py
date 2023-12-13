@@ -1,0 +1,3 @@
+# Unused for now
+class EquivalentError(Exception):
+    ...

@@ -43,7 +43,7 @@ def get_surface_active(self, alpha=0, delta=0):
             Arc1(
                 ZM2,
                 ZM3,
-                (Rbo - self.Hmag_bore - self.Hmag_gap),
+                (Rbo - self.H0_bore - self.H0_gap),
                 is_trigo_direction=True,
             )
         )
@@ -52,7 +52,7 @@ def get_surface_active(self, alpha=0, delta=0):
             Arc1(
                 ZM2,
                 ZM3,
-                (Rbo + self.Hmag_bore + self.Hmag_gap),
+                (Rbo + self.H0_bore + self.H0_gap),
                 is_trigo_direction=True,
             )
         )

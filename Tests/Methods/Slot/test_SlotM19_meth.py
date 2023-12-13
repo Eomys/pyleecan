@@ -12,7 +12,7 @@ from numpy import exp, angle
 Mag19_test = list()
 # Internal Slot
 lam = LamSlotMag(is_internal=True, Rext=0.1325)
-lam.slot = SlotM19(W0=10e-3, Zs=4, Hmag=5e-3, W1=5e-3)
+lam.slot = SlotM19(W0=10e-3, Zs=4, H0=5e-3, W1=5e-3)
 Mag19_test.append(
     {
         "test_obj": lam,
@@ -27,7 +27,7 @@ Mag19_test.append(
 
 # Outward Slot
 lam = LamSlotMag(is_internal=False, Rint=0.1325)
-lam.slot = SlotM19(W0=10e-3, Zs=4, Hmag=5e-3, W1=5e-3)
+lam.slot = SlotM19(W0=10e-3, Zs=4, H0=5e-3, W1=5e-3)
 Mag19_test.append(
     {
         "test_obj": lam,
@@ -133,11 +133,11 @@ class Test_Magnet_Type_19_meth(object):
         Z4 = point_dict["Z4"]
         W0 = test_obj.slot.W0
         W1 = test_obj.slot.W1
-        Hmag = test_obj.slot.Hmag
+        H0 = test_obj.slot.H0
         Rbo = test_obj.slot.get_Rbo()
 
-        msg = "Return " + str(Rbo - (Z2 + Z3) / 2) + "expected " + str(Hmag)
-        assert abs(Rbo - (Z2 + Z3) / 2) == pytest.approx(Hmag, rel=DELTA), msg
+        msg = "Return " + str(Rbo - (Z2 + Z3) / 2) + "expected " + str(H0)
+        assert abs(Rbo - (Z2 + Z3) / 2) == pytest.approx(H0, rel=DELTA), msg
         assert abs(Z1 - Z4) == pytest.approx(W1, rel=DELTA)
         assert abs(Z2 - Z3) == pytest.approx(W0, rel=DELTA)
 

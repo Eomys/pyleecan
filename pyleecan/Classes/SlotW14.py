@@ -92,6 +92,11 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotW14.get_H1 import get_H1
+except ImportError as error:
+    get_H1 = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -273,6 +278,15 @@ class SlotW14(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotW14.get_H1
+    if isinstance(get_H1, ImportError):
+        get_H1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW14 method get_H1: " + str(get_H1))
+            )
+        )
+    else:
+        get_H1 = get_H1
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -282,10 +296,11 @@ class SlotW14(Slot):
         self,
         W0=0.0122,
         H0=0.001,
-        H1=0.0015,
+        H1=0,
         H3=0.0122,
         wedge_type=0,
         W3=0.0122,
+        H1_is_rad=False,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
@@ -319,6 +334,8 @@ class SlotW14(Slot):
                 wedge_type = init_dict["wedge_type"]
             if "W3" in list(init_dict.keys()):
                 W3 = init_dict["W3"]
+            if "H1_is_rad" in list(init_dict.keys()):
+                H1_is_rad = init_dict["H1_is_rad"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
@@ -332,6 +349,7 @@ class SlotW14(Slot):
         self.H3 = H3
         self.wedge_type = wedge_type
         self.W3 = W3
+        self.H1_is_rad = H1_is_rad
         # Call Slot init
         super(SlotW14, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -349,6 +367,7 @@ class SlotW14(Slot):
         SlotW14_str += "H3 = " + str(self.H3) + linesep
         SlotW14_str += "wedge_type = " + str(self.wedge_type) + linesep
         SlotW14_str += "W3 = " + str(self.W3) + linesep
+        SlotW14_str += "H1_is_rad = " + str(self.H1_is_rad) + linesep
         return SlotW14_str
 
     def __eq__(self, other):
@@ -371,6 +390,8 @@ class SlotW14(Slot):
         if other.wedge_type != self.wedge_type:
             return False
         if other.W3 != self.W3:
+            return False
+        if other.H1_is_rad != self.H1_is_rad:
             return False
         return True
 
@@ -466,6 +487,18 @@ class SlotW14(Slot):
                 diff_list.append(name + ".W3" + val_str)
             else:
                 diff_list.append(name + ".W3")
+        if other._H1_is_rad != self._H1_is_rad:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._H1_is_rad)
+                    + ", other="
+                    + str(other._H1_is_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".H1_is_rad" + val_str)
+            else:
+                diff_list.append(name + ".H1_is_rad")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -483,6 +516,7 @@ class SlotW14(Slot):
         S += getsizeof(self.H3)
         S += getsizeof(self.wedge_type)
         S += getsizeof(self.W3)
+        S += getsizeof(self.H1_is_rad)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -508,6 +542,7 @@ class SlotW14(Slot):
         SlotW14_dict["H3"] = self.H3
         SlotW14_dict["wedge_type"] = self.wedge_type
         SlotW14_dict["W3"] = self.W3
+        SlotW14_dict["H1_is_rad"] = self.H1_is_rad
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW14_dict["__class__"] = "SlotW14"
@@ -523,6 +558,7 @@ class SlotW14(Slot):
         H3_val = self.H3
         wedge_type_val = self.wedge_type
         W3_val = self.W3
+        H1_is_rad_val = self.H1_is_rad
         Zs_val = self.Zs
         if self.wedge_mat is None:
             wedge_mat_val = None
@@ -537,6 +573,7 @@ class SlotW14(Slot):
             H3=H3_val,
             wedge_type=wedge_type_val,
             W3=W3_val,
+            H1_is_rad=H1_is_rad_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
             is_bore=is_bore_val,
@@ -552,6 +589,7 @@ class SlotW14(Slot):
         self.H3 = None
         self.wedge_type = None
         self.W3 = None
+        self.H1_is_rad = None
         # Set to None the properties inherited from Slot
         super(SlotW14, self)._set_None()
 
@@ -605,7 +643,7 @@ class SlotW14(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot intermediate height.
+        doc=u"""height or angle (See Schematics)
 
         :Type: float
         :min: 0
@@ -666,5 +704,23 @@ class SlotW14(Slot):
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_H1_is_rad(self):
+        """getter of H1_is_rad"""
+        return self._H1_is_rad
+
+    def _set_H1_is_rad(self, value):
+        """setter of H1_is_rad"""
+        check_var("H1_is_rad", value, "bool")
+        self._H1_is_rad = value
+
+    H1_is_rad = property(
+        fget=_get_H1_is_rad,
+        fset=_set_H1_is_rad,
+        doc=u"""H1 unit, 0 for m, 1 for rad
+
+        :Type: bool
         """,
     )

@@ -1,13 +1,10 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
-from matplotlib.pyplot import legend
 
 from ....Functions.init_fig import init_fig
-from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
-from ....definitions import config_dict
-
-ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+from ....Functions.Plot.get_color_legend_from_surface import (
+    get_color_legend_from_surface,
+)
 
 
 def plot(
@@ -68,14 +65,19 @@ def plot(
 
     # Color Selection for Surfaces
     for surf in surf_list:
-        color = get_path_color_from_label(surf.label)
-        patches.extend(
-            surf.get_patches(
-                color=color,
-                is_edge_only=is_edge_only,
-                edgecolor=edgecolor,
+        color, legend = get_color_legend_from_surface(surf, is_lam_only)
+
+        if color is not None:
+            patches.extend(
+                surf.get_patches(
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
+                )
             )
-        )
+        if not is_edge_only and legend is not None and legend not in label_leg:
+            label_leg.append(legend)
+            patch_leg.append(Patch(color=color))
 
     # Display the result
     ax.set_xlabel("(m)")
@@ -96,12 +98,8 @@ def plot(
     # Adding legend
     if not is_edge_only:
         if self.is_stator:
-            patch_leg.append(Patch(color=STATOR_COLOR))
-            label_leg.append("Stator")
             title = "Stator without slot"
         else:
-            patch_leg.append(Patch(color=ROTOR_COLOR))
-            label_leg.append("Rotor")
             title = "Rotor without slot"
         ax.set_title(title)
         ax.legend(patch_leg, label_leg)

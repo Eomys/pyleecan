@@ -138,6 +138,8 @@ machine11.stator = LamSlotWind()
 machine11.stator.winding = Winding()
 machine11.rotor = LamSquirrelCageMag()
 machine11.rotor.winding = WindingSC()
+machine11.rotor.hole = list()
+machine11.rotor.hole.append(HoleM50())
 machine11._set_None()  # Empty machine
 machine11.type_machine = 11
 machine11.stator.is_stator = True

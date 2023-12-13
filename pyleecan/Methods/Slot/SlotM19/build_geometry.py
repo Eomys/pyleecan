@@ -26,10 +26,10 @@ def build_geometry(self):
 
     # Creation of curve
     curve_list = list()
-    if self.Hmag > 0:
+    if self.H0 > 0:
         curve_list.append(Segment(Z1, Z2))
     curve_list.append(Segment(Z2, Z3))
-    if self.Hmag > 0:
+    if self.H0 > 0:
         curve_list.append(Segment(Z3, Z4))
 
     return curve_list

@@ -19,9 +19,9 @@ def get_surface_wedge(self, alpha=0, delta=0):
     surf_list : list
         list of surfaces objects
     """
-
+    H1 = self.get_H1()
     # H0=H1=0 no opening
-    if self.H0 == 0 and self.H1 == 0:
+    if self.H0 == 0 and H1 == 0:
         return []
 
     # Create curve list
@@ -36,9 +36,9 @@ def get_surface_wedge(self, alpha=0, delta=0):
 
     # Create surface
     if self.is_outwards():
-        Zmid = self.get_Rbo() + self.H0 + self.H1 / 2
+        Zmid = self.get_Rbo() + self.H0 + H1 / 2
     else:
-        Zmid = self.get_Rbo() - self.H0 + self.H1 / 2
+        Zmid = self.get_Rbo() - self.H0 + H1 / 2
 
     label = self.parent.get_label() + "_" + SOP_LAB + "_R0-T0-S0"
     surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)

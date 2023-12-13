@@ -21,7 +21,8 @@ def get_surface_active(self, alpha=0, delta=0):
     """
     # Create curve list
     line_dict = self._comp_line_dict()
-    if self.H1 != 0:
+    H1 = self.get_H1()
+    if H1 > 1e-6:
         curve_list = [
             line_dict["3-4"],
             line_dict["4-5"],
@@ -52,9 +53,9 @@ def get_surface_active(self, alpha=0, delta=0):
     # Create surface
     label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
     if self.is_outwards():
-        Zmid = self.get_Rbo() + self.H0 + self.H1 + self.H3 / 2
+        Zmid = self.get_Rbo() + self.H0 + H1 + self.H3 / 2
     else:
-        Zmid = self.get_Rbo() - self.H0 - self.H1 - self.H3 / 2
+        Zmid = self.get_Rbo() - self.H0 - H1 - self.H3 / 2
     surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
     # Apply transformation

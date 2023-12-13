@@ -13,4 +13,4 @@ def comp_height_active(self):
 
     """
 
-    return self.Hmag
+    return self.H0
