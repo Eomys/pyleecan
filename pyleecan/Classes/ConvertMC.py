@@ -172,13 +172,6 @@ except ImportError as error:
     add_rule_slotW23 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_lamination import (
-        add_rule_lamination,
-    )
-except ImportError as error:
-    add_rule_lamination = error
-
-try:
     from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_ventilationCirc import (
         add_rule_ventilationCirc,
     )
@@ -205,13 +198,6 @@ try:
     )
 except ImportError as error:
     add_rule_notch_slotM19 = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_slotM15_H0_0 import (
-        add_rule_slotM15_H0_0,
-    )
-except ImportError as error:
-    add_rule_slotM15_H0_0 = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_slotM14 import (
@@ -296,20 +282,6 @@ try:
     )
 except ImportError as error:
     add_rule_holeM52 = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_holeM63_top_flat import (
-        add_rule_holeM63_top_flat,
-    )
-except ImportError as error:
-    add_rule_holeM63_top_flat = error
-
-try:
-    from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_holeM62_radial import (
-        add_rule_holeM62_radial,
-    )
-except ImportError as error:
-    add_rule_holeM62_radial = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Hole.add_rule_holeM62 import (
@@ -595,18 +567,6 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_slotW23 = add_rule_slotW23
-    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_lamination
-    if isinstance(add_rule_lamination, ImportError):
-        add_rule_lamination = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method add_rule_lamination: "
-                    + str(add_rule_lamination)
-                )
-            )
-        )
-    else:
-        add_rule_lamination = add_rule_lamination
     # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_ventilationCirc
     if isinstance(add_rule_ventilationCirc, ImportError):
         add_rule_ventilationCirc = property(
@@ -655,18 +615,6 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_notch_slotM19 = add_rule_notch_slotM19
-    # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_slotM15_H0_0
-    if isinstance(add_rule_slotM15_H0_0, ImportError):
-        add_rule_slotM15_H0_0 = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method add_rule_slotM15_H0_0: "
-                    + str(add_rule_slotM15_H0_0)
-                )
-            )
-        )
-    else:
-        add_rule_slotM15_H0_0 = add_rule_slotM15_H0_0
     # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_slotM14
     if isinstance(add_rule_slotM14, ImportError):
         add_rule_slotM14 = property(
@@ -811,30 +759,6 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_holeM52 = add_rule_holeM52
-    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_holeM63_top_flat
-    if isinstance(add_rule_holeM63_top_flat, ImportError):
-        add_rule_holeM63_top_flat = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method add_rule_holeM63_top_flat: "
-                    + str(add_rule_holeM63_top_flat)
-                )
-            )
-        )
-    else:
-        add_rule_holeM63_top_flat = add_rule_holeM63_top_flat
-    # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_holeM62_radial
-    if isinstance(add_rule_holeM62_radial, ImportError):
-        add_rule_holeM62_radial = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method add_rule_holeM62_radial: "
-                    + str(add_rule_holeM62_radial)
-                )
-            )
-        )
-    else:
-        add_rule_holeM62_radial = add_rule_holeM62_radial
     # cf Methods.Converter.ConvertMC.Rules.Hole.add_rule_holeM62
     if isinstance(add_rule_holeM62, ImportError):
         add_rule_holeM62 = property(

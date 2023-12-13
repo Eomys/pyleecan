@@ -1183,12 +1183,10 @@
             "Rules.Slot.add_rule_slotW21",
             "Rules.Slot.add_rule_slotW14",
             "Rules.Slot.add_rule_slotW23",
-            "Rules.Lamination.add_rule_lamination",
             "Rules.Lamination.add_rule_ventilationCirc",
             "Rules.Lamination.add_rule_ventilationPolar",
             "Rules.Lamination.add_rule_ventilationTrap",
             "Rules.Lamination.add_rule_notch_slotM19",
-            "Rules.Rotor_Magnet.add_rule_slotM15_H0_0",
             "Rules.Rotor_Magnet.add_rule_slotM14",
             "Rules.Rotor_Magnet.add_rule_slotM13",
             "Rules.Rotor_Magnet.add_rule_slotM16",
@@ -1201,8 +1199,6 @@
             "Rules.Hole.add_rule_holeM60",
             "Rules.Hole.add_rule_holeM63",
             "Rules.Hole.add_rule_holeM52",
-            "Rules.Hole.add_rule_holeM63_top_flat",
-            "Rules.Hole.add_rule_holeM62_radial",
             "Rules.Hole.add_rule_holeM62"
         ],
         "mother": "Convert",
@@ -14893,7 +14889,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "height or angle  (See Schematics)",
+                "desc": "height or angle (See Schematics)",
                 "max": "",
                 "min": "0",
                 "name": "H1",
@@ -14939,7 +14935,7 @@
                 "name": "H1_is_rad",
                 "type": "bool",
                 "unit": "",
-                "value": 0
+                "value": false
             }
         ]
     },

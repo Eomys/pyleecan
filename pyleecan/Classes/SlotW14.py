@@ -643,7 +643,7 @@ class SlotW14(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""height or angle  (See Schematics)
+        doc=u"""height or angle (See Schematics)
 
         :Type: float
         :min: 0
