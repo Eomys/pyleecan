@@ -16,7 +16,7 @@ def convert_to_other(self, other_dict, machine, other_unit_dict):
     P_value = self.get_P(self.P_obj_path, machine)
 
     # possibility to have str in other_value, if other_value is a str we have an equivalent, and we can't multiply a str.
-    # "if" it’s so as not to have this problem
+    # The "if" here handles this issue
     if self.scaling_to_P != 1:
         P_value = P_value / self.scaling_to_P
 

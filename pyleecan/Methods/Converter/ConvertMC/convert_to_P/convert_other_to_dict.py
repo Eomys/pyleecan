@@ -3,7 +3,7 @@ from numpy import pi
 
 
 def convert_other_to_dict(self, file_path):
-    """convert file .mot into dict and creation other_unit_dict
+    """converts file .mot into dict and creates other_unit_dict
 
     Parameters
     ----------
@@ -22,7 +22,7 @@ def convert_other_to_dict(self, file_path):
 
     list_path = file_path.split(".")
     if not list_path[-1] == "mot":
-        raise NameError("The file is not a .mot, please select a .mot to convert")
+        raise ValueError("The file is not a .mot, please select a .mot to convert")
     if not isfile(file_path):
         raise ValueError(f"Error: This file doesn't exist: {file_path}")
     else:
@@ -115,22 +115,21 @@ def convert_other_to_dict(self, file_path):
 
             self.other_dict = other_dict
             self.other_unit_dict = other_unit_dict
-            file.close()
 
 
-# conversion str in float
-def isfloat(str):
+# conversion value in float
+def isfloat(value):
     try:
-        float(str)
+        float(value)
         return True
     except ValueError:
         return False
 
 
-# conversion str in int
-def isint(str):
+# conversion value in int
+def isint(value):
     try:
-        int(str)
+        int(value)
         return True
     except ValueError:
         return False
