@@ -36,20 +36,27 @@ class TestComplexRuleSlotM15(object):
     @pytest.mark.parametrize("test_dict", slotM12_test)
     def test_inset_parallel_slotM15(self, test_dict):
         """test rule complex"""
+
+        # retreive other_dict
         other_dict = test_dict["other_dict"]
+
+        # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
         machine.rotor.slot = SlotM15()
 
+        # Define and apply the slot rule
         rule = RuleComplex(fct_name="inset_breadloaf_slotM12", folder="MotorCAD")
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
             other_dict, machine, {"ED": (2 / 8) * (pi / 180), "m": 0.001}
         )
 
+        # retreive expected values
         Rtopm = test_dict["Rtopm"]
         W1 = test_dict["W1"]
 
+        # check the convertion
         assert machine.rotor.slot.W1 == pytest.approx(W1)
         assert machine.rotor.slot.Rtopm == pytest.approx(Rtopm)
 

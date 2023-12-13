@@ -4,7 +4,6 @@ from numpy import pi
 from pyleecan.Classes.RuleComplex import RuleComplex
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.Notch import Notch
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.SlotM19 import SlotM19
 
@@ -40,13 +39,17 @@ class TestComplexRuleNotch(object):
     @pytest.mark.parametrize("test_dict", notch_l)
     def test_add_notch(self, test_dict):
         """test rule complex"""
+
+        # retreive other_dict
         other_dict = test_dict["other_dict"]
+
+        # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
-        machine.rotor.notch.append(Notch())
-        machine.rotor.notch[0] = NotchEvenDist()
+        machine.rotor.notch.append(NotchEvenDist())
         machine.rotor.notch[0].notch_shape = SlotM19()
 
+        # Define and apply the slot rule
         rule = RuleComplex(fct_name="add_notch", folder="MotorCAD")
         p = 8  # number of pole
         # first rule complex use to define a slot
@@ -54,9 +57,11 @@ class TestComplexRuleNotch(object):
             other_dict, machine, {"ED": (2 / p) * (pi / 180), "m": 1}
         )
 
+        # retreive expected values
         W0 = test_dict["W0"]
         W1 = test_dict["W1"]
 
+        # check the convertion
         msg = f"{machine.rotor.notch[0].notch_shape.W1} expected {W1}"
         assert machine.rotor.notch[0].notch_shape.W1 == pytest.approx(W1), msg
         msg = f"{machine.rotor.notch[0].notch_shape.W0} expected {W0}"

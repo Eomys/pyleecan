@@ -10,6 +10,7 @@ from pyleecan.Classes.HoleM61 import HoleM61
 class TestComplexRuleHoleM61(object):
     def test_interior_U_shape_holeM61(self):
         """test rule complex"""
+        # defined other_dict
         other_dict = {
             "[Dimensions]": {
                 "UShape_InnerDiameter_Array[0]": 4,
@@ -18,25 +19,27 @@ class TestComplexRuleHoleM61(object):
             }
         }
 
+        # Construct the machine in which the hole will be set
         machine = MachineIPMSM()
         machine.rotor = LamHole()
         machine.rotor.hole.append(HoleM61())
         machine.rotor.is_stator = False
         machine.rotor.is_internal = True
 
-        param_dict = {"hole_id": 0}
+        # Define and apply the slot rule
         rule = RuleComplex(
             fct_name="interior_U_shape_holeM61",
             folder="MotorCAD",
-            param_dict=param_dict,
+            param_dict={"hole_id": 0},
         )
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
             other_dict, machine, {"ED": (2 / 8) * (pi / 180), "m": 0.001}
         )
 
-        assert machine.rotor.hole[0].W1 == None
-        assert machine.rotor.hole[0].W2 == None
+        # check the convertion
+        assert machine.rotor.hole[0].W1 is None
+        assert machine.rotor.hole[0].W2 is None
         assert machine.rotor.hole[0].H0 == pytest.approx(0.998)
 
 
