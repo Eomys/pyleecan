@@ -23,12 +23,14 @@ class Test_converter_mot(object):
 
     def test_rule_equation_0(self):
         """test rule equation"""
+
+        # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
         machine.stator.slot.W0 = 4
 
-        # rule equation
+        # Define and apply the slot rule
         rule = RuleEquation(
             param=[
                 {
@@ -54,17 +56,22 @@ class Test_converter_mot(object):
         machine = rule.convert_to_P(
             self.other_dict, machine, other_unit_dict={"m": 1 / 3}
         )
+
+        # check the convertion
         msg = f"{machine.stator.slot.H2}, should be equal at 2.0"
         assert abs(machine.stator.slot.H2) == pytest.approx(2.0), msg
 
     def test_rule_equation_1(self):
         """test rule equation"""
+
+        # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
         machine.stator.slot = SlotW11()
         machine.stator.slot.W0 = 12.5
         machine.stator.slot.H2 = 5.75
 
+        # Define and apply the slot rule
         rule = RuleEquation(
             param=[
                 {
@@ -108,8 +115,11 @@ class Test_converter_mot(object):
         )
 
         machine = rule.convert_to_P(self.other_dict, machine, other_unit_dict={"m": 1})
-        msg = machine.stator.slot.W1
-        assert abs(machine.stator.slot.W1) == pytest.approx(31.9326923076923), msg
+
+        # check the convertion
+        expected_value = 31.9326923076923
+        msg = f"{machine.stator.slot.W1} expected {expected_value}"
+        assert abs(machine.stator.slot.W1) == pytest.approx(expected_value), msg
 
 
 if __name__ == "__main__":

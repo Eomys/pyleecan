@@ -86,8 +86,11 @@ class TestComplexRuleSlotM14(object):
     @pytest.mark.parametrize("test_dict", slotM14_test)
     def test_surface_radial_slotM14(self, test_dict):
         """test rule complex"""
+
+        # retreive other_dict
         other_dict = test_dict["other_dict"]
 
+        # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
         machine.rotor.slot = SlotM14()
@@ -95,16 +98,19 @@ class TestComplexRuleSlotM14(object):
         machine.rotor.slot.H0 = 0.01
         machine.rotor.slot.H1 = 0.02
 
+        # Define and apply the slot rule
         rule = RuleComplex(fct_name="surface_radial_slotM14", folder="MotorCAD")
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
             other_dict, machine, {"ED": (2 / 8) * (pi / 180), "m": 0.001}
         )
 
+        # retreive expected values
         W0 = test_dict["W0"]
         W1 = test_dict["W1"]
         Rtopm = test_dict["Rtopm"]
 
+        # check the convertion
         msg = f"{machine.rotor.slot.W0} expected {W0}"
         assert machine.rotor.slot.W0 == pytest.approx(W0), msg
         msg = f"{machine.rotor.slot.W1} expected {W1}"
