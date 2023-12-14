@@ -150,5 +150,4 @@ if __name__ == "__main__":
     for test_dict in slotW62_test:
         a.test_comp_height(test_dict)
         a.test_comp_angle_opening(test_dict)
-        a.test_get_surfaces(test_dict)
     print("Done")
