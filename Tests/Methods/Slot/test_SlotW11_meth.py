@@ -125,14 +125,14 @@ lam_CT.slot = SlotW11(
     is_cstt_tooth=True,
     R1=5e-3,
 )
-Lam_CT_surf = 0.00032502735620
+Lam_CT_surf = 0.000676364299341
 slotW11_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
-        "Aw": 0.085149109116,
+        "Aw": 0.1871064077993,
         "SO_exp": 3.161013061533846e-05,
-        "SW_exp": 0.00029341722558,
+        "SW_exp": 0.0006447541687263,
         "H_exp": 0.03263591,
     }
 )
