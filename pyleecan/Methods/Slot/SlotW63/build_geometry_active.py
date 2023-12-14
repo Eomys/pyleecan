@@ -1,40 +1,3 @@
-from numpy import pi, exp
-
-from ....Classes.Segment import Segment
-from ....Classes.SurfLine import SurfLine
-from ....Methods.Slot.SlotW63 import S63_WindError
-from ....Functions.labels import WIND_LAB
-
-
-def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
-    """Split the slot winding area in several zone
-
-    Parameters
-    ----------
-    self : SlotW63
-        A SlotW63 object
-    Nrad : int
-        Number of radial layer
-    Ntan : int
-        Number of tangentiel layer
-    is_simplified : bool
-        boolean to specify if the coincident lines are considered as one
-        or different lines (Default value = False)
-    alpha : float
-        Angle for rotation (Default value = 0) [rad]
-    delta : complex
-        complex for translation (Default value = 0)
-
-    Returns
-    -------
-    surf_list: list
-        List of surface delimiting the winding zone
-    """
-
-    from numpy import pi, exp
-
-
-from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Methods.Slot.SlotW63 import S63_WindError
 from ....Functions.labels import WIND_LAB
@@ -66,8 +29,8 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
     """
 
-    # if Nrad != 1 or Ntan != 2:
-    #    raise S63_WindError("Slot 63 can use only for winding with Nrad=1 and Ntan=2")
+    if Nrad != 1 or Ntan != 2:
+        raise S63_WindError("Slot 63 can use only for winding with Nrad=1 and Ntan=2")
     self.check()
 
     # get the name of the lamination

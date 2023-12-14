@@ -17,7 +17,6 @@ def _comp_line_dict(self):
         Dictionnary of the slot lines (key: line name, value: line object)
     """
 
-    Rbo = self.get_Rbo()
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]
     Z2 = point_dict["Z2"]

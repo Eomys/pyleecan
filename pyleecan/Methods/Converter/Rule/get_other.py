@@ -23,7 +23,7 @@ def get_other(self, other_dict, other_path_list, other_unit_dict):
         # selection correct value in other_dict
         for temp in other_path_list:
             other_dict = other_dict[temp]
-    except Exception:
+    except AttributeError:
         raise ValueError(
             f"Value equivalent at {other_path_list} isn't found in other_dict"
         )

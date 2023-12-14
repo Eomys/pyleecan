@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, exp, arcsin, cos, sqrt, sin
+from numpy import pi, exp, arcsin, sin
 from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
 
 

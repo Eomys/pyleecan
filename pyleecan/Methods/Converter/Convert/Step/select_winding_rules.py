@@ -1,5 +1,5 @@
 def select_winding_rules(self, is_stator):
-    """selection step to add rules for winding
+    """select step to add rules for winding
 
     Parameters
     ----------

@@ -22,7 +22,7 @@ def get_surface_active(self, alpha=0, delta=0):
     # Create curve list
     line_dict = self._comp_line_dict()
     H1 = self.get_H1()
-    if H1 != 0:
+    if H1 > 1e-6:
         curve_list = [
             line_dict["3-4"],
             line_dict["4-5"],

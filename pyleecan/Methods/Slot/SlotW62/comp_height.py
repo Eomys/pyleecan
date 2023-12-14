@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from numpy import sqrt
 
 
 def comp_height(self):

@@ -6,7 +6,6 @@ from pyleecan.Classes.SlotW30 import SlotW30
 from numpy import ndarray, arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods.Slot.SlotW30 import S30InnerError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -24,6 +23,19 @@ slotW30_test.append(
         "SW_exp": 0.00029989062007,
         "SO_exp": 2.49213752500043e-05,
         "H_exp": 0.025040196456158986,
+    }
+)
+
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=0, R2=0, W0=5e-3, W3=10e-3)
+slotW30_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0003402579787222371,
+        "Aw": 0.10673472668521931,
+        "SW_exp": 0.0003153366034722328,
+        "SO_exp": 2.49213752500043e-05,
+        "H_exp": 0.0252197784008099,
     }
 )
 
@@ -66,33 +78,46 @@ class Test_SlotW30_meth(object):
             test_obj.slot.H0
         )
 
-        assert abs(point_dict["Z7"].real - point_dict["Z6"].real) == pytest.approx(0)
-
-        Z11 = point_dict["Z11"].real
-        Z7 = point_dict["Z7"].real
-        msg = f"{Z7 -Z11} is different H1 : {test_obj.slot.H1}"
-        assert abs((point_dict["Z7"].real - point_dict["Z11"].real)) == pytest.approx(
-            test_obj.slot.H1
-        ), msg
-
         # Check radius
-        assert abs(point_dict["Z3"] - point_dict["Zc1"]) - test_obj.slot.R1 < 1e-6
-        assert abs(point_dict["Z4"] - point_dict["Zc1"]) - test_obj.slot.R1 < 1e-6
-        assert abs(point_dict["Z10"] - point_dict["Zc4"]) - test_obj.slot.R1 < 1e-6
-        assert abs(point_dict["Z9"] - point_dict["Zc4"]) - test_obj.slot.R1 < 1e-6
-        assert abs(point_dict["Z5"] - point_dict["Zc2"]) - test_obj.slot.R2 < 1e-6
-        assert abs(point_dict["Z6"] - point_dict["Zc2"]) - test_obj.slot.R2 < 1e-6
-        assert abs(point_dict["Z7"] - point_dict["Zc3"]) - test_obj.slot.R2 < 1e-6
-        assert abs(point_dict["Z8"] - point_dict["Zc3"]) - test_obj.slot.R2 < 1e-6
+        if test_obj.slot.R1 > 0:
+            assert abs(point_dict["Z3"] - point_dict["Zc1"]) - test_obj.slot.R1 < 1e-6
+            assert abs(point_dict["Z4"] - point_dict["Zc1"]) - test_obj.slot.R1 < 1e-6
+            assert abs(point_dict["Z10"] - point_dict["Zc4"]) - test_obj.slot.R1 < 1e-6
+            assert abs(point_dict["Z9"] - point_dict["Zc4"]) - test_obj.slot.R1 < 1e-6
 
-        sp = 2 * pi / test_obj.slot.Zs
-        a = point_dict["Z9"]
-        b = exp(1j * sp) * point_dict["Z4"]
-        assert abs(a - b) == pytest.approx(test_obj.slot.W3)
+            sp = 2 * pi / test_obj.slot.Zs
+            a = point_dict["Z9"]
+            b = exp(1j * sp) * point_dict["Z4"]
+            assert abs(a - b) == pytest.approx(test_obj.slot.W3)
 
-        a = point_dict["Z8"]
-        b = exp(1j * sp) * point_dict["Z5"]
-        assert abs(a - b) == pytest.approx(test_obj.slot.W3)
+        else:
+            sp = 2 * pi / test_obj.slot.Zs
+            a = point_dict["Z100"]
+            b = exp(1j * sp) * point_dict["Z40"]
+            assert abs(a - b) == pytest.approx(test_obj.slot.W3)
+
+        if test_obj.slot.R2 > 0:
+            assert abs(point_dict["Z7"].real - point_dict["Z6"].real) == pytest.approx(
+                0
+            )
+
+            assert abs(point_dict["Z5"] - point_dict["Zc2"]) - test_obj.slot.R2 < 1e-6
+            assert abs(point_dict["Z6"] - point_dict["Zc2"]) - test_obj.slot.R2 < 1e-6
+            assert abs(point_dict["Z7"] - point_dict["Zc3"]) - test_obj.slot.R2 < 1e-6
+            assert abs(point_dict["Z8"] - point_dict["Zc3"]) - test_obj.slot.R2 < 1e-6
+
+            a = point_dict["Z8"]
+            b = exp(1j * sp) * point_dict["Z5"]
+            assert abs(a - b) == pytest.approx(test_obj.slot.W3)
+
+            assert abs(
+                (point_dict["Z7"].real - point_dict["Z11"].real)
+            ) == pytest.approx(test_obj.slot.H1)
+
+        else:
+            a = point_dict["Z80"]
+            b = exp(1j * sp) * point_dict["Z60"]
+            assert abs(a - b) == pytest.approx(test_obj.slot.W3)
 
     @pytest.mark.parametrize("test_dict", slotW30_test)
     def test_build_geometry_active(self, test_dict):
@@ -187,7 +212,6 @@ class Test_SlotW30_meth(object):
     def test_comp_angle_opening(self, test_dict):
         """Check that the computation of the average opening angle iscorrect"""
         test_obj = test_dict["test_obj"]
-        test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
 
         if test_obj.is_internal == False:
@@ -220,9 +244,6 @@ class Test_SlotW30_meth(object):
         assert len(result) == 1
         assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
         assert len(result[0].get_lines()) == 4
-
-        # result = lam.slot.get_surface()
-        # assert len(result.get_lines()) == 12
 
 
 if __name__ == "__main__":

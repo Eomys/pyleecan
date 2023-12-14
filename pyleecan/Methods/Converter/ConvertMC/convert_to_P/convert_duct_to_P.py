@@ -16,18 +16,15 @@ def convert_duct_to_P(self, is_stator):
     """
     # selection of lamination
     if is_stator == True:
+        self.get_logger().info("Stator duct are not implemented")
         return
-        lam_name_type = "Stator"
-        lam_name = ""
-        axial_vent = self.machine.stator.axial_vent
-    else:
-        lam_name_type = "Rotor"
-        lam_name = "Rotor"
-        axial_vent = self.machine.rotor.axial_vent
+
+    lam_name = "Rotor"
+    axial_vent = self.machine.rotor.axial_vent
 
     # selection type layers
-    if f"{lam_name_type}_Duct_Type" in self.other_dict["[Through_Vent]"]:
-        type_duct = self.other_dict["[Through_Vent]"][f"{lam_name_type}_Duct_Type"]
+    if f"{lam_name}_Duct_Type" in self.other_dict["[Through_Vent]"]:
+        type_duct = self.other_dict["[Through_Vent]"][f"{lam_name}_Duct_Type"]
     else:
         type_duct = f"No_{lam_name}_Ducts"
 
@@ -36,11 +33,9 @@ def convert_duct_to_P(self, is_stator):
         self.get_logger().debug(f"No duct to convert at {lam_name}")
 
     else:
-        number_duct = self.other_dict["[Through_Vent]"][f"{lam_name}CircularDuctLayers"]
         # CircularDuct
         if type_duct == f"{lam_name}_Circ_Ducts" or type_duct == "Circ_Ducts":
             Ventilation_class = VentilationCirc
-            rule = self.add_rule_circular_duct_circular
 
         # Shaft_spoke
         elif type_duct == f"{lam_name}_Shaft_Spoke_Ducts":
@@ -49,24 +44,24 @@ def convert_duct_to_P(self, is_stator):
         # Arcduct
         elif type_duct == f"{lam_name}_Arc_Ducts":
             Ventilation_class = VentilationPolar
-            rule = self.add_rule_arc_duct_polar
 
         # RectangularDuct
         elif type_duct == f"{lam_name}_Rect_Ducts" or type_duct == "Rect_Ducts":
             # Error convert is not Implemented
-            self.get_logger().info("Not Implemented")
+            self.get_logger().info("Rect_Ducts, Not Implemented")
             return
-            Ventilation_class = VentilationTrap
-            rule = self.add_rule_rectangular_duct_trapeze
+            # Ventilation_class = VentilationTrap
 
         else:
             raise NotImplementedError(
-                f"Type of duct {type_duct} has not equivalent in pyleecan or has not implement"
+                f"Type of duct {type_duct} has any equivalent in pyleecan or has not been implemented"
             )
 
+        # Duplication of the sets
+        number_duct = self.other_dict["[Through_Vent]"][f"{lam_name}CircularDuctLayers"]
         for duct_id in range(number_duct):
             axial_vent.append(Ventilation_class())
-            rule(is_stator, duct_id)
-            self.get_logger().info(
-                f"Conversion {type_duct} into {Ventilation_class.__name__}"
-            )
+
+        self.get_logger().info(
+            f"Conversion {type_duct} into {number_duct} {Ventilation_class.__name__}"
+        )

@@ -1,6 +1,3 @@
-from numpy import pi, exp
-
-from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Methods.Slot.SlotW62 import S62_WindError
 from ....Functions.labels import WIND_LAB
@@ -32,8 +29,8 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
     """
 
-    # if Nrad != 1 or Ntan != 2:
-    #    raise S62_WindError("Slot 62 can use only for winding with Nrad=1 and Ntan=2")
+    if Nrad != 1 or Ntan != 2:
+        raise S62_WindError("Slot 62 can use only for winding with Nrad=1 and Ntan=2")
     self.check()
 
     # get the name of the lamination
