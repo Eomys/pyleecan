@@ -92,7 +92,7 @@ def test_plot_glyph(gen_mesh_solution):
     mesh, solution = gen_mesh_solution
     MSol = MeshSolution(
         mesh=mesh,
-        solution=[solution],
+        solution_dict={solution.label: solution},
         dimension=3,
     )
     MSol.plot_glyph(
@@ -108,7 +108,7 @@ def test_plot_glyph_animated(gen_mesh_solution):
     mesh, solution = gen_mesh_solution
     MSol = MeshSolution(
         mesh=mesh,
-        solution=[solution],
+        solution_dict={solution.label: solution},
         dimension=3,
     )
     MSol.plot_glyph(
@@ -123,7 +123,7 @@ def test_plot_deflection(gen_mesh_solution):
     mesh, solution = gen_mesh_solution
     MSol = MeshSolution(
         mesh=mesh,
-        solution=[solution],
+        solution_dict={solution.label: solution},
         dimension=3,
     )
     MSol.plot_deflection(
@@ -137,7 +137,7 @@ def test_plot_deflection_animated(gen_mesh_solution):
     mesh, solution = gen_mesh_solution
     MSol = MeshSolution(
         mesh=mesh,
-        solution=[solution],
+        solution_dict={solution.label: solution},
         dimension=3,
     )
     MSol.plot_deflection(

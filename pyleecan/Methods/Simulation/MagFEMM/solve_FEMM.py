@@ -273,10 +273,10 @@ def solve_FEMM(
 
             # Initialize mesh and magnetic quantities for first time step
             if ii == start_t:
-                meshFEMM = [meshFEMMi]
+                meshFEMM = meshFEMMi
                 groups = groupsi
-                Nelem = meshFEMM[0].element_dict["triangle"].nb_element
-                Nnode = meshFEMM[0].node.nb_node
+                Nelem = meshFEMM.element_dict["triangle"].nb_element
+                Nnode = meshFEMM.node.nb_node
                 Nt0 = end_t - start_t
                 B_elem = zeros([Nt0, Nelem, 3])
                 H_elem = zeros([Nt0, Nelem, 3])

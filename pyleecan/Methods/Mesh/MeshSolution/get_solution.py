@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
+
+from ....Classes.Solution import Solution
 
 
-def get_solution(self, label=None):
+def get_solution(self, label: Optional[str] = None) -> Solution:
     """Return the solution corresponding to label or the first solution by default.
 
     Parameters
@@ -18,14 +21,14 @@ def get_solution(self, label=None):
 
     """
 
+    # Return first solution
+    if label is None:
+        return next(iter(self.solution_dict.values()))
+
     # Search for the desired solution
-    for solution in self.solution:
-        if solution.label == label:
-            return solution
-
-    if label is not None:
-        raise ValueError(
-            f"Wrong solution label {label}, please use one of the following values: {[sol.label for sol in self.solution]}."
+    try:
+        return self.solution_dict.get(label)
+    except KeyError:
+        raise KeyError(
+            f"Wrong solution label {label}, please use one of the following values: {list(self.solution_dict.keys())}."
         )
-
-    return self.solution[0]

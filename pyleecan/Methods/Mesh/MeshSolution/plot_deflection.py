@@ -98,7 +98,9 @@ def plot_deflection(
     if factor is None:
         factor = 0.2 * np_max(np_abs(mesh_pv.bounds)) / np_max(np_abs(vect_field))
 
-    field_name += " \n(x " + format(factor, ".3g") + " [" + self.solution[0].unit + "])"
+    field_name += (
+        " \n(x " + format(factor, ".3g") + " [" + self.get_solution().unit + "])"
+    )
 
     # # Plot mesh only
     # pv_plotter.add_mesh(

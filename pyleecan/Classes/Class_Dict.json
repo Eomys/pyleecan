@@ -8728,11 +8728,11 @@
             },
             {
                 "as_dict": "",
-                "desc": "A list of Solution objects",
+                "desc": "A dictionary of Solution objects",
                 "max": "",
                 "min": "",
-                "name": "solution",
-                "type": "[Solution]",
+                "name": "solution_dict",
+                "type": "{Solution}",
                 "unit": "",
                 "value": ""
             },

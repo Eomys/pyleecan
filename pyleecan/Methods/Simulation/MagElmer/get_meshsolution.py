@@ -1,11 +1,14 @@
+from os.path import join
+
+from meshio import read
+from numpy import append as np_append
+from numpy import arange
+from SciDataTool import Data1D, DataTime, Norm_ref, VectorField
+
 from ....Classes.MeshSolution import MeshSolution
 from ....Classes.MeshVTK import MeshVTK
 from ....Classes.SolutionData import SolutionData
 from ....Classes.SolutionVector import SolutionVector
-from meshio import read
-from SciDataTool import Data1D, VectorField, DataTime, Norm_ref
-from numpy import arange, append as np_append
-from os.path import join
 
 
 def get_meshsolution(self, output):
@@ -31,7 +34,7 @@ def get_meshsolution(self, output):
         return False
 
     meshvtk = MeshVTK(path=elmermesh_folder, name="step_t0002", format="vtu")
-    meshsol.mesh = [meshvtk]
+    meshsol.mesh = meshvtk
 
     result_filename = join(elmermesh_folder, "step_t0002.vtu")
     meshsolvtu = read(result_filename)

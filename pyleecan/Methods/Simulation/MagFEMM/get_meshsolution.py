@@ -97,7 +97,6 @@ def get_meshsolution(
         listElem = listElem0[:, 0:3] - 1
 
         mesh = MeshMat()
-        mesh.label = "FEMM"
         mesh.element_dict["triangle"] = ElementMat(
             connectivity=listElem,
             nb_element=NbElem,

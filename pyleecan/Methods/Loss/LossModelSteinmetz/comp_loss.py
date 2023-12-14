@@ -1,4 +1,7 @@
-from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
+from numpy import abs as np_abs
+from numpy import matmul
+from numpy import sqrt as np_sqrt
+from numpy import sum as np_sum
 
 
 def comp_loss(self):
@@ -70,20 +73,19 @@ def comp_loss(self):
     if self.group not in group_list:
         raise Exception("Cannot calculate core losses for group=" + self.group)
 
-    label_list = [sol.label for sol in meshsol.solution]
-
-    if "B" not in label_list:
-        raise Exception("Cannot calculate core losses if B is not in meshsolution")
-    else:
-        ind = label_list.index("B")
+    # Extract solution
+    try:
+        solution_B = meshsol.get("B")
+    except ValueError:
+        raise ValueError("Cannot calculate core losses if B is not in meshsolution")
 
     # Get element indices associated to group
     Igrp = meshsol.group[self.group]
 
     # Get element surface associated to group
-    Se = meshsol.mesh[0].get_element_area()[Igrp]
+    Se = meshsol.mesh.get_element_area()[Igrp]
 
-    Bvect = meshsol.solution[ind].field
+    Bvect = solution_B.field
     axes_list = Bvect.get_axes()
     Time_orig = axes_list[0]
     Time = Time_orig.copy()
@@ -121,8 +123,8 @@ def comp_loss(self):
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
     # Compute the loss density for each element and each frequency
-    Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
-    Pcore_density += k_hy * freqs[:, None] ** alpha_f * Bfft_magnitude ** alpha_B
+    Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude**2
+    Pcore_density += k_hy * freqs[:, None] ** alpha_f * Bfft_magnitude**alpha_B
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -133,10 +135,10 @@ def comp_loss(self):
     n = freqs / felec
 
     # Integrate loss density over group volume to get polynomial coefficients
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
-    A = np_sum(k_ed * coeff * n ** 2)
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
-    B = np_sum(k_hy * coeff * n ** alpha_f)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
+    A = np_sum(k_ed * coeff * n**2)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**alpha_B, Se)
+    B = np_sum(k_hy * coeff * n**alpha_f)
     self.coeff_dict = {"2": A, str(alpha_f): B}
 
     return Pcore_density, freqs

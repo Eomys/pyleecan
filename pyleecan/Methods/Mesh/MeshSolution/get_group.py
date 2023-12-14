@@ -96,25 +96,25 @@ def get_group(self, group_names):
             nb_element_interf,
             indices_interf,
         ) = mesh_interface.get_element()
-        node_indice_interf = list()
+        node_indice_interf = []
         for key in connect_interface:
             node_indice_interf.extend(np.unique(connect_interface[key]))
 
         node_indice = np.unique(node_indice_interf)
 
     # 4) select the corresponding solutions
-    sol_list = list()
-    for sol in self.solution:
-        type_element_sol = sol.type_element
+    solution_dict = {}
+    for key, solution in self.solution_dict.items():
+        type_element_sol = solution.type_element
 
         new_sol = None
         if type_element_sol == "node":
-            new_sol = sol.get_solution(indice=node_indice.tolist())
+            new_sol = solution.get_solution(indice=node_indice.tolist())
         elif not is_interface:  # Interface is only available for node solution.
-            new_sol = sol.get_solution(indice=indice_dict[type_element_sol])
+            new_sol = solution.get_solution(indice=indice_dict[type_element_sol])
 
         if new_sol is not None:
-            sol_list.append(new_sol)
+            solution_dict[key] = new_sol
 
     # 5) Create the corresponding MeshSolution object
     if is_interface:
@@ -128,7 +128,7 @@ def get_group(self, group_names):
     meshsol_grp.label = meshsolution_label
     meshsol_grp.mesh = mesh
     meshsol_grp.is_same_mesh = is_same_mesh
-    meshsol_grp.solution = sol_list
+    meshsol_grp.solution_dict = solution_dict
     meshsol_grp.dimension = dimension
     meshsol_grp.group = self.group
 

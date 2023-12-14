@@ -31,7 +31,7 @@ def comp_all_losses(
     meshsol = output.mag.meshsolution
     group = meshsol.group
     freqs = axes_dict["freqs"].get_values()
-    Nelem = meshsol.mesh[0].element_dict["triangle"].nb_element
+    Nelem = meshsol.mesh.element_dict["triangle"].nb_element
 
     out_loss.loss_dict = dict()
     for key, model in self.model_dict.items():

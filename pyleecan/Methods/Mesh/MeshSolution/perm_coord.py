@@ -15,15 +15,15 @@ def perm_coord(
     len_perm_coord_list = len(perm_coord_list)
 
     # swap mesh solution
-    for sol in self.solution:
+    for solution in self.solution_dict.values():
         # swap modal shapes
-        meshsol_field = sol.field
+        meshsol_field = solution.field
         if len_perm_coord_list != meshsol_field.shape[-1]:
             raise ValueError(
                 f"Wrong permutation list size, expected {meshsol_field.shape[-1]}, got {len_perm_coord_list}."
             )
         meshsol_field = meshsol_field[..., perm_coord_list]
-        sol.field = meshsol_field
+        solution.field = meshsol_field
 
     # swap mesh VTK
     self.mesh = self.mesh.perm_coord(perm_coord_list=perm_coord_list)

@@ -1,17 +1,15 @@
 from os.path import isfile
 from shutil import copyfile
 
-from numpy import zeros, concatenate, append
-
+from numpy import append, concatenate, zeros
 from SciDataTool import Data1D
 
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Classes.OutMagFEMM import OutMagFEMM
-
-from ....Functions.labels import STATOR_LAB
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
-from ....Functions.MeshSolution.build_solution_data import build_solution_data
+from ....Functions.labels import STATOR_LAB
 from ....Functions.MeshSolution.build_meshsolution import build_meshsolution
+from ....Functions.MeshSolution.build_solution_data import build_solution_data
 from ....Functions.MeshSolution.build_solution_vector import build_solution_vector
 
 
@@ -48,9 +46,9 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
     """
 
     logger = self.get_logger()
-    list_solution = list()
+    solution_dict = {}
 
-    for solution in MS_sliced.solution:
+    for key, solution in MS_sliced.solution.items():
         # Define axis
         name, _ = solution.get_axes_list()
 
@@ -111,12 +109,12 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
                 type_element=solution.type_element,
             )
 
-        list_solution.append(new_sol)
+        solution_dict[key] = new_sol
 
     MS_sliced_new = build_meshsolution(
-        list_solution=list_solution,
+        solution_dict=solution_dict,
         label=MS_sliced.label,
-        list_mesh=MS_sliced.mesh,
+        mesh=MS_sliced.mesh,
         group=MS_sliced.group,
     )
 

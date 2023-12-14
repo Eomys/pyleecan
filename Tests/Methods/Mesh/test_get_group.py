@@ -90,7 +90,7 @@ def test_MeshMat_2group():
 
     meshsol = MeshSolution()
     meshsol.mesh = mesh
-    meshsol.solution = [solution]
+    meshsol.solution_dict = {solution.label: solution}
     meshsol.group = dict()
     meshsol.group["stator"] = [11, 12]
     meshsol.group["rotor"] = [98, 100, 101]

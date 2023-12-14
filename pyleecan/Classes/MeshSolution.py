@@ -217,7 +217,7 @@ class MeshSolution(FrozenClass):
         label="",
         mesh=-1,
         is_same_mesh=True,
-        solution=-1,
+        solution_dict=-1,
         group=None,
         dimension=2,
         path=None,
@@ -245,8 +245,8 @@ class MeshSolution(FrozenClass):
                 mesh = init_dict["mesh"]
             if "is_same_mesh" in list(init_dict.keys()):
                 is_same_mesh = init_dict["is_same_mesh"]
-            if "solution" in list(init_dict.keys()):
-                solution = init_dict["solution"]
+            if "solution_dict" in list(init_dict.keys()):
+                solution_dict = init_dict["solution_dict"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
             if "dimension" in list(init_dict.keys()):
@@ -258,7 +258,7 @@ class MeshSolution(FrozenClass):
         self.label = label
         self.mesh = mesh
         self.is_same_mesh = is_same_mesh
-        self.solution = solution
+        self.solution_dict = solution_dict
         self.group = group
         self.dimension = dimension
         self.path = path
@@ -283,11 +283,14 @@ class MeshSolution(FrozenClass):
         else:
             MeshSolution_str += "mesh = None" + linesep + linesep
         MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh) + linesep
-        if len(self.solution) == 0:
-            MeshSolution_str += "solution = []" + linesep
-        for ii in range(len(self.solution)):
-            tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.solution_dict) == 0:
+            MeshSolution_str += "solution_dict = dict()" + linesep
+        for key, obj in self.solution_dict.items():
+            tmp = (
+                self.solution_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            MeshSolution_str += "solution_dict[" + key + "] =" + tmp + linesep + linesep
         MeshSolution_str += "group = " + str(self.group) + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         MeshSolution_str += 'path = "' + str(self.path) + '"' + linesep
@@ -304,7 +307,7 @@ class MeshSolution(FrozenClass):
             return False
         if other.is_same_mesh != self.is_same_mesh:
             return False
-        if other.solution != self.solution:
+        if other.solution_dict != self.solution_dict:
             return False
         if other.group != self.group:
             return False
@@ -355,20 +358,20 @@ class MeshSolution(FrozenClass):
                 diff_list.append(name + ".is_same_mesh" + val_str)
             else:
                 diff_list.append(name + ".is_same_mesh")
-        if (other.solution is None and self.solution is not None) or (
-            other.solution is not None and self.solution is None
+        if (other.solution_dict is None and self.solution_dict is not None) or (
+            other.solution_dict is not None and self.solution_dict is None
         ):
-            diff_list.append(name + ".solution None mismatch")
-        elif self.solution is None:
+            diff_list.append(name + ".solution_dict None mismatch")
+        elif self.solution_dict is None:
             pass
-        elif len(other.solution) != len(self.solution):
-            diff_list.append("len(" + name + ".solution)")
+        elif len(other.solution_dict) != len(self.solution_dict):
+            diff_list.append("len(" + name + "solution_dict)")
         else:
-            for ii in range(len(other.solution)):
+            for key in self.solution_dict:
                 diff_list.extend(
-                    self.solution[ii].compare(
-                        other.solution[ii],
-                        name=name + ".solution[" + str(ii) + "]",
+                    self.solution_dict[key].compare(
+                        other.solution_dict[key],
+                        name=name + ".solution_dict[" + str(key) + "]",
                         ignore_list=ignore_list,
                         is_add_value=is_add_value,
                     )
@@ -412,9 +415,9 @@ class MeshSolution(FrozenClass):
         S += getsizeof(self.label)
         S += getsizeof(self.mesh)
         S += getsizeof(self.is_same_mesh)
-        if self.solution is not None:
-            for value in self.solution:
-                S += getsizeof(value)
+        if self.solution_dict is not None:
+            for key, value in self.solution_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         if self.group is not None:
             for key, value in self.group.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -444,21 +447,19 @@ class MeshSolution(FrozenClass):
                 **kwargs
             )
         MeshSolution_dict["is_same_mesh"] = self.is_same_mesh
-        if self.solution is None:
-            MeshSolution_dict["solution"] = None
+        if self.solution_dict is None:
+            MeshSolution_dict["solution_dict"] = None
         else:
-            MeshSolution_dict["solution"] = list()
-            for obj in self.solution:
+            MeshSolution_dict["solution_dict"] = dict()
+            for key, obj in self.solution_dict.items():
                 if obj is not None:
-                    MeshSolution_dict["solution"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
+                    MeshSolution_dict["solution_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
                     )
                 else:
-                    MeshSolution_dict["solution"].append(None)
+                    MeshSolution_dict["solution_dict"][key] = None
         MeshSolution_dict["group"] = (
             self.group.copy() if self.group is not None else None
         )
@@ -478,12 +479,12 @@ class MeshSolution(FrozenClass):
         else:
             mesh_val = self.mesh.copy()
         is_same_mesh_val = self.is_same_mesh
-        if self.solution is None:
-            solution_val = None
+        if self.solution_dict is None:
+            solution_dict_val = None
         else:
-            solution_val = list()
-            for obj in self.solution:
-                solution_val.append(obj.copy())
+            solution_dict_val = dict()
+            for key, obj in self.solution_dict.items():
+                solution_dict_val[key] = obj.copy()
         if self.group is None:
             group_val = None
         else:
@@ -495,7 +496,7 @@ class MeshSolution(FrozenClass):
             label=label_val,
             mesh=mesh_val,
             is_same_mesh=is_same_mesh_val,
-            solution=solution_val,
+            solution_dict=solution_dict_val,
             group=group_val,
             dimension=dimension_val,
             path=path_val,
@@ -509,7 +510,7 @@ class MeshSolution(FrozenClass):
         if self.mesh is not None:
             self.mesh._set_None()
         self.is_same_mesh = None
-        self.solution = None
+        self.solution_dict = None
         self.group = None
         self.dimension = None
         self.path = None
@@ -585,18 +586,18 @@ class MeshSolution(FrozenClass):
         """,
     )
 
-    def _get_solution(self):
-        """getter of solution"""
-        if self._solution is not None:
-            for obj in self._solution:
+    def _get_solution_dict(self):
+        """getter of solution_dict"""
+        if self._solution_dict is not None:
+            for key, obj in self._solution_dict.items():
                 if obj is not None:
                     obj.parent = self
-        return self._solution
+        return self._solution_dict
 
-    def _set_solution(self, value):
-        """setter of solution"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
+    def _set_solution_dict(self, value):
+        """setter of solution_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
                 if isinstance(obj, str):  # Load from file
                     try:
                         obj = load_init_dict(obj)[1]
@@ -605,25 +606,23 @@ class MeshSolution(FrozenClass):
                             "Error while loading " + obj + ", setting None instead"
                         )
                         obj = None
-                        value[ii] = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "solution"
+                        "pyleecan.Classes", obj.get("__class__"), "solution_dict"
                     )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("solution", value, "[Solution]")
-        self._solution = value
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("solution_dict", value, "{Solution}")
+        self._solution_dict = value
 
-    solution = property(
-        fget=_get_solution,
-        fset=_set_solution,
-        doc=u"""A list of Solution objects
+    solution_dict = property(
+        fget=_get_solution_dict,
+        fset=_set_solution_dict,
+        doc=u"""A dictionary of Solution objects
 
-        :Type: [Solution]
+        :Type: {Solution}
         """,
     )
 

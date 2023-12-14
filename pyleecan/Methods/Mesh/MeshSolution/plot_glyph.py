@@ -95,10 +95,6 @@ def plot_glyph(
     if factor is None:
         factor = 0.2 * np_max(np_abs(mesh_pv.bounds)) / np_max(np_abs(vect_field))
 
-    # field_name += (
-    #     " \n(x " + format(factor, ".3g") + " [" + self.solution[0].unit + "])"
-    # )
-
     # Plot mesh
     pv_plotter.add_mesh(
         mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white"

@@ -64,14 +64,14 @@ def test_perm_coord():
     # Generate MeshSolution
     MSol = MeshSolution(
         mesh=mesh_vtk,
-        solution=[solution],
+        solution_dict={solution.label: solution},
         dimension=3,
     )
     MSol_before = MSol.copy()
     MSol.perm_coord(perm_coord_list=[0, 2, 1])
 
     assert (
-        MSol_before.solution[0].field[0, [0, 2, 1]] == MSol.solution[0].field[0, :]
+        MSol_before.get_solution().field[0, [0, 2, 1]] == MSol.get_solution().field[0, :]
     ).all()
 
 

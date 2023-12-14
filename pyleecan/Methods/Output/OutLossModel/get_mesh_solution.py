@@ -1,8 +1,8 @@
 import numpy as np
-
 from SciDataTool import DataFreq
-from ....Classes.SolutionData import SolutionData
+
 from ....Classes.MeshSolution import MeshSolution
+from ....Classes.SolutionData import SolutionData
 
 
 def get_mesh_solution(self):
@@ -22,7 +22,7 @@ def get_mesh_solution(self):
     # group = meshsol.group
     axes_dict = self.parent.axes_dict
     # freqs = axes_dict["freqs"].get_values()
-    # Nelem = meshsol.mesh[0].element["triangle"].nb_element
+    # Nelem = meshsol.mesh.element["triangle"].nb_element
 
     # If = np.argmin(np.abs(freqs[:, None] - self.freqs[None, :]), axis=0)[:, None]
     # Ie = np.array(group[self.group])[None, :]

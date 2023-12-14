@@ -1,4 +1,6 @@
-from numpy import sum as np_sum, zeros, array
+from numpy import array
+from numpy import sum as np_sum
+from numpy import zeros
 
 from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
@@ -52,7 +54,7 @@ def comp_loss(self):
     # Calculate overall joule losses
     Id_Iq = OP.get_Id_Iq()
     coeff = qs * Rs * (Id_Iq["Id"] ** 2 + Id_Iq["Iq"] ** 2)
-    Pjoule = coeff * (1 + k * felec ** 2)
+    Pjoule = coeff * (1 + k * felec**2)
 
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
@@ -62,7 +64,7 @@ def comp_loss(self):
 
     # Get surface elements for windings
     ms = output.mag.meshsolution
-    Se = ms.mesh[0].get_element_area()[ms.group[self.group]]
+    Se = ms.mesh.get_element_area()[ms.group[self.group]]
 
     # Constant component and twice the electrical frequency have same joule density values
     freqs = array([felec])
