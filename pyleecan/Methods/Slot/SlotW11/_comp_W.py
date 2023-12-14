@@ -70,6 +70,6 @@ def _comp_W(self):
                 - self.get_H1()
                 - self.H2
                 + self.R1
-                - self.W3 / (2 * tan(slot_pitch / 2) * cos(slot_pitch / 2))
+                + self.W3 / (2 * tan(slot_pitch / 2) * cos(slot_pitch / 2))
             )
         )
