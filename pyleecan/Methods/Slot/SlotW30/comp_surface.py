@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos, sin
-
 
 def comp_surface(self):
     """Compute the Slot total surface (by analytical computation).

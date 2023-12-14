@@ -55,7 +55,7 @@ def convert_magnet_to_P(self):
     self.machine.rotor.is_stator = False
     self.machine.rotor.is_internal = True
     other_value = self.other_dict["[Dimensions]"]["Pole_Number"]
-    self.machine.rotor.set_pole_pair_number(int(other_value / 2))
+    self.machine.rotor.set_pole_pair_number(other_value // 2)
 
     self.get_logger().info(
         f"Conversion {magnet_type} into {type(self.machine.rotor.slot).__name__}"

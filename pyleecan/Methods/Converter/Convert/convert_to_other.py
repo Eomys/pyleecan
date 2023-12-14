@@ -37,7 +37,6 @@ def convert_to_other(self, machine):
                 self.other_dict, self.machine, self.other_unit_dict
             )
         except Exception as e:
-            self.get_logger().error(f"Error while running rule {rule.get_name()}:\n{e}")
             raise ConvertionError(f"Error while running rule {rule.get_name()}:\n{e}")
 
     self.get_logger().info("End of conversion, dict is create")
