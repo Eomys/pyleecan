@@ -1,7 +1,7 @@
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.Classes.SlotW26 import SlotW26
-from pyleecan.Classes.SlotW30 import SlotW30
+from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW23 import SlotW23
+from .....Classes.SlotW26 import SlotW26
+from .....Classes.SlotW30 import SlotW30
 
 
 def select_slot_rotor_rules(self, is_stator):
@@ -24,7 +24,7 @@ def select_slot_rotor_rules(self, is_stator):
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:
-        self.convert_slot_rotor_to_MC()
+        self.convert_slot_rotor_to_other()
     else:
         self.convert_slot_rotor_to_P()
 

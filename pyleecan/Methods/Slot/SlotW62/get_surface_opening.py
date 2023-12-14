@@ -1,5 +1,3 @@
-from ....Classes.Segment import Segment
-from ....Classes.Arc1 import Arc1
 from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import SOP_LAB, DRAW_PROP_LAB
 
@@ -9,8 +7,8 @@ def get_surface_opening(self, alpha=0, delta=0):
 
     Parameters
     ----------
-    self : SlotW60
-        A SlotW60 object
+    self : SlotW62
+        A SlotW62 object
     alpha : float
         float number for rotation (Default value = 0) [rad]
     delta : complex
