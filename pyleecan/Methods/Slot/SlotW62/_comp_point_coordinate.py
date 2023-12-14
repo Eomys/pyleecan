@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, exp, arcsin, cos, sqrt
+from numpy import pi, exp, arcsin, sqrt
 
 
 def _comp_point_coordinate(self):
@@ -21,17 +21,9 @@ def _comp_point_coordinate(self):
     hsp = pi / self.Zs  # Half slot pitch
 
     alpha2 = arcsin(self.W1 / (2 * Rbo))
-    # Harct = float(Rbo * (1 - cos(alpha2)))
-    Harct = Rbo - sqrt((Rbo**2 - (self.W1 / 2) ** 2))
-
-    Rm = Rbo - self.H1 - self.H0 - Harct
-    # alpha is the angle to rotate Z0 so ||Z1,Z8|| = W0
-    alpha = arcsin(self.W0 / (2 * (Rm)))
 
     Z1 = Rbo * exp(-1j * hsp)
-
     Z1 = Z1 * exp(1j * hsp)
-
     Z1 = Z1 * exp(1j * alpha2)
 
     Z2 = Z1 - self.H1

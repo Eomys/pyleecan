@@ -8,7 +8,6 @@ from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW62 import (
     S62_InnerCheckError,
     S62_WindError,
-    S62_WindWError,
 )
 
 
@@ -143,26 +142,6 @@ class Test_SlotW62_meth(object):
         test_obj.is_internal = False
         with pytest.raises(S62_InnerCheckError) as context:
             test_obj.slot.check()
-
-    # dans la definition du slot, on ne peut pas faire ce test, car les winding sont dans le slot
-    # est ce qu'on peut simplement le supprimer ???
-    """
-    @pytest.mark.parametrize("test_dict", slotW62_test)
-    def test_get_surfaces(self, test_dict):
-        test_obj = test_dict["test_obj"]
-        Sact = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
-        Sfull = test_obj.slot.get_surface()
-        Sop = test_obj.slot.get_surface_opening()
-
-        Sop[0].plot()
-        assert len(Sact) == 2
-        assert len(Sop) == 1
-        S1 = Sact[0].comp_surface() + Sact[1].comp_surface() + Sop[0].comp_surface()
-        S2 = Sfull.comp_surface()
-
-        msg = "Act+Op=" + str(S1) + ", Full=" + str(S2)
-        assert abs((S1 - S2) / S1) < DELTA, msg
-    """
 
 
 if __name__ == "__main__":
