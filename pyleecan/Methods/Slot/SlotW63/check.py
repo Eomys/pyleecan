@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.Slot import SlotCheckError
 from ....Methods.Slot.SlotW63 import *
 
 

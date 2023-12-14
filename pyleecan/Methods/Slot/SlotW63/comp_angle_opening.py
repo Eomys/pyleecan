@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi, arcsin, sqrt
+from numpy import pi, arcsin
 
 
 def comp_angle_opening(self):

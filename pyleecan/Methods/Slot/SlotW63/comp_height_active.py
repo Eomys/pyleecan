@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi, exp
-
 
 def comp_height_active(self):
     """Compute the height of the winding area
