@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos, sin
+from numpy import sin
 
 
 def comp_surface_opening(self):

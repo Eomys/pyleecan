@@ -26,7 +26,7 @@ def get_P(self, path_machine, machine):
             eval(path),
             value_split[-1],
         )
-    except Exception:
+    except AttributeError:
         raise ValueError(
             f"Value equivalent at {path_machine} isn't found in obj machine"
         )

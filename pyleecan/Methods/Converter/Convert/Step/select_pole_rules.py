@@ -4,7 +4,7 @@ from pyleecan.Classes.SlotW29 import SlotW29
 
 
 def select_pole_rules(self, is_stator):
-    """selection step to add rules for pole
+    """selects step to add rules for pole
 
     Parameters
     ----------

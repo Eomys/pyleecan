@@ -1,6 +1,4 @@
-from numpy import angle, arcsin, arctan, cos, exp, pi, sin, sqrt, tan
-
-from ....Methods.Slot.SlotW30 import S30InnerError
+from numpy import arcsin, exp, pi
 from ....Functions.Geometry.inter_line_line import inter_line_line
 from ....Functions.Geometry.inter_line_circle import inter_line_circle
 from ....Classes.Arc1 import Arc1
@@ -27,6 +25,7 @@ def _comp_point_coordinate(self):
 
     Z0 = Rbo * exp(1j * 0)
     Z12 = Z0 * exp(1j * alpha)
+
     if self.is_outwards():
         Z11 = Z12 + self.H0
 
@@ -62,10 +61,11 @@ def _comp_point_coordinate(self):
             Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0])
             Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0])
 
-            if not len(Z8) > 0:
+            # we can have approximation, but we want a line tangent. So we can approximate coordinate center of cercle at 10e-6
+            if len(Z8) == 0:
                 Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0] - 1e-6)
 
-            if not len(Z7) > 0:
+            if len(Z7) == 0:
                 Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0] + 1e-6)
 
             Z8 = Z8[0]
@@ -96,10 +96,11 @@ def _comp_point_coordinate(self):
             Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0])
             Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0])
 
-            if not len(Z9) > 0:
+            # we can have approximation, but we want a line tangent. So we can approximate coordinate center of cercle at 10e-6
+            if len(Z9) == 0:
                 Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0] + 1e-6 * 1j)
 
-            if not len(Z10) > 0:
+            if len(Z10) == 0:
                 Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0] - 1e-6)
 
             Z9 = Z9[0]
@@ -142,10 +143,11 @@ def _comp_point_coordinate(self):
             Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0])
             Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0])
 
-            if not len(Z8) > 0:
+            # we can have approximation, but we want a line tangent. So we can approximate coordinate center of cercle at 10e-6
+            if len(Z8) == 0:
                 Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0] + 1e-6 * 1j)
 
-            if not len(Z7) > 0:
+            if len(Z7) == 0:
                 Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0] - 1e-6)
 
             Z8 = Z8[0]
@@ -176,10 +178,11 @@ def _comp_point_coordinate(self):
             Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0])
             Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0])
 
-            if not len(Z9) > 0:
+            # we can have approximation, but we want a line tangent. So we can approximate coordinate center of cercle at 10e-6
+            if len(Z9) == 0:
                 Z9 = inter_line_circle(Zp1, Zp2, self.R1, ZcenterR1[0] + 1e-6 * 1j)
 
-            if not len(Z10) > 0:
+            if len(Z10) == 0:
                 Z10 = inter_line_circle(Zp5, Zp6, self.R1, ZcenterR1[0] + 1e-6)
 
             Z9 = Z9[0]

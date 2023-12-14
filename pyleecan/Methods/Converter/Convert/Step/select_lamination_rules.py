@@ -1,5 +1,5 @@
 def select_lamination_rules(self, is_stator):
-    """selection step to add rules for lamination
+    """selects step to add rules for lamination
 
     Parameters
     ----------
@@ -10,11 +10,5 @@ def select_lamination_rules(self, is_stator):
 
     """
 
-    # selection of number and to layers
-    if not self.is_P_to_other:
-        self.convert_duct_to_P(is_stator)
-        self.convert_notch_to_P(is_stator)
-
-    else:
-        self.convert_duct_to_MC(is_stator)
-        self.convert_notch_to_MC(is_stator)
+    self.select_duct_rules(is_stator)
+    self.select_notch_rules(is_stator)

@@ -1,5 +1,6 @@
 from pyleecan.Functions.Converter.Utils.ConvertionError import ConvertionError
 from .... import __version__
+from os import path
 
 
 def convert_to_P(self, file_path):
@@ -37,20 +38,19 @@ def convert_to_P(self, file_path):
     # rule consersion into obj machine
     for rule in self.rules_list:
         try:
-            # utilisation polymorphism to choose type rule
+            # Uses polymorphism to choose type rule
             self.machine = rule.convert_to_P(
                 self.other_dict, self.machine, self.other_unit_dict
             )
         except Exception as e:
-            self.get_logger().error(f"Error while running rule {rule.get_name()}:\n{e}")
             raise ConvertionError(f"Error while running rule {rule.get_name()}:\n{e}")
 
-    # add name for machine
-    # \Documents\Documentation motor-CAD\fichier.mot\SCIM.mot
-    # selection SCIM
-    list_path = file_path.split(".")
-    name = list_path[-2].split("/")
-    self.machine.name = name[-1]
+    # Get machine name from the .mot file name
+    # Example :
+    #   file_path = \path\to\your\mot\file\SCIM.mot
+    #   => self.machine.name = SCIM
+    file_name_extension = path.basename(file_path)
+    self.machine.name = path.splitext(file_name_extension)[0]
 
     self.get_logger().info("End of conversion, obj machine is create\n\n\n")
 

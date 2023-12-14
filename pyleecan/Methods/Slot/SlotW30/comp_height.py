@@ -1,4 +1,4 @@
-from numpy import cos, sin
+from numpy import cos
 
 
 def comp_height(self):
