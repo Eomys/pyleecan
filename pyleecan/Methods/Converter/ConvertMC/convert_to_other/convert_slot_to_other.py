@@ -16,7 +16,6 @@ def convert_slot_to_other(self):
 
     # conversion to pyleecan
     slot = self.machine.stator.slot
-    slot_type = type(slot).__name__
 
     # selection type of Slot
     if isinstance(slot, SlotW11):
@@ -38,7 +37,7 @@ def convert_slot_to_other(self):
         raise NotImplementedError(
             f"Type of slot {name_slot} has not equivalent or has not implement"
         )
-    self.get_logger().info(f"Conversion {slot_type} into {name_slot}")
+    self.get_logger().info(f"Conversion {slot.__class__.__name__} into {name_slot}")
 
     # writting in dict
     if "[Calc_Options]" not in self.other_dict:

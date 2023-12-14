@@ -138,7 +138,6 @@ class TestPWSlot30(object):
             R2=2e-3,
         )
         self.widget = PWSlot30(self.test_obj)
-        self.test_obj.plot()
         msg = f"{self.widget.w_out.out_slot_height.text()}"
         assert (
             self.widget.w_out.out_slot_height.text() == "Slot height: 0.05013 [m]"

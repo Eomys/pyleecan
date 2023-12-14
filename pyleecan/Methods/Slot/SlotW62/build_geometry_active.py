@@ -1,6 +1,3 @@
-from numpy import pi, exp
-
-from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Methods.Slot.SlotW62 import S62_WindError
 from ....Functions.labels import WIND_LAB
