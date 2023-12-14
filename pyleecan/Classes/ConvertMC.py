@@ -81,11 +81,11 @@ except ImportError as error:
     convert_notch_to_P = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_other import (
-        convert_conductor_to_other,
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_P import (
+        convert_conductor_to_P,
     )
 except ImportError as error:
-    convert_conductor_to_other = error
+    convert_conductor_to_P = error
 
 try:
     from ..Methods.Converter.ConvertMC.convert_to_MC.init_other_unit import (
@@ -423,6 +423,20 @@ try:
 except ImportError as error:
     add_rule_winding = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Winding.add_rule_condtype11 import (
+        add_rule_condtype11,
+    )
+except ImportError as error:
+    add_rule_condtype11 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Winding.add_rule_condtype12 import (
+        add_rule_condtype12,
+    )
+except ImportError as error:
+    add_rule_condtype12 = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -542,18 +556,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_P = convert_notch_to_P
-    # cf Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_other
-    if isinstance(convert_conductor_to_other, ImportError):
-        convert_conductor_to_other = property(
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_P
+    if isinstance(convert_conductor_to_P, ImportError):
+        convert_conductor_to_P = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_conductor_to_other: "
-                    + str(convert_conductor_to_other)
+                    "Can't use ConvertMC method convert_conductor_to_P: "
+                    + str(convert_conductor_to_P)
                 )
             )
         )
     else:
-        convert_conductor_to_other = convert_conductor_to_other
+        convert_conductor_to_P = convert_conductor_to_P
     # cf Methods.Converter.ConvertMC.convert_to_MC.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
@@ -1131,6 +1145,30 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_winding = add_rule_winding
+    # cf Methods.Converter.ConvertMC.Rules.Winding.add_rule_condtype11
+    if isinstance(add_rule_condtype11, ImportError):
+        add_rule_condtype11 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_condtype11: "
+                    + str(add_rule_condtype11)
+                )
+            )
+        )
+    else:
+        add_rule_condtype11 = add_rule_condtype11
+    # cf Methods.Converter.ConvertMC.Rules.Winding.add_rule_condtype12
+    if isinstance(add_rule_condtype12, ImportError):
+        add_rule_condtype12 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_condtype12: "
+                    + str(add_rule_condtype12)
+                )
+            )
+        )
+    else:
+        add_rule_condtype12 = add_rule_condtype12
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

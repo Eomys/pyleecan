@@ -1169,7 +1169,7 @@
             "convert_to_P.convert_pole_to_P",
             "convert_to_P.convert_duct_to_P",
             "convert_to_P.convert_notch_to_P",
-            "convert_to_P.convert_conductor_to_other",
+            "convert_to_P.convert_conductor_to_P",
             "convert_to_MC.init_other_unit",
             "convert_to_MC.convert_slot_to_MC",
             "convert_to_MC.convert_slot_rotor_to_MC",
@@ -1217,7 +1217,9 @@
             "Rules.Pole.add_rule_parallel_tooth_slotW63",
             "Rules.Pole.add_rule_salient_pole_slotW62",
             "Rules.Pole.add_rule_parallel_slot_slotW29",
-            "Rules.Winding.add_rule_winding"
+            "Rules.Winding.add_rule_winding",
+            "Rules.Winding.add_rule_condtype11",
+            "Rules.Winding.add_rule_condtype12"
         ],
         "mother": "Convert",
         "name": "ConvertMC",

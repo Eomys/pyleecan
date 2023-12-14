@@ -47,8 +47,6 @@ class Test_converter_machine(object):
             machine = conv.convert_to_P(
                 f"/Users\LAP17\Documents/machine_MC_P/file_mot/{path}.mot"
             )
-            machine.stator.winding.conductor = CondType12()
-            machine.stator.winding.conductor.Nwppc = 13
 
             machine.plot()
             machine.save(

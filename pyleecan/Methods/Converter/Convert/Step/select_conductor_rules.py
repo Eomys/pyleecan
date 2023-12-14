@@ -1,5 +1,5 @@
 from .....Classes.CondType12 import CondType12
-from .....Classes.CondType13 import CondType13
+from .....Classes.CondType11 import CondType11
 
 
 def select_conductor_rules(self, is_stator):
@@ -21,8 +21,8 @@ def select_conductor_rules(self, is_stator):
         self.convert_conductor_to_P()
 
     # add the correct rule depending on the rotor
-    if isinstance(self.machine.stator.winding, CondType12):
+    if isinstance(self.machine.stator.winding.conductor, CondType12):
         self.add_rule_condtype12()
 
-    elif isinstance(self.machine.stator.winding, CondType13):
-        self.add_rule_condtype13()
+    elif isinstance(self.machine.stator.winding.conductor, CondType11):
+        self.add_rule_condtype11()

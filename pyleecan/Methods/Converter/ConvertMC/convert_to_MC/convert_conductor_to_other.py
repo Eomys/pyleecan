@@ -1,5 +1,5 @@
 from .....Classes.CondType12 import CondType12
-from .....Classes.CondType13 import CondType13
+from .....Classes.CondType11 import CondType11
 
 
 def convert_conductor_to_other(self):
@@ -15,7 +15,7 @@ def convert_conductor_to_other(self):
     if isinstance(conductor_type, CondType12):
         conductor_name = "AWG_Table"
 
-    elif isinstance(conductor_type, CondType13):
+    elif isinstance(conductor_type, CondType11):
         conductor_name = "Rectangular"
     else:
         raise NotImplementedError(
