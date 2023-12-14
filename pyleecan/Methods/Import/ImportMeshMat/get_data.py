@@ -41,7 +41,6 @@ def get_data(self):
         is_renum = True
 
     mesh = MeshMat(_is_renum=is_renum)
-    mesh.label = "Imported mesh"
 
     node_indices = nodes[:, 0].astype(int32)
 

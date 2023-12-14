@@ -270,7 +270,6 @@ class MeshMat(Mesh):
         _is_renum=False,
         sym=1,
         is_antiper_a=False,
-        label=None,
         dimension=2,
         init_dict=None,
         init_str=None,
@@ -300,8 +299,6 @@ class MeshMat(Mesh):
                 sym = init_dict["sym"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
         # Set the properties (value check and convertion are done in setter)
@@ -311,7 +308,7 @@ class MeshMat(Mesh):
         self.sym = sym
         self.is_antiper_a = is_antiper_a
         # Call Mesh init
-        super(MeshMat, self).__init__(label=label, dimension=dimension)
+        super(MeshMat, self).__init__(dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
         # add new properties
 
@@ -521,7 +518,6 @@ class MeshMat(Mesh):
         _is_renum_val = self._is_renum
         sym_val = self.sym
         is_antiper_a_val = self.is_antiper_a
-        label_val = self.label
         dimension_val = self.dimension
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
@@ -530,7 +526,6 @@ class MeshMat(Mesh):
             _is_renum=_is_renum_val,
             sym=sym_val,
             is_antiper_a=is_antiper_a_val,
-            label=label_val,
             dimension=dimension_val,
         )
         return obj_copy

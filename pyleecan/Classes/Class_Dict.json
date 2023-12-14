@@ -8574,16 +8574,6 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Description of the mesh",
-                "max": "",
-                "min": "",
-                "name": "label",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
                 "desc": "Dimension of the physical problem",
                 "max": "3",
                 "min": "1",

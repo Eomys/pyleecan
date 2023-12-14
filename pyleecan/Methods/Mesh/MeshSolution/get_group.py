@@ -29,7 +29,7 @@ def get_group(self, group_names):
     dimension = self.dimension
 
     group_indices = list()
-    label = ""
+    meshsolution_label = ""
     is_interface = False
 
     # 1) get the indices of all targeted element corresponding to group(s)
@@ -45,7 +45,7 @@ def get_group(self, group_names):
                 sep_list.append(group_indices_init)
             else:
                 group_indices.extend(self.group[grp])
-                label = label + grp + "_"
+                meshsolution_label += f"{grp}_"
     elif isinstance(group_names, str):
         if group_names not in self.group:
             raise KeyError(
@@ -55,7 +55,7 @@ def get_group(self, group_names):
                 + ")"
             )
         group_indices.extend(self.group[group_names])
-        label = label + group_names
+        meshsolution_label += group_names
 
     sep_list.append(np.sort(group_indices))
 
@@ -84,7 +84,6 @@ def get_group(self, group_names):
         node_indice = np.unique(node_indice)
 
         mesh_new.node = NodeMat(init_dict=mesh_init.node.as_dict())
-        mesh_new.label = label
 
         mesh_list.append(mesh_new)
 
@@ -126,7 +125,7 @@ def get_group(self, group_names):
         mesh = mesh_new
 
     meshsol_grp = self.copy()
-    meshsol_grp.label = label
+    meshsol_grp.label = meshsolution_label
     meshsol_grp.mesh = mesh
     meshsol_grp.is_same_mesh = is_same_mesh
     meshsol_grp.solution = sol_list

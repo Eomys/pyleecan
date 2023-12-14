@@ -192,7 +192,6 @@ class MeshVTK(Mesh):
         surf_path="",
         surf_name="",
         node_normals=None,
-        label=None,
         dimension=2,
         init_dict=None,
         init_str=None,
@@ -232,8 +231,6 @@ class MeshVTK(Mesh):
                 surf_name = init_dict["surf_name"]
             if "node_normals" in list(init_dict.keys()):
                 node_normals = init_dict["node_normals"]
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
         # Set the properties (value check and convertion are done in setter)
@@ -248,7 +245,7 @@ class MeshVTK(Mesh):
         self.surf_name = surf_name
         self.node_normals = node_normals
         # Call Mesh init
-        super(MeshVTK, self).__init__(label=label, dimension=dimension)
+        super(MeshVTK, self).__init__(dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
         # add new properties
 
@@ -496,7 +493,6 @@ class MeshVTK(Mesh):
             node_normals_val = None
         else:
             node_normals_val = self.node_normals.copy()
-        label_val = self.label
         dimension_val = self.dimension
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
@@ -510,7 +506,6 @@ class MeshVTK(Mesh):
             surf_path=surf_path_val,
             surf_name=surf_name_val,
             node_normals=node_normals_val,
-            label=label_val,
             dimension=dimension_val,
         )
         return obj_copy

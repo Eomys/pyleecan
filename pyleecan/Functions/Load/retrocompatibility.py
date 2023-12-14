@@ -577,7 +577,7 @@ def create_update_dict(file_version):
         Dictionnary Key: What to update, value: is update needed
     """
 
-    # Set every parameter to update if the version is not defined 
+    # Set every parameter to update if the version is not defined
     if file_version is None:
         update_dict = {class_obj: True for class_obj in OBJECT_VERSION_DICT.keys()}
     else:
