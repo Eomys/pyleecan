@@ -1,5 +1,5 @@
 from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
-from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Classes.SlotW11_2 import SlotW11_2
 from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.Classes.SlotW23 import SlotW23
 from pyleecan.Classes.SlotW26 import SlotW26
@@ -23,7 +23,7 @@ def convert_slot_rotor_to_P(self):
 
     # set the slot in obj machine, and add particularity
     if slot_type == "Parallel_Tooth":
-        self.machine.rotor.slot = SlotW11()
+        self.machine.rotor.slot = SlotW11_2()
         self.machine.rotor.slot.is_cstt_tooth = True
         self.machine.rotor.slot.H1_is_rad = True
 

@@ -223,6 +223,7 @@ from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotUD2 import SlotUD2
 from ..Classes.SlotW10 import SlotW10
 from ..Classes.SlotW11 import SlotW11
+from ..Classes.SlotW11_2 import SlotW11_2
 from ..Classes.SlotW12 import SlotW12
 from ..Classes.SlotW13 import SlotW13
 from ..Classes.SlotW14 import SlotW14

@@ -1189,7 +1189,7 @@
             "Rules.Slot.add_rule_slotW23",
             "Rules.Slot.rotor.add_rule_rotor_slotW30",
             "Rules.Slot.rotor.add_rule_rotor_slotW23",
-            "Rules.Slot.rotor.add_rule_rotor_slotW11",
+            "Rules.Slot.rotor.add_rule_rotor_slotW11_2",
             "Rules.Slot.rotor.add_rule_rotor_slotW26",
             "Rules.Lamination.add_rule_ventilationCirc",
             "Rules.Lamination.add_rule_ventilationPolar",
@@ -13177,6 +13177,7 @@
             "SlotUD2",
             "SlotW10",
             "SlotW11",
+            "SlotW11_2",
             "SlotW12",
             "SlotW13",
             "SlotW14",
@@ -14547,6 +14548,145 @@
         "name": "SlotW11",
         "package": "Slot",
         "path": "pyleecan/Generator/ClassesRef/Slot/SlotW11.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "height or angle  (See Schematics)",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m/rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "H1 unit, 0 for m, 1 for rad",
+                "max": "",
+                "min": "",
+                "name": "H1_is_rad",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot top width.",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot height below wedge ",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot bottom width.",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True: use W3 to define the slot, False: use W2 and W1",
+                "max": "",
+                "min": "",
+                "name": "is_cstt_tooth",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot bottom radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            }
+        ]
+    },
+    "SlotW11_2": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "",
+        "is_internal": false,
+        "methods": [
+            "_comp_line_dict",
+            "_comp_point_coordinate",
+            "_set_W3",
+            "_comp_W",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_opening",
+            "get_H1",
+            "get_surface_active",
+            "get_surface_opening",
+            "plot_schematics",
+            "plot_schematics_constant_tooth"
+        ],
+        "mother": "Slot",
+        "name": "SlotW11_2",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW11_2.csv",
         "properties": [
             {
                 "as_dict": "",
