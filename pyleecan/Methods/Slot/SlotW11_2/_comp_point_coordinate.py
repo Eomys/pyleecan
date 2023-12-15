@@ -60,7 +60,7 @@ def _comp_point_coordinate(self):
         Zi = inter_line_line(Z3, Zl2, Zct1, Zct2)
         Zc1 = Zi[0] + self.R1 * 1j
 
-        if 2 * self.R1 - self.W2 < 1e-6:
+        if abs(2 * self.R1 - self.W2) < 1e-6:
             Zc1 = Z4c + self.R1 * 1j
             Z5 = Zc1 - self.R1
 
