@@ -43,7 +43,7 @@ def add_rule_condtype11(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Magnetics]", "Copper_Height"],
+            other_key_list=["[Winding_Design]", "Copper_Height"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Wwire",
             unit_type="",
             scaling_to_P=1,
@@ -53,7 +53,7 @@ def add_rule_condtype11(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Magnetics]", "Copper_Width"],
+            other_key_list=["[Winding_Design]", "Copper_Width"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Hwire",
             unit_type="",
             scaling_to_P=1,
@@ -63,7 +63,7 @@ def add_rule_condtype11(self, is_stator):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Magnetics]", "WireInsThicknessCalculation"],
+            other_key_list=["[Calc_Options]", "WireInsThicknessCalculation"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Wins_wire",
             unit_type="",
             scaling_to_P=1,
