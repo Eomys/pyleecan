@@ -68,11 +68,6 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Slot.SlotW11_2.comp_surface_active import comp_surface_active
-except ImportError as error:
-    comp_surface_active = error
-
-try:
     from ..Methods.Slot.SlotW11_2.comp_surface_opening import comp_surface_opening
 except ImportError as error:
     comp_surface_opening = error
@@ -223,18 +218,6 @@ class SlotW11_2(Slot):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.SlotW11_2.comp_surface_active
-    if isinstance(comp_surface_active, ImportError):
-        comp_surface_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotW11_2 method comp_surface_active: "
-                    + str(comp_surface_active)
-                )
-            )
-        )
-    else:
-        comp_surface_active = comp_surface_active
     # cf Methods.Slot.SlotW11_2.comp_surface_opening
     if isinstance(comp_surface_opening, ImportError):
         comp_surface_opening = property(

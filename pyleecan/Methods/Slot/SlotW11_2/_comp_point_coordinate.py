@@ -41,7 +41,6 @@ def _comp_point_coordinate(self):
         Zc1 = Z4 + 1j * self.R1
         Z4c = Z4
 
-        # rot_sign = 1  # Rotation direction for Arc1
     else:  # inward slot
         Z2 = Z1 - self.H0
         Z3 = Z2.real - H1 + -1j * self.W1 / 2.0
@@ -57,15 +56,6 @@ def _comp_point_coordinate(self):
 
         Zct1 = Z1 - self.H2 - H1 - self.H0 + self.R1 - 1j
         Zct2 = Zct1 + 2j
-
-        # Z3= Z3 * exp(-1j * hsp)
-        # Zc4 = Z3 + 1
-        # Zc4 = Zc4 * exp(1j * hsp)
-
-        # Zl1 = Z3 - self.R1 * 1j
-
-        # Z3 = Z3 * exp(1j * hsp)
-        # Zl1 = Zl1 * exp(1j * hsp)
 
         Zi = inter_line_line(Z3, Zl2, Zct1, Zct2)
         Zc1 = Zi[0] + self.R1 * 1j
@@ -86,10 +76,6 @@ def _comp_point_coordinate(self):
             if len(Z5) == 0:
                 Z5 = inter_line_circle(Zct1, Zct2, self.R1, Zc1 - 0.0000001)
             Z5 = Z5[0]
-        #
-        # Z5 = Z5 * exp(1j * hsp)
-        # Zc1 = Zc1 * exp(1j * hsp)
-        # rot_sign = -1  # Rotation direction for Arc1
 
     point_dict = dict()
     # symetry

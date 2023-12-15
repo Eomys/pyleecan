@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import abs as np_abs, arcsin, exp, pi, sin, sqrt, cos, arccos, tan
+from numpy import abs as arcsin, exp, pi, cos, tan
 
 
 def _comp_W(self):

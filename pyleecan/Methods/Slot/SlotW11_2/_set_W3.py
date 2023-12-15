@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Classes._check import check_var
 
 
 def _set_W3(self, value):
-    """setter of W3"""
+    """setter of W3
+
+    Parameters
+    ----------
+    self : SlotW11_2
+        A SlotW11_2 object
+    value : float
+        value of W3
+    """
+
     check_var("W3", value, "float", Vmin=0)
     self._W3 = value
 
