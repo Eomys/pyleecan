@@ -1,5 +1,6 @@
 from .....Classes.CondType12 import CondType12
 from .....Classes.CondType11 import CondType11
+from .....Classes.MachineWRSM import MachineWRSM
 
 
 def select_conductor_rules(self, is_stator):
@@ -16,13 +17,18 @@ def select_conductor_rules(self, is_stator):
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:
-        self.convert_conductor_to_other()
+        self.convert_conductor_to_other(is_stator)
     else:
-        self.convert_conductor_to_P()
+        self.convert_conductor_to_P(is_stator)
+
+    if is_stator:
+        conductor = self.machine.stator.winding.conductor
+    else:
+        conductor = self.machine.rotor.winding.conductor
 
     # add the correct rule depending on the rotor
-    if isinstance(self.machine.stator.winding.conductor, CondType12):
-        self.add_rule_condtype12()
+    if isinstance(conductor, CondType12):
+        self.add_rule_condtype12(is_stator)
 
-    elif isinstance(self.machine.stator.winding.conductor, CondType11):
-        self.add_rule_condtype11()
+    elif isinstance(conductor, CondType11):
+        self.add_rule_condtype11(is_stator)

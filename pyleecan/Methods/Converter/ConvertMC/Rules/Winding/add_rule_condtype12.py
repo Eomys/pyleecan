@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_condtype12(self):
+def add_rule_condtype12(self, is_stator):
     """Create and adapt all the rules related to condtype12
     Extend rules_list within Converter object
 
@@ -11,12 +11,19 @@ def add_rule_condtype12(self):
     ----------
     self : ConvertMC
         A ConvertMC object
+    is_stator : Bool
+        True slot is in stator, False slot is in rotor
     """
+    # definie the correct position in rotor or in stator
+    if is_stator:
+        lam_name = "stator"
+    else:
+        lam_name = "rotor"
 
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Magnetics]", "NumberStrandsHand"],
-            P_obj_path="machine.stator.winding.conductor.Nwppc",
+            P_obj_path=f"machine.{lam_name}.winding.conductor.Nwppc",
             unit_type="",
             scaling_to_P=1,
             file_name=__file__,
@@ -26,17 +33,7 @@ def add_rule_condtype12(self):
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Winding_Design]", "Copper_Diameter"],
-            P_obj_path="machine.stator.winding.conductor.Wwire",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Winding_Design]", "EWdg_MLT"],
-            P_obj_path="machine.stator.winding.Lewout",
+            P_obj_path=f"machine.{lam_name}.winding.conductor.Wwire",
             unit_type="",
             scaling_to_P=1,
             file_name=__file__,
@@ -58,7 +55,7 @@ def add_rule_condtype12(self):
                 },
                 {
                     "src": "pyleecan",
-                    "path": f"machine.stator.winding.conductor.Wins_wire",
+                    "path": f"machine.{lam_name}.winding.conductor.Wins_wire",
                     "variable": "x",
                 },
             ],
@@ -66,4 +63,8 @@ def add_rule_condtype12(self):
             equation="y/2 + b = x",
             file_name=__file__,
         )
+    )
+
+    self.rules_list.append(
+        RuleComplex(fct_name="end_winding_lenght", folder="MotorCAD")
     )

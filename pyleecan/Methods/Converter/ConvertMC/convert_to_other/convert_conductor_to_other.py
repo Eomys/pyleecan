@@ -2,7 +2,7 @@ from .....Classes.CondType12 import CondType12
 from .....Classes.CondType13 import CondType13
 
 
-def convert_conductor_to_other(self):
+def convert_conductor_to_other(self, is_stator):
     """selects step to add rules for conductor in stator
 
     Parameters
@@ -10,7 +10,10 @@ def convert_conductor_to_other(self):
     self : ConvertMC
         A ConvertMC object
     """
-    conductor_type = self.machine.stator.winding.conductor
+    if is_stator:
+        conductor_type = self.machine.stator.winding.conductor
+    else:
+        conductor_type = self.machine.rotor.winding.conductor
 
     if isinstance(conductor_type, CondType12):
         conductor_name = "AWG_Table"

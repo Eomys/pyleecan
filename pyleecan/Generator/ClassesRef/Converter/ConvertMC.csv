@@ -10,6 +10,7 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,convert_to_P.convert_pole_to_P,,,,,,
 ,,convert_to_P.convert_duct_to_P,,,,,,
 ,,convert_to_P.convert_notch_to_P,,,,,,
+,,convert_to_P.convert_conductor_to_P,,,,,,
 ,,convert_to_other.convert_slot_rotor_to_other,,,,,,
 ,,convert_to_other.init_other_unit,,,,,,
 ,,convert_to_other.convert_slot_to_other,,,,,,

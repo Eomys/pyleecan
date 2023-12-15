@@ -4,6 +4,7 @@ import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Functions.load import load
+from pyleecan.Classes.CondType11 import CondType11
 
 
 class Test_converter_machine(object):
@@ -13,6 +14,9 @@ class Test_converter_machine(object):
         f = open("/Users\LAP17\AppData\Roaming\pyleecan/Pyleecan.log", "w")
         f.close()
 
+        # machineP = load(
+        #    "/Users\LAP17\AppData\Roaming\pyleecan/Machine/Renault_Zoe.json"
+        # )
         """
             "interor_V(web)",
             "EMD240_v16",

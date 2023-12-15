@@ -81,6 +81,13 @@ except ImportError as error:
     convert_notch_to_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_P import (
+        convert_conductor_to_P,
+    )
+except ImportError as error:
+    convert_conductor_to_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_other.convert_slot_rotor_to_other import (
         convert_slot_rotor_to_other,
     )
@@ -521,6 +528,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_P = convert_notch_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_conductor_to_P
+    if isinstance(convert_conductor_to_P, ImportError):
+        convert_conductor_to_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_conductor_to_P: "
+                    + str(convert_conductor_to_P)
+                )
+            )
+        )
+    else:
+        convert_conductor_to_P = convert_conductor_to_P
     # cf Methods.Converter.ConvertMC.convert_to_other.convert_slot_rotor_to_other
     if isinstance(convert_slot_rotor_to_other, ImportError):
         convert_slot_rotor_to_other = property(

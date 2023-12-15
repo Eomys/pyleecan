@@ -1,7 +1,7 @@
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW63 import SlotW63
-from pyleecan.Classes.SlotW62 import SlotW62
-from pyleecan.Classes.SlotW29 import SlotW29
+from .....Classes.LamSlotWind import LamSlotWind
+from .....Classes.SlotW63 import SlotW63
+from .....Classes.SlotW62 import SlotW62
+from .....Classes.SlotW29 import SlotW29
 
 
 def convert_pole_to_P(self):
