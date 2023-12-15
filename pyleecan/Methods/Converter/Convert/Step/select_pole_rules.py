@@ -16,7 +16,7 @@ def select_pole_rules(self, is_stator):
     """
 
     if is_stator:
-        raise ValueError("Hole are just in rotor")
+        raise ValueError("Pole are just in rotor")
 
     if self.is_P_to_other:
         self.convert_pole_to_MC()

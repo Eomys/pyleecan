@@ -59,7 +59,4 @@ def select_hole_rules(self, is_stator):
         elif isinstance(hole, HoleM60):
             self.add_rule_holeM60(hole_id)
 
-        elif isinstance(hole, HoleM57):
-            self.add_rule_holeM57(hole_id)
-
         hole_id += 1

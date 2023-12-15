@@ -235,11 +235,11 @@ except ImportError as error:
     add_rule_rotor_slotW23 = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11 import (
-        add_rule_rotor_slotW11,
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11_2 import (
+        add_rule_rotor_slotW11_2,
     )
 except ImportError as error:
-    add_rule_rotor_slotW11 = error
+    add_rule_rotor_slotW11_2 = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW26 import (
@@ -794,18 +794,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_rotor_slotW23 = add_rule_rotor_slotW23
-    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11
-    if isinstance(add_rule_rotor_slotW11, ImportError):
-        add_rule_rotor_slotW11 = property(
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11_2
+    if isinstance(add_rule_rotor_slotW11_2, ImportError):
+        add_rule_rotor_slotW11_2 = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_rotor_slotW11: "
-                    + str(add_rule_rotor_slotW11)
+                    "Can't use ConvertMC method add_rule_rotor_slotW11_2: "
+                    + str(add_rule_rotor_slotW11_2)
                 )
             )
         )
     else:
-        add_rule_rotor_slotW11 = add_rule_rotor_slotW11
+        add_rule_rotor_slotW11_2 = add_rule_rotor_slotW11_2
     # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW26
     if isinstance(add_rule_rotor_slotW26, ImportError):
         add_rule_rotor_slotW26 = property(
