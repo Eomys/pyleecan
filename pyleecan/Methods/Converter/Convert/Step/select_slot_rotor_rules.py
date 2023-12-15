@@ -1,4 +1,4 @@
-from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW11_2 import SlotW11_2
 from .....Classes.SlotW23 import SlotW23
 from .....Classes.SlotW26 import SlotW26
 from .....Classes.SlotW30 import SlotW30
@@ -30,7 +30,7 @@ def select_slot_rotor_rules(self, is_stator):
 
     slot = self.machine.rotor.slot
     # add the correct rule depending on the slot
-    if isinstance(slot, SlotW11):
+    if isinstance(slot, SlotW11_2):
         self.add_rule_rotor_slotW11(is_stator)
     elif isinstance(slot, SlotW23):
         self.add_rule_rotor_slotW23(is_stator)

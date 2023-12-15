@@ -1,11 +1,11 @@
-from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW11_2 import SlotW11_2
 from .....Classes.SlotW23 import SlotW23
 from .....Classes.SlotW26 import SlotW26
 from .....Classes.SlotW30 import SlotW30
 
 
 def convert_slot_rotor_to_other(self):
-    """Selection correct slot and implementation in dict
+    """Selects correct slot and implements it in dict
 
     Parameters
     ----------
@@ -16,7 +16,7 @@ def convert_slot_rotor_to_other(self):
     slot = type(self.machine.rotor.slot).__name__
 
     # selection type of Slot
-    if isinstance(slot, SlotW11):
+    if isinstance(slot, SlotW11_2):
         name_slot = "Parallel_Tooth"
 
     elif isinstance(slot, SlotW23):
