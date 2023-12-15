@@ -3,7 +3,7 @@ from pyleecan.Classes.RuleEquation import RuleEquation
 from pyleecan.Classes.RuleComplex import RuleComplex
 
 
-def add_rule_rotor_slotW11(self, is_stator):
+def add_rule_rotor_slotW11_2(self, is_stator):
     """Create and adapt all the rules related to slotW11 (lam radius,...)
     Extend rules_list within Converter object
     Parameters

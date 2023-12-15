@@ -13,6 +13,7 @@ from pyleecan.Classes.SlotM19 import SlotM19
 
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SlotW11 import SlotW11
+from pyleecan.Classes.SlotW11_2 import SlotW11_2
 from pyleecan.Classes.SlotW12 import SlotW12
 from pyleecan.Classes.SlotW13 import SlotW13
 from pyleecan.Classes.SlotW14 import SlotW14
@@ -79,6 +80,7 @@ SlotM_list = [
 SlotW_list = [
     SlotW10(),
     SlotW11(),
+    SlotW11_2(),
     SlotW12(),
     SlotW13(),
     SlotW14(),
@@ -208,6 +210,15 @@ plot_test.append(
         "method_name": "plot_schematics_constant_tooth",
     }
 )
+
+plot_test.append(
+    {
+        "test_obj": SlotW11_2(),
+        "type_add_active": 1,
+        "method_name": "plot_schematics_constant_tooth",
+    }
+)
+
 plot_test.append(
     {
         "test_obj": SlotW14(),
@@ -588,10 +599,10 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_plot(plot_test[35])
-    a.test_plot_point(plot_test[35])
-    a.test_plot(plot_test[37])
-    a.test_plot_point(plot_test[37])
+    a.test_plot(plot_test[41])
+    a.test_plot_point(plot_test[41])
+    a.test_plot(plot_test[20])
+    # a.test_plot_point(plot_test[34])
     #
 
     # for plot in plot_test:
