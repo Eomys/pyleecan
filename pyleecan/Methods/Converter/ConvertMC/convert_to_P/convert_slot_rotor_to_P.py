@@ -6,7 +6,7 @@ from pyleecan.Classes.SlotW26 import SlotW26
 
 
 def convert_slot_rotor_to_P(self):
-    """Selection correct slot and implementation in obj machine
+    """Selects correct slot for rotor and implements it in obj machine
 
     Parameters
     ----------
