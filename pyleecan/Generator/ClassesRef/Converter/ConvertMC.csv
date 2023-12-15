@@ -27,7 +27,7 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,Rules.Slot.add_rule_slotW23,,,,,,
 ,,Rules.Slot.rotor.add_rule_rotor_slotW30,,,,,,
 ,,Rules.Slot.rotor.add_rule_rotor_slotW23,,,,,,
-,,Rules.Slot.rotor.add_rule_rotor_slotW11,,,,,,
+,,Rules.Slot.rotor.add_rule_rotor_slotW11_2,,,,,,
 ,,Rules.Slot.rotor.add_rule_rotor_slotW26,,,,,,
 ,,Rules.Lamination.add_rule_ventilationCirc,,,,,,
 ,,Rules.Lamination.add_rule_ventilationPolar,,,,,,
