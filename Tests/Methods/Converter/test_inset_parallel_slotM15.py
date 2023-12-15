@@ -63,6 +63,6 @@ class TestComplexRuleSlotM15(object):
 
 if __name__ == "__main__":
     a = TestComplexRuleSlotM15()
-    for test_dict in slotM12_test:
+    for test_dict in slotM15_test:
         a.test_inset_parallel_slotM15(test_dict)
     print("Test Done")

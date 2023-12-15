@@ -6,7 +6,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM12 import SlotM12
 
-
+slotM12_test = list()
 
 
 # Common values
@@ -33,7 +33,6 @@ slotM12_test.append(
 
 
 class TestComplexRuleSlotM12(object):
-
     @pytest.mark.parametrize("test_dict", slotM12_test)
     def test_inset_breadloaf_slotM12(self, test_dict):
         """test rule complex"""
@@ -51,7 +50,6 @@ class TestComplexRuleSlotM12(object):
         rule = RuleComplex(fct_name="inset_breadloaf_slotM12", folder="MotorCAD")
         # first rule complex use to define a slot
         machine = rule.convert_to_P(
-
             other_dict, machine, {"ED": (2 / 8) * (pi / 180), "m": 0.001}
         )
 
