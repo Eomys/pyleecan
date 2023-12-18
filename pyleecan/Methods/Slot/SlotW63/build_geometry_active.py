@@ -38,8 +38,8 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
 
     line_dict = self._comp_line_dict()
 
-    Ref1 = (line_dict["w1-2"].get_begin() + line_dict["w2-w1"].get_begin()) / 2
-    Ref2 = (line_dict["w1s-w2s"].get_begin() + line_dict["7-w1s"].get_begin()) / 2
+    Ref1 = (line_dict["w1-w2"].get_begin() + line_dict["3-4"].get_begin()) / 2
+    Ref2 = (line_dict["w1s-w2s"].get_begin() + line_dict["5-6"].get_begin()) / 2
 
     # Create the surfaces
     wind1_lines = [
