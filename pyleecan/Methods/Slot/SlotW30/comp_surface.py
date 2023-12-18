@@ -2,7 +2,7 @@
 
 
 def comp_surface(self):
-    """Compute the Slot total surface (by analytical computation).
+    """Compute the Slot total surface.
     Caution, the bottom of the Slot is an Arc
 
     Parameters
@@ -16,4 +16,6 @@ def comp_surface(self):
         Slot total surface [m**2]
 
     """
+    # comp_surface_active is an numerical computation (defined in Slot class)
+    # comp_surface_opening is an analytical computation
     return self.comp_surface_active() + self.comp_surface_opening()

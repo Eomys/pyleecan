@@ -26,12 +26,8 @@ def comp_height(self):
 
     Rbo = self.get_Rbo()
 
-    # The bottom is an arc
-    alpha = self.comp_angle_opening()
-    Harc = float(Rbo * (1 - cos(alpha / 2)))
-
     if self.is_outwards():
         return abs(Z7) - Rbo
 
     else:
-        return abs((Z7 + Z6) / 2 - Rbo)
+        return abs(abs(Z7 + Z6) / 2 - Rbo)

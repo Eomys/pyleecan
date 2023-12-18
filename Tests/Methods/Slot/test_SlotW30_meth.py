@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from tkinter import S
 import pytest
 
 from pyleecan.Classes.SlotW30 import SlotW30
-from numpy import ndarray, arcsin, exp, pi
+from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 

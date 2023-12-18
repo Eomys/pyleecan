@@ -19,7 +19,7 @@ def check(self):
     Raises
     -------
     S30_W0Error
-        S
+        The slot is ill-defined
     """
     Rbo = self.get_Rbo()
 

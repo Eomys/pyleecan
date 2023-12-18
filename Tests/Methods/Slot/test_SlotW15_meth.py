@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from tkinter import S
 import pytest
 
 from pyleecan.Classes.SlotW15 import SlotW15
