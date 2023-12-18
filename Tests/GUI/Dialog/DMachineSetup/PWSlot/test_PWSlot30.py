@@ -12,6 +12,7 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot30.PWSlot30 import PWSlot30
+from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
 
 
 class TestPWSlot30(object):

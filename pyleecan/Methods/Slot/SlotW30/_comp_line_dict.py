@@ -55,8 +55,12 @@ def _comp_line_dict(self):
     line_dict["2-11"] = Segment(Z2, Z11)
     line_dict["11-2"] = Segment(Z11, Z2)
 
-    line_dict["1-2"] = Segment(Z1, Z2)
-    line_dict["11-12"] = Segment(Z11, Z12)
+    if self.H0 > 0:
+        line_dict["1-2"] = Segment(Z1, Z2)
+        line_dict["11-12"] = Segment(Z11, Z12)
+    else:
+        line_dict["1-2"] = None
+        line_dict["11-12"] = None
 
     if self.is_outwards():
         if self.R1 != 0 and self.R2 != 0:
