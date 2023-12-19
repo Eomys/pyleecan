@@ -409,6 +409,13 @@ try:
 except ImportError as error:
     add_rule_condtype12 = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Winding.add_rule_rotor_bar import (
+        add_rule_rotor_bar,
+    )
+except ImportError as error:
+    add_rule_rotor_bar = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -1094,6 +1101,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_condtype12 = add_rule_condtype12
+    # cf Methods.Converter.ConvertMC.Rules.Winding.add_rule_rotor_bar
+    if isinstance(add_rule_rotor_bar, ImportError):
+        add_rule_rotor_bar = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_rotor_bar: "
+                    + str(add_rule_rotor_bar)
+                )
+            )
+        )
+    else:
+        add_rule_rotor_bar = add_rule_rotor_bar
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

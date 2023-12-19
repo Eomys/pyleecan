@@ -1216,7 +1216,8 @@
             "Rules.Pole.add_rule_parallel_slot_slotW29",
             "Rules.Winding.add_rule_winding",
             "Rules.Winding.add_rule_condtype11",
-            "Rules.Winding.add_rule_condtype12"
+            "Rules.Winding.add_rule_condtype12",
+            "Rules.Winding.add_rule_rotor_bar"
         ],
         "mother": "Convert",
         "name": "ConvertMC",
