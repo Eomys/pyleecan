@@ -18,14 +18,4 @@ def add_rule_rotor_bar(self, is_stator):
     if is_stator:
         raise KeyError("Those rules are for rotor slot only")
 
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "EndRing_Thickness_F"],
-            P_obj_path=f"machine.rotor.Lscr",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
     self.rules_list.append(RuleComplex(fct_name="rotor_bar", folder="MotorCAD"))

@@ -27,6 +27,15 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     H = machine.rotor.slot.comp_height()
 
+    self.unit_type = "m"
+    other_path_list = ["[Dimensions]", "EndRing_Thickness_F"]
+    W0 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    self.unit_type = "m"
+    other_path_list = ["[Dimensions]", "EndRing_Thickness_R"]
+    W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    machine.rotor.Lscr = (W1 + W0) / 2
     machine.rotor.Hscr = H + H0 + H1
     machine.rotor.winding.Lewout = 0
     return machine
