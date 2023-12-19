@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-from tkinter import S
 import pytest
 
 from pyleecan.Classes.SlotW30 import SlotW30
-from numpy import ndarray, arcsin, exp, pi
+from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
+from pyleecan.Methods.Slot.SlotW30 import (
+    S30_R1Error,
+    S30_R2Error,
+    S30_W3Error,
+    S30_W0Error,
+)
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -36,6 +41,20 @@ slotW30_test.append(
         "SW_exp": 0.0003153366034722328,
         "SO_exp": 2.49213752500043e-05,
         "H_exp": 0.0252197784008099,
+    }
+)
+
+# R1 max
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=5e-3, R2=5e-3, W0=5e-3, W3=10e-3)
+slotW30_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00031845442493,
+        "Aw": 0.099493858,
+        "SW_exp": 0.00029353304,
+        "SO_exp": 2.49213752500043e-05,
+        "H_exp": 0.025013150503,
     }
 )
 
@@ -245,9 +264,40 @@ class Test_SlotW30_meth(object):
         assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
         assert len(result[0].get_lines()) == 4
 
+    def test_check(self):
+        """Check that the check function is raising error"""
+        # R1 too hight
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=10e-3, R2=5e-3, W0=5e-3, W3=10e-3)
+
+        with pytest.raises(S30_R1Error) as context:
+            lam.slot.check()
+
+        # R2 too hight
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=1e-3, R2=15e-3, W0=5e-3, W3=10e-3)
+
+        with pytest.raises(S30_R2Error) as context:
+            lam.slot.check()
+
+        # R1 + R2 > H1
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=5e-3, R2=20e-3, W0=5e-3, W3=10e-3)
+
+        with pytest.raises(S30_R1Error) as context:
+            lam.slot.check()
+
+        # W3 too high
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=0, R2=50e-3, W0=5e-3, W3=40e-3)
+
+        with pytest.raises(S30_R1Error) as context:
+            lam.slot.check()
+
 
 if __name__ == "__main__":
     a = Test_SlotW30_meth()
+    a.test_check()
     a.test_get_surface_X()
     for ii, test_dict in enumerate(slotW30_test):
         print("Running test for Slot[" + str(ii) + "]")

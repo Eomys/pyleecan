@@ -21,13 +21,13 @@ def check(self):
     Raises
     -------
     S30_W0Error
-        S
+        wrong definition of W0
     S30_W3Error
-
+        wrong definition of W3
     S30_R1Error
-
+        wrong definition of R1
     S30_R2Error
-
+        wrong definition of R2
     """
     Rbo = self.get_Rbo()
 
@@ -71,4 +71,7 @@ def check(self):
         raise S30_R2Error("R2 is too high")
 
     if R1 >= lr1 / 2:
-        raise S30_R1Error("R1 is too high")
+        if R1 != 0:
+            raise S30_R1Error("R1 is too high")
+        else:
+            raise S30_W3Error("W3 is too high")
