@@ -1,6 +1,4 @@
 from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
 
 
 def add_rule_rotor_slotW23(self, is_stator):
@@ -13,8 +11,8 @@ def add_rule_rotor_slotW23(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    if is_stator == True:
-        raise KeyError("this rule is for slot in rotor")
+    if is_stator:
+        raise KeyError("Those rules are for rotor slot only")
 
     self.rules_list.append(
         RuleSimple(
