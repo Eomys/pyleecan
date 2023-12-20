@@ -1,4 +1,3 @@
-
 from .....Classes.SlotW11_2 import SlotW11_2
 from .....Classes.SlotW23 import SlotW23
 from .....Classes.SlotW26 import SlotW26
