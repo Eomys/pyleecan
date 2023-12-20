@@ -8,7 +8,6 @@ from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW63 import (
     S63_InnerCheckError,
     S63_WindError,
-    S63_WindWError,
 )
 
 
@@ -42,6 +41,79 @@ slotW63_test.append(
         "Aw": 0.2880486802351,
         "SW_exp": 0.0012,
         "H_exp": 0.09361730554,
+        "Ao": 0.256135596778,
+    }
+)
+
+# H1 =0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW63(
+    Zs=12,
+    H0=30e-3,
+    W0=30e-3,
+    H1=0,
+    W1=80e-3,
+    H2=40e-3,
+    W2=15e-3,
+)
+
+slotW63_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0059996,
+        "Aw": 0.325341262,
+        "SW_exp": 0.0012,
+        "H_exp": 0.0765421,
+        "Ao": 0.256135596778,
+    }
+)
+
+# W2 = 0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW63(
+    Zs=12,
+    H0=10e-3,
+    W0=30e-3,
+    H1=0.78539,
+    W1=80e-3,
+    H2=40e-3,
+    W2=0,
+)
+
+# H2 = 0 and W2 =0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW63(
+    Zs=12,
+    H0=10e-3,
+    W0=30e-3,
+    H1=0.78539,
+    W1=80e-3,
+    H2=0,
+    W2=0,
+)
+
+slotW63_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0034841,
+        "Aw": 0.360020758,
+        "SW_exp": 0.0012,
+        "H_exp": 0.03566175,
         "Ao": 0.256135596778,
     }
 )
@@ -138,11 +210,14 @@ class Test_SlotW63_meth(object):
         Sact = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
         Sfull = test_obj.slot.get_surface()
         Sop = test_obj.slot.get_surface_opening()
-        assert len(Sact) == 2
-        assert len(Sop) == 1
-        S1 = Sact[0].comp_surface() + Sact[1].comp_surface() + Sop[0].comp_surface()
-        S2 = Sfull.comp_surface()
-
+        if len(Sact) == 2:
+            assert len(Sop) == 1
+            S1 = Sact[0].comp_surface() + Sact[1].comp_surface() + Sop[0].comp_surface()
+            S2 = Sfull.comp_surface()
+        if len(Sact) == 1:
+            assert len(Sop) == 1
+            S1 = Sact[0].comp_surface() + Sop[0].comp_surface()
+            S2 = Sfull.comp_surface()
         msg = "Act+Op=" + str(S1) + ", Full=" + str(S2)
         assert abs((S1 - S2) / S1) < DELTA, msg
 
