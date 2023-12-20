@@ -22,16 +22,42 @@ def get_surface_opening(self, alpha=0, delta=0):
 
     # Create curve list
     line_dict = self._comp_line_dict()
-    curve_list = [
-        line_dict["1-2"],
-        line_dict["2-w1"],
-        line_dict["w1-w2"],
-        line_dict["w2-w2s"],
-        line_dict["w2s-w1s"],
-        line_dict["w1s-7"],
-        line_dict["7-8"],
-        line_dict["8-1"],
-    ]
+    if self.W2 != 0:
+        if self.H2 != 0:
+            curve_list = [
+                line_dict["1-2"],
+                line_dict["2-w1"],
+                line_dict["w1-w2"],
+                line_dict["w2-w2s"],
+                line_dict["w2s-w1s"],
+                line_dict["w1s-7"],
+                line_dict["7-8"],
+                line_dict["8-1"],
+            ]
+
+        else:
+            curve_list = [
+                line_dict["2-w1"],
+                line_dict["w1-w2"],
+                line_dict["w2-w2s"],
+                line_dict["w2s-w1s"],
+                line_dict["w1s-7"],
+                line_dict["7-2"],
+            ]
+    else:
+        if self.H2 != 0:
+            curve_list = [
+                line_dict["1-2"],
+                line_dict["2-7"],
+                line_dict["7-8"],
+                line_dict["8-1"],
+            ]
+
+        else:
+            curve_list = [
+                line_dict["2-7"],
+                line_dict["7w-2w"],
+            ]
 
     curve_list = [line for line in curve_list if line is not None]
 

@@ -47,6 +47,95 @@ slotW62_test.append(
 )
 
 
+# W3 and H3 = 0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW62(
+    Zs=12,
+    H0=70e-3,
+    W0=50e-3,
+    H1=30e-3,
+    W1=120e-3,
+    W2=15e-3,
+    H2=40e-3,
+    W3=0,
+    H3=0,
+)
+slotW62_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0060191044069,
+        "Aw": 0.13918306,
+        "SW_exp": 0.0012,
+        "H_exp": 0.104456536,
+        "Ao": 0.120882934017,
+    }
+)
+
+
+# H1 = H2 + H3
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW62(
+    Zs=12,
+    H0=70e-3,
+    W0=50e-3,
+    H1=30e-3,
+    W1=120e-3,
+    W2=15e-3,
+    H2=40e-3,
+    W3=20e-3,
+    H3=30e-3,
+)
+slotW62_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0060191044069,
+        "Aw": 0.13918306,
+        "SW_exp": 0.0012,
+        "H_exp": 0.104456536,
+        "Ao": 0.120882934017,
+    }
+)
+
+# winding = 0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW62(
+    Zs=12,
+    H0=70e-3,
+    W0=50e-3,
+    H1=30e-3,
+    W1=120e-3,
+    W2=0,
+    H2=40e-3,
+    W3=20e-3,
+    H3=30e-3,
+)
+slotW62_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0060191044069,
+        "Aw": 0.0,
+        "SW_exp": 0,
+        "H_exp": 0.104456536,
+        "Ao": 0.120882934017,
+    }
+)
+
+
 class Test_SlotW62_meth(object):
     """pytest for SlotW62 methods"""
 
@@ -71,10 +160,16 @@ class Test_SlotW62_meth(object):
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface_active()
 
-        a = result
-        b = test_dict["SW_exp"]
-        msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        if result != 0:
+            a = result
+            b = test_dict["SW_exp"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < DELTA, msg
+        else:
+            a = result
+            b = test_dict["SW_exp"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert a == b, msg
 
     @pytest.mark.parametrize("test_dict", slotW62_test)
     def test_comp_height(self, test_dict):
@@ -111,10 +206,16 @@ class Test_SlotW62_meth(object):
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_angle_active_eq()
 
-        a = result
-        b = test_dict["Aw"]
-        msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        if result != 0:
+            a = result
+            b = test_dict["Aw"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < DELTA, msg
+        else:
+            a = result
+            b = test_dict["Aw"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert a == b, msg
 
     @pytest.mark.parametrize("test_dict", slotW62_test)
     def test_build_geometry_active_is_stator_true(self, test_dict):
