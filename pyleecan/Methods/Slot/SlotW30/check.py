@@ -71,7 +71,7 @@ def check(self):
         raise S30_R2Error("R2 is too high")
 
     if R1 >= lr1 / 2:
-        if R1 != 0:
+        if self.R1 != 0:
             raise S30_R1Error("R1 is too high")
         else:
             raise S30_W3Error("W3 is too high")

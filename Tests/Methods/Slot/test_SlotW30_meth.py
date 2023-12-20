@@ -23,11 +23,11 @@ lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=4.5e-3, R2=4e-3, W0=5e-3, W3=10e-3)
 slotW30_test.append(
     {
         "test_obj": lam,
-        "S_exp": 0.0003248119953235181,
-        "Aw": 0.101630141234976,
-        "SW_exp": 0.00029989062007,
-        "SO_exp": 2.49213752500043e-05,
-        "H_exp": 0.025040196456158986,
+        "S_exp": 0.00032481,
+        "Aw": 0.1016301,
+        "SW_exp": 0.00029989,
+        "SO_exp": 2.49213752e-05,
+        "H_exp": 0.02504019,
     }
 )
 
@@ -36,11 +36,11 @@ lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=0, R2=0, W0=5e-3, W3=10e-3)
 slotW30_test.append(
     {
         "test_obj": lam,
-        "S_exp": 0.0003402579787222371,
-        "Aw": 0.10673472668521931,
-        "SW_exp": 0.0003153366034722328,
-        "SO_exp": 2.49213752500043e-05,
-        "H_exp": 0.0252197784008099,
+        "S_exp": 0.0003402579,
+        "Aw": 0.10673472,
+        "SW_exp": 0.00031533,
+        "SO_exp": 2.49213752e-05,
+        "H_exp": 0.02521977,
     }
 )
 
@@ -50,13 +50,28 @@ lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=5e-3, R2=5e-3, W0=5e-3, W3=10e-3)
 slotW30_test.append(
     {
         "test_obj": lam,
-        "S_exp": 0.00031845442493,
-        "Aw": 0.099493858,
-        "SW_exp": 0.00029353304,
-        "SO_exp": 2.49213752500043e-05,
-        "H_exp": 0.025013150503,
+        "S_exp": 0.00031845442,
+        "Aw": 0.09949385,
+        "SW_exp": 0.000293533,
+        "SO_exp": 2.492137525e-05,
+        "H_exp": 0.0250131505,
     }
 )
+
+# W3 max
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=0, R2=0, W0=5e-3, W3=18.9826e-3)
+slotW30_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00015991,
+        "Aw": 0.0457516,
+        "SW_exp": 0.000134998,
+        "SO_exp": 2.49213752500e-05,
+        "H_exp": 0.02503374,
+    }
+)
+
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rint=0.1325)
@@ -64,11 +79,11 @@ lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=4.5e-3, R2=4e-3, W0=5e-3, W3=10e-3)
 slotW30_test.append(
     {
         "test_obj": lam,
-        "S_exp": 0.003255087,
-        "Aw": 0.163963806301649,
-        "SW_exp": 0.0032300767363885,
-        "SO_exp": 2.5010416686198074e-05,
-        "H_exp": 0.025003125004882887,
+        "S_exp": 0.0032550,
+        "Aw": 0.1639638063,
+        "SW_exp": 0.003230076,
+        "SO_exp": 2.5010416e-05,
+        "H_exp": 0.02500312,
     }
 )
 
@@ -289,9 +304,16 @@ class Test_SlotW30_meth(object):
 
         # W3 too high
         lam = LamSlot(is_internal=False, Rint=0.1325)
-        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=0, R2=50e-3, W0=5e-3, W3=40e-3)
+        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=0, R2=0, W0=5e-3, W3=20e-3)
 
-        with pytest.raises(S30_R1Error) as context:
+        with pytest.raises(S30_W3Error) as context:
+            lam.slot.check()
+
+        # W0
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW30(H0=5e-3, H1=20e-3, R1=10e-3, R2=0, W0=0, W3=20e-3)
+
+        with pytest.raises(S30_W0Error) as context:
             lam.slot.check()
 
 
