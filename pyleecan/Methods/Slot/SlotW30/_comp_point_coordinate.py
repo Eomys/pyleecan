@@ -1,7 +1,6 @@
 from numpy import arcsin, exp, pi
 from ....Functions.Geometry.inter_line_line import inter_line_line
 from ....Functions.Geometry.inter_line_circle import inter_line_circle
-from ....Classes.Arc1 import Arc1
 
 
 def _comp_point_coordinate(self):
@@ -63,7 +62,7 @@ def _comp_point_coordinate(self):
 
             # we can have approximation, but we want a line tangent. So we can approximate coordinate center of cercle at 10e-6
             if len(Z8) == 0:
-                Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0] - 1e-6)
+                Z8 = inter_line_circle(Zp1, Zp2, self.R2, ZcenterR2[0] + 1e-6 * 1j)
 
             if len(Z7) == 0:
                 Z7 = inter_line_circle(Zp3, Zp4 + 1j, self.R2, ZcenterR2[0] + 1e-6)
