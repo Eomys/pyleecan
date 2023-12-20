@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, exp, arcsin, sqrt
+from numpy import pi, exp, arcsin
 
 
 def _comp_point_coordinate(self):
