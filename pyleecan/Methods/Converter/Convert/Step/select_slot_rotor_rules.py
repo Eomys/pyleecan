@@ -5,7 +5,7 @@ from .....Classes.SlotW30 import SlotW30
 
 
 def select_slot_rotor_rules(self, is_stator):
-    """selection step to add rules for slot rotor
+    """selects step to add rules for slot in rotor and converts slot
 
     Parameters
     ----------

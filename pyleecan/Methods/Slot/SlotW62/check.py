@@ -23,5 +23,5 @@ def check(self):
     if self.is_outwards():
         raise S62_InnerCheckError("Slot 62 is for inner lamination only")
 
-    if self.H3 + self.H2 >= self.H0:
+    if self.H3 + self.H2 > self.H0:
         raise S62_WindHError("You must have H3+H2 < H0")

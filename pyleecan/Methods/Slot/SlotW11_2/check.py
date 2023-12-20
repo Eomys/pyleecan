@@ -2,7 +2,6 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot import SlotCheckError
 from ....Methods.Slot.SlotW11_2 import *
 
 

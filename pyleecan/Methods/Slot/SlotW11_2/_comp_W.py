@@ -10,8 +10,6 @@ def _comp_W(self):
     ----------
     self : SlotW11_2
         A SlotW11_2 object
-    Zs : int
-        Number of Slot
 
     Returns
     -------

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import tan
-from numpy import arcsin, exp, pi
+from numpy import arcsin, exp, pi, tan
 from ....Functions.Geometry.inter_line_line import inter_line_line
 
 
