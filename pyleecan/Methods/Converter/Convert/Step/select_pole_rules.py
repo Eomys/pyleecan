@@ -1,6 +1,6 @@
-from pyleecan.Classes.SlotW63 import SlotW63
-from pyleecan.Classes.SlotW62 import SlotW62
-from pyleecan.Classes.SlotW29 import SlotW29
+from .....Classes.SlotW63 import SlotW63
+from .....Classes.SlotW62 import SlotW62
+from .....Classes.SlotW29 import SlotW29
 
 
 def select_pole_rules(self, is_stator):
@@ -16,10 +16,10 @@ def select_pole_rules(self, is_stator):
     """
 
     if is_stator:
-        raise ValueError("Pole are just in rotor")
+        raise KeyError("Those rules are for rotor slot only")
 
     if self.is_P_to_other:
-        self.convert_pole_to_MC()
+        self.convert_pole_to_other()
 
     else:
         self.convert_pole_to_P()

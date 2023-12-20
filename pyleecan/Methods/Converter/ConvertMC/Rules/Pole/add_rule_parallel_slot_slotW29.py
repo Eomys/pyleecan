@@ -1,6 +1,6 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
+from ......Classes.RuleSimple import RuleSimple
+from ......Classes.RuleEquation import RuleEquation
+from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_slot_slotW29(self):

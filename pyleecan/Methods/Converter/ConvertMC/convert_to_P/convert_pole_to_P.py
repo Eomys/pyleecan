@@ -1,7 +1,7 @@
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW63 import SlotW63
-from pyleecan.Classes.SlotW62 import SlotW62
-from pyleecan.Classes.SlotW29 import SlotW29
+from .....Classes.LamSlotWind import LamSlotWind
+from .....Classes.SlotW63 import SlotW63
+from .....Classes.SlotW62 import SlotW62
+from .....Classes.SlotW29 import SlotW29
 
 
 def convert_pole_to_P(self):
@@ -16,12 +16,12 @@ def convert_pole_to_P(self):
 
     pole_type = self.other_dict["[Design_Options]"]["Sync_Rotor"]
 
-    # initialisation to set the hole in rotor
+    # initialisation to set the pole in rotor
     self.machine.rotor = LamSlotWind()
     self.machine.rotor.is_stator = False
     self.machine.rotor.is_internal = True
 
-    # set the hole in obj machine, and add particularity to hole
+    # set the pole in obj machine, and add particularity to pole
     if pole_type == "Sync_Salient_Pole":
         self.machine.rotor.slot = SlotW62()
 
@@ -35,7 +35,7 @@ def convert_pole_to_P(self):
 
     else:
         raise NotImplementedError(
-            f"Type of hole {pole_type} has not equivalent in pyleecan or has not implement"
+            f"Type of pole {pole_type} has not equivalent in pyleecan or has not implement"
         )
 
     self.get_logger().info(
