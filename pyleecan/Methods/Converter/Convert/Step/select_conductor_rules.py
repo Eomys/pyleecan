@@ -32,3 +32,11 @@ def select_conductor_rules(self, is_stator):
 
     elif isinstance(conductor, CondType11):
         self.add_rule_condtype11(is_stator)
+
+    if is_stator:
+        self.select_material_rules("machine.stator.winding.conductor.cond_mat")
+        self.select_material_rules("machine.stator.winding.conductor.ins_mat")
+
+    else:
+        self.select_material_rules("machine.rotor.winding.conductor.cond_mat")
+        self.select_material_rules("machine.rotor.winding.conductor.ins_mat")

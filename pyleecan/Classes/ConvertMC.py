@@ -88,6 +88,13 @@ except ImportError as error:
     convert_conductor_to_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_material_to_P import (
+        convert_material_to_P,
+    )
+except ImportError as error:
+    convert_material_to_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_other.convert_slot_rotor_to_other import (
         convert_slot_rotor_to_other,
     )
@@ -156,6 +163,13 @@ try:
     )
 except ImportError as error:
     convert_conductor_to_other = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_material_to_other import (
+        convert_material_to_other,
+    )
+except ImportError as error:
+    convert_material_to_other = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
@@ -416,6 +430,18 @@ try:
 except ImportError as error:
     add_rule_rotor_bar = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.add_rule_material_magnetics import (
+        add_rule_material_magnetics,
+    )
+except ImportError as error:
+    add_rule_material_magnetics = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.add_rule_material import add_rule_material
+except ImportError as error:
+    add_rule_material = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -547,6 +573,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_conductor_to_P = convert_conductor_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_material_to_P
+    if isinstance(convert_material_to_P, ImportError):
+        convert_material_to_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_material_to_P: "
+                    + str(convert_material_to_P)
+                )
+            )
+        )
+    else:
+        convert_material_to_P = convert_material_to_P
     # cf Methods.Converter.ConvertMC.convert_to_other.convert_slot_rotor_to_other
     if isinstance(convert_slot_rotor_to_other, ImportError):
         convert_slot_rotor_to_other = property(
@@ -667,6 +705,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_conductor_to_other = convert_conductor_to_other
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_material_to_other
+    if isinstance(convert_material_to_other, ImportError):
+        convert_material_to_other = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_material_to_other: "
+                    + str(convert_material_to_other)
+                )
+            )
+        )
+    else:
+        convert_material_to_other = convert_material_to_other
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
     if isinstance(add_rule_machine_dimension, ImportError):
         add_rule_machine_dimension = property(
@@ -1113,6 +1163,30 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_rotor_bar = add_rule_rotor_bar
+    # cf Methods.Converter.ConvertMC.Rules.add_rule_material_magnetics
+    if isinstance(add_rule_material_magnetics, ImportError):
+        add_rule_material_magnetics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_material_magnetics: "
+                    + str(add_rule_material_magnetics)
+                )
+            )
+        )
+    else:
+        add_rule_material_magnetics = add_rule_material_magnetics
+    # cf Methods.Converter.ConvertMC.Rules.add_rule_material
+    if isinstance(add_rule_material, ImportError):
+        add_rule_material = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_material: "
+                    + str(add_rule_material)
+                )
+            )
+        )
+    else:
+        add_rule_material = add_rule_material
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

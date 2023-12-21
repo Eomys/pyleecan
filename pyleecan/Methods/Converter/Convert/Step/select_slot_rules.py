@@ -3,6 +3,7 @@ from pyleecan.Classes.SlotW14 import SlotW14
 from pyleecan.Classes.SlotW21 import SlotW21
 from pyleecan.Classes.SlotW23 import SlotW23
 from pyleecan.Classes.SlotW29 import SlotW29
+from pyleecan.Classes.Material import Material
 
 
 def select_slot_rules(self, is_stator):
@@ -42,3 +43,6 @@ def select_slot_rules(self, is_stator):
         self.add_rule_slotW23(is_stator)
     elif isinstance(slot, SlotW29):
         self.add_rule_slotW29(is_stator)
+
+    self.machine.stator.slot.wedge_mat = Material()
+    self.select_material_rules("machine.stator.slot.wedge_mat")

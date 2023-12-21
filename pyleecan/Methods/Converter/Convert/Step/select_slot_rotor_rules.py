@@ -38,3 +38,5 @@ def select_slot_rotor_rules(self, is_stator):
         self.add_rule_rotor_slotW26(is_stator)
     elif isinstance(slot, SlotW30):
         self.add_rule_rotor_slotW30(is_stator)
+
+    self.select_material_rules("machine.rotor.slot.wedge_mat")

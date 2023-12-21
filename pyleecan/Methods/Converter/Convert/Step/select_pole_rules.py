@@ -34,3 +34,5 @@ def select_pole_rules(self, is_stator):
 
     elif isinstance(slot, SlotW29):
         self.add_rule_parallel_slot_slotW29()
+
+    self.select_material_rules("machine.rotor.slot.wedge_mat")

@@ -35,6 +35,7 @@ def convert_to_P(self, file_path):
     # conversion dict into machine
     self.select_machine_rules()
 
+    comp = 0
     # rule consersion into obj machine
     for rule in self.rules_list:
         try:
@@ -43,8 +44,9 @@ def convert_to_P(self, file_path):
                 self.other_dict, self.machine, self.other_unit_dict
             )
         except Exception as e:
+            self.get_logger().info(f"Error while running rule {rule.get_name()}:\n{e}")
             raise ConvertionError(f"Error while running rule {rule.get_name()}:\n{e}")
-
+        comp += 1
     # Get machine name from the .mot file name
     # Example :
     #   file_path = \path\to\your\mot\file\SCIM.mot

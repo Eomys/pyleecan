@@ -49,14 +49,30 @@ def select_hole_rules(self, is_stator):
 
         elif isinstance(hole, HoleM61):
             self.add_rule_holeM61(hole_id)
+            self.select_material_rules(
+                f"machine.rotor.hole[{hole_id}].magnet_1.mat_type"
+            )
+            self.select_material_rules(
+                f"machine.rotor.hole[{hole_id}].magnet_2.mat_type"
+            )
+            self.select_material_rules(
+                f"machine.rotor.hole[{hole_id}].magnet_3.mat_type"
+            )
 
         elif isinstance(hole, HoleM52):
             self.add_rule_holeM52(hole_id)
 
         elif isinstance(hole, HoleM57):
             self.add_rule_holeM57(hole_id)
+            self.select_material_rules(
+                f"machine.rotor.hole[{hole_id}].magnet_1.mat_type"
+            )
 
         elif isinstance(hole, HoleM60):
             self.add_rule_holeM60(hole_id)
+            self.select_material_rules(
+                f"machine.rotor.hole[{hole_id}].magnet_1.mat_type"
+            )
 
+        self.select_material_rules(f"machine.rotor.hole[{hole_id}].magnet_0.mat_type")
         hole_id += 1

@@ -1,5 +1,7 @@
 from .....Classes.MachineSIPMSM import MachineSIPMSM
 from .....Classes.MachineIPMSM import MachineIPMSM
+from .....Classes.MachineSCIM import MachineSCIM
+from .....Classes.MachineWRSM import MachineWRSM
 
 
 def convert_machine_to_other(self):  # conversion to MotorCAD
@@ -21,10 +23,10 @@ def convert_machine_to_other(self):  # conversion to MotorCAD
     elif isinstance(self.machine, MachineIPMSM):
         name_machine = "BPM"
 
-    elif motor_type == "MachineSCIM":
+    elif isinstance(self.machine, MachineSCIM):
         name_machine = "IM"
 
-    elif motor_type == "MachineWRSM":
+    elif isinstance(self.machine, MachineWRSM):
         name_machine = "SYNC"
 
     else:

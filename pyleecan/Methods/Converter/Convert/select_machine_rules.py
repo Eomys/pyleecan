@@ -39,3 +39,6 @@ def select_machine_rules(self):
 
     else:
         raise NotImplementedError("machine is not implemented yet")
+
+    self.select_material_rules("machine.shaft.mat_type")
+    self.select_material_rules("machine.frame.mat_type")

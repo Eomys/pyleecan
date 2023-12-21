@@ -12,3 +12,8 @@ def select_lamination_rules(self, is_stator):
 
     self.select_duct_rules(is_stator)
     self.select_notch_rules(is_stator)
+
+    if is_stator:
+        self.select_material_rules("machine.stator.mat_type")
+    else:
+        self.select_material_rules("machine.rotor.mat_type")
