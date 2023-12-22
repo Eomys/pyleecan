@@ -1,4 +1,4 @@
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.ImportMatrixVal import ImportMatrixVal
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -31,7 +31,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
             B_value = other_dict[f"[{material}]"][f"BValue[{idx_BH}]"]
             H_value = other_dict[f"[{material}]"][f"HValue[{idx_BH}]"]
             idx_BH += 1
-            curve_BH.append([B_value, H_value])
+            curve_BH.append([H_value, B_value])
 
         except:
             is_BH = False
@@ -60,6 +60,16 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         path = f"{path_P}.mag.BH_curve.value"
 
         self.set_P(machine, other_value, path)
+
+    # set name of material
+    path_name = f"{path_P}.name"
+    other_value = f"{material}"
+    self.set_P(machine, other_value, path_name)
+
+    # set is_isotropic
+    path = f"{path_P}.is_isotropic"
+    other_value = True
+    self.set_P(machine, other_value, path)
 
     return machine
 

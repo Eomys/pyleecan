@@ -45,134 +45,152 @@ def add_rule_material(self, path_P, material):
         )
     )
 
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=[f"[{material}]", "PoissonsRatio"],
-            P_obj_path=f"{path_P}.struct.nu_xy",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
+    try:
+        self.other_dict[f"[{material}]"]["PoissonsRatio"]
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=[f"[{material}]", "PoissonsRatio"],
+                P_obj_path=f"{path_P}.struct.nu_xy",
+                unit_type="",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
 
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=[f"[{material}]", "PoissonsRatio"],
-            P_obj_path=f"{path_P}.struct.nu_xz",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=[f"[{material}]", "PoissonsRatio"],
+                P_obj_path=f"{path_P}.struct.nu_xz",
+                unit_type="",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
 
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=[f"[{material}]", "PoissonsRatio"],
-            P_obj_path=f"{path_P}.struct.nu_yz",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=[f"[{material}]", "PoissonsRatio"],
+                P_obj_path=f"{path_P}.struct.nu_yz",
+                unit_type="",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
 
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=[f"[{material}]", "YoungsCoefficient"],
-            P_obj_path=f"{path_P}.struct.Ex",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
+    except:
+        pass
+
+    try:
+        self.other_dict[f"[{material}]"]["YoungsCoefficient"]
+
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=[f"[{material}]", "YoungsCoefficient"],
+                P_obj_path=f"{path_P}.struct.Ex",
+                unit_type="",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=[f"[{material}]", "YoungsCoefficient"],
-            P_obj_path=f"{path_P}.struct.Ey",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=[f"[{material}]", "YoungsCoefficient"],
+                P_obj_path=f"{path_P}.struct.Ey",
+                unit_type="",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=[f"[{material}]", "YoungsCoefficient"],
-            P_obj_path=f"{path_P}.struct.Ez",
-            unit_type="",
-            scaling_to_P=1,
-            file_name=__file__,
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=[f"[{material}]", "YoungsCoefficient"],
+                P_obj_path=f"{path_P}.struct.Ez",
+                unit_type="",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
+
+    except:
+        pass
 
     if self.is_P_to_other == False:
-        self.rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": [f"[{material}]", "YoungsCoefficient"],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "other",
-                        "path": [f"[{material}]", "PoissonsRatio"],
-                        "variable": "b",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": f"{path_P}.struct.Gxy",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="",
-                equation="a/(2*(1+b))=x",
-                file_name=__file__,
+        try:
+            self.other_dict[f"[{material}]"]["YoungsCoefficient"]
+            self.other_dict[f"[{material}]"]["PoissonsRatio"]
+
+            self.rules_list.append(
+                RuleEquation(
+                    param=[
+                        {
+                            "src": "other",
+                            "path": [f"[{material}]", "YoungsCoefficient"],
+                            "variable": "a",
+                        },
+                        {
+                            "src": "other",
+                            "path": [f"[{material}]", "PoissonsRatio"],
+                            "variable": "b",
+                        },
+                        {
+                            "src": "pyleecan",
+                            "path": f"{path_P}.struct.Gxy",
+                            "variable": "x",
+                        },
+                    ],
+                    unit_type="",
+                    equation="a/(2*(1+b))=x",
+                    file_name=__file__,
+                )
             )
-        )
-        self.rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": [f"[{material}]", "YoungsCoefficient"],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "other",
-                        "path": [f"[{material}]", "PoissonsRatio"],
-                        "variable": "b",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": f"{path_P}.struct.Gxz",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="",
-                equation="a/(2*(1+b))=x",
-                file_name=__file__,
+            self.rules_list.append(
+                RuleEquation(
+                    param=[
+                        {
+                            "src": "other",
+                            "path": [f"[{material}]", "YoungsCoefficient"],
+                            "variable": "a",
+                        },
+                        {
+                            "src": "other",
+                            "path": [f"[{material}]", "PoissonsRatio"],
+                            "variable": "b",
+                        },
+                        {
+                            "src": "pyleecan",
+                            "path": f"{path_P}.struct.Gxz",
+                            "variable": "x",
+                        },
+                    ],
+                    unit_type="",
+                    equation="a/(2*(1+b))=x",
+                    file_name=__file__,
+                )
             )
-        )
-        self.rules_list.append(
-            RuleEquation(
-                param=[
-                    {
-                        "src": "other",
-                        "path": [f"[{material}]", "YoungsCoefficient"],
-                        "variable": "a",
-                    },
-                    {
-                        "src": "other",
-                        "path": [f"[{material}]", "PoissonsRatio"],
-                        "variable": "b",
-                    },
-                    {
-                        "src": "pyleecan",
-                        "path": f"{path_P}.struct.Gyz",
-                        "variable": "x",
-                    },
-                ],
-                unit_type="",
-                equation="a/(2*(1+b))=x",
-                file_name=__file__,
+            self.rules_list.append(
+                RuleEquation(
+                    param=[
+                        {
+                            "src": "other",
+                            "path": [f"[{material}]", "YoungsCoefficient"],
+                            "variable": "a",
+                        },
+                        {
+                            "src": "other",
+                            "path": [f"[{material}]", "PoissonsRatio"],
+                            "variable": "b",
+                        },
+                        {
+                            "src": "pyleecan",
+                            "path": f"{path_P}.struct.Gyz",
+                            "variable": "x",
+                        },
+                    ],
+                    unit_type="",
+                    equation="a/(2*(1+b))=x",
+                    file_name=__file__,
+                )
             )
-        )
+
+        except:
+            pass

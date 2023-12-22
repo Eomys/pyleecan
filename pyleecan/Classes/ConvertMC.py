@@ -291,6 +291,13 @@ except ImportError as error:
     add_rule_notch_slotM19 = error
 
 try:
+    from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_lamination import (
+        add_rule_lamination,
+    )
+except ImportError as error:
+    add_rule_lamination = error
+
+try:
     from ..Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_slotM14 import (
         add_rule_slotM14,
     )
@@ -923,6 +930,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_notch_slotM19 = add_rule_notch_slotM19
+    # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_lamination
+    if isinstance(add_rule_lamination, ImportError):
+        add_rule_lamination = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_lamination: "
+                    + str(add_rule_lamination)
+                )
+            )
+        )
+    else:
+        add_rule_lamination = add_rule_lamination
     # cf Methods.Converter.ConvertMC.Rules.Rotor_Magnet.add_rule_slotM14
     if isinstance(add_rule_slotM14, ImportError):
         add_rule_slotM14 = property(

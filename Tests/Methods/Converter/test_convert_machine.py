@@ -24,10 +24,15 @@ class Test_converter_machine(object):
         #    "/Users\LAP17\AppData\Roaming\pyleecan/Machine/SCIM_5kw_Zaheer.json"
         # )
         """
+            "EMD240_v16",
+            "VF_Manatee_Hairpin_winding",
+        
+            
+        """
+
+        path_list = [
             "interor_V(web)",
-            
             "form_wound_inset_parallel_arc_duct",
-            
             "parallel_slot_surface_breadloaf",
             "parallel_tooth_embedded_breadloaf",
             "parallel_tooth_embedded_parallel_rectanguler_duct_stator",
@@ -47,11 +52,6 @@ class Test_converter_machine(object):
             "WRSM_parallel_tooth",
             "WRSM_parallel_slot",
             "WRSM_salient_pole",
-        """
-
-        path_list = [
-            "EMD240_v16",
-            "VF_Manatee_Hairpin_winding",
         ]
 
         for path in path_list:

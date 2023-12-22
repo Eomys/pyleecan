@@ -40,6 +40,7 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,Rules.Lamination.add_rule_ventilationPolar,,,,,,
 ,,Rules.Lamination.add_rule_ventilationTrap,,,,,,
 ,,Rules.Lamination.add_rule_notch_slotM19,,,,,,
+,,Rules.Lamination.add_rule_lamination,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_slotM14,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_slotM13,,,,,,
 ,,Rules.Rotor_Magnet.add_rule_slotM16,,,,,,

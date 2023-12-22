@@ -10,6 +10,7 @@ def select_lamination_rules(self, is_stator):
 
     """
 
+    self.add_rule_lamination(is_stator)
     self.select_duct_rules(is_stator)
     self.select_notch_rules(is_stator)
 

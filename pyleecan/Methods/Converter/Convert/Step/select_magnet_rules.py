@@ -52,4 +52,4 @@ def select_magnet_rules(self, is_stator):
     elif isinstance(self.machine.rotor.slot, SlotM16):
         self.add_rule_slotM16()
 
-    self.select_material_rules("machine.rotor.slot.mat_type")
+    self.select_material_rules("machine.rotor.magnet.mat_type")
