@@ -52,12 +52,17 @@ def select_hole_rules(self, is_stator):
             self.select_material_rules(
                 f"machine.rotor.hole[{hole_id}].magnet_1.mat_type"
             )
+            self.machine.rotor.hole[hole_id].magnet_1.type_magnetization = 1
+
             self.select_material_rules(
                 f"machine.rotor.hole[{hole_id}].magnet_2.mat_type"
             )
+            self.machine.rotor.hole[hole_id].magnet_2.type_magnetization = 1
+
             self.select_material_rules(
                 f"machine.rotor.hole[{hole_id}].magnet_3.mat_type"
             )
+            self.machine.rotor.hole[hole_id].magnet_3.type_magnetization = 1
 
         elif isinstance(hole, HoleM52):
             self.add_rule_holeM52(hole_id)
@@ -67,12 +72,17 @@ def select_hole_rules(self, is_stator):
             self.select_material_rules(
                 f"machine.rotor.hole[{hole_id}].magnet_1.mat_type"
             )
+            self.machine.rotor.hole[hole_id].magnet_1.type_magnetization = 1
 
         elif isinstance(hole, HoleM60):
             self.add_rule_holeM60(hole_id)
             self.select_material_rules(
                 f"machine.rotor.hole[{hole_id}].magnet_1.mat_type"
             )
+            self.machine.rotor.hole[hole_id].magnet_1.type_magnetization = 1
 
         self.select_material_rules(f"machine.rotor.hole[{hole_id}].magnet_0.mat_type")
+        # set type_magnetization at parallel
+        self.machine.rotor.hole[hole_id].magnet_0.type_magnetization = 1
+
         hole_id += 1

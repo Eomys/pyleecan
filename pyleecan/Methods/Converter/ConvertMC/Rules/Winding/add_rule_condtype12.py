@@ -40,6 +40,8 @@ def add_rule_condtype12(self, is_stator):
         )
     )
 
+    # Not implemented
+    """
     self.rules_list.append(
         RuleEquation(
             param=[
@@ -64,7 +66,7 @@ def add_rule_condtype12(self, is_stator):
             file_name=__file__,
         )
     )
-
+    """
     self.rules_list.append(
         RuleComplex(fct_name="end_winding_lenght", folder="MotorCAD")
     )

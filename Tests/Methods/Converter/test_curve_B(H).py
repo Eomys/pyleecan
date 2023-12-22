@@ -2,11 +2,12 @@ import pytest
 
 from pyleecan.Classes.RuleComplex import RuleComplex
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 
 material_l = list()
 
-
+# curve B(H)
 other_dict = {
     "[POSCO 30PNX1500F_red_Keddy]": {
         "Type": "Fixed_Solid",
@@ -248,7 +249,7 @@ material_l.append(
     }
 )
 
-
+# not curve B(H)
 other_dict = {
     "[POSCO 30PNX1500F_red_Keddy]": {
         "Type": "Fixed_Solid",
@@ -323,14 +324,22 @@ class TestComplexRulecurve_B_H(object):
 
         tab_curve_expected = curve_B_H
 
+        # if file_mot haven't curve B(H), class of mag isn't change ans value doesn't exist
         if curve_B_H == None:
+            if isinstance(machine.stator.mat_type.mag.BH_curve, ImportMatrixVal):
+                raise Exception("BH_curve.value should not be defined")
             try:
                 tab_curve = machine.stator.mat_type.mag.BH_curve.value
-                raise TypeError("BH_curve.value should not be defined")
+                raise Exception("BH_curve.value should not be defined")
             except:
                 pass
 
         else:
+            msg = f"{machine.stator.mat_type.mag.BH_curve.__class__.__name__} exepected {ImportMatrixVal}"
+            assert (
+                machine.stator.mat_type.mag.BH_curve.__class__ == ImportMatrixVal
+            ), msg
+
             tab_curve = machine.stator.mat_type.mag.BH_curve.value
             for nb_ele, ele in enumerate(tab_curve):
                 msg = f"{ele[0]} exepected {tab_curve_expected[nb_ele][0]}"

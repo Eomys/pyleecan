@@ -36,7 +36,7 @@ def add_rule_lamination(self, is_stator):
         RuleSimple(
             other_key_list=["[Miscellaneous]", f"Stacking_Factor_[{lam_name_MC}]"],
             P_obj_path=f"machine.{lam_name}.Kf1",
-            unit_type="m",
+            unit_type="",
             scaling_to_P=1,
             file_name=__file__,
         )

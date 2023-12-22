@@ -45,7 +45,7 @@ def add_rule_condtype11(self, is_stator):
         RuleSimple(
             other_key_list=["[Winding_Design]", "Copper_Height"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Wwire",
-            unit_type="",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
@@ -55,21 +55,23 @@ def add_rule_condtype11(self, is_stator):
         RuleSimple(
             other_key_list=["[Winding_Design]", "Copper_Width"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Hwire",
-            unit_type="",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
     )
 
+    # not implemented
+    """
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Calc_Options]", "WireInsThicknessCalculation"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Wins_wire",
-            unit_type="",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
-    )
+    )"""
 
     self.rules_list.append(
         RuleComplex(fct_name="end_winding_lenght", folder="MotorCAD")

@@ -27,10 +27,6 @@ class Test_converter_machine(object):
             "EMD240_v16",
             "VF_Manatee_Hairpin_winding",
         
-            
-        """
-
-        path_list = [
             "interor_V(web)",
             "form_wound_inset_parallel_arc_duct",
             "parallel_slot_surface_breadloaf",
@@ -49,15 +45,25 @@ class Test_converter_machine(object):
             "SCIM_pear",
             "SCIM_rectangular",
             "SCIM_round",
-            "WRSM_parallel_tooth",
-            "WRSM_parallel_slot",
-            "WRSM_salient_pole",
+            
+        """
+
+        """
+        "Audi_etron_SCIM_Parallel_tooth_parallel_tooth",
+        "Benchmark_SPMSM_tapered_slot_surface_radial",
+        "IPMSM_B_parallel_tooth_interior_V_web",
+        "WRSM_parallel_tooth",
+        "WRSM_parallel_slot",
+        "WRSM_salient_pole",
+        """
+        path_list = [
+            "WRSM_parallel_tooth_salient_pole",
         ]
 
         for path in path_list:
             conv = ConvertMC()
             machine = conv.convert_to_P(
-                f"/Users\LAP17\Documents/machine_MC_P/file_mot/{path}.mot"
+                f"/Users\LAP17\Documents/machine_MC_P/file_mot_mat/{path}.mot"
             )
 
             machine.plot()
