@@ -25,7 +25,6 @@ def get_group(self, group_names):
         a new MeshSolution object which is subpart of self
     """
 
-    is_same_mesh = self.is_same_mesh
     dimension = self.dimension
 
     group_indices = list()
@@ -127,7 +126,6 @@ def get_group(self, group_names):
     meshsol_grp = self.copy()
     meshsol_grp.label = meshsolution_label
     meshsol_grp.mesh = mesh
-    meshsol_grp.is_same_mesh = is_same_mesh
     meshsol_grp.solution_dict = solution_dict
     meshsol_grp.dimension = dimension
     meshsol_grp.group = self.group

@@ -33,11 +33,10 @@ def comp_force_nodal(self, output, axes_dict):
     else:
         meshsolution_group = meshsolution_mag.get_group(self.group)
 
-    # TODO before: Check if is_same_mesh is True
     mesh = meshsolution_group.mesh
 
     # New meshsolution object for output, that could be different from the one inputed
-    meshsolution = MeshSolution(mesh=[mesh.copy()], is_same_mesh=True, dimension=dim)
+    meshsolution = MeshSolution(mesh=[mesh.copy()], dimension=dim)
 
     # Load magnetic flux B and H and mu objects
     B_sol = meshsolution_group.get_solution(label="B")

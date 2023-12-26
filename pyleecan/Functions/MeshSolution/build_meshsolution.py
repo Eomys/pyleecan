@@ -14,7 +14,7 @@ def build_meshsolution(
     dimension: int = 2,
     group: Optional[Dict[str, np.ndarray]] = None,
 ) -> MeshSolution:
-    """Build the MeshSolution objets from FEMM outputs.
+    """Build the MeshSolution object from FEMM outputs.
 
     Parameters
     ----------
@@ -37,7 +37,6 @@ def build_meshsolution(
         label=label,
         mesh=mesh,
         solution_dict=solution_dict,
-        is_same_mesh=True,
         dimension=dimension,
         group=group,
     )

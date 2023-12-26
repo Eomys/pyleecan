@@ -216,7 +216,6 @@ class MeshSolution(FrozenClass):
         self,
         label="",
         mesh=-1,
-        is_same_mesh=True,
         solution_dict=-1,
         group=None,
         dimension=2,
@@ -243,8 +242,6 @@ class MeshSolution(FrozenClass):
                 label = init_dict["label"]
             if "mesh" in list(init_dict.keys()):
                 mesh = init_dict["mesh"]
-            if "is_same_mesh" in list(init_dict.keys()):
-                is_same_mesh = init_dict["is_same_mesh"]
             if "solution_dict" in list(init_dict.keys()):
                 solution_dict = init_dict["solution_dict"]
             if "group" in list(init_dict.keys()):
@@ -257,7 +254,6 @@ class MeshSolution(FrozenClass):
         self.parent = None
         self.label = label
         self.mesh = mesh
-        self.is_same_mesh = is_same_mesh
         self.solution_dict = solution_dict
         self.group = group
         self.dimension = dimension
@@ -282,7 +278,6 @@ class MeshSolution(FrozenClass):
             MeshSolution_str += "mesh = " + tmp
         else:
             MeshSolution_str += "mesh = None" + linesep + linesep
-        MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh) + linesep
         if len(self.solution_dict) == 0:
             MeshSolution_str += "solution_dict = dict()" + linesep
         for key, obj in self.solution_dict.items():
@@ -304,8 +299,6 @@ class MeshSolution(FrozenClass):
         if other.label != self.label:
             return False
         if other.mesh != self.mesh:
-            return False
-        if other.is_same_mesh != self.is_same_mesh:
             return False
         if other.solution_dict != self.solution_dict:
             return False
@@ -346,18 +339,6 @@ class MeshSolution(FrozenClass):
                     is_add_value=is_add_value,
                 )
             )
-        if other._is_same_mesh != self._is_same_mesh:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_same_mesh)
-                    + ", other="
-                    + str(other._is_same_mesh)
-                    + ")"
-                )
-                diff_list.append(name + ".is_same_mesh" + val_str)
-            else:
-                diff_list.append(name + ".is_same_mesh")
         if (other.solution_dict is None and self.solution_dict is not None) or (
             other.solution_dict is not None and self.solution_dict is None
         ):
@@ -414,7 +395,6 @@ class MeshSolution(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.label)
         S += getsizeof(self.mesh)
-        S += getsizeof(self.is_same_mesh)
         if self.solution_dict is not None:
             for key, value in self.solution_dict.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -446,7 +426,6 @@ class MeshSolution(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        MeshSolution_dict["is_same_mesh"] = self.is_same_mesh
         if self.solution_dict is None:
             MeshSolution_dict["solution_dict"] = None
         else:
@@ -478,7 +457,6 @@ class MeshSolution(FrozenClass):
             mesh_val = None
         else:
             mesh_val = self.mesh.copy()
-        is_same_mesh_val = self.is_same_mesh
         if self.solution_dict is None:
             solution_dict_val = None
         else:
@@ -495,7 +473,6 @@ class MeshSolution(FrozenClass):
         obj_copy = type(self)(
             label=label_val,
             mesh=mesh_val,
-            is_same_mesh=is_same_mesh_val,
             solution_dict=solution_dict_val,
             group=group_val,
             dimension=dimension_val,
@@ -509,7 +486,6 @@ class MeshSolution(FrozenClass):
         self.label = None
         if self.mesh is not None:
             self.mesh._set_None()
-        self.is_same_mesh = None
         self.solution_dict = None
         self.group = None
         self.dimension = None
@@ -565,24 +541,6 @@ class MeshSolution(FrozenClass):
         doc=u"""A Mesh object. 
 
         :Type: Mesh
-        """,
-    )
-
-    def _get_is_same_mesh(self):
-        """getter of is_same_mesh"""
-        return self._is_same_mesh
-
-    def _set_is_same_mesh(self, value):
-        """setter of is_same_mesh"""
-        check_var("is_same_mesh", value, "bool")
-        self._is_same_mesh = value
-
-    is_same_mesh = property(
-        fget=_get_is_same_mesh,
-        fset=_set_is_same_mesh,
-        doc=u"""1 if the mesh is the same at each step (time, mode etc.)
-
-        :Type: bool
         """,
     )
 

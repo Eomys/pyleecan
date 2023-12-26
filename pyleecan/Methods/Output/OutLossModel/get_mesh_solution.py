@@ -49,7 +49,6 @@ def get_mesh_solution(self):
     ms_loss = MeshSolution(
         label=Loss_density_sd.label,
         group=ms_mag.group,
-        is_same_mesh=True,
         mesh=ms_mag.mesh,
         solution=[Loss_density_sd],
         dimension=2,

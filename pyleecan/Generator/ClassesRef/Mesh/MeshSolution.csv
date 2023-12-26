@@ -1,7 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 label,,(Optional) Descriptive name of the mesh,,str,,,
 mesh,,A Mesh object. ,,Mesh,,,
-is_same_mesh,,"1 if the mesh is the same at each step (time, mode etc.)",,bool,1,,
 solution_dict,,A dictionary of Solution objects,,{Solution},,,
 group,,Dict sorted by groups name with list of elements indices. ,,dict,None,,
 dimension,,Dimension of the physical problem,,int,2,1,3

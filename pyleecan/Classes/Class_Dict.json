@@ -8718,16 +8718,6 @@
             },
             {
                 "as_dict": "",
-                "desc": "1 if the mesh is the same at each step (time, mode etc.)",
-                "max": "",
-                "min": "",
-                "name": "is_same_mesh",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "as_dict": "",
                 "desc": "A dictionary of Solution objects",
                 "max": "",
                 "min": "",
