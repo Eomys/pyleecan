@@ -31,7 +31,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     lewout = MLT / 2 - machine.stator.comp_length() - cp
 
-    machine.stator.winding.Lewout = lewout
+    machine.stator.winding.Lewout = lewout / 1000  # convertion mm to m
     return machine
 
 

@@ -1,4 +1,4 @@
-from pyleecan.Methods.Slot.Slot.comp_surface_active import comp_surface_active
+from ....Methods.Slot.Slot.comp_surface_active import comp_surface_active
 
 
 def comp_surface(self):

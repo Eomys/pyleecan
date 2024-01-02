@@ -23,6 +23,10 @@ class Test_converter_machine(object):
         # machineP3 = load(
         #    "/Users\LAP17\AppData\Roaming\pyleecan/Machine/SCIM_5kw_Zaheer.json"
         # )
+        machineP3 = load(
+            "/Users\LAP17\AppData\Roaming\pyleecan/Machine/Toyota_Prius_test_skew.json"
+        )
+
         """
             "EMD240_v16",
             "VF_Manatee_Hairpin_winding",
@@ -55,9 +59,10 @@ class Test_converter_machine(object):
         "WRSM_parallel_tooth",
         "WRSM_parallel_slot",
         "WRSM_salient_pole",
+        "WRSM_parallel_tooth_salient_pole",
         """
         path_list = [
-            "WRSM_parallel_tooth_salient_pole",
+            "skew",
         ]
 
         for path in path_list:
