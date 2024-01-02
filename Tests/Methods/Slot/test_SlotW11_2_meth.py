@@ -28,8 +28,8 @@ lam.slot = SlotW11_2(
 SlotW11_2_test.append(
     {
         "test_obj": lam,
-        "S_exp": 4.0685736e-4,
-        "Aw": 0.108612284,
+        "S_exp": 0.0004068558,
+        "Aw": 0.108611951225,
         "SO_exp": 3.258746174548993e-05,
         "SW_exp": 3.7426990e-04,
         "H_exp": 0.03263591876947885,
@@ -122,13 +122,13 @@ lam_CT.slot = SlotW11_2(
     is_cstt_tooth=True,
     R1=1e-3,
 )
-Lam_CT_surf = 0.00033325214122137165
+Lam_CT_surf = 0.000333289388
 SlotW11_2_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
-        "Aw": 0.0875359257,
-        "SO_exp": 3.161013061533846e-05,
+        "Aw": 0.0875461964,
+        "SO_exp": 3.16119853732e-05,
         "SW_exp": 0.0006447541687263,
         "H_exp": 0.03263591,
     }
@@ -151,15 +151,15 @@ lam_CT.slot = SlotW11_2(
 )
 
 
-Lam_CT_surf = 0.00822538918926
+Lam_CT_surf = 0.0082260530
 SlotW11_2_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
-        "Aw": 0.422032267,
-        "SO_exp": 0.0011571242131896945,
+        "Aw": 0.422066929,
+        "SO_exp": 0.0011572004684,
         "SW_exp": 0.00706826497607,
-        "H_exp": 0.116852030429,
+        "H_exp": 0.116852241277,
     }
 )
 
@@ -359,8 +359,8 @@ class Test_SlotW11_2_meth(object):
             is_cstt_tooth=True,
         )
         lam.slot._comp_W()
-        assert lam.slot.W1 == 0.012696891826464714
-        assert lam.slot.W2 == 0.007610728953823591
+        assert lam.slot.W1 == 0.012699364837066218
+        assert lam.slot.W2 == 0.007610745213606121
 
         lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
         lam.slot = SlotW11_2(
@@ -374,8 +374,8 @@ class Test_SlotW11_2_meth(object):
             is_cstt_tooth=True,
         )
         lam.slot._comp_W()
-        assert lam.slot.W1 == 0.01733037811046905
-        assert lam.slot.W2 == 0.02239963613011551
+        assert lam.slot.W1 == 0.017332085329084986
+        assert lam.slot.W2 == 0.022399646484284684
 
     def test_comp_surface_change_W3(self):
         # Check surface, change, W3, check surface again
