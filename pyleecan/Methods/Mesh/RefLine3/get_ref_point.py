@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 
 def get_ref_point(self, element_coordinate, point):
     """Return the coordinate of the equivalent point in the ref element

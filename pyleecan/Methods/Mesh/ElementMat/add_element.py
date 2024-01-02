@@ -33,13 +33,10 @@ def add_element(self, node_indices: Union[ArrayLike, int], new_index: int) -> bo
 
     # Create/Add the new element
     if self.nb_element == 0:  # First element
-
         # Force connectivity to have shape nb_element × nb_node_per_element
         if isinstance(node_indices, int):
-            self.connectivity = np.array([[node_indices]])
-        else:
-            self.connectivity = np.array([node_indices])
-
+            node_indices = [node_indices]
+        self.connectivity = np.array([node_indices])
         self.indice = np.array([new_index])
     else:
         self.connectivity = np.vstack([self.connectivity, node_indices])

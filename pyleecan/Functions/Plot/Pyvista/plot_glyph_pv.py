@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
-from numpy import abs as np_abs
-from numpy import max as np_max
-from numpy import min as np_min
 from numpy import real
-
 from ....definitions import config_dict
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]

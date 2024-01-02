@@ -1,10 +1,8 @@
 from os import remove, rename
 from os.path import isfile, splitext
 
-from numpy import abs as np_abs
 from numpy import all as np_all
 from numpy import cos
-from numpy import max as np_max
 from numpy import pi, roll, sin, zeros
 
 from ....Classes._FEMMHandler import _FEMMHandler

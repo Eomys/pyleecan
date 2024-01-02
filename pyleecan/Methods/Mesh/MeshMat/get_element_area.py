@@ -2,7 +2,7 @@
 from itertools import repeat
 from typing import List, Optional, Union
 
-from numpy import abs, array, ndarray, newaxis
+from numpy import array, ndarray
 
 from .get_element import _check_element_name
 
@@ -48,8 +48,10 @@ def get_element_area(
 
             except (AttributeError, NotImplementedError):
                 logger.warning(
-                    f'MeshMat: Reference element for "{element_name}" of type "{type(self.element_dict[element_name])}" not found. '
-                    + "Respective area set to zero."
+                    (
+                        f'MeshMat: Reference element for "{element_name}" of type "{type(self.element_dict[element_name])}" not found. ',
+                        "Respective area set to zero.",
+                    )
                 )
                 A = list(repeat(0, element_coordinate.shape[0]))
 

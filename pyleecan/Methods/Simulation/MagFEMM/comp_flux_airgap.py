@@ -1,6 +1,3 @@
-from os.path import isfile
-from shutil import copyfile
-
 from numpy import zeros
 from SciDataTool import Data1D
 

@@ -21,7 +21,7 @@ def comp_loss(self):
     """
 
     if self.parent.parent.parent is None:
-        raise Exception("Cannot calculate core losses if simu is not in an Output")
+        raise ValueError("Cannot calculate core losses if simu is not in an Output")
     else:
         output = self.parent.parent.parent
 
@@ -56,22 +56,22 @@ def comp_loss(self):
     felec = output.elec.OP.get_felec()
 
     if output.mag is None:
-        raise Exception("Cannot calculate core losses if OutMag is None")
+        raise ValueError("Cannot calculate core losses if OutMag is None")
 
     if output.mag.meshsolution is None:
-        raise Exception("Cannot calculate core losses if OutMag.meshsolution is None")
+        raise ValueError("Cannot calculate core losses if OutMag.meshsolution is None")
     else:
         meshsol = output.mag.meshsolution
 
     group_list = list(meshsol.group.keys())
 
     if self.group not in group_list:
-        raise Exception("Cannot calculate core losses for group=" + self.group)
+        raise ValueError("Cannot calculate core losses for group=" + self.group)
 
     label_list = [sol.label for sol in meshsol.solution]
 
     if "B" not in label_list:
-        raise Exception("Cannot calculate core losses if B is not in meshsolution")
+        raise ValueError("Cannot calculate core losses if B is not in meshsolution")
     else:
         ind = label_list.index("B")
 
@@ -120,7 +120,7 @@ def comp_loss(self):
 
     # Compute the loss density for each element and each frequency
     Pcore_density = k_ed * (freqs[:, None] * Bfft_magnitude) ** 2
-    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** 2
+    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude**2
     Pcore_density += k_ex * (freqs[:, None] * Bfft_magnitude) ** 1.5
 
     if is_change_Time:
@@ -132,15 +132,15 @@ def comp_loss(self):
     n = freqs / felec
 
     # Integrate loss density over group volume to get polynomial coefficients
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
     # Get polynomial coefficient
-    B = np_sum(k_ed * coeff * n ** 2)
+    B = np_sum(k_ed * coeff * n**2)
 
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 1.5, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**1.5, Se)
     # Get polynomial coefficient
-    C = np_sum(k_ex * coeff * n ** 1.5)
+    C = np_sum(k_ex * coeff * n**1.5)
 
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
     # Get polynomial coefficient
     A = np_sum(k_hy * coeff * n)
 

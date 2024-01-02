@@ -25,7 +25,7 @@ def get_element_coordinate(
 
     Returns
     -------
-    node_coordinates: ndarray
+    node_coordinates: Dict[str, ndarray]
         Nodes coordinates of each selected element
 
     """

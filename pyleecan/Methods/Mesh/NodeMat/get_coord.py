@@ -9,8 +9,10 @@ def get_coord(self, node_indices: ArrayLike) -> np.ndarray:
 
     Parameters
     ----------
-    node_indices : ArrayLike
-        Array of node indices
+    self : NodeMat
+        an NodeMat object
+    node_indice : np.array
+        an array of node indice
 
     Returns
     -------

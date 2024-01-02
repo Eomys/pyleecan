@@ -8,13 +8,13 @@ from typing import Union
 def get_connectivity(
     self, element_index: Optional[int] = None
 ) -> Union[np.ndarray, None]:
-    """_summary_
+    """Return the connectivity of one element.
 
     Parameters
     ----------
     self : ElementMat
         an ElementMat object
-    element_index : Optional[int], optional
+    element_index : Optional[int]
        the indice of a element, by default None. If None, return all elements.
 
     Returns

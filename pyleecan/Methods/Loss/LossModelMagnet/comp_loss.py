@@ -2,7 +2,6 @@ from numpy import sum as np_sum, abs as np_abs, pi, matmul, zeros
 
 import numpy as np
 
-from ....Classes.CondType21 import CondType21
 from ....Classes.HoleM50 import HoleM50
 from ....Classes.HoleM51 import HoleM51
 from ....Classes.HoleM52 import HoleM52
@@ -245,7 +244,7 @@ def comp_loss(self):
         L1 * per_a * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
     )
     # Sum over orders
-    A = np_sum(Af * n ** 2)
+    A = np_sum(Af * n**2)
     self.coeff_dict = {"2": A}
 
     return Pmagnet_density, freqs

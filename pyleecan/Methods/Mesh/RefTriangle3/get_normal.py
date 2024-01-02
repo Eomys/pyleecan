@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 
 def get_normal(self, element_coordinate):
     """Return the array of the normals coordinates.

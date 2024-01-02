@@ -1,7 +1,5 @@
 from numpy import sum as np_sum, zeros, array
 
-from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
-
 
 def comp_loss(self):
     """Calculate joule losses in stator windings
@@ -20,15 +18,15 @@ def comp_loss(self):
     """
 
     if self.parent.parent is None:
-        raise Exception("Cannot calculate joule losses if simu is not in an Output")
+        raise ValueError("Cannot calculate joule losses if simu is not in an Output")
     else:
         output = self.parent.parent.parent
 
     if output.elec is None:
-        raise Exception("Cannot calculate joule losses if OutElec is None")
+        raise ValueError("Cannot calculate joule losses if OutElec is None")
 
     if self.parent.is_get_meshsolution and output.mag is None:
-        raise Exception("Cannot calculate joule losses if OutMag is None")
+        raise ValueError("Cannot calculate joule losses if OutMag is None")
 
     machine = output.simu.machine
     lam = machine.stator if "stator" in self.group else machine.rotor
@@ -52,7 +50,7 @@ def comp_loss(self):
     # #TODO if the model is applied to the rotor of an SCIM, use the rotor current computed from the EEC.
     Id_Iq = OP.get_Id_Iq()
     coeff = qs * Rs * (Id_Iq["Id"] ** 2 + Id_Iq["Iq"] ** 2)
-    Pjoule = coeff * (1 + k * felec ** 2)
+    Pjoule = coeff * (1 + k * felec**2)
 
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:

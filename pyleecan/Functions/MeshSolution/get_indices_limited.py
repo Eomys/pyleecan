@@ -15,16 +15,13 @@ def get_indices_limited(
     ----------
     meshsolution : MeshSolution
         a MeshSolution object
-
     label : str
         label of a MeshSolution solution field
-
     group_names : list of str
         list of the groups names or string of a single group
 
     max_value : float
         max. field magnitude (over time)
-
     min_value : float
         min. field magnitude (over time)
 

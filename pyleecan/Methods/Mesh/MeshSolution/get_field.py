@@ -13,7 +13,6 @@ from numpy import (
     imag,
     sum as np_sum,
     abs as np_abs,
-    hstack,
     swapaxes,
     reshape,
 )
@@ -336,7 +335,7 @@ def apply_normal_center_surf_vectorfield(
             field = einsum("ij,ij->i", normals, field)
         # rms computation
         if is_rms:
-            field = sqrt(np_sum(np_abs(field ** 2) * cell_area) / np_sum(cell_area))
+            field = sqrt(np_sum(np_abs(field**2) * cell_area) / np_sum(cell_area))
         # Coordinates
         if is_rthetaz:
             field = cart2pol(field, points)

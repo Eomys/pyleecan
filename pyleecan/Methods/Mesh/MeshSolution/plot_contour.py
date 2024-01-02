@@ -1,26 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from numpy import real, min as np_min, max as np_max
-from numpy.linalg import norm
-
-from ....Classes.MeshMat import MeshMat
-from ....definitions import config_dict
 
 from numpy import (
     pi,
     real,
     min as np_min,
     max as np_max,
-    abs as np_abs,
     linspace,
     exp,
 )
 
-from ....Classes.MeshVTK import MeshVTK
-
-from pyleecan.Functions.Plot.Pyvista.configure_plot import configure_plot
-from pyleecan.Functions.Plot.Pyvista.plot_surf_deflection import plot_surf_deflection
-from pyleecan.Functions.Plot.Pyvista.plot_mesh_field import plot_mesh_field
+from ....definitions import config_dict
+from ....Functions.Plot.Pyvista.configure_plot import configure_plot
+from ....Functions.Plot.Pyvista.plot_mesh_field import plot_mesh_field
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]

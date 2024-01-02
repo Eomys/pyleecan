@@ -11,7 +11,7 @@ def find_element(self, points, normal_t=None):
     self : MeshMat
         an MeshMat object
     points : ndarray
-        2darray containing the coordinates of the target point(s)
+        2D array containing the coordinates of the target point(s)
     normal_t TODO identify what it is
 
     Returns
@@ -46,7 +46,6 @@ def find_element(self, points, normal_t=None):
             elements = self.element_dict[key]
             ref_element = elements.ref_element
             connect = elements.connectivity
-            nb_node_per_element = elements.nb_node_per_element
 
             # All selected nodes from the closest to the farthest are tested
             # get elements that contain the closest node and test if point is inside

@@ -2,10 +2,9 @@
 
 import numpy as np
 
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.SolutionMat import SolutionMat
+from ....Classes.ElementMat import ElementMat
+from ....Classes.MeshMat import MeshMat
+from ....Classes.NodeMat import NodeMat
 
 
 def get_group(self, group_names):
@@ -61,10 +60,9 @@ def get_group(self, group_names):
 
     # 2) extract the corresponding connectivity and create a new mesh
     mesh_init = self.get_mesh()
-    node_init = mesh_init.get_node_coordinate()
     mesh_list = list()
     for sep in sep_list:
-        connect_dict, nb_element, indice_dict = mesh_init.get_element(sep)
+        connect_dict, _, indice_dict = mesh_init.get_element(sep)
 
         node_indice = list()
         mesh_new = MeshMat(
@@ -92,11 +90,7 @@ def get_group(self, group_names):
     #    it creates only segment elements)
     if is_interface:
         mesh_interface = mesh_list[0].interface(mesh_list[1])
-        (
-            connect_interface,
-            nb_element_interf,
-            indices_interf,
-        ) = mesh_interface.get_element()
+        connect_interface, *_ = mesh_interface.get_element()
         node_indice_interf = list()
         for key in connect_interface:
             node_indice_interf.extend(np.unique(connect_interface[key]))

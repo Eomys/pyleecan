@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-import copy
 
 import numpy as np
-
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
+from ....Classes.NodeMat import NodeMat
 
 
 def clear_node(self):

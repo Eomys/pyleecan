@@ -25,13 +25,11 @@ def interpolate(
         interpolated field
 
     """
+    # TODO: input only single point
+    point_ref = self.ref_element.get_ref_point(node_coord, point)
 
-    point_ref = self.ref_element.get_ref_point(
-        node_coord, point
-    )  # TODO: input only single point
-    values_ref, _ = self.ref_element.shape_function(
-        point_ref
-    )  # TODO: input only multipel points
+    # TODO: input only multiple points
+    values_ref, _ = self.ref_element.shape_function(point_ref)
 
     interp_func = np.tensordot(values_ref, field, axes=([2], [0]))
 

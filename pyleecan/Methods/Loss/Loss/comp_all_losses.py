@@ -1,11 +1,6 @@
 import numpy as np
-from SciDataTool import DataFreq
 
 from pyleecan.Classes.OutLossModel import OutLossModel
-
-from ....Classes.MeshSolution import MeshSolution
-from ....Classes.SolutionData import SolutionData
-from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
 def comp_all_losses(

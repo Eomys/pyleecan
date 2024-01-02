@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import copy
-
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
 
 
 def clear_element(self):
@@ -20,4 +15,4 @@ def clear_element(self):
     """
 
     # TODO
-    pass
+    raise NotImplementedError("The clear_element method is not yet implemented")

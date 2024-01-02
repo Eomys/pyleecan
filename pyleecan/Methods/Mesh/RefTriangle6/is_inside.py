@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from numpy import dot
 
 
 def is_inside(self, element_coordinate, point, normal_t=None):

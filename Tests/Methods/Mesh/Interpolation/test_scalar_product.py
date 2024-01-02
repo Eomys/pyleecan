@@ -11,7 +11,6 @@ from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.RefSegmentP1 import RefSegmentP1
-from pyleecan.Classes.ScalarProductL2 import ScalarProductL2
 
 
 @pytest.mark.MeshSol
