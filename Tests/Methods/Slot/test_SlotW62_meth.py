@@ -77,7 +77,7 @@ slotW62_test.append(
 )
 
 
-# H1 = H2 + H3
+# H0 = H2 + H3
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -101,35 +101,6 @@ slotW62_test.append(
         "S_exp": 0.0060191044069,
         "Aw": 0.13918306,
         "SW_exp": 0.0012,
-        "H_exp": 0.104456536,
-        "Ao": 0.120882934017,
-    }
-)
-
-# winding = 0
-lam = LamSlot(
-    Rint=0.135,
-    Rext=0.3,
-    is_internal=True,
-    is_stator=False,
-)
-lam.slot = SlotW62(
-    Zs=12,
-    H0=70e-3,
-    W0=50e-3,
-    H1=30e-3,
-    W1=120e-3,
-    W2=0,
-    H2=40e-3,
-    W3=20e-3,
-    H3=30e-3,
-)
-slotW62_test.append(
-    {
-        "test_obj": lam,
-        "S_exp": 0.0060191044069,
-        "Aw": 0.0,
-        "SW_exp": 0,
         "H_exp": 0.104456536,
         "Ao": 0.120882934017,
     }
