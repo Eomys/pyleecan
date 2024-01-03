@@ -2,7 +2,6 @@
 
 from numpy import pi
 
-from ....Methods.Slot.Slot import SlotCheckError
 from ....Methods.Slot.SlotW11_2 import *
 
 
@@ -47,21 +46,21 @@ def check(self):
         return "In constant tooth mode, you must set W3 !"
 
     if self.H1_is_rad and self.H1 >= pi / 2:
-        raise S11_H1rCheckError("With H1 in radian, you must have H1 < pi/2")
+        raise S11_2_H1rCheckError("With H1 in radian, you must have H1 < pi/2")
         # return "With H1 in radian, you must have H1 < pi/2"
 
     if self.W1 is None or self.W0 is None:
         pass
     else:
         if self.W1 < self.W0:
-            raise S11_W01CheckError("You must have W0 <= W1")
+            raise S11_2_W01CheckError("You must have W0 <= W1")
 
     if not self.W1 is None or not self.W2 is None:
         if 2 * self.R1 >= self.W2 and (not self.W2 is None or not self.R1 is None):
-            raise S11_RWCheckError("You must have 2*R1 <= W2")
+            raise S11_2_RWCheckError("You must have 2*R1 <= W2")
 
     if self.R1 > self.H2:
-        raise S11_RHCheckError("You must have R1 <= H2")
+        raise S11_2_RHCheckError("You must have R1 <= H2")
 
     if self.H1_is_rad and self.H1 >= pi / 2:
-        raise S11_H1rCheckError("With H1 in radian, you must have H1 < pi/2")
+        raise S11_2_H1rCheckError("With H1 in radian, you must have H1 < pi/2")

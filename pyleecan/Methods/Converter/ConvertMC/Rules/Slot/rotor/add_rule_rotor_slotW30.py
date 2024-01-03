@@ -13,8 +13,9 @@ def add_rule_rotor_slotW30(self, is_stator):
     is_stator : Bool
         A booleen to know, position in lamination
     """
-    if is_stator == True:
-        raise KeyError("this rule is for slot in rotor")
+    if is_stator:
+        raise KeyError("Those rules are for rotor slot only")
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Rotor_Bars"],

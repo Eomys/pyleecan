@@ -2,11 +2,11 @@
 import pytest
 
 from pyleecan.Classes.SlotW11_2 import SlotW11_2
-from numpy import ndarray, arcsin, exp, angle, pi
-from scipy.optimize import fsolve
+from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods.Slot.SlotW11_2 import S11_H1rCheckError
+from pyleecan.Methods.Slot.SlotW11_2 import S11_2_H1rCheckError
+
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -28,10 +28,10 @@ lam.slot = SlotW11_2(
 SlotW11_2_test.append(
     {
         "test_obj": lam,
-        "S_exp": 4.0685736e-4,
-        "Aw": 0.108612284,
+        "S_exp": 0.0004068558,
+        "Aw": 0.108611951225,
         "SO_exp": 3.258746174548993e-05,
-        "SW_exp": 3.7426990e-04,
+        "SW_exp": 0.090597018,
         "H_exp": 0.03263591876947885,
     }
 )
@@ -55,7 +55,7 @@ SlotW11_2_test.append(
         "S_exp": 0.0004011338271489,
         "Aw": 0.10695143,
         "SO_exp": 3.258746174548993e-05,
-        "SW_exp": 0.00036854866776,
+        "SW_exp": 0.09059701805,
         "H_exp": 0.03263591876947885,
     }
 )
@@ -79,7 +79,7 @@ SlotW11_2_test.append(
         "S_exp": 4.046824e-4,
         "Aw": 0.083244699,
         "SO_exp": 3.0412538254510085e-05,
-        "SW_exp": 3.742699e-04,
+        "SW_exp": 0.0905970180,
         "H_exp": 0.032367202959,
     }
 )
@@ -103,7 +103,7 @@ SlotW11_2_test.append(
         "S_exp": 3.981824e-4,
         "Aw": 0.08352335186,
         "SO_exp": 2.3912538254510076e-05,
-        "SW_exp": 3.7426990e-4,
+        "SW_exp": 0.090597018056,
         "H_exp": 0.03186721292,
     }
 )
@@ -122,14 +122,14 @@ lam_CT.slot = SlotW11_2(
     is_cstt_tooth=True,
     R1=1e-3,
 )
-Lam_CT_surf = 0.00033325214122137165
+Lam_CT_surf = 0.000333289388
 SlotW11_2_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
-        "Aw": 0.0875359257,
-        "SO_exp": 3.161013061533846e-05,
-        "SW_exp": 0.0006447541687263,
+        "Aw": 0.0875461964,
+        "SO_exp": 3.16119853732e-05,
+        "SW_exp": 0.0905970180566,
         "H_exp": 0.03263591,
     }
 )
@@ -151,15 +151,15 @@ lam_CT.slot = SlotW11_2(
 )
 
 
-Lam_CT_surf = 0.00822538918926
+Lam_CT_surf = 0.0082260530
 SlotW11_2_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
-        "Aw": 0.422032267,
-        "SO_exp": 0.0011571242131896945,
-        "SW_exp": 0.00706826497607,
-        "H_exp": 0.116852030429,
+        "Aw": 0.422066929,
+        "SO_exp": 0.0011572004684,
+        "SW_exp": 0.22690152563,
+        "H_exp": 0.116852241277,
     }
 )
 
@@ -282,6 +282,17 @@ class Test_SlotW11_2_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", SlotW11_2_test)
+    def test_comp_surface_active(self, test_dict):
+        """Check that the computation of the winding surface is correct"""
+        test_obj = test_dict["test_obj"].copy()
+        result = Slot.comp_angle_opening(test_obj.slot)
+
+        a = result
+        b = test_dict["SW_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", SlotW11_2_test)
     def test_comp_angle_active_eq(self, test_dict):
         """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"].copy()
@@ -342,7 +353,7 @@ class Test_SlotW11_2_meth(object):
             H1_is_rad=True,
         )
 
-        with pytest.raises(S11_H1rCheckError) as context:
+        with pytest.raises(S11_2_H1rCheckError) as context:
             lam.slot.check()
 
     def test_comp_W(self):
@@ -359,8 +370,8 @@ class Test_SlotW11_2_meth(object):
             is_cstt_tooth=True,
         )
         lam.slot._comp_W()
-        assert lam.slot.W1 == 0.012696891826464714
-        assert lam.slot.W2 == 0.007610728953823591
+        assert lam.slot.W1 == 0.012699364837066218
+        assert lam.slot.W2 == 0.007610745213606121
 
         lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
         lam.slot = SlotW11_2(
@@ -374,8 +385,8 @@ class Test_SlotW11_2_meth(object):
             is_cstt_tooth=True,
         )
         lam.slot._comp_W()
-        assert lam.slot.W1 == 0.01733037811046905
-        assert lam.slot.W2 == 0.02239963613011551
+        assert lam.slot.W1 == 0.017332085329084986
+        assert lam.slot.W2 == 0.022399646484284684
 
     def test_comp_surface_change_W3(self):
         # Check surface, change, W3, check surface again

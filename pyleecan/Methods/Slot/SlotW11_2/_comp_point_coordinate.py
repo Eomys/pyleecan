@@ -1,6 +1,6 @@
 from numpy import arcsin, exp, pi
-from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Functions.Geometry.inter_line_line import inter_line_line
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
 
 
 def _comp_point_coordinate(self):
@@ -21,7 +21,6 @@ def _comp_point_coordinate(self):
         # Compute W1 and W2 to match W3 tooth constraint
         self._comp_W()
 
-    hsp = pi / self.Zs  # Half slot pitch
     Rbo = self.get_Rbo()
 
     H1 = self.get_H1()
