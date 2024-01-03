@@ -60,7 +60,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.setWindowIcon(QIcon(pixmap_dict["soft_icon"]))
 
         # Get parent dict containing all children of each class
-        gen_dict = read_all(DOC_DIR, is_mother_of_mother=False)
+        gen_dict = read_all(DOC_DIR, is_update_mother_of_mother=False)
         self.parent_dict = dict()
         for class_name, class_dict in gen_dict.items():
             self.parent_dict[class_name] = sorted(
