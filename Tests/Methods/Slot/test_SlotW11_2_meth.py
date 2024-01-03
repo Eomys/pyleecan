@@ -31,7 +31,7 @@ SlotW11_2_test.append(
         "S_exp": 0.0004068558,
         "Aw": 0.108611951225,
         "SO_exp": 3.258746174548993e-05,
-        "SW_exp": 3.7426990e-04,
+        "SW_exp": 0.090597018,
         "H_exp": 0.03263591876947885,
     }
 )
@@ -55,7 +55,7 @@ SlotW11_2_test.append(
         "S_exp": 0.0004011338271489,
         "Aw": 0.10695143,
         "SO_exp": 3.258746174548993e-05,
-        "SW_exp": 0.00036854866776,
+        "SW_exp": 0.09059701805,
         "H_exp": 0.03263591876947885,
     }
 )
@@ -79,7 +79,7 @@ SlotW11_2_test.append(
         "S_exp": 4.046824e-4,
         "Aw": 0.083244699,
         "SO_exp": 3.0412538254510085e-05,
-        "SW_exp": 3.742699e-04,
+        "SW_exp": 0.0905970180,
         "H_exp": 0.032367202959,
     }
 )
@@ -103,7 +103,7 @@ SlotW11_2_test.append(
         "S_exp": 3.981824e-4,
         "Aw": 0.08352335186,
         "SO_exp": 2.3912538254510076e-05,
-        "SW_exp": 3.7426990e-4,
+        "SW_exp": 0.090597018056,
         "H_exp": 0.03186721292,
     }
 )
@@ -129,7 +129,7 @@ SlotW11_2_test.append(
         "S_exp": Lam_CT_surf,
         "Aw": 0.0875461964,
         "SO_exp": 3.16119853732e-05,
-        "SW_exp": 0.0006447541687263,
+        "SW_exp": 0.0905970180566,
         "H_exp": 0.03263591,
     }
 )
@@ -158,7 +158,7 @@ SlotW11_2_test.append(
         "S_exp": Lam_CT_surf,
         "Aw": 0.422066929,
         "SO_exp": 0.0011572004684,
-        "SW_exp": 0.00706826497607,
+        "SW_exp": 0.22690152563,
         "H_exp": 0.116852241277,
     }
 )
@@ -278,6 +278,17 @@ class Test_SlotW11_2_meth(object):
         assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
         b = Slot.comp_angle_opening(test_obj.slot)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", SlotW11_2_test)
+    def test_comp_surface_active(self, test_dict):
+        """Check that the computation of the winding surface is correct"""
+        test_obj = test_dict["test_obj"].copy()
+        result = Slot.comp_angle_opening(test_obj.slot)
+
+        a = result
+        b = test_dict["SW_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
