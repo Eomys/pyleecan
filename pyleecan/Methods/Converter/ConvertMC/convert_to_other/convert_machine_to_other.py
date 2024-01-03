@@ -14,10 +14,14 @@ def convert_machine_to_other(self):  # conversion to MotorCAD
     motor_type = type(self.machine).__name__
 
     # selection type of machine
+
     if isinstance(self.machine, MachineSIPMSM):
         name_machine = "BPM"
 
     elif isinstance(self.machine, MachineIPMSM):
+        name_machine = "BPM"
+
+    elif motor_type == "MachineSCIM":
         name_machine = "IM"
 
     else:

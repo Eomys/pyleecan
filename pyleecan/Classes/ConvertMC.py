@@ -32,6 +32,13 @@ except ImportError as error:
     convert_slot_to_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_slot_rotor_to_P import (
+        convert_slot_rotor_to_P,
+    )
+except ImportError as error:
+    convert_slot_rotor_to_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_P.convert_machine_to_P import (
         convert_machine_to_P,
     )
@@ -65,6 +72,13 @@ try:
     )
 except ImportError as error:
     convert_notch_to_P = error
+
+try:
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_slot_rotor_to_other import (
+        convert_slot_rotor_to_other,
+    )
+except ImportError as error:
+    convert_slot_rotor_to_other = error
 
 try:
     from ..Methods.Converter.ConvertMC.convert_to_other.init_other_unit import (
@@ -170,6 +184,34 @@ try:
     )
 except ImportError as error:
     add_rule_slotW23 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW30 import (
+        add_rule_rotor_slotW30,
+    )
+except ImportError as error:
+    add_rule_rotor_slotW30 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW23 import (
+        add_rule_rotor_slotW23,
+    )
+except ImportError as error:
+    add_rule_rotor_slotW23 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11 import (
+        add_rule_rotor_slotW11,
+    )
+except ImportError as error:
+    add_rule_rotor_slotW11 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW26 import (
+        add_rule_rotor_slotW26,
+    )
+except ImportError as error:
+    add_rule_rotor_slotW26 = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Lamination.add_rule_ventilationCirc import (
@@ -325,6 +367,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_slot_to_P = convert_slot_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_slot_rotor_to_P
+    if isinstance(convert_slot_rotor_to_P, ImportError):
+        convert_slot_rotor_to_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_slot_rotor_to_P: "
+                    + str(convert_slot_rotor_to_P)
+                )
+            )
+        )
+    else:
+        convert_slot_rotor_to_P = convert_slot_rotor_to_P
     # cf Methods.Converter.ConvertMC.convert_to_P.convert_machine_to_P
     if isinstance(convert_machine_to_P, ImportError):
         convert_machine_to_P = property(
@@ -385,6 +439,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_P = convert_notch_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_slot_rotor_to_other
+    if isinstance(convert_slot_rotor_to_other, ImportError):
+        convert_slot_rotor_to_other = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_slot_rotor_to_other: "
+                    + str(convert_slot_rotor_to_other)
+                )
+            )
+        )
+    else:
+        convert_slot_rotor_to_other = convert_slot_rotor_to_other
     # cf Methods.Converter.ConvertMC.convert_to_other.init_other_unit
     if isinstance(init_other_unit, ImportError):
         init_other_unit = property(
@@ -567,6 +633,54 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_slotW23 = add_rule_slotW23
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW30
+    if isinstance(add_rule_rotor_slotW30, ImportError):
+        add_rule_rotor_slotW30 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_rotor_slotW30: "
+                    + str(add_rule_rotor_slotW30)
+                )
+            )
+        )
+    else:
+        add_rule_rotor_slotW30 = add_rule_rotor_slotW30
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW23
+    if isinstance(add_rule_rotor_slotW23, ImportError):
+        add_rule_rotor_slotW23 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_rotor_slotW23: "
+                    + str(add_rule_rotor_slotW23)
+                )
+            )
+        )
+    else:
+        add_rule_rotor_slotW23 = add_rule_rotor_slotW23
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW11
+    if isinstance(add_rule_rotor_slotW11, ImportError):
+        add_rule_rotor_slotW11 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_rotor_slotW11: "
+                    + str(add_rule_rotor_slotW11)
+                )
+            )
+        )
+    else:
+        add_rule_rotor_slotW11 = add_rule_rotor_slotW11
+    # cf Methods.Converter.ConvertMC.Rules.Slot.rotor.add_rule_rotor_slotW26
+    if isinstance(add_rule_rotor_slotW26, ImportError):
+        add_rule_rotor_slotW26 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_rotor_slotW26: "
+                    + str(add_rule_rotor_slotW26)
+                )
+            )
+        )
+    else:
+        add_rule_rotor_slotW26 = add_rule_rotor_slotW26
     # cf Methods.Converter.ConvertMC.Rules.Lamination.add_rule_ventilationCirc
     if isinstance(add_rule_ventilationCirc, ImportError):
         add_rule_ventilationCirc = property(

@@ -12,8 +12,7 @@ def add_rule_machine_dimension_surface_magnet(self):
         A ConvertMC object
     """
 
-    rules_list = self.rules_list
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Bore"],
             P_obj_path="machine.stator.Rint",
@@ -23,7 +22,7 @@ def add_rule_machine_dimension_surface_magnet(self):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Lam_Dia"],
             P_obj_path="machine.stator.Rext",
@@ -34,7 +33,7 @@ def add_rule_machine_dimension_surface_magnet(self):
     )
 
     # shaft
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Shaft_Dia"],
             P_obj_path="machine.rotor.Rint",
@@ -43,7 +42,7 @@ def add_rule_machine_dimension_surface_magnet(self):
             file_name=__file__,
         )
     )
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Shaft_Dia"],
             P_obj_path="machine.shaft.Drsh",
@@ -54,7 +53,7 @@ def add_rule_machine_dimension_surface_magnet(self):
     )
 
     if self.is_P_to_other == True:
-        rules_list.append(
+        self.rules_list.append(
             RuleEquation(
                 param=[
                     {
@@ -85,7 +84,7 @@ def add_rule_machine_dimension_surface_magnet(self):
         )
 
     if not self.is_P_to_other:
-        rules_list.append(
+        self.rules_list.append(
             RuleEquation(
                 param=[
                     {
@@ -115,7 +114,7 @@ def add_rule_machine_dimension_surface_magnet(self):
             )
         )
     else:
-        rules_list.append(
+        self.rules_list.append(
             RuleEquation(
                 param=[
                     {
@@ -146,7 +145,7 @@ def add_rule_machine_dimension_surface_magnet(self):
         )
 
     # frame
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Motor_Length"],
             P_obj_path="machine.frame.Lfra",
@@ -156,7 +155,7 @@ def add_rule_machine_dimension_surface_magnet(self):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Stator_Lam_Dia"],
             P_obj_path="machine.frame.Rint",
@@ -166,7 +165,7 @@ def add_rule_machine_dimension_surface_magnet(self):
         )
     )
 
-    rules_list.append(
+    self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Housing_Dia"],
             P_obj_path="machine.frame.Rext",

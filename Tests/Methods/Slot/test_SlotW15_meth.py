@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from tkinter import S
 import pytest
 
 from pyleecan.Classes.SlotW15 import SlotW15
-from numpy import ndarray, arcsin
+from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW15 import S15InnerError
@@ -60,12 +59,13 @@ class Test_SlotW15_meth(object):
             test_obj.slot.W0
         )
         # Check height
-        # assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
-        #     test_obj.slot.H0
-        # )
-        # assert abs(point_dict["Z13"] - point_dict["Z12"]) == pytest.approx(
-        #     test_obj.slot.H0
-        # )
+        assert abs(
+            test_obj.slot.get_Rbo() * exp(1j * 0) - point_dict["Z2"].real
+        ) == pytest.approx(test_obj.slot.H0)
+        assert abs(
+            test_obj.slot.get_Rbo() * exp(1j * 0) - point_dict["Z12"].real
+        ) == pytest.approx(test_obj.slot.H0)
+
         assert abs(point_dict["Z2"].real - point_dict["Zc1"].real) == pytest.approx(
             test_obj.slot.H1
         )
@@ -103,6 +103,27 @@ class Test_SlotW15_meth(object):
         assert abs(point_dict["Z8"] - point_dict["Zc3"]) == pytest.approx(
             test_obj.slot.R2
         )
+
+        sp = 2 * pi / test_obj.slot.Zs
+        a = point_dict["Z9"]
+        b = exp(1j * sp) * point_dict["Z5"]
+        assert abs(a - b) == pytest.approx(test_obj.slot.W3)
+
+        a = point_dict["Z10"]
+        b = exp(1j * sp) * point_dict["Z4"]
+        assert abs(a - b) == pytest.approx(test_obj.slot.W3)
+
+        # check Zc3, Z8 and (0,0) are align
+        ya = point_dict["Zc3"].imag
+        xa = point_dict["Zc3"].real
+
+        yb = point_dict["Z8"].imag
+        xb = point_dict["Z8"].real
+
+        a = (ya - yb) / (xa - xb)
+
+        assert abs(a) == pytest.approx(ya / xa)
+        assert abs(a) == pytest.approx(yb / xb)
 
     @pytest.mark.parametrize("test_dict", slotW15_test)
     def test_build_geometry_active(self, test_dict):

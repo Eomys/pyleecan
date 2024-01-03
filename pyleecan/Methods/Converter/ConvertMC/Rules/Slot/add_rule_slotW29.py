@@ -123,5 +123,3 @@ def add_rule_slotW29(self, is_stator):
             file_name=__file__,
         )
     )
-
-    return self.rules_list

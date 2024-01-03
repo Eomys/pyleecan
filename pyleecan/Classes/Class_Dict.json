@@ -1163,11 +1163,13 @@
         "methods": [
             "convert_to_P.convert_other_to_dict",
             "convert_to_P.convert_slot_to_P",
+            "convert_to_P.convert_slot_rotor_to_P",
             "convert_to_P.convert_machine_to_P",
             "convert_to_P.convert_magnet_to_P",
             "convert_to_P.convert_hole_to_P",
             "convert_to_P.convert_duct_to_P",
             "convert_to_P.convert_notch_to_P",
+            "convert_to_other.convert_slot_rotor_to_other",
             "convert_to_other.init_other_unit",
             "convert_to_other.convert_slot_to_other",
             "convert_to_other.convert_machine_to_other",
@@ -1183,6 +1185,10 @@
             "Rules.Slot.add_rule_slotW21",
             "Rules.Slot.add_rule_slotW14",
             "Rules.Slot.add_rule_slotW23",
+            "Rules.Slot.rotor.add_rule_rotor_slotW30",
+            "Rules.Slot.rotor.add_rule_rotor_slotW23",
+            "Rules.Slot.rotor.add_rule_rotor_slotW11",
+            "Rules.Slot.rotor.add_rule_rotor_slotW26",
             "Rules.Lamination.add_rule_ventilationCirc",
             "Rules.Lamination.add_rule_ventilationPolar",
             "Rules.Lamination.add_rule_ventilationTrap",
@@ -13180,6 +13186,7 @@
             "SlotW27",
             "SlotW28",
             "SlotW29",
+            "SlotW30",
             "SlotW60",
             "SlotW61",
             "SlotWLSRPM"
@@ -15971,6 +15978,101 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.2
+            }
+        ]
+    },
+    "SlotW30": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "",
+        "is_internal": false,
+        "methods": [
+            "_comp_line_dict",
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_opening",
+            "get_surface_active",
+            "get_surface_opening",
+            "plot_schematics"
+        ],
+        "mother": "Slot",
+        "name": "SlotW30",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW30.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot isthmus height.",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot active height.",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.006
+            },
+            {
+                "as_dict": "",
+                "desc": "Top radius",
+                "max": "",
+                "min": "0",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "Bottom radius",
+                "max": "",
+                "min": "0",
+                "name": "R2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
             }
         ]
     },

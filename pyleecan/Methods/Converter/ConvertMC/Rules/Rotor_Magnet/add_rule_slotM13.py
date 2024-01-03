@@ -23,6 +23,7 @@ def add_rule_slotM13(self):
             file_name=__file__,
         )
     )
+
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
@@ -32,6 +33,7 @@ def add_rule_slotM13(self):
             file_name=__file__,
         )
     )
+
     self.rules_list.append(
         RuleComplex(fct_name="surface_breadloaf_slotM13", folder="MotorCAD")
     )
