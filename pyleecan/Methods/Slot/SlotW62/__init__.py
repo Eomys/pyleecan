@@ -32,19 +32,6 @@ class S62_WindWError(SlotCheckError):
 
 
 class S62_WindError(SlotCheckError):
-    """
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-    Raises
-    ------
-    winding
-
-
-    """
+    """ """
 
     pass

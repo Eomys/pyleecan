@@ -25,7 +25,7 @@ def comp_surface(self):
     Rint = abs(Z5)
 
     # Surface of a slot pitch
-    Sring = (pi * Rext**2 - pi * Rint**2) * 1 / self.Zs
+    Sring = (pi * Rext**2 - pi * Rint**2) / self.Zs
 
     # Tooth surface
     St = self.H0 * self.W0 + self.H1 * self.W1

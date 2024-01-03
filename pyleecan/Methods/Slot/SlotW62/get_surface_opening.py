@@ -44,7 +44,7 @@ def get_surface_opening(self, alpha=0, delta=0):
     Z9 = line_dict["1-2"].get_begin()
     Z2 = line_dict["7-8"].get_end()
     Zmid = (Z9 + Z2) / 2
-    label = self.parent.get_label() + "_" + SOP_LAB + "_R0-T0-S0"
+    label = f"{self.parent.get_label()}_{SOP_LAB}_R0-T0-S0"
     surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
     # Apply transformation
