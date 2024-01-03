@@ -90,15 +90,13 @@ def read_all(
     return gen_dict
 
 
-def read_file(file_path, soft_name=PACKAGE_NAME, is_get_size=False):
+def read_file(file_path, soft_name=PACKAGE_NAME):
     """Read a csv file and create a dict for the class code generation
 
     Parameters
     ----------
     file_path : str
         path to the class csv file to read
-    is_get_size : bool
-        True to return size in class_dict
 
     Returns
     -------
@@ -133,7 +131,7 @@ def read_file(file_path, soft_name=PACKAGE_NAME, is_get_size=False):
         if is_side_by_side:
             get_dict_from_side_by_side(class_csv, class_dict)
         else:
-            get_dict_from_columns(class_csv, class_dict, header_index, is_get_size)
+            get_dict_from_columns(class_csv, class_dict, header_index)
     return class_dict
 
 
@@ -196,7 +194,7 @@ def get_dict_from_side_by_side(class_csv, class_dict):
         )
 
 
-def get_dict_from_columns(class_csv, class_dict, header_index, is_get_size=False):
+def get_dict_from_columns(class_csv, class_dict, header_index):
     # Get all the properties of the class
     properties = list()
     Nline = len(class_csv)
@@ -207,8 +205,7 @@ def get_dict_from_columns(class_csv, class_dict, header_index, is_get_size=False
             prop_dict = dict()
             prop_dict["name"] = name
             prop_dict["unit"] = class_csv[rx][UNIT_COL]
-            if is_get_size:
-                prop_dict["size"] = class_csv[rx][SIZE_COL]
+            prop_dict["size"] = class_csv[rx][SIZE_COL]
             prop_dict["type"] = class_csv[rx][TYPE_COL]
             prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
             prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")

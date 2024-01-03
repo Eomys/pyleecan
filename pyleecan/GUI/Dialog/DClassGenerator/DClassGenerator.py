@@ -308,7 +308,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Load csv file (meaning current class without modifications)
         try:
-            class_dict_ref = read_file(csv_path, is_get_size=True)
+            class_dict_ref = read_file(csv_path)
         except Exception as e:
             print("Cannot check reference csv file: " + csv_path)
             return True
@@ -408,7 +408,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Load csv file
         try:
-            current_class_dict = read_file(csv_path, is_get_size=True)
+            current_class_dict = read_file(csv_path)
         except Exception as e:
             print("Cannot load csv file: " + csv_path)
             return
@@ -1810,7 +1810,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 child_path = self.get_child_path(child_class)
                 # Load csv file
                 try:
-                    child_class_dict = read_file(child_path, is_get_size=True)
+                    child_class_dict = read_file(child_path)
                 except Exception as e:
                     print("Cannot load csv file: " + child_path)
                     return
@@ -1868,7 +1868,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             child_path = self.get_child_path(child_class)
             # Load csv file
             try:
-                child_class_dict = read_file(child_path, is_get_size=True)
+                child_class_dict = read_file(child_path)
             except Exception as e:
                 print("Cannot load csv file: " + child_path)
                 return
