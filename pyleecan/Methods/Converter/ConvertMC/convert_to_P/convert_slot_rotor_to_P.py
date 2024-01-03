@@ -1,8 +1,8 @@
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW30 import SlotW30
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.Classes.SlotW26 import SlotW26
+from .....Classes.LamSquirrelCage import LamSquirrelCage
+from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW30 import SlotW30
+from .....Classes.SlotW23 import SlotW23
+from .....Classes.SlotW26 import SlotW26
 
 
 def convert_slot_rotor_to_P(self):
@@ -16,8 +16,7 @@ def convert_slot_rotor_to_P(self):
     slot_type = self.other_dict["[Design_Options]"]["Top_Bar"]
 
     # initialisation to set the slot in rotor
-    dict_machine = self.machine.rotor.as_dict()
-    self.machine.rotor = LamSquirrelCage(init_dict=dict_machine)
+    self.machine.rotor = LamSquirrelCage()
     self.machine.rotor.is_stator = False
     self.machine.rotor.is_internal = True
 
@@ -40,12 +39,16 @@ def convert_slot_rotor_to_P(self):
         self.machine.rotor.slot = SlotW30()
 
     else:
-        raise Exception("Conversion of machine doesn't exist")
+        raise NotImplementedError(
+            f"Type of slot {slot_type} has not equivalent or has not implement"
+        )
 
     self.get_logger().info(
         f"Conversion {slot_type} into {type(self.machine.rotor.slot).__name__}"
     )
 
+    # Motor-Cad has possibility to have 2 slots, nested one on top of the other
+    # We have dicided to select just the top_BAR
     if self.other_dict["[Design_Options]"]["Bottom_Bar"] != None:
         self.get_logger().error(
             f"Conversion with 2 slot in rotor is not accept in Pyleecan"

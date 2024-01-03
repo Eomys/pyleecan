@@ -13,7 +13,7 @@ def convert_slot_rotor_to_other(self):
         A ConvertMC object
     """
     # conversion to pyleecan
-    slot = type(self.machine.rotor.slot).__name__
+    slot = self.machine.rotor.slot
 
     # selection type of Slot
     if isinstance(slot, SlotW11):
@@ -29,7 +29,9 @@ def convert_slot_rotor_to_other(self):
         name_slot = "Pear"
 
     else:
-        raise Exception("Conversion of machine doesn't exist")
+        raise NotImplementedError(
+            f"Type of slot {name_slot} has not equivalent or has not implement"
+        )
 
     self.get_logger().info(f"Conversion {slot.__class__.__name__} into {name_slot}")
 
