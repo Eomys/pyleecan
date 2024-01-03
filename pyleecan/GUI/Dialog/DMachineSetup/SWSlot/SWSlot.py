@@ -13,6 +13,8 @@ from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....Classes.Slot import Slot
 from .....Classes.SlotUD import SlotUD
 from .....Classes.SlotUD2 import SlotUD2
+from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW11_2 import SlotW11_2
 from .....Classes.Slot import Slot
 from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
@@ -128,6 +130,8 @@ class SWSlot(Gen_SWSlot, QWidget):
         # Set the correct index for the type checkbox and display the object
         if isinstance(self.obj.slot, SlotUD2):
             index = 0
+        elif isinstance(self.obj.slot, SlotW11_2):
+            index = INIT_INDEX.index(SlotW11)
         else:
             index = INIT_INDEX.index(type(self.obj.slot))
         self.c_slot_type.setCurrentIndex(index)
@@ -339,6 +343,8 @@ class SWSlot(Gen_SWSlot, QWidget):
             # different check method)
             if isinstance(lam.slot, SlotUD2):
                 index = 0
+            elif isinstance(lam.slot, SlotW11_2):
+                index = INIT_INDEX.index(SlotW11)
             else:
                 index = INIT_INDEX.index(type(lam.slot))
             return WIDGET_LIST[index].check(lam)
