@@ -2,11 +2,11 @@
 import pytest
 
 from pyleecan.Classes.SlotW11_2 import SlotW11_2
-from numpy import ndarray, arcsin, exp, angle, pi
-from scipy.optimize import fsolve
+from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods.Slot.SlotW11_2 import S11_H1rCheckError
+from pyleecan.Methods.Slot.SlotW11_2 import S11_2_H1rCheckError
+
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -353,7 +353,7 @@ class Test_SlotW11_2_meth(object):
             H1_is_rad=True,
         )
 
-        with pytest.raises(S11_H1rCheckError) as context:
+        with pytest.raises(S11_2_H1rCheckError) as context:
             lam.slot.check()
 
     def test_comp_W(self):
