@@ -39,7 +39,6 @@ if __name__ == "__main__":
         file_name,
         ui_folder_path,
         gen_dict=gen_dict,
-        is_gen_resource=False,
         IS_SDT=IS_SDT,
     )
 
