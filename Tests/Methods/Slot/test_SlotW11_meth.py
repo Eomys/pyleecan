@@ -2,12 +2,8 @@
 import pytest
 
 from pyleecan.Classes.SlotW11 import SlotW11
-from numpy import ndarray, arcsin, exp, angle, pi
-from scipy.optimize import fsolve
+from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW11 import S11_H1rCheckError
 
@@ -125,14 +121,14 @@ lam_CT.slot = SlotW11(
     is_cstt_tooth=True,
     R1=5e-3,
 )
-Lam_CT_surf = 0.000676364299341
+Lam_CT_surf = 0.00067636429
 slotW11_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
         "Aw": 0.1871064077993,
         "SO_exp": 3.161013061533846e-05,
-        "SW_exp": 0.0006447541687263,
+        "SW_exp": 0.000644754168,
         "H_exp": 0.03263591,
     }
 )

@@ -13,11 +13,7 @@ from ....Functions.Plot import (
     MAIN_LINE_WIDTH,
     P_FONT_SIZE,
     SC_FONT_SIZE,
-    SC_LINE_COLOR,
-    SC_LINE_STYLE,
-    SC_LINE_WIDTH,
     TEXT_BOX,
-    plot_quote,
 )
 from ....Methods import ParentMissingError
 
@@ -41,8 +37,8 @@ def plot_schematics(
 
     Parameters
     ----------
-    self : SlotW15
-        A SlotW15 object
+    self : SlotW30
+        A SlotW30 object
     is_default : bool
         True: plot default schematics, else use current slot values
     is_return_default : bool
