@@ -21,4 +21,4 @@ def comp_height(self):
     point_dict = self._comp_point_coordinate()
     Z4 = point_dict["Z4"]
 
-    return abs(Rbo - abs(Z4))
+    return Rbo - abs(Z4)
