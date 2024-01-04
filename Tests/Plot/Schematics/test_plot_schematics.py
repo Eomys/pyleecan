@@ -31,6 +31,7 @@ from pyleecan.Classes.SlotW29 import SlotW29
 from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.Classes.SlotW60 import SlotW60
 from pyleecan.Classes.SlotW61 import SlotW61
+from pyleecan.Classes.SlotW62 import SlotW62
 from pyleecan.Classes.SlotWLSRPM import SlotWLSRPM
 
 from pyleecan.Classes.HoleM50 import HoleM50
@@ -97,6 +98,7 @@ SlotW_list = [
     SlotW30(),
     SlotW60(),
     SlotW61(),
+    SlotW62(),
     SlotWLSRPM(),
 ]
 

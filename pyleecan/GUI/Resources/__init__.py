@@ -89,6 +89,7 @@ pixmap_dict = {
     "SlotW61_empty_int_rotor": ":/images/images/MachineSetup/WSlot/SlotW61_empty_int_rotor.png",
     "SlotW61_wedge_full_int_rotor": ":/images/images/MachineSetup/WSlot/SlotW61_wedge_full_int_rotor.png",
     "SlotW61_wind_int_rotor": ":/images/images/MachineSetup/WSlot/SlotW61_wind_int_rotor.png",
+    "SlotW62_wind_int_rotor": ":/images/images/MachineSetup/WSlot/SlotW62_wind_int_rotor.png",
     "HoleM50_empty_int_rotor": ":/images/images/MachineSetup/SMHoleMag/HoleM50_empty_int_rotor.png",
     "HoleM50_mag_int_rotor": ":/images/images/MachineSetup/SMHoleMag/HoleM50_mag_int_rotor.png",
     "HoleM51_empty_int_rotor": ":/images/images/MachineSetup/SMHoleMag/HoleM51_empty_int_rotor.png",
