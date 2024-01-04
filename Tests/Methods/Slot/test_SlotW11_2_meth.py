@@ -5,7 +5,7 @@ from pyleecan.Classes.SlotW11_2 import SlotW11_2
 from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods.Slot.SlotW11_2 import S11_2_H1rCheckError
+from pyleecan.Methods.Slot.SlotW11_2 import S11_2_H1rCheckError, S11_2_R1CheckError
 
 
 # For AlmostEqual
@@ -354,6 +354,10 @@ class Test_SlotW11_2_meth(object):
         )
 
         with pytest.raises(S11_2_H1rCheckError) as context:
+            lam.slot.check()
+
+        lam.slot.R1 = 0
+        with pytest.raises(S11_2_R1CheckError) as context:
             lam.slot.check()
 
     def test_comp_W(self):
