@@ -40,15 +40,37 @@ def add_rule_slotW11(self, is_stator):
         )
     )
 
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", "Tooth_Width"],
-            P_obj_path=f"machine.{lam_name}.slot.W3",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
+    if self.machine.stator.slot.is_cstt_tooth:
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=["[Dimensions]", "Tooth_Width"],
+                P_obj_path=f"machine.{lam_name}.slot.W3",
+                unit_type="m",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
         )
-    )
+
+    else:
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=["[Dimensions]", "Slot_Width_Top"],
+                P_obj_path=f"machine.{lam_name}.slot.W1",
+                unit_type="m",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
+        )
+
+        self.rules_list.append(
+            RuleSimple(
+                other_key_list=["[Dimensions]", "Slot_Width_Bottom"],
+                P_obj_path=f"machine.{lam_name}.slot.W2",
+                unit_type="m",
+                scaling_to_P=1,
+                file_name=__file__,
+            )
+        )
 
     self.rules_list.append(
         RuleSimple(

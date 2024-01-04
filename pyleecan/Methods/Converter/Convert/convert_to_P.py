@@ -45,7 +45,7 @@ def convert_to_P(self, file_path):
             )
         except Exception as e:
             self.get_logger().info(f"Error while running rule {rule.get_name()}:\n{e}")
-            raise ConvertionError(f"Error while running rule {rule.get_name()}:\n{e}")
+            # raise ConvertionError(f"Error while running rule {rule.get_name()}:\n{e}")
         comp += 1
     # Get machine name from the .mot file name
     # Example :

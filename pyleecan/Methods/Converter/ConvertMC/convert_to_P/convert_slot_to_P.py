@@ -22,10 +22,18 @@ def convert_slot_to_P(self):
 
     # set the slot in obj machine, and add particularity
     if slot_type == "Parallel_Tooth":
-        self.machine.stator.slot = SlotW11()
-        self.machine.stator.slot.is_cstt_tooth = True
-        self.machine.stator.slot.H1_is_rad = True
-        self.machine.stator.is_internal = False
+        if self.other_dict["[Dimensions]"]["Slot_Corner_Radius"] == 0:
+            self.machine.stator.slot = SlotW23()
+            self.machine.stator.slot.is_cstt_tooth = True
+            self.machine.stator.slot.H1_is_rad = True
+            self.machine.stator.is_internal = False
+
+        else:
+            self.machine.stator.slot = SlotW11()
+            self.machine.stator.slot.is_cstt_tooth = True
+            self.machine.stator.slot.H1_is_rad = True
+            self.machine.stator.is_internal = False
+            self.get_logger().warning("Approximation top of slot is flat in Pyleecan")
 
     elif slot_type == "Parallel_Tooth_SqBase":
         self.machine.stator.slot = SlotW14()
@@ -38,10 +46,18 @@ def convert_slot_to_P(self):
         self.machine.stator.is_internal = False
 
     elif slot_type == "Tapered_Slot":
-        self.machine.stator.slot = SlotW23()
-        self.machine.stator.slot.is_cstt_tooth = False
-        self.machine.stator.slot.H1_is_rad = True
-        self.machine.stator.is_internal = False
+        if self.other_dict["[Dimensions]"]["Slot_Corner_Radius"] == 0:
+            self.machine.stator.slot = SlotW23()
+            self.machine.stator.slot.is_cstt_tooth = False
+            self.machine.stator.slot.H1_is_rad = True
+            self.machine.stator.is_internal = False
+
+        else:
+            self.machine.stator.slot = SlotW11()
+            self.machine.stator.slot.is_cstt_tooth = False
+            self.machine.stator.slot.H1_is_rad = True
+            self.machine.stator.is_internal = False
+            self.get_logger().warning("Approximation top of slot is flat in Pyleecan")
 
     elif slot_type == "Form_Wound":
         self.machine.stator.slot = SlotW29()

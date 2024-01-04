@@ -78,6 +78,11 @@ def convert_hole_to_P(self):
     if isinstance(self.machine.rotor.hole[0], HoleM63):
         self.get_logger().warning(f"HoleM63 : Approximation for W0")
 
+    if isinstance(self.machine.rotor.hole[0], HoleM57):
+        self.get_logger().warning(
+            f"HoleM57 : Approximation Pole Arc has not equivalent in pyleecan "
+        )
+
     self.get_logger().info(
         f"Conversion {hole_type} into {type(self.machine.rotor.hole[0]).__name__}"
     )

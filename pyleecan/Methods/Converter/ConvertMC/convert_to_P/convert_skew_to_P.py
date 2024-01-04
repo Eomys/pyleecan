@@ -10,7 +10,10 @@ def convert_skew_to_P(self):
         A ConvertMC object
     """
     # conversion to pyleecan
-    skew_type = self.other_dict["[Magnetics]"]["SkewType"]
+    try:
+        skew_type = self.other_dict["[Magnetics]"]["SkewType"]
+    except:
+        skew_type = 0
 
     if skew_type == 2:
         # initialisation to set the skew in rotor
