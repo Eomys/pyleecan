@@ -107,6 +107,65 @@ slotW62_test.append(
 )
 
 
+# W1 < W0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW62(
+    Zs=12,
+    H0=70e-3,
+    W0=50e-3,
+    H1=30e-3,
+    W1=40e-3,
+    W2=15e-3,
+    H2=40e-3,
+    W3=20e-3,
+    H3=30e-3,
+)
+slotW62_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.008330411950,
+        "Aw": 0.13581162,
+        "SW_exp": 0.0012,
+        "H_exp": 0.099105794,
+        "Ao": 0.39016647,
+    }
+)
+
+# W1 = W0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW62(
+    Zs=12,
+    H0=70e-3,
+    W0=50e-3,
+    H1=30e-3,
+    W1=50e-3,
+    W2=15e-3,
+    H2=40e-3,
+    W3=20e-3,
+    H3=30e-3,
+)
+slotW62_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00805273,
+        "Aw": 0.13604142,
+        "SW_exp": 0.0012,
+        "H_exp": 0.099478938,
+        "Ao": 0.3567386,
+    }
+)
+
+
 class Test_SlotW62_meth(object):
     """pytest for SlotW62 methods"""
 

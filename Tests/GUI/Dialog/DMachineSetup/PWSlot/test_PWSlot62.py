@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-
+import mock
 import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
@@ -10,6 +10,7 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW62 import SlotW62
 from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot62.PWSlot62 import PWSlot62
+from pyleecan.Methods.Slot.SlotW62 import *
 
 
 class TestPWSlot62(object):
@@ -34,28 +35,28 @@ class TestPWSlot62(object):
 
         self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotW62(
-            H0=0.10,
-            H1=0.11,
-            H2=0.12,
-            W0=0.13,
-            W1=0.14,
-            W2=0.15,
-            H3=0.16,
-            W3=0.17,
+            H0=0.05,
+            H1=0.01,
+            H2=0.01,
+            W0=0.01,
+            W1=0.02,
+            W2=0.005,
+            H3=0.001,
+            W3=0.001,
         )
         self.widget = PWSlot62(self.test_obj)
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        assert self.widget.lf_H0.value() == 0.10
-        assert self.widget.lf_H1.value() == 0.11
-        assert self.widget.lf_H2.value() == 0.12
-        assert self.widget.lf_W0.value() == 0.13
-        assert self.widget.lf_W1.value() == 0.14
-        assert self.widget.lf_W2.value() == 0.15
-        assert self.widget.lf_H3.value() == 0.16
-        assert self.widget.lf_W3.value() == 0.17
+        assert self.widget.lf_H0.value() == 0.05
+        assert self.widget.lf_H1.value() == 0.01
+        assert self.widget.lf_H2.value() == 0.01
+        assert self.widget.lf_W0.value() == 0.01
+        assert self.widget.lf_W1.value() == 0.02
+        assert self.widget.lf_W2.value() == 0.005
+        assert self.widget.lf_H3.value() == 0.001
+        assert self.widget.lf_W3.value() == 0.001
 
     def test_out(self):
         """Checking output"""
@@ -87,6 +88,15 @@ class TestPWSlot62(object):
         assert self.widget.slot.W0 == 0.31
         assert self.test_obj.slot.W0 == 0.31
 
+        self.widget.lf_W0.clear()
+        QTest.keyClicks(self.widget.lf_W0, "0")
+        self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
+        try:
+            self.widget.lamination.slot.check()
+            assert False
+        except S62_W0Error:
+            assert True
+
     def test_set_W1(self):
         """Check that the Widget allow to update W1"""
         self.widget.lf_W1.clear()  # Clear the field before writing
@@ -95,6 +105,15 @@ class TestPWSlot62(object):
 
         assert self.widget.slot.W1 == 0.32
         assert self.test_obj.slot.W1 == 0.32
+
+        self.widget.lf_W1.clear()
+        QTest.keyClicks(self.widget.lf_W1, "0")
+        self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
+        try:
+            self.widget.lamination.slot.check()
+            assert False
+        except S62_W1Error:
+            assert True
 
     def test_set_W2(self):
         """Check that the Widget allow to update W2"""
@@ -105,6 +124,15 @@ class TestPWSlot62(object):
         assert self.widget.slot.W2 == 0.33
         assert self.test_obj.slot.W2 == 0.33
 
+        self.widget.lf_W2.clear()
+        QTest.keyClicks(self.widget.lf_W2, "0")
+        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
+        try:
+            self.widget.lamination.slot.check()
+            assert False
+        except S62_W2Error:
+            assert True
+
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
         self.widget.lf_H0.clear()  # Clear the field before writing
@@ -113,6 +141,15 @@ class TestPWSlot62(object):
 
         assert self.widget.slot.H0 == 0.34
         assert self.test_obj.slot.H0 == 0.34
+
+        self.widget.lf_H0.clear()
+        QTest.keyClicks(self.widget.lf_H0, "0.001")
+        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
+        try:
+            self.widget.lamination.slot.check()
+            assert False
+        except S62_WindHError:
+            assert True
 
     def test_set_H1(self):
         """Check that the Widget allow to update H1"""
@@ -123,6 +160,15 @@ class TestPWSlot62(object):
         assert self.widget.slot.H1 == 0.35
         assert self.test_obj.slot.H1 == 0.35
 
+        self.widget.lf_H1.clear()
+        QTest.keyClicks(self.widget.lf_H1, "0")
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+        try:
+            self.widget.lamination.slot.check()
+            assert False
+        except S62_H1Error:
+            assert True
+
     def test_set_H2(self):
         """Check that the Widget allow to update H2"""
         self.widget.lf_H2.clear()  # Clear the field before writing
@@ -131,6 +177,15 @@ class TestPWSlot62(object):
 
         assert self.widget.slot.H2 == 0.36
         assert self.test_obj.slot.H2 == 0.36
+
+        self.widget.lf_H2.clear()
+        QTest.keyClicks(self.widget.lf_H2, "0")
+        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
+        try:
+            self.widget.lamination.slot.check()
+            assert False
+        except S62_H2Error:
+            assert True
 
     def test_set_W3(self):
         """Check that the Widget allow to update W3"""
