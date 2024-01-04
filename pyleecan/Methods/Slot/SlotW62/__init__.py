@@ -31,20 +31,37 @@ class S62_WindWError(SlotCheckError):
     pass
 
 
+class S62_W0Error(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S62_W1Error(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S62_H1Error(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S62_W2Error(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S62_H2Error(SlotCheckError):
+    """ """
+
+    pass
+
+
 class S62_WindError(SlotCheckError):
-    """
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-    Raises
-    ------
-    winding
-
-
-    """
+    """ """
 
     pass

@@ -51,7 +51,7 @@ def get_surface_active(self, alpha=0, delta=0):
         curve.prop_dict.update({DRAW_PROP_LAB: False})
 
     # Create surface
-    label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
+    label = f"{self.parent.get_label()}_{WIND_LAB}_R0-T0-S0"
     if self.is_outwards():
         Zmid = self.get_Rbo() + self.H0 + H1 + self.H3 / 2
     else:

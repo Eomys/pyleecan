@@ -17,6 +17,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict=None):
     machine : Machine
         A obj machine
     """
+    # H1 has already been defined in [rad] with a RuleSimple
     H1 = machine.rotor.slot.get_H1()
     machine.rotor.slot.H1_is_rad = False
     machine.rotor.slot.H1 = H1
