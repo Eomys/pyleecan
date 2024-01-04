@@ -42,6 +42,8 @@ def check(self):
         return "You must set H2 !"
     elif self.R1 is None:
         return "You must set R1 !"
+    elif self.R1 > 0:
+        return "You must have R1 > 0"
     elif self.is_cstt_tooth and self.W3 is None:
         return "In constant tooth mode, you must set W3 !"
 
