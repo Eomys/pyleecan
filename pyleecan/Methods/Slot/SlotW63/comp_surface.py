@@ -26,12 +26,12 @@ def comp_surface(self):
     Rint = abs(Z5)
 
     # Surface of a slot pitch
-    Sring = (pi * Rext ** 2 - pi * Rint ** 2) * 1 / self.Zs
+    Sring = (pi * Rext**2 - pi * Rint**2) / self.Zs
 
     # bottom is not a cercle
     D54 = abs(Z5 - Z4)
     alpha = 2 * arcsin(D54 / (2 * Rint))
-    Sarc_bot2 = (Rint ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc_bot2 = (Rint**2.0) / 2.0 * (alpha - sin(alpha))
 
     # Tooth surface
     H = sin(self.H1) * (self.W1 - self.W0) / 2
@@ -43,9 +43,9 @@ def comp_surface(self):
     )
 
     alpha_top = 2 * arcsin(self.W1 / (2 * Rext))
-    Sarc_top = (Rext ** 2.0) / 2.0 * (alpha_top - sin(alpha_top))
+    Sarc_top = (Rext**2.0) / 2.0 * (alpha_top - sin(alpha_top))
 
     alpha_bot = 2 * arcsin(self.W0 / (2 * Rint))
-    Sarc_bot1 = (Rint ** 2.0) / 2.0 * (alpha_bot - sin(alpha_bot))
+    Sarc_bot1 = (Rint**2.0) / 2.0 * (alpha_bot - sin(alpha_bot))
 
     return Sring - (St + Sarc_top - Sarc_bot1) + Sarc_bot2
