@@ -47,7 +47,7 @@ slotW63_test.append(
     }
 )
 
-# H1 =0
+# H1=0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -75,7 +75,7 @@ slotW63_test.append(
     }
 )
 
-# W2 = 0
+# W2=0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -92,7 +92,7 @@ lam.slot = SlotW63(
     W2=0,
 )
 
-# H2 = 0 and W2 =0
+# H2=0 and W2=0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
