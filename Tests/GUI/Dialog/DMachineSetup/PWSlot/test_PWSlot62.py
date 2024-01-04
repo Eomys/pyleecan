@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-
 import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest

@@ -24,4 +24,7 @@ def check(self):
         raise S63_InnerCheckError("Slot 60 is for inner lamination only")
 
     if self.W0 > self.W1:
-        raise S63_WindHError("You must have W1 > W0")
+        raise S63_W0CheckError("You must have W1 > W0")
+
+    if self.H0 == 0:
+        raise S63_H0CheckError("You must have H0 > 0")

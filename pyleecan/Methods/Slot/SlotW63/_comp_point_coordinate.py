@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import pi, exp, arcsin, sin
-from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
+from ....Functions.Geometry.inter_line_line import inter_line_line
 
 
 def _comp_point_coordinate(self):
@@ -23,12 +23,13 @@ def _comp_point_coordinate(self):
 
     alpha = arcsin(self.W1 / (2 * Rbo))
 
+    # Point used to define geometry of slot
     Z1 = Rbo * exp(1j * alpha)
-
     Z2 = Z1 - self.H2
     Z3 = Z2 - ((self.W1 - self.W0) / 2) * sin(self.H1) - 1j * ((self.W1 - self.W0) / 2)
     Z4 = Z3 - self.H0
 
+    # Set points in correct base with a rotation
     Z1 = Z1 * exp(-1j * hsp)
     Z2 = Z2 * exp(-1j * hsp)
     Z3 = Z3 * exp(-1j * hsp)
@@ -41,10 +42,9 @@ def _comp_point_coordinate(self):
 
     Zmid = (Z2 + Z7) / 2
 
+    # Zw are points used to define geometry of winding
     Zw1 = Zmid - 1j * self.W2 / 2
-
     Zc = Zw1 - 1
-
     Zw2 = inter_line_line(Z5, Z4, Zw1, Zc)
     Zw2 = Zw2[0]
 

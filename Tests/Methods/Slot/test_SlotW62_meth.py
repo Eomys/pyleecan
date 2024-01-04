@@ -8,6 +8,12 @@ from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW62 import (
     S62_InnerCheckError,
     S62_WindError,
+    S62_WindHError,
+    S62_W0Error,
+    S62_W1Error,
+    S62_W2Error,
+    S62_H1Error,
+    S62_H2Error,
 )
 
 
@@ -77,7 +83,7 @@ slotW62_test.append(
 )
 
 
-# H1 = H2 + H3
+# H0 = H2 + H3
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -106,7 +112,8 @@ slotW62_test.append(
     }
 )
 
-# winding = 0
+
+# W1 < W0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -118,8 +125,8 @@ lam.slot = SlotW62(
     H0=70e-3,
     W0=50e-3,
     H1=30e-3,
-    W1=120e-3,
-    W2=0,
+    W1=40e-3,
+    W2=15e-3,
     H2=40e-3,
     W3=20e-3,
     H3=30e-3,
@@ -127,11 +134,40 @@ lam.slot = SlotW62(
 slotW62_test.append(
     {
         "test_obj": lam,
-        "S_exp": 0.0060191044069,
-        "Aw": 0.0,
-        "SW_exp": 0,
-        "H_exp": 0.104456536,
-        "Ao": 0.120882934017,
+        "S_exp": 0.008330411950,
+        "Aw": 0.13581162,
+        "SW_exp": 0.0012,
+        "H_exp": 0.099105794,
+        "Ao": 0.39016647,
+    }
+)
+
+# W1 = W0
+lam = LamSlot(
+    Rint=0.135,
+    Rext=0.3,
+    is_internal=True,
+    is_stator=False,
+)
+lam.slot = SlotW62(
+    Zs=12,
+    H0=70e-3,
+    W0=50e-3,
+    H1=30e-3,
+    W1=50e-3,
+    W2=15e-3,
+    H2=40e-3,
+    W3=20e-3,
+    H3=30e-3,
+)
+slotW62_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00805273,
+        "Aw": 0.13604142,
+        "SW_exp": 0.0012,
+        "H_exp": 0.099478938,
+        "Ao": 0.3567386,
     }
 )
 
@@ -243,6 +279,144 @@ class Test_SlotW62_meth(object):
         test_obj.is_internal = False
         with pytest.raises(S62_InnerCheckError) as context:
             test_obj.slot.check()
+
+    def test_SlotW62_check_S62_W0Error(self):
+        """Check if the error S62_W0Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=0,
+            H1=30e-3,
+            W1=120e-3,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_W0Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_W1Error(self):
+        """Check if the error S62_W1Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=0,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_W1Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_W2Error(self):
+        """Check if the error S62_W2Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=120e-3,
+            W2=0,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_W2Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_H1Error(self):
+        """Check if the error S62_H1Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=0,
+            W1=120e-3,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_H1Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_H2Error(self):
+        """Check if the error S62_H2Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=120e-3,
+            W2=15e-3,
+            H2=0,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_H2Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_WindHError(self):
+        """Check if the error S62_WindHError is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=20e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=120e-3,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_WindHError) as context:
+            lam.slot.check()
 
 
 if __name__ == "__main__":
