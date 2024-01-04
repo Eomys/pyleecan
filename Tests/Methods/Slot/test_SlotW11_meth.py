@@ -5,7 +5,7 @@ from pyleecan.Classes.SlotW11 import SlotW11
 from numpy import arcsin, exp, pi
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods.Slot.SlotW11 import S11_H1rCheckError
+from pyleecan.Methods.Slot.SlotW11 import S11_H1rCheckError, S11_R1CheckError
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -360,6 +360,10 @@ class Test_SlotW11_meth(object):
         )
 
         with pytest.raises(S11_H1rCheckError) as context:
+            lam.slot.check()
+
+        lam.slot.R1 = 0
+        with pytest.raises(S11_R1CheckError) as context:
             lam.slot.check()
 
     def test_comp_W(self):
