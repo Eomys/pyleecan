@@ -41,6 +41,7 @@ def convert(
         new_mesh = self.copy()
         new_mesh.node.coordinate *= scale
     elif meshtype == "MeshMat":
+        # Avoid circular import
         from ....Classes.MeshMat import MeshMat
 
         new_mesh = MeshMat(dimension=self.dimension)

@@ -12,8 +12,8 @@ def interpolation(
     ----------
     self : Interpolation
          an Interpolation object
-    points : ndarray
-        evaluation points
+    point : ndarray
+        evaluation point
     node_coord : ndarray
         coordinates of the element nodes
     field : ndarray
@@ -26,8 +26,8 @@ def interpolation(
 
     """
 
-    point_ref = self.get_ref_point(node_coord, point)  # TODO: input only single point
-    values_ref, _ = self.shape_function(point_ref)  # TODO: input only multipel points
+    point_ref = self.get_ref_point(node_coord, point)
+    values_ref, _ = self.shape_function(point_ref)
 
     interp_func = np.tensordot(values_ref, field, axes=([2], [0]))
 

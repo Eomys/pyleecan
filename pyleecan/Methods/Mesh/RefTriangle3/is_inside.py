@@ -18,7 +18,7 @@ def is_inside(
     point : ndarray
         coordinates of the checked point
     normal_t : ndarray
-        (optional) element normal vector
+        (optional) normal of another element
 
     Returns
     -------

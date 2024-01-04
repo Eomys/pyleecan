@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     interpolation = error
 
+try:
+    from ..Methods.Mesh.RefElement.get_element_area import get_element_area
+except ImportError as error:
+    get_element_area = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -32,6 +37,7 @@ class RefElement(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.RefElement.interpolation
     if isinstance(interpolation, ImportError):
         interpolation = property(
@@ -43,6 +49,18 @@ class RefElement(FrozenClass):
         )
     else:
         interpolation = interpolation
+    # cf Methods.Mesh.RefElement.get_element_area
+    if isinstance(get_element_area, ImportError):
+        get_element_area = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RefElement method get_element_area: "
+                    + str(get_element_area)
+                )
+            )
+        )
+    else:
+        get_element_area = get_element_area
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

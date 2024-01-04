@@ -53,7 +53,7 @@ def get_element_area(
                         "Respective area set to zero.",
                     )
                 )
-                A = list(repeat(0, element_coordinate.shape[0]))
+                A = repeat(0, element_coordinate.shape[0])
 
             area.extend(A)
 

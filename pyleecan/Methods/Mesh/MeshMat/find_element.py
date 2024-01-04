@@ -12,7 +12,7 @@ def find_element(self, points, normal_t=None):
         an MeshMat object
     points : ndarray
         2D array containing the coordinates of the target point(s)
-    normal_t TODO identify what it is
+    normal_t normal direction to the target element
 
     Returns
     -------
@@ -49,7 +49,7 @@ def find_element(self, points, normal_t=None):
 
             # All selected nodes from the closest to the farthest are tested
             # get elements that contain the closest node and test if point is inside
-            idx_closest_elements = np.where(connect == idx_closest_node)[0]
+            idx_closest_elements = np.nonzero(connect == idx_closest_node)[0]
             nb_closest_elem = len(idx_closest_elements)
             a, b = np.zeros(nb_closest_elem), np.zeros(nb_closest_elem)
             element_idx = []
@@ -66,9 +66,6 @@ def find_element(self, points, normal_t=None):
                     element_prop.append(key)
                     element_idx.append(idx_closest_elem)
 
-                # inode = inode + 1
-                # break<
-
             # if no element was found, give it a second try
             # TODO first check if outside mesh
             if len(element_prop) == 0:
@@ -82,7 +79,7 @@ def find_element(self, points, normal_t=None):
                 idx_sorted_dist = np.argsort(dist_element_cent, axis=0)[:, 0]
                 for i in range(elements.nb_element):
                     vert = self.get_element_coordinate(idx_sorted_dist[i])[key]
-                    (is_inside, a, b) = ref_element.is_inside(
+                    is_inside, a, *_ = ref_element.is_inside(
                         vert, point[: self.dimension], normal_t
                     )
                     if is_inside:
