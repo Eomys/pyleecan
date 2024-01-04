@@ -34,6 +34,7 @@ class Ui_SWPole(object):
         self.c_slot_type.addItem("")
         self.c_slot_type.addItem("")
         self.c_slot_type.addItem("")
+        self.c_slot_type.addItem("")
         self.c_slot_type.setObjectName(u"c_slot_type")
 
         self.horizontalLayout_2.addWidget(self.c_slot_type)
@@ -108,6 +109,9 @@ class Ui_SWPole(object):
         )
         self.c_slot_type.setItemText(
             2, QCoreApplication.translate("SWPole", u"Pole Type 62", None)
+        )
+        self.c_slot_type.setItemText(
+            3, QCoreApplication.translate("SWPole", u"Pole Type 63", None)
         )
 
         self.in_Zs.setText(QCoreApplication.translate("SWPole", u"Zs = 2*p = ", None))

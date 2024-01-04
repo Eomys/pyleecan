@@ -9,17 +9,19 @@ from .....Classes.Slot import Slot
 from .....Classes.SlotW60 import SlotW60
 from .....Classes.SlotW61 import SlotW61
 from .....Classes.SlotW62 import SlotW62
+from .....Classes.SlotW63 import SlotW63
 from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot62.PWSlot62 import PWSlot62
+from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot63.PWSlot63 import PWSlot63
 from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
-INIT_INDEX = [SlotW60, SlotW61, SlotW62]
+INIT_INDEX = [SlotW60, SlotW61, SlotW62, SlotW63]
 NAME_INDEX = [slot.__name__ for slot in INIT_INDEX]
-WIDGET_LIST = [PWSlot60, PWSlot61, PWSlot62]
+WIDGET_LIST = [PWSlot60, PWSlot61, PWSlot62, PWSlot63]
 
 
 class SWPole(Ui_SWPole, QWidget):
@@ -62,6 +64,7 @@ class SWPole(Ui_SWPole, QWidget):
             SlotW60: None,
             SlotW61: None,
             SlotW62: None,
+            SlotW63: None,
         }
 
         if self.is_stator:

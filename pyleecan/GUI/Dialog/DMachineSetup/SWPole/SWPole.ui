@@ -49,6 +49,11 @@
          <string>Pole Type 62</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Pole Type 63</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

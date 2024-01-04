@@ -28,7 +28,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 
-is_show_fig = True
+is_show_fig = False
 
 
 @pytest.mark.long_5s
