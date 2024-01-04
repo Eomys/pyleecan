@@ -8,6 +8,8 @@ from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW63 import (
     S63_InnerCheckError,
     S63_WindError,
+    S63_W0CheckError,
+    S63_H0CheckError,
 )
 
 
@@ -45,7 +47,7 @@ slotW63_test.append(
     }
 )
 
-# H1 =0
+# H1=0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -73,7 +75,7 @@ slotW63_test.append(
     }
 )
 
-# W2 = 0
+# W2=0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -90,7 +92,7 @@ lam.slot = SlotW63(
     W2=0,
 )
 
-# H2 = 0 and W2 =0
+# H2=0 and W2=0
 lam = LamSlot(
     Rint=0.135,
     Rext=0.3,
@@ -220,6 +222,69 @@ class Test_SlotW63_meth(object):
             S2 = Sfull.comp_surface()
         msg = "Act+Op=" + str(S1) + ", Full=" + str(S2)
         assert abs((S1 - S2) / S1) < DELTA, msg
+
+    def test_SlotW63_check_S63_W0CheckError(self):
+        """Check if the error S63_W0CheckError is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW63(
+            Zs=12,
+            H0=30e-3,
+            W0=30e-3,
+            H1=0.78539,
+            W1=20e-3,
+            H2=40e-3,
+            W2=15e-3,
+        )
+
+        with pytest.raises(S63_W0CheckError) as context:
+            lam.slot.check()
+
+    def test_SlotW63_check_S63_H0CheckError(self):
+        """Check if the error S63_H0CheckError is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW63(
+            Zs=12,
+            H0=0,
+            W0=30e-3,
+            H1=0.78539,
+            W1=70e-3,
+            H2=40e-3,
+            W2=15e-3,
+        )
+
+        with pytest.raises(S63_H0CheckError) as context:
+            lam.slot.check()
+
+    def test_SlotW63_check_S63_W0CheckError(self):
+        """Check if the error S63_H0CheckError is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW63(
+            Zs=12,
+            H0=30e-3,
+            W0=0,
+            H1=0.78539,
+            W1=70e-3,
+            H2=40e-3,
+            W2=15e-3,
+        )
+
+        with pytest.raises(S63_W0CheckError) as context:
+            lam.slot.check()
 
 
 if __name__ == "__main__":
