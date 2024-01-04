@@ -47,6 +47,7 @@ def _comp_point_coordinate(self):
     Zw3 = Zw3 * exp(-1j * hsp)
     Zw4 = Zw4 * exp(-1j * hsp)
 
+    # symetry
     Z5 = Z4.conjugate()
     Z6 = Z3.conjugate()
     Z7 = Z2.conjugate()
@@ -58,7 +59,6 @@ def _comp_point_coordinate(self):
     Zw4s = Zw4.conjugate()
 
     point_dict = dict()
-    # symetry
     point_dict["Z1"] = Z1
     point_dict["Z2"] = Z2
     point_dict["Z3"] = Z3
