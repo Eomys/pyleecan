@@ -265,6 +265,27 @@ class Test_SlotW63_meth(object):
         with pytest.raises(S63_H0CheckError) as context:
             lam.slot.check()
 
+    def test_SlotW63_check_S63_W0CheckError(self):
+        """Check if the error S63_H0CheckError is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW63(
+            Zs=12,
+            H0=30e-3,
+            W0=0,
+            H1=0.78539,
+            W1=70e-3,
+            H2=40e-3,
+            W2=15e-3,
+        )
+
+        with pytest.raises(S63_W0CheckError) as context:
+            lam.slot.check()
+
 
 if __name__ == "__main__":
     a = Test_SlotW63_meth()
