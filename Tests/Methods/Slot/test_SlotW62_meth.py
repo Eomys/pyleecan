@@ -8,6 +8,12 @@ from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW62 import (
     S62_InnerCheckError,
     S62_WindError,
+    S62_WindHError,
+    S62_W0Error,
+    S62_W1Error,
+    S62_W2Error,
+    S62_H1Error,
+    S62_H2Error,
 )
 
 
@@ -273,6 +279,144 @@ class Test_SlotW62_meth(object):
         test_obj.is_internal = False
         with pytest.raises(S62_InnerCheckError) as context:
             test_obj.slot.check()
+
+    def test_SlotW62_check_S62_W0Error(self):
+        """Check if the error S62_W0Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=0,
+            H1=30e-3,
+            W1=120e-3,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_W0Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_W1Error(self):
+        """Check if the error S62_W1Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=0,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_W1Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_W2Error(self):
+        """Check if the error S62_W2Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=120e-3,
+            W2=0,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_W2Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_H1Error(self):
+        """Check if the error S62_H1Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=0,
+            W1=120e-3,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_H1Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_H2Error(self):
+        """Check if the error S62_H2Error is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=70e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=120e-3,
+            W2=15e-3,
+            H2=0,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_H2Error) as context:
+            lam.slot.check()
+
+    def test_SlotW62_check_S62_WindHError(self):
+        """Check if the error S62_WindHError is correctly raised in the check method"""
+        lam = LamSlot(
+            Rint=0.135,
+            Rext=0.3,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam.slot = SlotW62(
+            Zs=12,
+            H0=20e-3,
+            W0=70e-3,
+            H1=30e-3,
+            W1=120e-3,
+            W2=15e-3,
+            H2=40e-3,
+            W3=10e-3,
+            H3=12e-3,
+        )
+
+        with pytest.raises(S62_WindHError) as context:
+            lam.slot.check()
 
 
 if __name__ == "__main__":
