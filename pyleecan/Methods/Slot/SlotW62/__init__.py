@@ -62,19 +62,6 @@ class S62_H2Error(SlotCheckError):
 
 
 class S62_WindError(SlotCheckError):
-    """
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-
-    Raises
-    ------
-    winding
-
-
-    """
+    """ """
 
     pass
