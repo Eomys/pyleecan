@@ -74,3 +74,24 @@ def convert_slot_to_P(self):
     self.get_logger().info(
         f"Conversion {slot_type} into {type(self.machine.stator.slot).__name__}"
     )
+
+    try:
+        wedge = self.other_dict["[Winding_Design]"]["Wedge_Model"]
+
+    except:
+        wedge = "Air"
+
+    if wedge == "Air":
+        return 0
+    elif wedge == "Wedge":
+        return 1
+    elif wedge == "Wound_Space":
+        self.get_logger().info(
+            f"Conversion Wound_Space for {type(self.machine.stator.slot).__name__} has not equivalent in pyleecan or has not implement"
+        )
+        self.get_logger().info(f"we define air in place of the wedge")
+        return 0
+    else:
+        self.get_logger().warning(f"Error for conversion of wedge")
+        self.get_logger().info(f"we define air in place of the wedge")
+        return 0

@@ -62,10 +62,9 @@ class Test_converter_machine(object):
         
             "parallel_tooth_interior_U_Shape_mat",
         "interor_V(web)_mat",
+        "tapered_slot_slot_corner_radius",
         """
-        path_list = [
-            "tapered_slot_slot_corner_radius",
-        ]
+        path_list = ["tapered_slot_slot_corner_radius_interior_U_Shape_mat"]
 
         for path in path_list:
             conv = ConvertMC()
