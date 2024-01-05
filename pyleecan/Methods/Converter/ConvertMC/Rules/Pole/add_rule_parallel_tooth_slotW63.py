@@ -15,7 +15,7 @@ def add_rule_parallel_tooth_slotW63(self):
     self.rules_list.append(
         RuleSimple(
             other_key_list=["[Dimensions]", "Rotor_Poles"],
-            P_obj_path=f"machine.rotor.slot.Zs",
+            P_obj_path="machine.rotor.slot.Zs",
             unit_type="",
             scaling_to_P=1,
             file_name=__file__,
@@ -24,8 +24,8 @@ def add_rule_parallel_tooth_slotW63(self):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"Pole_Depth"],
-            P_obj_path=f"machine.rotor.slot.H0",
+            other_key_list=["[Dimensions]", "Pole_Depth"],
+            P_obj_path="machine.rotor.slot.H0",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -34,8 +34,8 @@ def add_rule_parallel_tooth_slotW63(self):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"Rotor_Pole_Angle"],
-            P_obj_path=f"machine.rotor.slot.H1",
+            other_key_list=["[Dimensions]", "Rotor_Pole_Angle"],
+            P_obj_path="machine.rotor.slot.H1",
             unit_type="deg",
             scaling_to_P=1,
             file_name=__file__,
@@ -55,8 +55,8 @@ def add_rule_parallel_tooth_slotW63(self):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"PoleTipRadialDepth"],
-            P_obj_path=f"machine.rotor.slot.H2",
+            other_key_list=["[Dimensions]", "PoleTipRadialDepth"],
+            P_obj_path="machine.rotor.slot.H2",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -65,8 +65,8 @@ def add_rule_parallel_tooth_slotW63(self):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"Pole_Width"],
-            P_obj_path=f"machine.rotor.slot.W0",
+            other_key_list=["[Dimensions]", "Pole_Width"],
+            P_obj_path="machine.rotor.slot.W0",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
@@ -88,7 +88,7 @@ def add_rule_parallel_tooth_slotW63(self):
                 },
                 {
                     "src": "pyleecan",
-                    "path": f"machine.rotor.slot.W1",
+                    "path": "machine.rotor.slot.W1",
                     "variable": "x",
                 },
             ],

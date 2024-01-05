@@ -23,6 +23,7 @@ holeM63_test.append(
     }
 )
 
+# Max of Magnet_Embed_Depth
 other_dict = {
     "[Dimensions]": {
         "Magnet_Embed_Depth": 8,
@@ -37,6 +38,7 @@ holeM63_test.append(
     }
 )
 
+# Min of Magnet_Embed_Depth
 other_dict = {
     "[Dimensions]": {
         "Magnet_Embed_Depth": 0,

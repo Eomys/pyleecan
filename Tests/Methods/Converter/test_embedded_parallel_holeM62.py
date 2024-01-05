@@ -23,6 +23,7 @@ holeM62_test.append(
     }
 )
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "Magnet_Embed_Depth": 8,
@@ -37,6 +38,7 @@ holeM62_test.append(
     }
 )
 
+# Common values
 other_dict = {
     "[Dimensions]": {
         "Magnet_Embed_Depth": 0,
