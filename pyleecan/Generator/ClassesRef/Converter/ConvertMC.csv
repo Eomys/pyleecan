@@ -18,7 +18,7 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,convert_to_other.convert_hole_to_other,,,,,,
 ,,convert_to_other.convert_duct_to_other,,,,,,
 ,,convert_to_other.convert_notch_to_other,,,,,,
-,,convert_to_other.convert_pole_to_ohter,,,,,,
+,,convert_to_other.convert_pole_to_other,,,,,,
 ,,Rules.add_rule_machine_dimension_surface_magnet,,,,,,
 ,,Rules.add_rule_machine_type,,,,,,
 ,,Rules.add_rule_machine_dimension,,,,,,
