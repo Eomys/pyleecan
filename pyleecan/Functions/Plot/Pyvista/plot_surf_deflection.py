@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from numpy import (
-    real,
-    min as np_min,
-    max as np_max,
-    abs as np_abs,
-)
+from numpy import abs as np_abs
+from numpy import max as np_max
+from numpy import min as np_min
+from numpy import real
 
 from ....definitions import config_dict
 
@@ -63,7 +61,8 @@ def plot_surf_deflection(
 
     # Compute pyvista object
     # Add field to surf
-    surf_pv.vectors = real(vect_field * phase) * factor
+    surf_pv.point_data[field_name] = real(vect_field * phase) * factor
+    surf_pv.active_vectors_name = field_name
 
     # Warp by vectors
     surf_warp = surf_pv.warp_by_vector()

@@ -121,7 +121,7 @@ def test_Benchmark_Tensor():
     components2["comp_y"] = fy2_data
 
     vec_force2 = VectorField(name="Nodal forces 2", symbol="F2", components=components2)
-    solforce2 = SolutionVector(field=vec_force2, type_cell="node", label="F2")
+    solforce2 = SolutionVector(field=vec_force2, type_element="node", label="F2")
     out.force.meshsolution.solution.append(solforce2)
 
     out.force.meshsolution.plot_glyph(
@@ -203,7 +203,7 @@ def test_Benchmark_Tensor():
     vec_force_dx = VectorField(
         name="Nodal forces dx", symbol="Fdx", components=components_diff_x
     )
-    solforce_dx = SolutionVector(field=vec_force_dx, type_cell="node", label="Fdx")
+    solforce_dx = SolutionVector(field=vec_force_dx, type_element="node", label="Fdx")
     out.force.meshsolution.solution.append(solforce_dx)
 
     out.force.meshsolution.plot_glyph(

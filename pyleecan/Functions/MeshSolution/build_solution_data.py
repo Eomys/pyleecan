@@ -4,7 +4,7 @@ import numpy as np
 
 
 def build_solution_data(
-    field, axis_list, name="", symbol="", unit="", is_real=True, type_cell="triangle"
+    field, axis_list, name="", symbol="", unit="", is_real=True, type_element="triangle"
 ):
     """Build the MeshSolution objets from FEMM outputs.
 
@@ -30,4 +30,4 @@ def build_solution_data(
         is_real=is_real,
     )
 
-    return SolutionData(field=data, label=symbol, type_cell=type_cell)
+    return SolutionData(field=data, label=symbol, type_element=type_element)

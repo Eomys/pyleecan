@@ -58,22 +58,22 @@ def comp_loss(self):
     felec = output.elec.OP.get_felec()
 
     if output.mag is None:
-        raise Exception("Cannot calculate core losses if OutMag is None")
+        raise ValueError("Cannot calculate core losses if OutMag is None")
 
     if output.mag.meshsolution is None:
-        raise Exception("Cannot calculate core losses if OutMag.meshsolution is None")
+        raise ValueError("Cannot calculate core losses if OutMag.meshsolution is None")
     else:
         meshsol = output.mag.meshsolution
 
     group_list = list(meshsol.group.keys())
 
     if self.group not in group_list:
-        raise Exception("Cannot calculate core losses for group=" + self.group)
+        raise ValueError("Cannot calculate core losses for group=" + self.group)
 
     label_list = [sol.label for sol in meshsol.solution]
 
     if "B" not in label_list:
-        raise Exception("Cannot calculate core losses if B is not in meshsolution")
+        raise ValueError("Cannot calculate core losses if B is not in meshsolution")
     else:
         ind = label_list.index("B")
 
@@ -81,7 +81,7 @@ def comp_loss(self):
     Igrp = meshsol.group[self.group]
 
     # Get element surface associated to group
-    Se = meshsol.mesh[0].get_cell_area()[Igrp]
+    Se = meshsol.mesh[0].get_element_area()[Igrp]
 
     Bvect = meshsol.solution[ind].field
     axes_list = Bvect.get_axes()

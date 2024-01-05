@@ -15,6 +15,14 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Mesh.Mesh.get_node_coordinate import get_node_coordinate
+except ImportError as error:
+    get_node_coordinate = error
+
+
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -24,6 +32,18 @@ class Mesh(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Mesh.Mesh.get_node_coordinate
+    if isinstance(get_node_coordinate, ImportError):
+        get_node_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_node_coordinate: "
+                    + str(get_node_coordinate)
+                )
+            )
+        )
+    else:
+        get_node_coordinate = get_node_coordinate
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

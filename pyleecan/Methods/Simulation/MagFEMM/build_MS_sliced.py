@@ -99,7 +99,7 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
                 name=comp_x.name,
                 symbol=solution.field.symbol,
                 unit=comp_x.unit,
-                type_cell=solution.type_cell,
+                type_element=solution.type_element,
             )
         else:
             new_sol = build_solution_data(
@@ -108,7 +108,7 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
                 name=data.name,
                 symbol=data.symbol,
                 unit=data.unit,
-                type_cell=solution.type_cell,
+                type_element=solution.type_element,
             )
 
         list_solution.append(new_sol)

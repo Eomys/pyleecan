@@ -59,7 +59,7 @@ def plot_B_mesh(
     is_radial : bool
         radial component only
     is_center : bool
-        field at cell-centers
+        field at element-centers
     clim : list
         a list of 2 elements for the limits of the colorbar
     field_name : str
@@ -137,7 +137,7 @@ def plot_B_mesh(
     if is_contour:
         lab_ind = None
         for ii, sol in enumerate(MS_B_plot.solution):
-            if sol.label == "A_z" and sol.type_cell == "node":
+            if sol.label == "A_z" and sol.type_element == "node":
                 lab_ind = ii
                 break
         if lab_ind is None:

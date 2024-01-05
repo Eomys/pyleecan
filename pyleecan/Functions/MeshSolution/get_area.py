@@ -8,13 +8,10 @@ def get_area(meshsolution, group_names=None, indices=None):
     ----------
     meshsolution : MeshSolution
         a MeshSolution object
-
     group_names : list of str
         list of the groups names or string of a single group
-
     indices : list
         list of indices, if not given all indices are considered
-
     Return
     ------
     area : float
@@ -28,4 +25,4 @@ def get_area(meshsolution, group_names=None, indices=None):
 
     msh = meshsol.get_mesh()
 
-    return msh.get_cell_area(indices=indices).sum()
+    return msh.get_element_area(indices=indices).sum()

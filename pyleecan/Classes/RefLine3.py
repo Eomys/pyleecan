@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .RefCell import RefCell
+from .RefElement import RefElement
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -52,7 +52,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class RefLine3(RefCell):
+class RefLine3(RefElement):
     """Store line elements for 2D mesh"""
 
     VERSION = 1
@@ -145,16 +145,16 @@ class RefLine3(RefCell):
             if "epsilon" in list(init_dict.keys()):
                 epsilon = init_dict["epsilon"]
         # Set the properties (value check and convertion are done in setter)
-        # Call RefCell init
+        # Call RefElement init
         super(RefLine3, self).__init__(epsilon=epsilon)
-        # The class is frozen (in RefCell init), for now it's impossible to
+        # The class is frozen (in RefElement init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         RefLine3_str = ""
-        # Get the properties inherited from RefCell
+        # Get the properties inherited from RefElement
         RefLine3_str += super(RefLine3, self).__str__()
         return RefLine3_str
 
@@ -164,7 +164,7 @@ class RefLine3(RefCell):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from RefCell
+        # Check the properties inherited from RefElement
         if not super(RefLine3, self).__eq__(other):
             return False
         return True
@@ -178,7 +178,7 @@ class RefLine3(RefCell):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from RefCell
+        # Check the properties inherited from RefElement
         diff_list.extend(
             super(RefLine3, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -193,7 +193,7 @@ class RefLine3(RefCell):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from RefCell
+        # Get size of the properties inherited from RefElement
         S += super(RefLine3, self).__sizeof__()
         return S
 
@@ -208,7 +208,7 @@ class RefLine3(RefCell):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from RefCell
+        # Get the properties inherited from RefElement
         RefLine3_dict = super(RefLine3, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -231,5 +231,5 @@ class RefLine3(RefCell):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        # Set to None the properties inherited from RefCell
+        # Set to None the properties inherited from RefElement
         super(RefLine3, self)._set_None()

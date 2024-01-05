@@ -4,7 +4,7 @@ from numpy import all as np_all
 
 
 def build_solution_vector(
-    field, axis_list, name="", symbol="", unit="", is_real=True, type_cell="triangle"
+    field, axis_list, name="", symbol="", unit="", is_real=True, type_element="triangle"
 ):
     """Build a SolutionVector object
 
@@ -56,6 +56,8 @@ def build_solution_vector(
 
     vectorfield = VectorField(name=name, symbol=symbol, components=components)
 
-    solution = SolutionVector(field=vectorfield, label=symbol, type_cell=type_cell)
+    solution = SolutionVector(
+        field=vectorfield, label=symbol, type_element=type_element
+    )
 
     return solution

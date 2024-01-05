@@ -31,7 +31,7 @@ class Solution(FrozenClass):
 
     def __init__(
         self,
-        type_cell="triangle",
+        type_element="triangle",
         label=None,
         dimension=2,
         unit="",
@@ -53,8 +53,8 @@ class Solution(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "type_cell" in list(init_dict.keys()):
-                type_cell = init_dict["type_cell"]
+            if "type_element" in list(init_dict.keys()):
+                type_element = init_dict["type_element"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -63,7 +63,7 @@ class Solution(FrozenClass):
                 unit = init_dict["unit"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.type_cell = type_cell
+        self.type_element = type_element
         self.label = label
         self.dimension = dimension
         self.unit = unit
@@ -79,7 +79,7 @@ class Solution(FrozenClass):
             Solution_str += "parent = None " + linesep
         else:
             Solution_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Solution_str += 'type_cell = "' + str(self.type_cell) + '"' + linesep
+        Solution_str += 'type_element = "' + str(self.type_element) + '"' + linesep
         Solution_str += 'label = "' + str(self.label) + '"' + linesep
         Solution_str += "dimension = " + str(self.dimension) + linesep
         Solution_str += 'unit = "' + str(self.unit) + '"' + linesep
@@ -90,7 +90,7 @@ class Solution(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.type_cell != self.type_cell:
+        if other.type_element != self.type_element:
             return False
         if other.label != self.label:
             return False
@@ -108,18 +108,18 @@ class Solution(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._type_cell != self._type_cell:
+        if other._type_element != self._type_element:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._type_cell)
+                    + str(self._type_element)
                     + ", other="
-                    + str(other._type_cell)
+                    + str(other._type_element)
                     + ")"
                 )
-                diff_list.append(name + ".type_cell" + val_str)
+                diff_list.append(name + ".type_element" + val_str)
             else:
-                diff_list.append(name + ".type_cell")
+                diff_list.append(name + ".type_element")
         if other._label != self._label:
             if is_add_value:
                 val_str = (
@@ -156,7 +156,7 @@ class Solution(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.type_cell)
+        S += getsizeof(self.type_element)
         S += getsizeof(self.label)
         S += getsizeof(self.dimension)
         S += getsizeof(self.unit)
@@ -174,7 +174,7 @@ class Solution(FrozenClass):
         """
 
         Solution_dict = dict()
-        Solution_dict["type_cell"] = self.type_cell
+        Solution_dict["type_element"] = self.type_element
         Solution_dict["label"] = self.label
         Solution_dict["dimension"] = self.dimension
         Solution_dict["unit"] = self.unit
@@ -186,13 +186,13 @@ class Solution(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        type_cell_val = self.type_cell
+        type_element_val = self.type_element
         label_val = self.label
         dimension_val = self.dimension
         unit_val = self.unit
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            type_cell=type_cell_val,
+            type_element=type_element_val,
             label=label_val,
             dimension=dimension_val,
             unit=unit_val,
@@ -202,24 +202,24 @@ class Solution(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.type_cell = None
+        self.type_element = None
         self.label = None
         self.dimension = None
         self.unit = None
 
-    def _get_type_cell(self):
-        """getter of type_cell"""
-        return self._type_cell
+    def _get_type_element(self):
+        """getter of type_element"""
+        return self._type_element
 
-    def _set_type_cell(self, value):
-        """setter of type_cell"""
-        check_var("type_cell", value, "str")
-        self._type_cell = value
+    def _set_type_element(self, value):
+        """setter of type_element"""
+        check_var("type_element", value, "str")
+        self._type_element = value
 
-    type_cell = property(
-        fget=_get_type_cell,
-        fset=_set_type_cell,
-        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)
+    type_element = property(
+        fget=_get_type_element,
+        fset=_set_type_element,
+        doc=u"""Type of element (Point, Segment2, Triangle3, etc.)
 
         :Type: str
         """,

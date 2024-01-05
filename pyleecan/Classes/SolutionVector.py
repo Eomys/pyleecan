@@ -85,7 +85,7 @@ class SolutionVector(Solution):
     def __init__(
         self,
         field=None,
-        type_cell="triangle",
+        type_element="triangle",
         label=None,
         dimension=2,
         unit="",
@@ -109,8 +109,8 @@ class SolutionVector(Solution):
             # Overwrite default value with init_dict content
             if "field" in list(init_dict.keys()):
                 field = init_dict["field"]
-            if "type_cell" in list(init_dict.keys()):
-                type_cell = init_dict["type_cell"]
+            if "type_element" in list(init_dict.keys()):
+                type_element = init_dict["type_element"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -121,7 +121,7 @@ class SolutionVector(Solution):
         self.field = field
         # Call Solution init
         super(SolutionVector, self).__init__(
-            type_cell=type_cell, label=label, dimension=dimension, unit=unit
+            type_element=type_element, label=label, dimension=dimension, unit=unit
         )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
@@ -228,14 +228,14 @@ class SolutionVector(Solution):
             field_val = None
         else:
             field_val = self.field.copy()
-        type_cell_val = self.type_cell
+        type_element_val = self.type_element
         label_val = self.label
         dimension_val = self.dimension
         unit_val = self.unit
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             field=field_val,
-            type_cell=type_cell_val,
+            type_element=type_element_val,
             label=label_val,
             dimension=dimension_val,
             unit=unit_val,

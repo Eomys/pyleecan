@@ -1,9 +1,8 @@
 import numpy as np
-from SciDataTool import DataTime, VectorField, Data1D
+from SciDataTool import Data1D, DataTime, VectorField
 
-from pyleecan.Classes.Interpolation import Interpolation
-from pyleecan.Classes.MeshSolution import MeshSolution
-from pyleecan.Classes.SolutionVector import SolutionVector
+from ....Classes.MeshSolution import MeshSolution
+from ....Classes.SolutionVector import SolutionVector
 
 
 def comp_force_nodal(self, output, axes_dict):
@@ -121,7 +120,7 @@ def comp_force_nodal(self, output, axes_dict):
     components["comp_y"] = fy_data
 
     vec_force = VectorField(name="Nodal forces", symbol="F", components=components)
-    solforce = SolutionVector(field=vec_force, type_cell="node", label="F")
+    solforce = SolutionVector(field=vec_force, type_element="node", label="F")
     meshsolution.solution.append(solforce)
 
     out_dict = dict()

@@ -1,13 +1,11 @@
+import numpy as np
 import pytest
 
-import numpy as np
-
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshSolution import MeshSolution
+from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.SolutionMat import SolutionMat
-
 from Tests import save_plot_path as save_path
 
 
@@ -21,18 +19,18 @@ def test_plot_contour_1group():
     mesh.node.add_node([1, 1, 0])
     mesh.node.add_node([2, 1, 0])
 
-    mesh.cell["triangle"] = CellMat(nb_node_per_cell=3)
-    mesh.add_cell([0, 1, 2], "triangle")
-    mesh.add_cell([1, 2, 3], "triangle")
-    mesh.add_cell([2, 3, 4], "triangle")
-    mesh.cell["triangle"].indice = np.array([11, 12, 13])
+    mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
+    mesh.add_element([0, 1, 2], "triangle")
+    mesh.add_element([1, 2, 3], "triangle")
+    mesh.add_element([2, 3, 4], "triangle")
+    mesh.element_dict["triangle"].indice = np.array([11, 12, 13])
 
     solution = SolutionMat()
     solution.field = np.array([[1, 2, 3], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4]])
     solution.axis_name = ["time", "indice"]
     solution.axis_size = [5, 3]
     solution.indice = np.array([11, 12, 13])
-    solution.type_cell = "triangle"
+    solution.type_element = "triangle"
     solution.label = "B"
 
     MSol = MeshSolution(mesh=[mesh], solution=[solution])
@@ -48,7 +46,7 @@ def test_plot_contour_1group():
 
 def test_plot_contour_2group():
     mesh = MeshMat()
-    mesh.cell["triangle"] = CellMat(nb_node_per_cell=3)
+    mesh.element_dict["triangle"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
     mesh.node.add_node(np.array([0, 0]))
     mesh.node.add_node(np.array([1, 0]))
@@ -61,14 +59,14 @@ def test_plot_contour_2group():
     mesh.node.add_node(np.array([-2, -3]))
     mesh.node.add_node(np.array([-3, -3]))
 
-    mesh.add_cell(np.array([0, 1, 2]), "triangle")
-    mesh.add_cell(np.array([1, 2, 3]), "triangle")
-    mesh.add_cell(np.array([4, 2, 3]), "triangle")
-    mesh.add_cell(np.array([0, 5, 6]), "triangle")
-    mesh.add_cell(np.array([5, 6, 7]), "triangle")
-    mesh.add_cell(np.array([8, 6, 7]), "triangle")
+    mesh.add_element(np.array([0, 1, 2]), "triangle")
+    mesh.add_element(np.array([1, 2, 3]), "triangle")
+    mesh.add_element(np.array([4, 2, 3]), "triangle")
+    mesh.add_element(np.array([0, 5, 6]), "triangle")
+    mesh.add_element(np.array([5, 6, 7]), "triangle")
+    mesh.add_element(np.array([8, 6, 7]), "triangle")
 
-    mesh.cell["triangle"].indice = np.array([11, 12, 13, 98, 100, 101])
+    mesh.element_dict["triangle"].indice = np.array([11, 12, 13, 98, 100, 101])
 
     solution = SolutionMat()
     solution.field = np.array(
@@ -77,7 +75,7 @@ def test_plot_contour_2group():
     solution.axis_name = ["indice", "time"]
     solution.axis_size = [6, 3]
     solution.indice = np.array([11, 12, 13, 98, 100, 101])
-    solution.type_cell = "triangle"
+    solution.type_element = "triangle"
     solution.label = "B"
 
     meshsol = MeshSolution()

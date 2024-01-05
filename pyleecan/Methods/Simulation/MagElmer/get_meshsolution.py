@@ -133,8 +133,8 @@ def get_meshsolution(self, output):
                 sol_list.append(
                     SolutionData(
                         field=field,
-                        # type_cell="point",
-                        type_cell="triangle",
+                        # type_element="point",
+                        type_element="triangle",
                         label=store_dict[key]["symbol"],
                     )
                 )
@@ -150,8 +150,8 @@ def get_meshsolution(self, output):
                 sol_list.append(
                     SolutionVector(
                         field=field,
-                        # type_cell="point",
-                        type_cell="triangle",
+                        # type_element="point",
+                        type_element="triangle",
                         label=store_dict[key]["symbol"],
                     )
                 )

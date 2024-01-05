@@ -50,7 +50,7 @@ def test_SolutionMat():
 def test_SolutionVector():
     DELTA = 1e-10
 
-    Indices_Cell = Data1D(name="indice", values=[0, 1, 2, 4], is_components=True)
+    Indices_Element = Data1D(name="indice", values=[0, 1, 2, 4], is_components=True)
     Time = DataLinspace(
         name="time",
         unit="s",
@@ -68,7 +68,7 @@ def test_SolutionVector():
         name="Magnetic Field Hx",
         unit="A/m",
         symbol="Hx",
-        axes=[Time, Indices_Cell],
+        axes=[Time, Indices_Element],
         values=H[:, :, 0],
     )
     componentsH["comp_x"] = Hx_data
@@ -77,12 +77,12 @@ def test_SolutionVector():
         name="Magnetic Field Hy",
         unit="A/m",
         symbol="Hy",
-        axes=[Time, Indices_Cell],
+        axes=[Time, Indices_Element],
         values=H[:, :, 1],
     )
     componentsH["comp_y"] = Hy_data
     vecH = VectorField(name="Magnetic Field", symbol="H", components=componentsH)
-    solution = SolutionVector(field=vecH, type_cell="triangle", label="H")
+    solution = SolutionVector(field=vecH, type_element="triangle", label="H")
 
     field = solution.get_field()
 
@@ -103,7 +103,7 @@ def test_SolutionVector():
 def test_SolutionData():
     DELTA = 1e-10
 
-    Indices_Cell = Data1D(name="indice", values=[0, 1, 2, 4], is_components=True)
+    Indices_Element = Data1D(name="indice", values=[0, 1, 2, 4], is_components=True)
     Time = DataLinspace(
         name="time",
         unit="s",
@@ -117,11 +117,11 @@ def test_SolutionData():
         name="Magnetic Field Hx",
         unit="A/m",
         symbol="Hx",
-        axes=[Time, Indices_Cell],
+        axes=[Time, Indices_Element],
         values=np.ones((10, 4)),
     )
 
-    solution = SolutionData(field=H, type_cell="triangle", label="H")
+    solution = SolutionData(field=H, type_element="triangle", label="H")
 
     field = solution.get_field()
 

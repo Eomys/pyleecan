@@ -13,7 +13,6 @@ from numpy import (
     imag,
     sum as np_sum,
     abs as np_abs,
-    hstack,
     swapaxes,
     reshape,
 )
@@ -57,7 +56,7 @@ def get_field(
     is_rms : bool
         rms over surface sum((F.n)**2 dS)/S
     is_center : bool
-        field at cell centers
+        field at element centers
     is_surf : bool
         field over outer surface
     is_squeeze : bool
@@ -176,7 +175,7 @@ def get_field(
     # Get nodes coordinates if necessary
     if is_rthetaz or is_pol2cart:
         is_recursive = True
-        points = mesh.get_node(indices=indices)
+        points = mesh.get_node_coordinate(indices=indices)
     else:
         points = None
     # Get normals if necessary
@@ -189,9 +188,9 @@ def get_field(
         normals = mesh.get_normals(indices=indices_normals, loc="point")
     else:
         normals = None
-    # Get cell area if necessary
+    # Get element area if necessary
     if is_rms:
-        cell_area = mesh.get_cell_area(indices=indices)
+        cell_area = mesh.get_element_area(indices=indices)
     else:
         cell_area = None
 
@@ -277,7 +276,7 @@ def apply_normal_center_surf_vectorfield(
     field : ndarray
         a vector field
     is_center : bool
-        field at cell centers
+        field at element centers
     indices : list
         list of indices to extract from mesh and field
     is_rthetaz : bool

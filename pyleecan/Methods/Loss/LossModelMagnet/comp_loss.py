@@ -2,7 +2,6 @@ from numpy import sum as np_sum, abs as np_abs, pi, matmul, zeros
 
 import numpy as np
 
-from ....Classes.CondType21 import CondType21
 from ....Classes.HoleM50 import HoleM50
 from ....Classes.HoleM51 import HoleM51
 from ....Classes.HoleM52 import HoleM52
@@ -113,7 +112,7 @@ def comp_loss(self):
 
     lab_ind = None
     for ii, sol in enumerate(meshsol.solution):
-        if sol.label == "A_z^{element}" and sol.type_cell == "triangle":
+        if sol.label == "A_z^{element}" and sol.type_element == "triangle":
             lab_ind = ii
             break
     if lab_ind is None:
@@ -137,7 +136,7 @@ def comp_loss(self):
         Az_dt.axes[0] = Time
 
     # Get all element surfaces
-    Se = meshsol.mesh[0].get_cell_area()
+    Se = meshsol.mesh[0].get_element_area()
 
     # Get list of element indices for each magnet
     list_Imag = list()
