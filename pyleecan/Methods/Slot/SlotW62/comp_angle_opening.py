@@ -18,6 +18,6 @@ def comp_angle_opening(self):
 
     """
     slot_pitch = 2 * pi / self.Zs
-    tooth_angle = float(2 * arcsin(self.W1 / (2 * self.get_Rbo())))
+    tooth_angle = 2 * arcsin(self.W1 / (2 * self.get_Rbo()))
 
     return slot_pitch - tooth_angle

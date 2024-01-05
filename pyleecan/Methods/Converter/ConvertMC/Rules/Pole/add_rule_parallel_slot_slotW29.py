@@ -1,10 +1,8 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
+from ......Classes.RuleSimple import RuleSimple
 
 
 def add_rule_parallel_slot_slotW29(self):
-    """Create and adapt all the rules related to Hole
+    """Create and adapt all the rules related to Pole
     Extend rules_list within Converter object
 
     Parameters

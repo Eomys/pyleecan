@@ -59,7 +59,7 @@ def convert_hole_to_other(self):
 
     else:
         raise NotImplementedError(
-            f"Type of hole {hole_type} has not equivalent or has not implement"
+            f"Type of hole {hole_type} has not equivalent or has not been implementated"
         )
 
     # writting in dict

@@ -144,11 +144,11 @@ except ImportError as error:
     convert_notch_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.convert_to_other.convert_pole_to_ohter import (
-        convert_pole_to_ohter,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_pole_to_other import (
+        convert_pole_to_other,
     )
 except ImportError as error:
-    convert_pole_to_ohter = error
+    convert_pole_to_other = error
 
 try:
     from ..Methods.Converter.ConvertMC.convert_to_other.convert_conductor_to_other import (
@@ -643,18 +643,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_other = convert_notch_to_other
-    # cf Methods.Converter.ConvertMC.convert_to_other.convert_pole_to_ohter
-    if isinstance(convert_pole_to_ohter, ImportError):
-        convert_pole_to_ohter = property(
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_pole_to_other
+    if isinstance(convert_pole_to_other, ImportError):
+        convert_pole_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method convert_pole_to_ohter: "
-                    + str(convert_pole_to_ohter)
+                    "Can't use ConvertMC method convert_pole_to_other: "
+                    + str(convert_pole_to_other)
                 )
             )
         )
     else:
-        convert_pole_to_ohter = convert_pole_to_ohter
+        convert_pole_to_other = convert_pole_to_other
     # cf Methods.Converter.ConvertMC.convert_to_other.convert_conductor_to_other
     if isinstance(convert_conductor_to_other, ImportError):
         convert_conductor_to_other = property(

@@ -26,7 +26,9 @@ if __name__ == "__main__":
         soft_name = "SciDataTool"
         is_log = False
 
-    ui_folder_path = join(MAIN_DIR, "GUI", "Dialog", "DMachineSetup", "SWPole")
+    ui_folder_path = join(
+        MAIN_DIR, "GUI", "Dialog", "DMachineSetup", "SWSlot", "PWSlot14"
+    )
     gen_dict = read_all(DOC_DIR, soft_name=soft_name)
     print("#############################\nGenerating gui....")
     generate_gui(ui_folder_path, gen_dict=gen_dict, is_gen_resource=True, IS_SDT=IS_SDT)

@@ -53,13 +53,15 @@ class Test_converter_mot(object):
             equation="y/3 = b +2*x",
         )
 
+        # 1/3 has any physic meening, only for testing
         machine = rule.convert_to_P(
             self.other_dict, machine, other_unit_dict={"m": 1 / 3}
         )
 
         # check the convertion
-        msg = f"{machine.stator.slot.H2}, should be equal at 2.0"
-        assert abs(machine.stator.slot.H2) == pytest.approx(2.0), msg
+        expected_value = 2.0
+        msg = f"{machine.stator.slot.H2}, should be equal at {expected_value}"
+        assert abs(machine.stator.slot.H2) == pytest.approx(expected_value), msg
 
     def test_rule_equation_1(self):
         """test rule equation"""
@@ -96,17 +98,17 @@ class Test_converter_mot(object):
                 },
                 {
                     "src": "pyleecan",
-                    "path": f"machine.stator.slot.H2",
+                    "path": "machine.stator.slot.H2",
                     "variable": "a",
                 },
                 {
                     "src": "pyleecan",
-                    "path": f"machine.stator.slot.W0",
+                    "path": "machine.stator.slot.W0",
                     "variable": "b",
                 },
                 {
                     "src": "pyleecan",
-                    "path": f"machine.stator.slot.W1",
+                    "path": "machine.stator.slot.W1",
                     "variable": "x",
                 },
             ],

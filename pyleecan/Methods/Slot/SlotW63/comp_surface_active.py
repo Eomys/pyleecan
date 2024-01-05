@@ -37,6 +37,7 @@ def comp_surface_active(self):
     D72 = abs(Z7 - Z2)
 
     Striangle = (Z8.real - Z7.real) * (Z8.imag - Z7.imag)
+
     Srect = D72 * (Z8.real - Z7.real)
 
     return surface - s_bottom - Sarc_top - Striangle - Srect
