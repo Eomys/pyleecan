@@ -1,6 +1,5 @@
 from ......Classes.RuleSimple import RuleSimple
 from ......Classes.RuleEquation import RuleEquation
-from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_tooth_slotW63(self):

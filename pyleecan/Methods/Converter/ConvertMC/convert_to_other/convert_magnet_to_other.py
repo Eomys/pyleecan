@@ -45,7 +45,7 @@ def convert_magnet_to_other(self):
 
     else:
         raise NotImplementedError(
-            f"Type of magnet {magnet_type} has not equivalent or has not implement"
+            f"Type of magnet {magnet_type} has not equivalent or has not been implementated"
         )
 
     # writting magnet type in other_dict

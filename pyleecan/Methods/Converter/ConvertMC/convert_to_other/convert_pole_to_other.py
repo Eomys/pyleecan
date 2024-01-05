@@ -22,7 +22,7 @@ def convert_pole_to_other(self):
 
     else:
         raise NotImplementedError(
-            f"Type of pole {pole_type} has not equivalent or has not implement"
+            f"Type of pole {pole_type} has not equivalent or has not been implementated"
         )
 
     # writting in dict
