@@ -1,9 +1,9 @@
-from pyleecan.Classes.SlotM11 import SlotM11
-from pyleecan.Classes.SlotM12 import SlotM12
-from pyleecan.Classes.SlotM13 import SlotM13
-from pyleecan.Classes.SlotM14 import SlotM14
-from pyleecan.Classes.SlotM15 import SlotM15
-from pyleecan.Classes.SlotM16 import SlotM16
+from .....Classes.SlotM11 import SlotM11
+from .....Classes.SlotM12 import SlotM12
+from .....Classes.SlotM13 import SlotM13
+from .....Classes.SlotM14 import SlotM14
+from .....Classes.SlotM15 import SlotM15
+from .....Classes.SlotM16 import SlotM16
 
 
 def select_magnet_rules(self, is_stator):

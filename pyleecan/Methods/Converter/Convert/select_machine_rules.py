@@ -1,6 +1,7 @@
 from ....Classes.MachineIPMSM import MachineIPMSM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
 from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.MachineWRSM import MachineWRSM
 
 
 def select_machine_rules(self):
@@ -31,6 +32,10 @@ def select_machine_rules(self):
     elif isinstance(self.machine, MachineSCIM):
         self.add_rule_machine_dimension()
         self.select_SCIM_rules()
+
+    elif isinstance(self.machine, MachineWRSM):
+        self.add_rule_machine_dimension()
+        self.select_WRSM_rules()
 
     else:
         raise NotImplementedError("machine is not implemented yet")

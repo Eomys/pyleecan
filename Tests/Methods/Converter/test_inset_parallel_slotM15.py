@@ -7,7 +7,7 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM15 import SlotM15
 
 
-slotM12_test = list()
+slotM15_test = list()
 
 # Common values
 other_dict = {
@@ -16,7 +16,7 @@ other_dict = {
         "Magnet_Arc_[ED]": 120,
     }
 }
-slotM12_test.append(
+slotM15_test.append(
     {"other_dict": other_dict, "W1": 0.5155675378442213, "Rtopm": 0.001}
 )
 
@@ -27,13 +27,13 @@ other_dict = {
         "Magnet_Arc_[ED]": 40,
     }
 }
-slotM12_test.append(
+slotM15_test.append(
     {"other_dict": other_dict, "W1": 0.1729169936113538, "Rtopm": 0.001}
 )
 
 
 class TestComplexRuleSlotM15(object):
-    @pytest.mark.parametrize("test_dict", slotM12_test)
+    @pytest.mark.parametrize("test_dict", slotM15_test)
     def test_inset_parallel_slotM15(self, test_dict):
         """test rule complex"""
 
@@ -63,6 +63,6 @@ class TestComplexRuleSlotM15(object):
 
 if __name__ == "__main__":
     a = TestComplexRuleSlotM15()
-    for test_dict in slotM12_test:
+    for test_dict in slotM15_test:
         a.test_inset_parallel_slotM15(test_dict)
     print("Test Done")

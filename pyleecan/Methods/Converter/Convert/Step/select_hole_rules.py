@@ -1,9 +1,9 @@
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM57 import HoleM57
-from pyleecan.Classes.HoleM60 import HoleM60
-from pyleecan.Classes.HoleM61 import HoleM61
-from pyleecan.Classes.HoleM62 import HoleM62
-from pyleecan.Classes.HoleM63 import HoleM63
+from .....Classes.HoleM52 import HoleM52
+from .....Classes.HoleM57 import HoleM57
+from .....Classes.HoleM60 import HoleM60
+from .....Classes.HoleM61 import HoleM61
+from .....Classes.HoleM62 import HoleM62
+from .....Classes.HoleM63 import HoleM63
 
 
 def select_hole_rules(self, is_stator):
@@ -58,8 +58,5 @@ def select_hole_rules(self, is_stator):
 
         elif isinstance(hole, HoleM60):
             self.add_rule_holeM60(hole_id)
-
-        elif isinstance(hole, HoleM57):
-            self.add_rule_holeM57(hole_id)
 
         hole_id += 1

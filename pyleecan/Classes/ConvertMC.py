@@ -60,6 +60,13 @@ except ImportError as error:
     convert_hole_to_P = error
 
 try:
+    from ..Methods.Converter.ConvertMC.convert_to_P.convert_pole_to_P import (
+        convert_pole_to_P,
+    )
+except ImportError as error:
+    convert_pole_to_P = error
+
+try:
     from ..Methods.Converter.ConvertMC.convert_to_P.convert_duct_to_P import (
         convert_duct_to_P,
     )
@@ -130,11 +137,11 @@ except ImportError as error:
     convert_notch_to_other = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
-        add_rule_machine_dimension,
+    from ..Methods.Converter.ConvertMC.convert_to_other.convert_pole_to_other import (
+        convert_pole_to_other,
     )
 except ImportError as error:
-    add_rule_machine_dimension = error
+    convert_pole_to_other = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension_surface_magnet import (
@@ -149,6 +156,13 @@ try:
     )
 except ImportError as error:
     add_rule_machine_type = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
+        add_rule_machine_dimension,
+    )
+except ImportError as error:
+    add_rule_machine_dimension = error
 
 try:
     from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_slotW11 import (
@@ -332,6 +346,27 @@ try:
 except ImportError as error:
     add_rule_holeM62 = error
 
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW63 import (
+        add_rule_parallel_tooth_slotW63,
+    )
+except ImportError as error:
+    add_rule_parallel_tooth_slotW63 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW62 import (
+        add_rule_salient_pole_slotW62,
+    )
+except ImportError as error:
+    add_rule_salient_pole_slotW62 = error
+
+try:
+    from ..Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_slot_slotW29 import (
+        add_rule_parallel_slot_slotW29,
+    )
+except ImportError as error:
+    add_rule_parallel_slot_slotW29 = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -415,6 +450,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_hole_to_P = convert_hole_to_P
+    # cf Methods.Converter.ConvertMC.convert_to_P.convert_pole_to_P
+    if isinstance(convert_pole_to_P, ImportError):
+        convert_pole_to_P = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method convert_pole_to_P: "
+                    + str(convert_pole_to_P)
+                )
+            )
+        )
+    else:
+        convert_pole_to_P = convert_pole_to_P
     # cf Methods.Converter.ConvertMC.convert_to_P.convert_duct_to_P
     if isinstance(convert_duct_to_P, ImportError):
         convert_duct_to_P = property(
@@ -535,18 +582,18 @@ class ConvertMC(Convert):
         )
     else:
         convert_notch_to_other = convert_notch_to_other
-    # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
-    if isinstance(add_rule_machine_dimension, ImportError):
-        add_rule_machine_dimension = property(
+    # cf Methods.Converter.ConvertMC.convert_to_other.convert_pole_to_other
+    if isinstance(convert_pole_to_other, ImportError):
+        convert_pole_to_other = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ConvertMC method add_rule_machine_dimension: "
-                    + str(add_rule_machine_dimension)
+                    "Can't use ConvertMC method convert_pole_to_other: "
+                    + str(convert_pole_to_other)
                 )
             )
         )
     else:
-        add_rule_machine_dimension = add_rule_machine_dimension
+        convert_pole_to_other = convert_pole_to_other
     # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension_surface_magnet
     if isinstance(add_rule_machine_dimension_surface_magnet, ImportError):
         add_rule_machine_dimension_surface_magnet = property(
@@ -573,6 +620,18 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_machine_type = add_rule_machine_type
+    # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
+    if isinstance(add_rule_machine_dimension, ImportError):
+        add_rule_machine_dimension = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_machine_dimension: "
+                    + str(add_rule_machine_dimension)
+                )
+            )
+        )
+    else:
+        add_rule_machine_dimension = add_rule_machine_dimension
     # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_slotW11
     if isinstance(add_rule_slotW11, ImportError):
         add_rule_slotW11 = property(
@@ -885,6 +944,42 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_holeM62 = add_rule_holeM62
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_tooth_slotW63
+    if isinstance(add_rule_parallel_tooth_slotW63, ImportError):
+        add_rule_parallel_tooth_slotW63 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_tooth_slotW63: "
+                    + str(add_rule_parallel_tooth_slotW63)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_tooth_slotW63 = add_rule_parallel_tooth_slotW63
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_salient_pole_slotW62
+    if isinstance(add_rule_salient_pole_slotW62, ImportError):
+        add_rule_salient_pole_slotW62 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_salient_pole_slotW62: "
+                    + str(add_rule_salient_pole_slotW62)
+                )
+            )
+        )
+    else:
+        add_rule_salient_pole_slotW62 = add_rule_salient_pole_slotW62
+    # cf Methods.Converter.ConvertMC.Rules.Pole.add_rule_parallel_slot_slotW29
+    if isinstance(add_rule_parallel_slot_slotW29, ImportError):
+        add_rule_parallel_slot_slotW29 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ConvertMC method add_rule_parallel_slot_slotW29: "
+                    + str(add_rule_parallel_slot_slotW29)
+                )
+            )
+        )
+    else:
+        add_rule_parallel_slot_slotW29 = add_rule_parallel_slot_slotW29
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

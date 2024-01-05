@@ -8,6 +8,7 @@ from pyleecan.Classes.SlotM12 import SlotM12
 
 slotM12_test = list()
 
+
 # Common values
 other_dict = {
     "[Dimensions]": {
@@ -40,6 +41,7 @@ class TestComplexRuleSlotM12(object):
         other_dict = test_dict["other_dict"]
 
         # Construct the machine in which the slot will be set
+
         machine = MachineSIPMSM()
         machine.rotor = LamSlotMag()
         machine.rotor.slot = SlotM12()
@@ -62,6 +64,7 @@ class TestComplexRuleSlotM12(object):
 
 if __name__ == "__main__":
     a = TestComplexRuleSlotM12()
+
     for test_dict in slotM12_test:
         a.test_inset_breadloaf_slotM12(test_dict)
     print("Test Done")

@@ -1,6 +1,7 @@
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineSCIM import MachineSCIM
+from .....Classes.MachineSIPMSM import MachineSIPMSM
+from .....Classes.MachineIPMSM import MachineIPMSM
+from .....Classes.MachineSCIM import MachineSCIM
+from .....Classes.MachineWRSM import MachineWRSM
 
 
 def convert_machine_to_P(self):
@@ -41,10 +42,13 @@ def convert_machine_to_P(self):
     elif motor_type == "IM":
         self.machine = MachineSCIM()
 
+    elif motor_type == "SYNC":
+        self.machine = MachineWRSM()
+
     else:
         # exception if machine as not an equivalent in pyleecan
         raise NotImplementedError(
-            f"Machine {motor_type} has not equivalent in pyleecan or has not implement"
+            f"Machine {motor_type} has not equivalent in pyleecan or has not been implementated"
         )
 
     self.get_logger().info(
