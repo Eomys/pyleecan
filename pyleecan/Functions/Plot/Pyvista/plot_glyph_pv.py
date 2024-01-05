@@ -53,5 +53,3 @@ def plot_glyph_pv(
         arrows_plt = centers2.arrows
 
     p.add_mesh(arrows_plt, color="red")
-    p.add_mesh(arrows_plt, color="red")
-    p.add_mesh(arrows_plt, color="red")

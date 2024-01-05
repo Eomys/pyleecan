@@ -1,9 +1,7 @@
 from os import remove, rename
 from os.path import isfile, splitext
 
-from numpy import all as np_all
-from numpy import cos
-from numpy import pi, roll, sin, zeros
+from numpy import pi, roll, sin, zeros, cos, all
 
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
@@ -162,9 +160,9 @@ def solve_FEMM(
     A_elem = None
 
     # Check current values
-    if np_all(Is == 0):
+    if all(Is == 0):
         Is = None
-    if np_all(Ir == 0):
+    if all(Ir == 0):
         Ir = None
 
     k1 = 0

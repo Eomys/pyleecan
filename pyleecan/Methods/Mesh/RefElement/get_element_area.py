@@ -17,4 +17,6 @@ def get_element_area(self, element_coordinate: ndarray) -> ndarray:
         area of the elements
     """
 
-    raise NotImplementedError("RefElement.get_element_area is not implemented.")
+    raise NotImplementedError(
+        f"{type(self).__name__}.get_element_area is not implemented."
+    )

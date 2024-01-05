@@ -1,6 +1,6 @@
 import numpy as np
 
-from pyleecan.Classes.OutLossModel import OutLossModel
+from ....Classes.OutLossModel import OutLossModel
 
 
 def comp_all_losses(

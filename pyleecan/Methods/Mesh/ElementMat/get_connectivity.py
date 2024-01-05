@@ -2,7 +2,6 @@
 
 import numpy as np
 from typing import Optional
-from typing import Union
 
 
 def get_connectivity(self, element_index: Optional[int] = None) -> np.ndarray:

@@ -24,7 +24,6 @@ def is_inside(
     -------
     is_inside: bool
         true if the point is inside the element
-
     """
     point_ref = self.get_ref_point(node, point)
     s = point_ref[0]
