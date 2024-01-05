@@ -49,7 +49,7 @@ def convert_magnet_to_P(self):
 
     else:
         raise NotImplementedError(
-            f"type of magnet {magnet_type} has not equivalent in pyleecan or has not implement"
+            f"type of magnet {magnet_type} has not equivalent in pyleecan or has not been implementated"
         )
 
     self.machine.rotor.is_stator = False

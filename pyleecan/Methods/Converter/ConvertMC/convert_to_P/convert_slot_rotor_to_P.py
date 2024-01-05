@@ -40,7 +40,7 @@ def convert_slot_rotor_to_P(self):
 
     else:
         raise NotImplementedError(
-            f"Type of slot {slot_type} has not equivalent or has not implement"
+            f"Type of slot {slot_type} has not equivalent or has not been implementated"
         )
 
     self.get_logger().info(

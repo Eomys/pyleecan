@@ -48,7 +48,7 @@ def convert_machine_to_P(self):
     else:
         # exception if machine as not an equivalent in pyleecan
         raise NotImplementedError(
-            f"Machine {motor_type} has not equivalent in pyleecan or has not implement"
+            f"Machine {motor_type} has not equivalent in pyleecan or has not been implementated"
         )
 
     self.get_logger().info(

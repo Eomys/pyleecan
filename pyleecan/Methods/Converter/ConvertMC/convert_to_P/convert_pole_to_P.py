@@ -35,7 +35,7 @@ def convert_pole_to_P(self):
 
     else:
         raise NotImplementedError(
-            f"Type of pole {pole_type} has not equivalent in pyleecan or has not implement"
+            f"Type of pole {pole_type} has not equivalent in pyleecan or has not been implementated"
         )
 
     self.get_logger().info(

@@ -35,7 +35,7 @@ def convert_slot_to_other(self):
 
     else:
         raise NotImplementedError(
-            f"Type of slot {name_slot} has not equivalent or has not implement"
+            f"Type of slot {name_slot} has not equivalent or has not been implementated"
         )
     self.get_logger().info(f"Conversion {slot.__class__.__name__} into {name_slot}")
 

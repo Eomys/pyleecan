@@ -50,7 +50,7 @@ def convert_duct_to_other(self, is_stator):
         duct_MC_name = "Rotor_Rectangular_Ducts"
     else:
         raise NotImplementedError(
-            f"Type of duct {axial_vent[0].__name__} has not equivalent or has not implement"
+            f"Type of duct {axial_vent[0].__name__} has not equivalent or has not been implementated"
         )
 
     # writting in dict
