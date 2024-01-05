@@ -41,3 +41,8 @@ def convert_pole_to_P(self):
     self.get_logger().info(
         f"Conversion {pole_type} into {type(self.machine.rotor.slot).__name__}"
     )
+
+    if isinstance(pole_type, SlotW63):
+        self.get_logger().warning(
+            f"SlotW62 : Approximation for W2 has not equivalent in Motor-CAD"
+        )

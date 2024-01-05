@@ -1,7 +1,7 @@
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineWRSM import MachineWRSM
+from .....Classes.MachineSIPMSM import MachineSIPMSM
+from .....Classes.MachineIPMSM import MachineIPMSM
+from .....Classes.MachineSCIM import MachineSCIM
+from .....Classes.MachineWRSM import MachineWRSM
 
 
 def convert_machine_to_P(self):

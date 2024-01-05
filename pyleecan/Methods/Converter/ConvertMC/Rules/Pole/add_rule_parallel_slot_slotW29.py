@@ -4,7 +4,7 @@ from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_parallel_slot_slotW29(self):
-    """Create and adapt all the rules related to Hole
+    """Create and adapt all the rules related to Pole
     Extend rules_list within Converter object
 
     Parameters

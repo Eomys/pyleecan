@@ -1,3 +1,8 @@
+from .....Classes.SlotW61 import SlotW61
+from .....Classes.SlotW62 import SlotW62
+from .....Classes.SlotW29 import SlotW29
+
+
 def convert_pole_to_other(self):
     """Selects correct pole and implements it in dict
     Parameters
@@ -8,21 +13,21 @@ def convert_pole_to_other(self):
     ---------
     """
     # conversion to motor-cad
-    pole_type = self.machine.rotor.slot.__class__.__name__
+    pole_type = self.machine.rotor.slot
 
     # selection type of pole
-    if pole_type == "SlotW61":
+    if isinstance(pole_type, SlotW61):
         name_pole = "Sync_Salient_Pole"
 
-    elif pole_type == "SlotW62":
+    elif isinstance(pole_type, SlotW62):
         name_pole = "Sync_Parallel_Tooth"
 
-    elif pole_type == "SlotW29":
+    elif isinstance(pole_type, SlotW29):
         name_pole = "Sync_Parallel_Slot"
 
     else:
         raise NotImplementedError(
-            f"Type of pole {pole_type} has not equivalent or has not implement"
+            f"Type of pole {pole_type.__class__.__name__} has not equivalent or has not implement"
         )
 
     # writting in dict
@@ -31,4 +36,6 @@ def convert_pole_to_other(self):
     else:
         self.other_dict["[Design_Options]"]["Sync_Rotor"] = name_pole
 
-    self.get_logger().info(f"Conversion {pole_type} into {name_pole}")
+    self.get_logger().info(
+        f"Conversion {pole_type.__class__.__name__} into {name_pole}"
+    )
