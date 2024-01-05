@@ -18,14 +18,22 @@ def other_to_P(self, machine, other_dict, other_unit_dict=None):
         A pyleecan machine
     """
     self.unit_type = ""
-    other_path_list = ["[Winding_Design]", "Liner_Layers"]
+    other_path_list = ["[Winding_Design]", "Winding_Type"]
     Nlayer = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    if Nlayer == "Single_Layer":
-        machine.stator.winding.Nlayer = 1
-    elif Nlayer == "Double_Layer":
-        machine.stator.winding.Nlayer = 2
+    self.unit_type = ""
+    other_path_list = ["[Magnetics]", "MagPathType"]
+    type = self.get_other(other_dict, other_path_list, other_unit_dict)
 
+    if Nlayer == "Overlapping":
+        machine.stator.winding.Nlayer = 2
+        if type == 2:
+            machine.stator.winding.is_change_layer = True
+        else:
+            machine.stator.winding.is_change_layer = False
+
+    else:
+        machine.stator.winding.Nlayer = 1
     return machine
 
 

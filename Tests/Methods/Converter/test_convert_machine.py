@@ -58,18 +58,21 @@ class Test_converter_machine(object):
         "WRSM_salient_pole",
         "WRSM_parallel_tooth_salient_pole",
         
-        "skew",
         
+        "VF_Manatee_Hairpin_winding_2",
             "parallel_tooth_interior_U_Shape_mat",
         "interor_V(web)_mat",
         "tapered_slot_slot_corner_radius",
+        "tapered_slot_slot_corner_radius_interior_U_Shape_mat",
         """
-        path_list = ["tapered_slot_slot_corner_radius_interior_U_Shape_mat"]
+        path_list = [
+            "skew",
+        ]
 
         for path in path_list:
             conv = ConvertMC()
             machine = conv.convert_to_P(
-                f"/Users\LAP17\Documents/machine_MC_P/file_mot/{path}.mot"
+                f"/Users\LAP17\Documents/machine_MC_P/file_mot_mat/{path}.mot"
             )
 
             machine.plot()
