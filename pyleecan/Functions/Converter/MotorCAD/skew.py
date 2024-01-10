@@ -22,10 +22,11 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         A pyleecan machine
     """
 
-    is_skew = True
+    skew_step = other_dict["[Magnetics]"]["RotorSkewSlices"]
+
     idx_skew = 0
     skew_list = []
-    while is_skew:
+    for idx_skew in range(skew_step):
         try:
             skew_value = other_dict[f"[Magnetics]"][f"RotorSkewAngle_Array[{idx_skew}]"]
 
@@ -36,7 +37,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
             skew_list.append(skew_value)
 
         except:
-            is_skew = False
+            pass
 
     if len(skew_list) == 0:
         other_value = None
@@ -62,7 +63,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     # set number of step for skew
     path_name = f"machine.rotor.skew.Nstep"
-    other_value = idx_skew
+    other_value = skew_step
     self.set_P(machine, other_value, path_name)
     return machine
 

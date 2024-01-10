@@ -59,6 +59,12 @@ def _comp_line_dict(self):
     line_dict["w2s-w1s"] = Segment(Zw2s, Zw1s)
     line_dict["w2-w2s"] = Segment(Zw2, Zw2s)
 
+    line_dict["7-2"] = Segment(Z7, Z2)
+    line_dict["2-7"] = Segment(Z2, Z7)
+
     line_dict["8-1"] = Arc1(Z8, Z1, -abs(Z8), is_trigo_direction=False)
+
+    if self.H2 == 0:
+        line_dict["7w-2w"] = Arc1(Z7, Z2, -abs(Z7), is_trigo_direction=False)
 
     return line_dict

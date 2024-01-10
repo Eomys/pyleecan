@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 from pyleecan.Classes.ConvertMC import ConvertMC
-from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Functions.load import load
-from pyleecan.Classes.CondType11 import CondType11
 
 
 class Test_converter_machine(object):
@@ -23,15 +20,15 @@ class Test_converter_machine(object):
         # machineP3 = load(
         #    "/Users\LAP17\AppData\Roaming\pyleecan/Machine/SCIM_5kw_Zaheer.json"
         # )
-        machineP3 = load(
-            "/Users\LAP17\AppData\Roaming\pyleecan/Machine/Toyota_Prius_test_skew.json"
-        )
+        # machineP3 = load(
+        #    "/Users\LAP17\AppData\Roaming\pyleecan/Machine/Toyota_Prius_test_skew.json"
+        # )
 
         """
             "EMD240_v16",
             "VF_Manatee_Hairpin_winding",
         
-            "interor_V(web)",
+            
             "form_wound_inset_parallel_arc_duct",
             "parallel_slot_surface_breadloaf",
             "parallel_tooth_embedded_breadloaf",
@@ -60,15 +57,17 @@ class Test_converter_machine(object):
         "WRSM_parallel_slot",
         "WRSM_salient_pole",
         "WRSM_parallel_tooth_salient_pole",
+        
+        "skew",
         """
         path_list = [
-            "skew",
+            "interor_V(web)",
         ]
 
         for path in path_list:
             conv = ConvertMC()
             machine = conv.convert_to_P(
-                f"/Users\LAP17\Documents/machine_MC_P/file_mot_mat/{path}.mot"
+                f"/Users\LAP17\Documents/machine_MC_P/file_mot/{path}.mot"
             )
 
             machine.plot()
