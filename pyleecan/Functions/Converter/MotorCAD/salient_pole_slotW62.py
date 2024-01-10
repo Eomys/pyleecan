@@ -2,7 +2,7 @@ from numpy import sin, exp
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Conversion of the slot inset_parallel (motor-cad) into the slotM15 (pyleecan)
+    """Conversion of the slot salient_pole (motor-cad) into the slotW62 (pyleecan)
 
     Parameters
     ----------

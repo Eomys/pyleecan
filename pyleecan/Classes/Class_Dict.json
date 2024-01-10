@@ -1181,7 +1181,7 @@
             "convert_to_other.convert_hole_to_other",
             "convert_to_other.convert_duct_to_other",
             "convert_to_other.convert_notch_to_other",
-            "convert_to_other.convert_pole_to_ohter",
+            "convert_to_other.convert_pole_to_other",
             "convert_to_other.convert_conductor_to_other",
             "convert_to_other.convert_material_to_other",
             "Rules.add_rule_machine_dimension",

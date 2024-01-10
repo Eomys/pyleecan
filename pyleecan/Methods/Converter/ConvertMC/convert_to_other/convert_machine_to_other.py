@@ -31,7 +31,7 @@ def convert_machine_to_other(self):  # conversion to MotorCAD
 
     else:
         raise NotImplementedError(
-            f"Machine {motor_type} has not equivalent or has not implement"
+            f"Machine {motor_type} has not equivalent or has not been implementated"
         )
 
     self.get_logger().info(f"Conversion {motor_type} into {name_machine}")

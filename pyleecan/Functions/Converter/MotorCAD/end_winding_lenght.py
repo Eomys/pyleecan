@@ -1,6 +1,3 @@
-from numpy import sqrt, cos, arcsin, exp
-
-
 def other_to_P(self, machine, other_dict, other_unit_dict):
     """Converts the MLT motor-cad slot into pyleecan lewout
 

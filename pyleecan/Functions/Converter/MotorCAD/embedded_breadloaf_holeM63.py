@@ -1,4 +1,4 @@
-from numpy import sin, cos, pi, sqrt, tan
+from numpy import tan
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):

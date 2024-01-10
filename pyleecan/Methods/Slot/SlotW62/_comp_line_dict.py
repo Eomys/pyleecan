@@ -41,11 +41,18 @@ def _comp_line_dict(self):
     # Creation of curve
     line_dict = dict()
     line_dict["1-2"] = Segment(Z1, Z2)
-    line_dict["2-3"] = Segment(Z2, Z3)
+    if Z2 != Z3:
+        line_dict["2-3"] = Segment(Z2, Z3)
+    else:
+        line_dict["2-3"] = None
     line_dict["3-4"] = Segment(Z3, Z4)
     line_dict["4-5"] = Arc1(Z4, Z5, abs(Z4))
     line_dict["5-6"] = Segment(Z5, Z6)
-    line_dict["6-7"] = Segment(Z6, Z7)
+    if Z6 != Z7:
+        line_dict["6-7"] = Segment(Z6, Z7)
+    else:
+        line_dict["6-7"] = None
+
     line_dict["7-8"] = Segment(Z7, Z8)
     line_dict["8-1"] = Arc1(Z8, Z1, -Rbo, is_trigo_direction=False)
 

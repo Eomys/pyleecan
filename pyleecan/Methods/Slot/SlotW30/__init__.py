@@ -12,3 +12,15 @@ class S30_W3Error(SlotCheckError):
     """ """
 
     pass
+
+
+class S30_R2Error(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S30_R1Error(SlotCheckError):
+    """ """
+
+    pass

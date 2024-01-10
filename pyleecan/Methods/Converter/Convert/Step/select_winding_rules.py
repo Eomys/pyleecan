@@ -1,4 +1,4 @@
-from pyleecan.Classes.MachineWRSM import MachineWRSM
+from .....Classes.MachineWRSM import MachineWRSM
 
 
 def select_winding_rules(self, is_stator):
@@ -13,6 +13,7 @@ def select_winding_rules(self, is_stator):
     """
 
     if isinstance(self.machine, MachineWRSM) and is_stator == False:
+        # WRSM has particular winding
         self.machine.rotor.winding.qs = 1
         self.machine.rotor.winding.Nlayer = 2
         self.machine.rotor.winding.is_change_layer = False

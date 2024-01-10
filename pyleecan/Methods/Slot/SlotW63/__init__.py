@@ -13,6 +13,18 @@ class S63_W21CheckError(SlotCheckError):
     pass
 
 
+class S63_H0CheckError(SlotCheckError):
+    """ """
+
+    pass
+
+
+class S63_W0CheckError(SlotCheckError):
+    """ """
+
+    pass
+
+
 class S63_RCheckError(SlotCheckError):
     """ """
 
