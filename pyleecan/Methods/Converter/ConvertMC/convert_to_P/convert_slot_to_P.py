@@ -62,6 +62,7 @@ def convert_slot_to_P(self):
     elif slot_type == "Form_Wound":
         self.machine.stator.slot = SlotW29()
         self.machine.stator.is_internal = False
+        self.machine.stator.slot.wedge_type = 1
 
     elif slot_type == "Slotless":
         self.get_logger().error("Slotless has not equivalent in Pyleecan")

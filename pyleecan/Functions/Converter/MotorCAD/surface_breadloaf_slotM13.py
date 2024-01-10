@@ -55,7 +55,6 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine.rotor.slot.Rtopm = abs(Z1)
 
     point_dict = machine.rotor.slot._comp_point_coordinate()
-
     ZM0 = point_dict["ZM0"]
     ZM2 = point_dict["ZM2"]
     ZM3 = point_dict["ZM3"]
@@ -84,6 +83,12 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     Rtopm = sqrt((x1 - x) ** 2 + (y1 - y) ** 2)
 
     machine.rotor.slot.Rtopm = Rtopm
+
+    # correction value H1 (circular segment)
+    c = machine.rotor.slot.W0
+    alpha = 2 * arcsin(c / (2 * Rbo))
+    h = Rbo * (1 - cos(alpha / 2))
+    machine.rotor.slot.H1 = machine.rotor.slot.H1 + h
 
     return machine
 

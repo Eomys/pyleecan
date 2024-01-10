@@ -1,5 +1,5 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleComplex import RuleComplex
+from ......Classes.RuleSimple import RuleSimple
+from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_slotM15(self):
@@ -29,6 +29,16 @@ def add_rule_slotM15(self):
             other_key_list=["[Dimensions]", "Magnet_Thickness"],
             P_obj_path=f"machine.rotor.slot.H1",
             unit_type="m",
+            scaling_to_P=1,
+            file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Magnet_Arc_[ED]"],
+            P_obj_path=f"machine.rotor.slot.W0",
+            unit_type="ED",
             scaling_to_P=1,
             file_name=__file__,
         )

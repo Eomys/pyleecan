@@ -1,4 +1,4 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
+from ......Classes.RuleSimple import RuleSimple
 
 
 def add_rule_ventilationTrap(self, is_stator, duct_id):
