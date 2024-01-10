@@ -1,10 +1,10 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
-from pyleecan.Classes.RuleComplex import RuleComplex
+from ......Classes.RuleSimple import RuleSimple
+from ......Classes.RuleEquation import RuleEquation
+from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_salient_pole_slotW62(self):
-    """Create and adapt all the rules related to Hole
+    """Create and adapt all the rules related to Pole
     Extend rules_list within Converter object
 
     Parameters

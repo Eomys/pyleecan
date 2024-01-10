@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, exp, arcsin, sqrt
+from numpy import pi, exp, arcsin
 
 
 def _comp_point_coordinate(self):
@@ -22,6 +22,7 @@ def _comp_point_coordinate(self):
 
     alpha2 = arcsin(self.W1 / (2 * Rbo))
 
+    # Point used to define geometry of slot
     Z1 = Rbo * exp(-1j * hsp)
     Z1 = Z1 * exp(1j * hsp)
     Z1 = Z1 * exp(1j * alpha2)
@@ -30,11 +31,13 @@ def _comp_point_coordinate(self):
     Z3 = Z2 - ((self.W1 - self.W0) / 2) * 1j
     Z4 = Z3 - self.H0
 
+    # Zw are points used to define geometry of winding
     Zw1 = Z3 + self.W3 * 1j - self.H3
     Zw2 = Zw1 - self.H2
     Zw3 = Zw2 + self.W2 * 1j
     Zw4 = Zw1 + self.W2 * 1j
 
+    # Set points in correct base with a rotation
     Z1 = Z1 * exp(-1j * hsp)
     Z2 = Z2 * exp(-1j * hsp)
     Z3 = Z3 * exp(-1j * hsp)
@@ -44,6 +47,7 @@ def _comp_point_coordinate(self):
     Zw3 = Zw3 * exp(-1j * hsp)
     Zw4 = Zw4 * exp(-1j * hsp)
 
+    # symetry
     Z5 = Z4.conjugate()
     Z6 = Z3.conjugate()
     Z7 = Z2.conjugate()
@@ -55,7 +59,6 @@ def _comp_point_coordinate(self):
     Zw4s = Zw4.conjugate()
 
     point_dict = dict()
-    # symetry
     point_dict["Z1"] = Z1
     point_dict["Z2"] = Z2
     point_dict["Z3"] = Z3

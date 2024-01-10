@@ -53,7 +53,6 @@ other_dict = {
     }
 }
 
-# Magnet_Reduction = 0, no reduction
 slotM15_test.append(
     {
         "other_dict": other_dict,
@@ -63,6 +62,7 @@ slotM15_test.append(
     }
 )
 
+# Magnet_Reduction = 0, no reduction
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,

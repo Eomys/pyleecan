@@ -7,7 +7,7 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 
 
-class Test_converter_mot(object):
+class TestRuleSimple(object):
     @staticmethod
     def setup_class(cls):
         # other_dict of Motror-CAD converter
@@ -19,7 +19,7 @@ class Test_converter_mot(object):
             }
         }
 
-    def test_rule_simple_0(self):
+    def test_identity(self):
         """test rule simple"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
@@ -39,7 +39,7 @@ class Test_converter_mot(object):
         msg = f"{machine.stator.slot.W0}, should be equal at {expected_value}"
         assert abs(machine.stator.slot.W0) == pytest.approx(expected_value), msg
 
-    def test_rule_simple_1(self):
+    def test_scaling(self):
         """test rule simple"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
@@ -58,7 +58,7 @@ class Test_converter_mot(object):
         msg = f"{machine.stator.slot.W2}, should be equal at {expected_value}"
         assert abs(machine.stator.slot.W2) == pytest.approx(expected_value), msg
 
-    def test_rule_simple_2(self):
+    def test_scaling_unit(self):
         """test rule simple"""
         machine = MachineSIPMSM()
         machine.stator = LamSlotWind()
@@ -78,10 +78,13 @@ class Test_converter_mot(object):
         msg = f"{machine.stator.slot.W1}, should be equal at pi / 4"
         assert abs(machine.stator.slot.W1) == pytest.approx(pi / 4), msg
 
+    def test_string(self):
+        pass
+
 
 if __name__ == "__main__":
-    a = Test_converter_mot()
-    a.test_rule_simple_0()
-    a.test_rule_simple_1()
-    a.test_rule_simple_2()
+    a = TestRuleSimple()
+    a.test_identity()
+    a.test_scaling()
+    a.test_scaling_unit()
     print("Done")

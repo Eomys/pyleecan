@@ -3,16 +3,13 @@
 import sys
 from random import uniform
 
-import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
-from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW30 import SlotW30
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot30.PWSlot30 import PWSlot30
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
 
 
 class TestPWSlot30(object):
@@ -203,6 +200,6 @@ if __name__ == "__main__":
     a.setup_class()
     a.setup_method()
     a.test_init()
-    a.teardown_class()
     a.test_output_txt()
+    a.teardown_class()
     print("Done")

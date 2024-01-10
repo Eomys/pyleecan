@@ -69,7 +69,7 @@ def convert_slot_to_P(self):
 
     else:
         raise NotImplementedError(
-            f"type of slot {slot_type} has not equivalent in pyleecan or has not implement"
+            f"type of slot {slot_type} has not equivalent in pyleecan or has not been implementated"
         )
 
     self.get_logger().info(

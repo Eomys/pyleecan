@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ....Classes.Arc1 import Arc1
-from ....Classes.Segment import Segment
-
 
 def build_geometry(self):
     """Compute the curve (Line) needed to plot the Slot.

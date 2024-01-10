@@ -3,13 +3,14 @@ from .....Classes.CondType13 import CondType13
 
 
 def convert_conductor_to_other(self, is_stator):
-    """selects step to add rules for conductor in stator
+    """selects step to add rules for conductor
 
     Parameters
     ----------
     self : ConvertMC
         A ConvertMC object
     """
+    # selection if conductor is in stator or rotor
     if is_stator:
         conductor_type = self.machine.stator.winding.conductor
     else:
