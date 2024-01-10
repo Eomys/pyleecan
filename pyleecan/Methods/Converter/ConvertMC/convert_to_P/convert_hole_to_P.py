@@ -45,6 +45,9 @@ def convert_hole_to_P(self):
     elif hole_type == "Interior_Flat_Simple":
         self.machine.rotor.hole.append(HoleM63())
         self.machine.rotor.hole[0].top_flat = True
+        self.get_logger().warning(
+            f"HoleM63 : Approximation for H1, Pole Arc isn't present in Pyleecan"
+        )
 
     elif hole_type == "Interior_Flat_Web":
         self.machine.rotor.hole.append(HoleM52())
