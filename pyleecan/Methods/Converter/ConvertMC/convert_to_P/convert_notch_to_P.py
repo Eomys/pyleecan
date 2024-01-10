@@ -1,6 +1,5 @@
-from pyleecan.Classes.Notch import Notch
-from pyleecan.Classes.NotchEvenDist import NotchEvenDist
-from pyleecan.Classes.SlotM19 import SlotM19
+from .....Classes.NotchEvenDist import NotchEvenDist
+from .....Classes.SlotM19 import SlotM19
 
 
 def convert_notch_to_P(self, is_stator):

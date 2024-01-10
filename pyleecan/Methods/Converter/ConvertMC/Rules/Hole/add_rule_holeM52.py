@@ -1,4 +1,4 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
+from ......Classes.RuleSimple import RuleSimple
 
 
 def add_rule_holeM52(self, hole_id):

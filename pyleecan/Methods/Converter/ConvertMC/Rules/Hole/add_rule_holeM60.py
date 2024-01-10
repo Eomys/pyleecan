@@ -1,5 +1,5 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
+from ......Classes.RuleSimple import RuleSimple
+from ......Classes.RuleEquation import RuleEquation
 
 
 def add_rule_holeM60(self, hole_id):
