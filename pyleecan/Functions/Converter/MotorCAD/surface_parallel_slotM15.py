@@ -31,7 +31,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     self.unit_type = "m"
     try:
-        other_path_list = ["[Dimensions]", "Magnet_Reduction"]
+        other_path_list = ["[Dimensions]", "MagnetReduction"]
         Red = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     except:
@@ -47,9 +47,6 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     ZM4 = point_dict["ZM4"]
 
     machine.rotor.slot.W0 = 2 * arcsin((machine.rotor.slot.W1 / 2) / abs(ZM4))
-
-    # set W0
-    # machine.rotor.slot.W0 = 2 * arctan((slot_W1 / 2) / Rbo)
 
     machine.rotor.slot.Rtopm = Rbo + H1
 

@@ -42,8 +42,9 @@ class Test_converter_machine(object):
                 f"/Users\LAP17\Documents/Machine/Motor-cad/{path}.mot"
             )
 
+            # 2 possibility plot machine, or regenerate all .json to load machine without pass by plot
             machine.plot()
-            machine.save(f"/Users/LAP17/Documents/Machine/Pyleecan/{machine.name}")
+            # machine.save(f"/Users/LAP17/Documents/Machine/Pyleecan/{machine.name}")
 
             machine2 = load(
                 f"/Users\LAP17\Documents/Machine/Pyleecan/{machine.name}.json"
