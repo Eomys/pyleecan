@@ -24,7 +24,6 @@ Converter,Convert,convert_to_P.convert_other_to_dict,VERSION,1,convertorMC abstr
 ,,Rules.add_rule_machine_dimension,,,,,,
 ,,Rules.add_rule_machine_dimension_surface_magnet,,,,,,
 ,,Rules.add_rule_machine_type,,,,,,
-,,Rules.add_rule_machine_dimension,,,,,,
 ,,Rules.Slot.add_rule_slotW11,,,,,,
 ,,Rules.Slot.add_rule_slotW29,,,,,,
 ,,Rules.Slot.add_rule_slotW21,,,,,,

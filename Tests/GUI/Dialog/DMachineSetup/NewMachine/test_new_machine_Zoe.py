@@ -457,7 +457,7 @@ class TestNewMachineZoe(object):
             == "Slot pitch: 360 / Zs = 90 [°] (1.571 [rad])"
         )
 
-        assert self.widget.w_step.c_slot_type.count() == 4
+        assert self.widget.w_step.c_slot_type.count() == 5
 
         assert self.widget.w_step.c_slot_type.currentText() == "Pole Type 60"
 
