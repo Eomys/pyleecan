@@ -1,10 +1,10 @@
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotM11 import SlotM11
-from pyleecan.Classes.SlotM12 import SlotM12
-from pyleecan.Classes.SlotM13 import SlotM13
-from pyleecan.Classes.SlotM14 import SlotM14
-from pyleecan.Classes.SlotM15 import SlotM15
-from pyleecan.Classes.SlotM16 import SlotM16
+from .....Classes.LamSlotMag import LamSlotMag
+from .....Classes.SlotM11 import SlotM11
+from .....Classes.SlotM12 import SlotM12
+from .....Classes.SlotM13 import SlotM13
+from .....Classes.SlotM14 import SlotM14
+from .....Classes.SlotM15 import SlotM15
+from .....Classes.SlotM16 import SlotM16
 
 
 def convert_magnet_to_P(self):
@@ -40,6 +40,9 @@ def convert_magnet_to_P(self):
     elif magnet_type == "Inset_Parallel":
         self.machine.rotor.slot = SlotM15()
         self.machine.rotor.slot.H0 = 0.001  # To pass the check for inset parallel
+        self.get_logger().warning(
+            "Approximation for slotM15 hasn't equivalent in Pyleecan"
+        )
 
     elif magnet_type == "Inset_Breadloaf":
         self.machine.rotor.slot = SlotM12()

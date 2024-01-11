@@ -98,6 +98,10 @@ class PWSlot14(Gen_PWSlot14, QWidget):
 
         if self.slot.wedge_type == None:
             self.slot.wedge_type = 0
+        elif self.slot.wedge_type == 1:
+            self.img_slot.setPixmap(
+                QPixmap(pixmap_dict["SlotW14_wedge_type_1_ext_stator"])
+            )
 
         self.c_wedge_type.setCurrentIndex(self.slot.wedge_type)
 

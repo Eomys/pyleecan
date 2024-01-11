@@ -1,4 +1,4 @@
-from numpy import sin
+from numpy import sin, arcsin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -31,6 +31,13 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     # Set Rtopm
     machine.rotor.slot.Rtopm = Rbo
+
+    point_dict = machine.rotor.slot._comp_point_coordinate()
+    ZM4 = point_dict["ZM4"]
+
+    machine.rotor.plot()
+    # set W0
+    machine.rotor.slot.W0 = 2 * arcsin((machine.rotor.slot.W1 / 2) / abs(ZM4))
 
     return machine
 

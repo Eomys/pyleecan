@@ -46,10 +46,6 @@ def add_rule_slotM15(self):
 
     if self.machine.rotor.slot.H0 != 0:
         self.rules_list.append(
-            RuleComplex(fct_name="inset_parallel_slotM15", folder="MotorCAD")
-        )
-
-        self.rules_list.append(
             RuleSimple(
                 other_key_list=["[Dimensions]", "Magnet_Thickness"],
                 P_obj_path=f"machine.rotor.slot.H0",
@@ -57,6 +53,9 @@ def add_rule_slotM15(self):
                 scaling_to_P=1,
                 file_name=__file__,
             )
+        )
+        self.rules_list.append(
+            RuleComplex(fct_name="inset_parallel_slotM15", folder="MotorCAD")
         )
 
     else:

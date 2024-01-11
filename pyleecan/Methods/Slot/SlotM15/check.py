@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
+from numpy import sin, cos
 
 from ....Methods.Slot.Slot import SlotCheckError
 
@@ -17,7 +17,12 @@ def check(self):
     -------
     None
     """
-    if self.W0 < self.W1:
+    Rbo = self.get_Rbo()
+
+    # conversion W0 rad -> m
+    W0_m = 2 * (Rbo - self.H0) * sin(self.W0 / 2)
+
+    if W0_m < self.W1:
         raise SlotCheckError("You must have W1 <= W0")
     if 2 * self.Rtopm < self.W1:
         raise SlotCheckError("You must have W1 <= 2*Rtopm")
