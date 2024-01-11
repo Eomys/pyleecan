@@ -63,6 +63,9 @@ def convert_hole_to_P(self):
         number_hole = self.other_dict["[Dimensions]"]["VMagnet_Layers"]
         for hole_id in range(number_hole):
             self.machine.rotor.hole.append(HoleM57())
+            self.get_logger().warning(
+                "HoleM57 : Approximation check the settings for HoleM57"
+            )
 
     elif hole_type == "Interior_UShape":
         number_hole = self.other_dict["[Dimensions]"]["Magnet_Layers"]

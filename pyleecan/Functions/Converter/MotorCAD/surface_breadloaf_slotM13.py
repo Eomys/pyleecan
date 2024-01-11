@@ -31,7 +31,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     self.unit_type = "m"
     try:
-        other_path_list = ["[Dimensions]", "Magnet_Reduction"]
+        other_path_list = ["[Dimensions]", "MagnetReduction"]
         Red = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     except:
@@ -39,11 +39,17 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     Rbo = machine.rotor.get_Rbo()
 
-    slot_W1 = sqrt(2 * (Rbo + H1) ** 2 * (1 - cos(W1)))
+    slot_W1 = sqrt(2 * (Rbo) ** 2 * (1 - cos(W1)))
     machine.rotor.slot.W1 = slot_W1
 
     # set W0
     machine.rotor.slot.W0 = slot_W1
+
+    # correction value H1 (circular segment)
+    c = machine.rotor.slot.W0
+    alpha = 2 * arcsin(c / (2 * Rbo))
+    H = Rbo * (1 - cos(alpha / 2))
+    machine.rotor.slot.H1 = machine.rotor.slot.H1 + H
 
     # define rtopm at max
 
@@ -83,12 +89,6 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     Rtopm = sqrt((x1 - x) ** 2 + (y1 - y) ** 2)
 
     machine.rotor.slot.Rtopm = Rtopm
-
-    # correction value H1 (circular segment)
-    c = machine.rotor.slot.W0
-    alpha = 2 * arcsin(c / (2 * Rbo))
-    h = Rbo * (1 - cos(alpha / 2))
-    machine.rotor.slot.H1 = machine.rotor.slot.H1 + h
 
     return machine
 
