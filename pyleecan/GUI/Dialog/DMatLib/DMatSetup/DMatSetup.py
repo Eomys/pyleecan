@@ -292,6 +292,60 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.set_save_needed(is_save_needed=is_save_needed)
         self.blockSignals(False)
 
+        #####################
+        # Setup tab values losses
+        if not isinstance(self.mat.mag.LossData, ImportMatrixVal):
+            self.g_losses_import.setChecked(False)
+        elif array_equal(self.mat.mag.LossData.value, array([[0, 0]])):
+            self.g_losses_import.setChecked(False)
+        else:
+            self.g_losses_import.setChecked(True)
+        self.tab_values_losses.setWindowFlags(
+            self.tab_values_losses.windowFlags() & ~Qt.Dialog
+        )
+        self.tab_values_losses.title = self.g_losses_import.title()
+        self.tab_values_losses.N_row_txt = "Nb of Line"
+        self.tab_values_losses.N_colum_txt = "Nb of Colum"
+        self.tab_values_losses.shape_expected = (None, 3)
+        self.tab_values_losses.shape_min = (None, 3)
+        # self.tab_values_losses.col_header = ["value1", "value2", "value3"]
+        # self.tab_values_losses.unit_order = [
+        #     "First column 1",
+        #     "First column 2",
+        #     "First column 3",
+        # ]
+        # self.tab_values_losses.button_plot_title = "1"
+        self.tab_values_losses.si_col.show()
+        self.tab_values_losses.in_col.show()
+        self.tab_values_losses.b_close.hide()
+        self.tab_values_losses.b_import.setHidden(False)
+        self.tab_values_losses.b_export.setHidden(False)
+
+        if isinstance(self.mat.mag.LossData, ImportMatrixXls):
+            try:
+                self.mat.mag.LossData = ImportMatrixVal(
+                    self.mat.mag.LossData.get_data()
+                )
+            except Exception as e:
+                logger = getLogger(GUI_LOG_NAME)
+                logger.error(
+                    "Unable to import losses from Excel for "
+                    + str(self.mat.name)
+                    + ":\n"
+                    + str(e),
+                )
+                self.mat.mag.LossData = ImportMatrixVal(array([[0, 0]]))
+            self.tab_values_losses.data = self.mat.mag.LossData.get_data()
+        elif not isinstance(self.mat.mag.LossData, ImportMatrixVal):
+            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0]]))
+            self.tab_values_losses.data = array([[0, 0]])
+        elif self.mat.mag.LossData.get_data() is not None:
+            self.tab_values_losses.data = self.mat.mag.LossData.get_data()
+        else:
+            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0]]))
+            self.tab_values_losses.data = array([[0, 0]])
+        self.tab_values_losses.update()
+
     def set_default(self, attr):
         """When mat.elec or mat.mag are None, initialize with default values
 
@@ -885,3 +939,25 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         else:  # Lamination
             self.nav_mag.setCurrentIndex(1)
+
+    def set_table_values_losses(self):
+        """Signal to update the value of the table according to the table
+
+        Parameters
+        ----------
+        self :
+            A DMatSetup object
+
+        Returns
+        -------
+        None
+        """
+        if isinstance(self.mat.mag.LossData, ImportMatrixVal):
+            if not array_equal(
+                self.mat.mag.LossData.value, self.tab_values_losses.get_data()
+            ):
+                self.mat.mag.LossData.value = self.tab_values_losses.get_data()
+                self.set_save_needed(is_save_needed=True)
+        elif isinstance(self.mat.mag.LossData, (ImportMatrixXls, ImportMatrix)):
+            self.mat.mag.LossData = ImportMatrixVal(self.tab_values_losses.get_data())
+            self.set_save_needed(is_save_needed=True)

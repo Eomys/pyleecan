@@ -19,7 +19,7 @@ class Ui_DMatSetup(object):
     def setupUi(self, DMatSetup):
         if not DMatSetup.objectName():
             DMatSetup.setObjectName(u"DMatSetup")
-        DMatSetup.resize(600, 657)
+        DMatSetup.resize(600, 677)
         DMatSetup.setMinimumSize(QSize(600, 0))
         icon = QIcon()
         icon.addFile(
@@ -704,6 +704,32 @@ class Ui_DMatSetup(object):
         self.verticalLayout_6.addItem(self.verticalSpacer_4)
 
         self.nav_phy.addTab(self.tab_eco, "")
+        self.tab_losses = QWidget()
+        self.tab_losses.setObjectName(u"tab_losses")
+        self.tab_losses.setMaximumSize(QSize(16222, 16222))
+        self.tab_losses.setAutoFillBackground(False)
+        self.verticalLayout_13 = QVBoxLayout(self.tab_losses)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.g_losses_import = QGroupBox(self.tab_losses)
+        self.g_losses_import.setObjectName(u"g_losses_import")
+        self.g_losses_import.setCheckable(True)
+        self.g_losses_import.setChecked(False)
+        self.verticalLayout_10 = QVBoxLayout(self.g_losses_import)
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.tab_values_losses = DTableData(self.g_losses_import)
+        self.tab_values_losses.setObjectName(u"tab_values_losses")
+
+        self.verticalLayout_10.addWidget(self.tab_values_losses)
+
+        self.verticalSpacer_8 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_10.addItem(self.verticalSpacer_8)
+
+        self.verticalLayout_13.addWidget(self.g_losses_import)
+
+        self.nav_phy.addTab(self.tab_losses, "")
 
         self.verticalLayout.addWidget(self.nav_phy)
 
@@ -735,7 +761,7 @@ class Ui_DMatSetup(object):
         self.retranslateUi(DMatSetup)
 
         self.nav_phy.setCurrentIndex(0)
-        self.nav_mag.setCurrentIndex(0)
+        self.nav_mag.setCurrentIndex(1)
         self.nav_meca.setCurrentIndex(0)
         self.nav_ther.setCurrentIndex(0)
 
@@ -882,6 +908,13 @@ class Ui_DMatSetup(object):
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_eco),
             QCoreApplication.translate("DMatSetup", u"Economical", None),
+        )
+        self.g_losses_import.setTitle(
+            QCoreApplication.translate("DMatSetup", u"Losses", None)
+        )
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_losses),
+            QCoreApplication.translate("DMatSetup", u"Losses", None),
         )
         self.b_delete.setText(QCoreApplication.translate("DMatSetup", u"Delete", None))
         self.b_save.setText(QCoreApplication.translate("DMatSetup", u"Save", None))
