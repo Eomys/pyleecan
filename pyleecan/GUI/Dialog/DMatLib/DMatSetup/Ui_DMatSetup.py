@@ -307,6 +307,32 @@ class Ui_DMatSetup(object):
         self.mag_layout.addItem(self.verticalSpacer)
 
         self.nav_phy.addTab(self.tab_mag, "")
+        self.tab_losses = QWidget()
+        self.tab_losses.setObjectName(u"tab_losses")
+        self.tab_losses.setMaximumSize(QSize(16222, 16222))
+        self.tab_losses.setAutoFillBackground(False)
+        self.verticalLayout_13 = QVBoxLayout(self.tab_losses)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.g_losses_import = QGroupBox(self.tab_losses)
+        self.g_losses_import.setObjectName(u"g_losses_import")
+        self.g_losses_import.setCheckable(True)
+        self.g_losses_import.setChecked(False)
+        self.verticalLayout_10 = QVBoxLayout(self.g_losses_import)
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.tab_values_losses = DTableData(self.g_losses_import)
+        self.tab_values_losses.setObjectName(u"tab_values_losses")
+
+        self.verticalLayout_10.addWidget(self.tab_values_losses)
+
+        self.verticalSpacer_8 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_10.addItem(self.verticalSpacer_8)
+
+        self.verticalLayout_13.addWidget(self.g_losses_import)
+
+        self.nav_phy.addTab(self.tab_losses, "")
         self.tab_mec = QWidget()
         self.tab_mec.setObjectName(u"tab_mec")
         self.verticalLayout_12 = QVBoxLayout(self.tab_mec)
@@ -704,32 +730,6 @@ class Ui_DMatSetup(object):
         self.verticalLayout_6.addItem(self.verticalSpacer_4)
 
         self.nav_phy.addTab(self.tab_eco, "")
-        self.tab_losses = QWidget()
-        self.tab_losses.setObjectName(u"tab_losses")
-        self.tab_losses.setMaximumSize(QSize(16222, 16222))
-        self.tab_losses.setAutoFillBackground(False)
-        self.verticalLayout_13 = QVBoxLayout(self.tab_losses)
-        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.g_losses_import = QGroupBox(self.tab_losses)
-        self.g_losses_import.setObjectName(u"g_losses_import")
-        self.g_losses_import.setCheckable(True)
-        self.g_losses_import.setChecked(False)
-        self.verticalLayout_10 = QVBoxLayout(self.g_losses_import)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.tab_values_losses = DTableData(self.g_losses_import)
-        self.tab_values_losses.setObjectName(u"tab_values_losses")
-
-        self.verticalLayout_10.addWidget(self.tab_values_losses)
-
-        self.verticalSpacer_8 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-
-        self.verticalLayout_10.addItem(self.verticalSpacer_8)
-
-        self.verticalLayout_13.addWidget(self.g_losses_import)
-
-        self.nav_phy.addTab(self.tab_losses, "")
 
         self.verticalLayout.addWidget(self.nav_phy)
 
@@ -835,6 +835,13 @@ class Ui_DMatSetup(object):
             self.nav_phy.indexOf(self.tab_mag),
             QCoreApplication.translate("DMatSetup", u"Magnetics", None),
         )
+        self.g_losses_import.setTitle(
+            QCoreApplication.translate("DMatSetup", u"Losses", None)
+        )
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_losses),
+            QCoreApplication.translate("DMatSetup", u"Losses", None),
+        )
         self.in_material_type.setText(
             QCoreApplication.translate("DMatSetup", u"Material Type :", None)
         )
@@ -908,13 +915,6 @@ class Ui_DMatSetup(object):
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_eco),
             QCoreApplication.translate("DMatSetup", u"Economical", None),
-        )
-        self.g_losses_import.setTitle(
-            QCoreApplication.translate("DMatSetup", u"Losses", None)
-        )
-        self.nav_phy.setTabText(
-            self.nav_phy.indexOf(self.tab_losses),
-            QCoreApplication.translate("DMatSetup", u"Losses", None),
         )
         self.b_delete.setText(QCoreApplication.translate("DMatSetup", u"Delete", None))
         self.b_save.setText(QCoreApplication.translate("DMatSetup", u"Save", None))

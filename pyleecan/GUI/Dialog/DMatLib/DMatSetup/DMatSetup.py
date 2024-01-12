@@ -2,7 +2,7 @@ from os.path import join, dirname, isfile
 from PySide2.QtWidgets import QDialog, QMessageBox, QLayout
 from PySide2.QtCore import Qt, Signal
 from logging import getLogger
-from numpy import pi, array, array_equal
+from numpy import pi, array, array_equal, transpose
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QDialog, QMessageBox
 from .....GUI import gui_option
@@ -97,6 +97,9 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_nu_yz.editingFinished.connect(self.set_nu_yz)
         self.tab_values.saveNeeded.connect(self.set_table_values)
         self.c_type_material.currentIndexChanged.connect(self.change_type_material)
+
+        # Losses
+        self.tab_values_losses.saveNeeded.connect(self.set_table_values_losses)
 
         # Connect buttons
         self.b_delete.clicked.connect(lambda: self.materialToDelete.emit())
@@ -296,7 +299,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # Setup tab values losses
         if not isinstance(self.mat.mag.LossData, ImportMatrixVal):
             self.g_losses_import.setChecked(False)
-        elif array_equal(self.mat.mag.LossData.value, array([[0, 0]])):
+        elif array_equal(self.mat.mag.LossData.value, array([[0], [0], [0]])):
             self.g_losses_import.setChecked(False)
         else:
             self.g_losses_import.setChecked(True)
@@ -305,18 +308,22 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         )
         self.tab_values_losses.title = self.g_losses_import.title()
         self.tab_values_losses.N_row_txt = "Nb of Line"
-        self.tab_values_losses.N_colum_txt = "Nb of Colum"
-        self.tab_values_losses.shape_expected = (None, 3)
         self.tab_values_losses.shape_min = (None, 3)
-        # self.tab_values_losses.col_header = ["value1", "value2", "value3"]
-        # self.tab_values_losses.unit_order = [
-        #     "First column 1",
-        #     "First column 2",
-        #     "First column 3",
-        # ]
-        # self.tab_values_losses.button_plot_title = "1"
-        self.tab_values_losses.si_col.show()
-        self.tab_values_losses.in_col.show()
+        self.tab_values_losses.col_header = [
+            "f [Hz]",
+            "B [T]",
+            "Loss [W/Lb]",
+        ]
+
+        self.tab_values_losses.si_col.hide()
+        self.tab_values_losses.in_col.hide()
+
+        self.tab_values_losses.in_row.show()
+        self.tab_values_losses.si_row.show()
+
+        self.tab_values_losses.b_plot.show()
+        self.tab_values_losses.button_plot_title = "Loss(B)"
+
         self.tab_values_losses.b_close.hide()
         self.tab_values_losses.b_import.setHidden(False)
         self.tab_values_losses.b_export.setHidden(False)
@@ -324,8 +331,9 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         if isinstance(self.mat.mag.LossData, ImportMatrixXls):
             try:
                 self.mat.mag.LossData = ImportMatrixVal(
-                    self.mat.mag.LossData.get_data()
+                    transpose(self.mat.mag.LossData.get_data())
                 )
+
             except Exception as e:
                 logger = getLogger(GUI_LOG_NAME)
                 logger.error(
@@ -334,17 +342,19 @@ class DMatSetup(Gen_DMatSetup, QDialog):
                     + ":\n"
                     + str(e),
                 )
-                self.mat.mag.LossData = ImportMatrixVal(array([[0, 0]]))
+                self.mat.mag.LossData = ImportMatrixVal(array([[0, 0, 0]]))
             self.tab_values_losses.data = self.mat.mag.LossData.get_data()
         elif not isinstance(self.mat.mag.LossData, ImportMatrixVal):
-            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0]]))
-            self.tab_values_losses.data = array([[0, 0]])
+            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0, 0]]))
+            self.tab_values_losses.data = array([[0, 0, 0]])
         elif self.mat.mag.LossData.get_data() is not None:
-            self.tab_values_losses.data = self.mat.mag.LossData.get_data()
+            self.tab_values_losses.data = transpose(self.mat.mag.LossData.get_data())
         else:
-            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0]]))
-            self.tab_values_losses.data = array([[0, 0]])
+            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0, 0]]))
+            self.tab_values_losses.data = array([[0, 0, 0]])
+
         self.tab_values_losses.update()
+        self.mat.mag.LossData = transpose(self.tab_values_losses.data)
 
     def set_default(self, attr):
         """When mat.elec or mat.mag are None, initialize with default values

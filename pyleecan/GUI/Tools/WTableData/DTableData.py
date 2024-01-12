@@ -159,7 +159,7 @@ class DTableData(Ui_DTableData, QDialog):
                 # Connect the slot
                 self.w_tab.cellWidget(ii, jj).editingFinished.connect(self.emit_save)
 
-        if ncol == 2:
+        if ncol == 2 or self.button_plot_title == "Loss(B)":
             self.b_plot.setHidden(False)
         else:
             self.b_plot.setHidden(True)
@@ -352,6 +352,37 @@ class DTableData(Ui_DTableData, QDialog):
             axes.set_xlabel(self.col_header[0])
             axes.set_ylabel(self.col_header[1])
             fig.show()
+
+        elif (
+            len(data.shape) == 2
+            and data.shape[1] == 3
+            and self.button_plot_title == "Loss(B)"
+        ):
+            # Data in column
+            fig, axes = plt.subplots()
+            a = data[0, 0]
+            temp = 0
+            end = 0
+            one_curve = True
+            while temp < data.shape[0] - 1:
+                temp += 1
+                if a != data[temp, 0]:
+                    one_curve = False
+                    axes.plot(data[end:temp, 1], data[end:temp, 2], label=f" {a} Hz")
+                    end = temp
+                    a = data[temp, 0]
+
+            if one_curve == True:
+                axes.plot(data[:, 1], data[:, 2], label=f" {data[0,0]} Hz")
+
+            axes.set_xlabel(self.col_header[1])
+            axes.set_ylabel(self.col_header[2])
+            fig.legend()
+            plt.title("Curve Loss(B) depending to Frequency")
+            plt.yscale("log")
+            plt.grid(True)
+            fig.show()
+
         if self.col_header is not None:
             fig.canvas.manager.set_window_title(self.col_header[0] + " plot")
         set_plot_gui_icon()
