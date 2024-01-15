@@ -32,14 +32,14 @@ def _check_element_name(
     if isinstance(element_name, str):
         element_name = [element_name]
     elif len(element_name) == 0:
-        element_name = element_mat_dict.keys()
-    else:
-        all_element_names = [*element_mat_dict.keys()]
-        for elem_name in element_name:
-            if elem_name not in all_element_names:
-                raise ValueError(
-                    f'Wrong element_name value, "{elem_name}" not in {all_element_names}'
-                )
+        return element_mat_dict.keys()
+
+    all_element_names = list(element_mat_dict.keys())
+    for elem_name in element_name:
+        if elem_name not in all_element_names:
+            raise ValueError(
+                f'Wrong element_name value, "{elem_name}" not in {all_element_names}'
+            )
     return element_name
 
 
