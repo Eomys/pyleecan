@@ -48,7 +48,7 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
     logger = self.get_logger()
     solution_dict = {}
 
-    for key, solution in MS_sliced.solution.items():
+    for key, solution in MS_sliced.solution_dict.items():
         # Define axis
         name, _ = solution.get_axes_list()
 
