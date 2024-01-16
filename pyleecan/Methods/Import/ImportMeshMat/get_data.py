@@ -45,10 +45,13 @@ def get_data(self):
     node_indices = nodes[:, 0].astype(np.int32)
 
     # Node indices must start at 0 and be consecutive
-    unique_node_indices = np.sort(np.unique(node_indices))
+    unique_node_indices = np.unique(node_indices)
+    if unique_node_indices.size != node_indices.size:
+        raise ValueError("Duplicated node index")
+
     if (
-        unique_node_indices[-1] != unique_node_indices.size - 1
-        or unique_node_indices.size != node_indices.size
+        unique_node_indices[0] != 0
+        or unique_node_indices[-1] != unique_node_indices.size - 1
     ):
         for new_index, old_index in enumerate(unique_node_indices):
             node_indices[node_indices == old_index] = new_index
@@ -82,8 +85,7 @@ def get_data(self):
         # Refactor indices
         for element in elements.values():
             nb_element = element.shape[0]
-            indices = np.arange(min_indice, min_indice + nb_element)
-            element[:, 0] = indices
+            element[:, 0] = np.arange(min_indice, min_indice + nb_element)
             min_indice += nb_element
 
     # Define ElementMat objects
