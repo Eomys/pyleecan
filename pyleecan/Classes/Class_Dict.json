@@ -11942,7 +11942,8 @@
         "desc": "Store shape functions definition in the reference element",
         "is_internal": false,
         "methods": [
-            "interpolation"
+            "interpolation",
+            "get_element_area"
         ],
         "mother": "",
         "name": "RefElement",

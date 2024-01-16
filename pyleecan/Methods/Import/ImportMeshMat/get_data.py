@@ -3,7 +3,6 @@
 from os.path import splitext
 
 import numpy as np
-from numpy import int32
 
 from ....Classes.ElementMat import ElementMat
 from ....Classes.ImportMeshUnv import ImportMeshUnv
@@ -29,10 +28,11 @@ def get_data(self):
     """
 
     # Get mesh data (nodes and elements)
-    if splitext(self.file_path)[1] == ".unv":
+    file_extension = splitext(self.file_path)[1]
+    if file_extension == ".unv":
         nodes, elements = ImportMeshUnv(self.file_path).get_data()
     else:
-        raise Exception(splitext(self.file_path)[1] + " files are not supported")
+        raise Exception(f"{file_extension} files are not supported")
 
     # Define MeshMat object
     if min(nodes[:, 0]) == 0 and max(nodes[:, 0]) == len(nodes[:, 0]) - 1:
@@ -42,11 +42,26 @@ def get_data(self):
 
     mesh = MeshMat(_is_renum=is_renum)
 
-    node_indices = nodes[:, 0].astype(int32)
+    node_indices = nodes[:, 0].astype(np.int32)
 
     # Node indices must start at 0 and be consecutive
     unique_node_indices = np.sort(np.unique(node_indices))
     if np.any(unique_node_indices != np.arange(unique_node_indices.size)):
+        for new_index, old_index in enumerate(unique_node_indices):
+            node_indices[node_indices == old_index] = new_index
+
+            # Change indices in element connectivity value
+            for element in elements.values():
+                element[:, 1:][element[:, 1:] == old_index] = new_index
+
+    node_indices = nodes[:, 0].astype(np.int32)
+
+    # Node indices must start at 0 and be consecutive
+    unique_node_indices = np.sort(np.unique(node_indices))
+    if (
+        unique_node_indices[-1] != unique_node_indices.size - 1
+        or unique_node_indices.size != node_indices.size
+    ):
         for new_index, old_index in enumerate(unique_node_indices):
             node_indices[node_indices == old_index] = new_index
 

@@ -119,4 +119,4 @@ class Test_get_element_MeshMat(object):
 
     def test_get_connectivity_None(self):
         """Check if get_connectivity works correctly"""
-        assert self.mesh.element_dict["triangle3"].get_connectivity(5) == None
+        assert not self.mesh.element_dict["triangle3"].get_connectivity(5) 

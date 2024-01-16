@@ -31,10 +31,10 @@ def get_connectivity(
         return connectivity
 
     if nb_element == 0:  # No element
-        return None
+        return np.array([[]])
 
     connectivity_index = (indices == element_index).nonzero()[0]
     if connectivity_index.size > 0:
         return connectivity[connectivity_index[0], :]
     else:
-        return None
+        return np.array([[]])

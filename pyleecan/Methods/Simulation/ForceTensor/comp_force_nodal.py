@@ -1,8 +1,8 @@
 import numpy as np
 from SciDataTool import Data1D, DataTime, VectorField
 
-from pyleecan.Classes.MeshSolution import MeshSolution
-from pyleecan.Classes.SolutionVector import SolutionVector
+from ....Classes.MeshSolution import MeshSolution
+from ....Classes.SolutionVector import SolutionVector
 
 
 def comp_force_nodal(self, output, axes_dict):

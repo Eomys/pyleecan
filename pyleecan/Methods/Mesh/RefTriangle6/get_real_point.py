@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 
 def get_real_point(self, element_coordinate, ref_pt, nb_ref_pt=1):
     """Return the coordinates in the element of a point in the reference element.

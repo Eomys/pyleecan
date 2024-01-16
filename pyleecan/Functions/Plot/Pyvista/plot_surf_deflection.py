@@ -61,8 +61,8 @@ def plot_surf_deflection(
 
     # Compute pyvista object
     # Add field to surf
-    surf_pv.point_data["field"] = real(vect_field * phase) * factor
-    surf_pv.active_vectors_name = "field"
+    surf_pv.point_data[field_name] = real(vect_field * phase) * factor
+    surf_pv.active_vectors_name = field_name
 
     # Warp by vectors
     surf_warp = surf_pv.warp_by_vector()

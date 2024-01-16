@@ -61,17 +61,17 @@ def comp_loss(self):
     felec = output.elec.OP.get_felec()
 
     if output.mag is None:
-        raise Exception("Cannot calculate core losses if OutMag is None")
+        raise ValueError("Cannot calculate core losses if OutMag is None")
 
     if output.mag.meshsolution is None:
-        raise Exception("Cannot calculate core losses if OutMag.meshsolution is None")
+        raise ValueError("Cannot calculate core losses if OutMag.meshsolution is None")
     else:
         meshsol = output.mag.meshsolution
 
     group_list = list(meshsol.group.keys())
 
     if self.group not in group_list:
-        raise Exception("Cannot calculate core losses for group=" + self.group)
+        raise ValueError("Cannot calculate core losses for group=" + self.group)
 
     # Extract solution
     try:
@@ -99,23 +99,6 @@ def comp_loss(self):
     if is_change_Time:
         for comp in Bvect.components.values():
             comp.axes[0] = Time
-
-    # # Plot 2D to check periodicity
-    # # ii = Igrp[0]
-    # ii = 1560
-    # Bvect.components["comp_x"].plot_2D_Data(
-    #     "time",
-    #     "indice[" + str(ii) + "]",
-    #     data_list=[Bvect.components["comp_y"]],
-    #     legend_list=["Bx", "By"],
-    # )
-
-    # Bvect.components["comp_x"].plot_2D_Data(
-    #     "freqs",
-    #     "indice[" + str(ii) + "]",
-    #     data_list=[Bvect.components["comp_y"]],
-    #     legend_list=["Bx", "By"],
-    # )
 
     # Compute magnetic flux density FFT
     Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z=mean")

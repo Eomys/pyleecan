@@ -13,7 +13,6 @@ from numpy import (
     imag,
     sum as np_sum,
     abs as np_abs,
-    hstack,
     swapaxes,
     reshape,
 )

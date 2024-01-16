@@ -21,15 +21,15 @@ def comp_loss(self):
     """
 
     if self.parent.parent is None:
-        raise Exception("Cannot calculate losses if simu is not in an Output")
+        raise ValueError("Cannot calculate losses if simu is not in an Output")
     else:
         output = self.parent.parent.parent
 
     if output.elec is None:
-        raise Exception("Cannot calculate losses if OutElec is None")
+        raise ValueError("Cannot calculate losses if OutElec is None")
 
     if self.parent.is_get_meshsolution and output.mag is None:
-        raise Exception("Cannot calculate losses if OutMag is None")
+        raise ValueError("Cannot calculate losses if OutMag is None")
 
     machine = output.simu.machine
 

@@ -78,7 +78,6 @@ def _gen_mesh_solution():
         field=vectorfield,
         label="Field",
     )
-
     return mesh, solution
 
 

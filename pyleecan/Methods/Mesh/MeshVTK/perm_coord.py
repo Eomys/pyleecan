@@ -1,6 +1,6 @@
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.NodeMat import NodeMat
+from ....Classes.ElementMat import ElementMat
+from ....Classes.MeshMat import MeshMat
+from ....Classes.NodeMat import NodeMat
 
 
 def perm_coord(

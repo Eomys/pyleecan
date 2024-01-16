@@ -60,7 +60,7 @@ def build_meshsolution(self):
             siz = value.shape[1]
             # only regard max. 3 components
             if siz > 3:
-                logger.warning(
+                self.get_logger().warning(
                     f'ElmerResultsVTU.build_meshsolution(): size of data "{key}" > 3'
                     + " - "
                     + "Data will be truncated."

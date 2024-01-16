@@ -32,5 +32,5 @@ def get_indice(self, coordinate: Optional[np.ndarray] = None) -> Union[np.ndarra
         return self.indice[index_min]
     else:
         raise ValueError(
-            f"The node with coordinate {coordinate} has not been retrieved."
+            f"The node with coordinate {coordinate} has not been retrieved with tolerance {self.delta}, increasing the tolerance value may solve the issue."
         )
