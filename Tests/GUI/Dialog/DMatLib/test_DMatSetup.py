@@ -572,7 +572,7 @@ class TestDMatSetup(object):
         assert wimport.c_sheet.currentText() == "Feuil1"
         wimport.c_sheet.setCurrentIndex(1)
         assert wimport.c_sheet.currentText() == "Feuil2"
-        wimport.le_range.setText("F8:H57")
+        wimport.le_range.setText("F8:G57")
         assert wimport.b_ok.isEnabled() == True
         wimport.c_order.setCurrentIndex(1)
         wimport.b_ok.clicked.emit()
@@ -735,18 +735,18 @@ class TestDMatSetup(object):
         assert wimport.c_sheet.currentText() == "Feuil1"
         wimport.c_sheet.setCurrentIndex(1)
         assert wimport.c_sheet.currentText() == "Feuil2"
-        wimport.le_range.setText("F8:I57")
+        wimport.le_range.setText("F8:H57")
         assert wimport.b_ok.isEnabled() == True
         wimport.c_order.setCurrentIndex(1)
         wimport.b_ok.clicked.emit()
 
         assert mat.si_row.value() == 50
         assert mat.si_col.value() == 3
-        assert mat.w_tab.cellWidget(0, 0).value() == 50
-        assert mat.w_tab.cellWidget(1, 0).value() == 50
-        assert mat.w_tab.cellWidget(2, 0).value() == 50
-        assert mat.w_tab.cellWidget(3, 0).value() == 50
-        assert mat.w_tab.cellWidget(49, 0).value() == 100
+        assert mat.w_tab.cellWidget(0, 2).value() == 50
+        assert mat.w_tab.cellWidget(1, 2).value() == 50
+        assert mat.w_tab.cellWidget(2, 2).value() == 50
+        assert mat.w_tab.cellWidget(3, 2).value() == 50
+        assert mat.w_tab.cellWidget(49, 2).value() == 100
 
         assert mat.w_tab.cellWidget(0, 1).value() == 0
         assert mat.w_tab.cellWidget(1, 1).value() == 1
@@ -754,15 +754,15 @@ class TestDMatSetup(object):
         assert mat.w_tab.cellWidget(3, 1).value() == 3
         assert mat.w_tab.cellWidget(49, 1).value() == 49
 
-        assert mat.w_tab.cellWidget(0, 2).value() == 0
-        assert mat.w_tab.cellWidget(1, 2).value() == 0.01
-        assert mat.w_tab.cellWidget(2, 2).value() == 0.02
-        assert mat.w_tab.cellWidget(3, 2).value() == 0.03
-        assert mat.w_tab.cellWidget(49, 2).value() == 0.49
+        assert mat.w_tab.cellWidget(0, 0).value() == 0
+        assert mat.w_tab.cellWidget(1, 0).value() == 0.01
+        assert mat.w_tab.cellWidget(2, 0).value() == 0.02
+        assert mat.w_tab.cellWidget(3, 0).value() == 0.03
+        assert mat.w_tab.cellWidget(49, 0).value() == 0.49
 
-        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 50
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 0.03
         assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 3
-        assert self.widget.w_setup.mat.mag.LossData.value[2, 3] == 0.03
+        assert self.widget.w_setup.mat.mag.LossData.value[2, 3] == 50
 
         # Export Csv
         save_csv_path_Loss = join(save_path, "DMatSetup_csv_export_Loss.csv").replace(
@@ -782,11 +782,11 @@ class TestDMatSetup(object):
         ):
             mat.b_import.clicked.emit()
 
-        assert mat.w_tab.cellWidget(0, 0).value() == 50
-        assert mat.w_tab.cellWidget(1, 0).value() == 50
-        assert mat.w_tab.cellWidget(2, 0).value() == 50
-        assert mat.w_tab.cellWidget(3, 0).value() == 50
-        assert mat.w_tab.cellWidget(49, 0).value() == 100
+        assert mat.w_tab.cellWidget(0, 2).value() == 50
+        assert mat.w_tab.cellWidget(1, 2).value() == 50
+        assert mat.w_tab.cellWidget(2, 2).value() == 50
+        assert mat.w_tab.cellWidget(3, 2).value() == 50
+        assert mat.w_tab.cellWidget(49, 2).value() == 100
 
         assert mat.w_tab.cellWidget(0, 1).value() == 0
         assert mat.w_tab.cellWidget(1, 1).value() == 1
@@ -794,15 +794,15 @@ class TestDMatSetup(object):
         assert mat.w_tab.cellWidget(3, 1).value() == 3
         assert mat.w_tab.cellWidget(49, 1).value() == 49
 
-        assert mat.w_tab.cellWidget(0, 2).value() == 0
-        assert mat.w_tab.cellWidget(1, 2).value() == 0.01
-        assert mat.w_tab.cellWidget(2, 2).value() == 0.02
-        assert mat.w_tab.cellWidget(3, 2).value() == 0.03
-        assert mat.w_tab.cellWidget(49, 2).value() == 0.49
+        assert mat.w_tab.cellWidget(0, 0).value() == 0
+        assert mat.w_tab.cellWidget(1, 0).value() == 0.01
+        assert mat.w_tab.cellWidget(2, 0).value() == 0.02
+        assert mat.w_tab.cellWidget(3, 0).value() == 0.03
+        assert mat.w_tab.cellWidget(49, 0).value() == 0.49
 
-        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 50
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 0.03
         assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 3
-        assert self.widget.w_setup.mat.mag.LossData.value[2, 3] == 0.03
+        assert self.widget.w_setup.mat.mag.LossData.value[2, 3] == 50
 
 
 if __name__ == "__main__":
