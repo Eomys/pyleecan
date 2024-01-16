@@ -46,11 +46,15 @@ def get_data(self):
             # Store connectivities
             elements = dict()
             for elt_type, elt_dict in dataset.items():
-                if elt_type != "type":
+                if (
+                    elt_type != "type"
+                    and isinstance(elt_type, str)
+                    and isinstance(elt_dict, dict)
+                ):
                     elements[elt_type] = hstack(
                         (
-                            elt_dict["element_nums"][:, newaxis],
-                            np_array(elt_dict["nodes_nums"]),
+                            np_array(elt_dict["element_nums"])[:, newaxis],
+                            elt_dict["nodes_nums"],
                         )
                     )
 
