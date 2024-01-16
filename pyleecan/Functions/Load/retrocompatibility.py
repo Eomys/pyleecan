@@ -511,6 +511,27 @@ def convert_meshsolution_mesh(meshsolution_dict):
                 f"MeshSolution object only supports one mesh for version >= {MeshSolution_VERSION}"
             )
 
+    # Convert list of solution stored in solution to dict of solution stored in solution_dict
+    list_solution = meshsolution_dict_new.get("solution", None)
+    if isinstance(list_solution, list):
+        list_label = [solution["label"] for solution in list_solution]
+
+        # Check if solution labels are unique
+        if len(set(list_label)) == len(list_label):
+            meshsolution_dict_new["solution_dict"] = {
+                solution["label"]: solution for solution in list_solution
+            }
+        else:  # Duplicated labels
+            getLogger(GUI_LOG_NAME).warning(
+                f"MeshSolution constains solutions with same label, instancing solution_dict with \"{meshsolution_dict_new['label']}_i\""
+            )
+            meshsolution_dict_new["solution_dict"] = {
+                f"{meshsolution_dict_new['label']}_{k}": solution
+                for k, solution in enumerate(list_solution, 1)
+            }
+
+        del meshsolution_dict_new["solution"]
+
     return MeshSolution(init_dict=meshsolution_dict_new)
 
 

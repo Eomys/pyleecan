@@ -5,16 +5,13 @@ from numpy import exp, linspace
 from numpy import max as np_max
 from numpy import pi
 
-from ....Classes.MeshMat import MeshMat
 from ....definitions import config_dict
-from ....Functions.MeshSolution.use_group import use_group
 from ....Functions.Plot.Pyvista.configure_plot import configure_plot
 from ....Functions.Plot.Pyvista.plot_glyph_pv import plot_glyph_pv
 
 FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
 
-@use_group
 def plot_glyph(
     self,
     *args,
@@ -24,7 +21,6 @@ def plot_glyph(
     field_name=None,
     save_path=None,
     is_point_arrow=False,
-    group_names=None,  # Used by the decorator
     is_show_fig=True,
     pv_plotter=None,
     win_title="",
@@ -55,8 +51,6 @@ def plot_glyph(
         path to save the plot into an image
     is_point_arrow : bool
         to plot a nodal field (point-wise solution required)
-    group_names : [str]
-        plot is restricted to the group(s) corresponding to this list of group names.
     pv_plotter : pyvista
         a pyvista object
     enforced_mesh : Mesh

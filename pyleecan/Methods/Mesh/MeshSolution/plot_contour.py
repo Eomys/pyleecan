@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from numpy import (
-    pi,
-    real,
-    min as np_min,
-    max as np_max,
-    linspace,
-    exp,
-)
+from numpy import exp, linspace
+from numpy import max as np_max
+from numpy import min as np_min
+from numpy import pi, real
 
 from ....definitions import config_dict
 from ....Functions.Plot.Pyvista.configure_plot import configure_plot
 from ....Functions.Plot.Pyvista.plot_mesh_field import plot_mesh_field
-from ....Functions.MeshSolution.use_group import use_group
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
 
-@use_group
 def plot_contour(
     self,
     *args,
@@ -30,12 +24,9 @@ def plot_contour(
     is_center=False,
     clim=None,
     field_name=None,
-    group_names=None,  # Used by the decorator
     save_path=None,
-    itimefreq=0,
     is_show_fig=True,
     win_title=None,
-    factor=None,
     is_animated=False,
     title="",
     pv_plotter=None,
@@ -63,18 +54,12 @@ def plot_contour(
         a list of 2 elements for the limits of the colorbar
     field_name : str
         title of the field to display on plot
-    group_names : list
-        a list of str corresponding to group name(s)
     save_path : str
         path to save the figure
-    itimefreq : int
-        if the field depends has a time/freqs axis, return the timefreq-th slice.
     is_show_fig : bool
         To call show at the end of the method
     win_title : str
         Name of the window
-    factor : float
-        Normalization factor
     is_animated : bool
         True to animate magnetic flux density
     title : str
