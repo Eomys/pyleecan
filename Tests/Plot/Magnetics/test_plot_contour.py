@@ -1,18 +1,16 @@
 from os import cpu_count
 from os.path import join
 
+import numpy as np
 import pytest
 
-import numpy as np
-
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Functions.load import load
-from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.Skew import Skew
-
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 from Tests import save_plot_path as save_path
 
 
@@ -56,8 +54,7 @@ def test_SPMSM015_plot_contour_B_FEMM():
     out.mag.meshsolution.plot_contour(
         is_show_fig=False, save_path=join(save_path, "plot_mesh.png")
     )
-    out.mag.meshsolution.plot_contour(
-        group_names="stator core",
+    out.mag.meshsolution.get_group("stator core").plot_contour(
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )
@@ -108,8 +105,7 @@ def test_Benchmark_plot_contour_B_FEMM():
     #     save_path=join(save_path, "plot_B_mesh.gif"),
     # )
 
-    out.mag.meshsolution.plot_contour(
-        group_names=["rotor magnets", "rotor core"],
+    out.mag.meshsolution.get_group(["rotor magnets", "rotor core"]).plot_contour(
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )
@@ -162,8 +158,7 @@ def test_Benchmark_skew_plot_contour_B_FEMM():
     #     save_path=join(save_path, "plot_B_mesh.gif"),
     # )
 
-    out.mag.meshsolution.plot_contour(
-        group_names=["rotor magnets", "rotor core"],
+    out.mag.meshsolution.get_group(["rotor magnets", "rotor core"]).plot_contour(
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )

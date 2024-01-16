@@ -1,24 +1,17 @@
 from os.path import join
 
-import pytest
-
 import numpy as np
-from numpy.testing import assert_almost_equal
-from numpy.testing import assert_allclose
-
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.OPdq import OPdq
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.LossFEA import LossFEA
-
-
-from pyleecan.Functions.load import load
-
-from pyleecan.definitions import DATA_DIR
-
+import pytest
+from numpy.testing import assert_allclose, assert_almost_equal
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.LossFEA import LossFEA
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 
 is_show_fig = False
 
@@ -110,9 +103,9 @@ def test_LossFEA_SPMSM():
         group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
-                loss.plot_mesh(group_names=group_names + ["stator winding"])
+                loss.get_group(group_names + ["stator winding"]).plot_mesh()
             else:
-                loss.plot_mesh(group_names=group_names)
+                loss.get_group(group_names).plot_mesh()
         out.loss.plot_losses()
 
         # plot_2D(
