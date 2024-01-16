@@ -84,7 +84,8 @@ def plot_B_mesh(
             title = win_title
 
         pv_plotter, sargs = configure_plot(
-            pv_plotter=pv_plotter, win_title=win_title, save_path=save_path
+            pv_plotter=pv_plotter,
+            win_title=win_title,
         )
 
         pv_plotter.add_text(
@@ -130,12 +131,7 @@ def plot_B_mesh(
     )
 
     if is_contour:
-        lab_ind = None
-        for ii, sol in enumerate(MS_B_plot.solution):
-            if sol.label == "A_z" and sol.type_element == "node":
-                lab_ind = ii
-                break
-        if lab_ind is None:
+        if MS_B_plot["A_z"].type_element != "node":
             raise Exception(
                 "Cannot field lines if A_z calculated on nodes is not in meshsolution"
             )
@@ -147,7 +143,6 @@ def plot_B_mesh(
             is_radial=is_radial,
             is_center=is_center,
             field_name=field_name,
-            index=lab_ind,
         )
         mesh_pv_Az[field_name_A] = field_A
         contours = mesh_pv_Az.contour()
