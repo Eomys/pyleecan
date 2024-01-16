@@ -23,7 +23,7 @@ def jacobian(
     """
 
     grad_func = self.grad_shape_function(point)
-    jacob = np.dot(grad_func, element_coordinate[:, 0:2])
+    jacob = np.dot(grad_func, element_coordinate[:, :2])
     det_jacob = np.linalg.det(jacob)
 
     return jacob, det_jacob

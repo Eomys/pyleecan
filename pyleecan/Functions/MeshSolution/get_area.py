@@ -8,13 +8,10 @@ def get_area(meshsolution, group_names=None, indices=None):
     ----------
     meshsolution : MeshSolution
         a MeshSolution object
-
     group_names : list of str
         list of the groups names or string of a single group
-
     indices : list
         list of indices, if not given all indices are considered
-
     Return
     ------
     area : float

@@ -3,7 +3,7 @@ import copy
 
 import numpy as np
 
-from pyleecan.Classes.ElementMat import ElementMat
+from ....Classes.ElementMat import ElementMat
 
 
 def renum(self):

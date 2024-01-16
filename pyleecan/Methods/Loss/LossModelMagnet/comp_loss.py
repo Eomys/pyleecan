@@ -4,7 +4,6 @@ from numpy import matmul, pi
 from numpy import sum as np_sum
 from numpy import zeros
 
-from ....Classes.CondType21 import CondType21
 from ....Classes.HoleM50 import HoleM50
 from ....Classes.HoleM51 import HoleM51
 from ....Classes.HoleM52 import HoleM52

@@ -1,4 +1,4 @@
-import csv
+import numpy as np
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,48 +19,36 @@ def element_loop(
 
     from publications:
 
-
     Parameters
     ----------
     self : ForceTensor
         A ForceTensor object
-
-    mesh :
+    mesh : MeshMat
         A Mesh object
-
-
-
-
-    polynomial_coeffs : 2x3 List, optional
-        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2
+    polynomial_coeffs : List
+        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2. Shape of (s2*3)
 
     Return
     ----------
-    f : (nb_nodes*dim*Nt_tot) array
-        nodal forces
-
-    connect : (nb_element*nb_node_per_element) array
-        table of mesh connectivity
+    f : ndarray
+        nodal forces of shape (nb_nodes*dim*Nt_tot)
+    connect :  ndarray
+        table of mesh connectivity of shape (nb_element*nb_node_per_element)
 
     """
 
     # For every type of element (now only Triangle3, TO BE extended)
     for key in mesh.element_dict:
-        # mesh.element_dict[key].interpolation = Interpolation()
-        # mesh.element_dict[key].interpolation.init_key(key=key, nb_gauss=1)
-
-        nb_node_per_element = mesh.element_dict[
-            key
-        ].nb_node_per_element  # Number of nodes per element
+        # Number of nodes per element
+        nb_node_per_element = mesh.element_dict[key].nb_node_per_element
 
         mesh_element_key = mesh.element_dict[key]
-        connect = mesh.element_dict[
-            key
-        ].get_connectivity()  # Each row of connect is an element
 
-        nb_elem = len(connect)
+        # Each row of connect is an element
+        connect = mesh.element_dict[key].get_connectivity()
 
-        nb_node = mesh.node.nb_node  # Total nodes number
+        # Total nodes number
+        nb_node = mesh.node.nb_node
 
         # Nodal forces init
         f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
@@ -76,12 +64,11 @@ def element_loop(
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-            node_number = mesh_element_key.get_connectivity(
-                elt_number
-            )  # elt nodes numbers, can differ from indices
-            element_coordinate = mesh.get_element_coordinate(elt_number)[
-                key
-            ]  # elt nodes coordonates
+            # elt nodes numbers, can differ from indices
+            node_number = mesh_element_key.get_connectivity(elt_number)
+
+            # elt nodes coordonates
+            element_coordinate = mesh.get_element_coordinate(elt_number)[key]
 
             # elt physical fields values
             Be = B[elt_indice, :, :]
@@ -89,9 +76,8 @@ def element_loop(
             mue = mu[elt_indice, :]
             mu_0 = 4 * np.pi * 1e-7
 
-            Me = np.reshape(
-                Be / mu_0 - He, (dim, 1, Nt_tot)
-            )  # reshaped for matrix product purpose
+            # reshaped for matrix product purpose
+            Me = np.reshape(Be / mu_0 - He, (dim, 1, Nt_tot))
 
             # Total tensor initalization
             total_tensor = np.zeros((dim, dim, Nt_tot))
@@ -127,12 +113,11 @@ def element_loop(
                 )  # coordonées du vecteur nn+1
 
                 # Volume ratio (Green Ostrogradski)
-                L = np.linalg.norm(edge_vector)
-                Ve0 = L
+                Ve0 = np.linalg.norm(edge_vector)
 
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
-                    np.array((edge_vector[1], -edge_vector[0])) / L
+                    np.array((edge_vector[1], -edge_vector[0])) / Ve0
                 )
                 normal_to_edge = (
                     normal_to_edge_unoriented

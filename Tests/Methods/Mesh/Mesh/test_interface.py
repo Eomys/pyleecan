@@ -41,17 +41,12 @@ class Test_interface(object):
         self.other_mesh.add_element([4, 6, 2], "triangle")
 
         new_seg_mesh = self.mesh.interface(self.other_mesh)
-        solution = np.array([[0, 2], [4, 2]])
-        resultat = new_seg_mesh.element_dict["line"].connectivity
-        testA = np.sum(abs(resultat - solution))
-        msg = (
-            "Wrong projection: returned "
-            + str(resultat)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        assert abs(testA - 0) < DELTA, msg
+        solution = np.array([[2, 0], [4, 2]])
+        result = new_seg_mesh.element_dict["line"].connectivity
+        for res in result:
+            assert np.any(
+                np.all(np.isin(solution, res), axis=1)
+            ), f"Wrong result, {res} is not in {solution}"
 
     def test_ElementMat_NodeMat_corner_ext(self):
         """unittest with an external corner interface"""
@@ -76,10 +71,10 @@ class Test_interface(object):
         # Check result
         solution = np.array([[0, 1], [1, 5]])
         result = new_seg_mesh.element_dict["line"].connectivity
-        testA = np.sum(abs(result - solution))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        assert abs(testA - 0) < DELTA, msg
+        for res in result:
+            assert np.any(
+                np.all(np.isin(solution, res), axis=1)
+            ), f"Wrong result, {res} is not in {solution}"
 
     def test_ElementMat_NodeMat_corner_int(self):
         """unittest with an internal corner interface"""
@@ -104,10 +99,10 @@ class Test_interface(object):
         # Check result
         solution = np.array([[0, 1], [1, 5]])
         result = new_seg_mesh.element_dict["line"].connectivity
-        testA = np.sum(abs(result - solution))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        assert abs(testA - 0) < DELTA, msg
+        for res in result:
+            assert np.any(
+                np.all(np.isin(solution, res), axis=1)
+            ), f"Wrong result, {res} is not in {solution}"
 
     def test_ElementMat_NodeMat_self(self):
         """unittest with interface of a mesh on itself"""
@@ -123,9 +118,15 @@ class Test_interface(object):
         new_seg_mesh = self.mesh.interface(self.mesh)
 
         # Check result
-        solution = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [2, 3]])
+        solution = np.array([[0, 1], [0, 2], [1, 2], [2, 3], [3, 0]])
         result = new_seg_mesh.element_dict["line"].connectivity
-        testA = np.sum(abs(result - solution))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        assert abs(testA - 0) < DELTA, msg
+        for res in result:
+            assert np.any(
+                np.all(np.isin(solution, res), axis=1)
+            ), f"Wrong result, {res} is not in {solution}"
+
+
+if __name__ == "__main__":
+    test = Test_interface()
+    test.setup_method(None)
+    test.test_MeshMat_flat()

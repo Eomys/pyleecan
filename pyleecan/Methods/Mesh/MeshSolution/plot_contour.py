@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from numpy import abs as np_abs
-from numpy import exp, linspace
-from numpy import max as np_max
-from numpy import min as np_min
-from numpy import pi, real
-from numpy.linalg import norm
 
-from pyleecan.Functions.Plot.Pyvista.configure_plot import configure_plot
-from pyleecan.Functions.Plot.Pyvista.plot_mesh_field import plot_mesh_field
+from numpy import (
+    pi,
+    real,
+    min as np_min,
+    max as np_max,
+    linspace,
+    exp,
+)
 
-from ....Classes.MeshMat import MeshMat
-from ....Classes.MeshVTK import MeshVTK
 from ....definitions import config_dict
+from ....Functions.Plot.Pyvista.configure_plot import configure_plot
+from ....Functions.Plot.Pyvista.plot_mesh_field import plot_mesh_field
 from ....Functions.MeshSolution.use_group import use_group
 
 COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]

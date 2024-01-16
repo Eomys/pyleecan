@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from os.path import join
 
-import numpy as np
 import pytest
 from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.ImportMeshMat import ImportMeshMat
-from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.MeshVTK import MeshVTK
 from Tests import TEST_DATA_DIR
 

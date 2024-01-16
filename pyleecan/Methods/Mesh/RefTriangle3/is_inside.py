@@ -18,13 +18,12 @@ def is_inside(
     point : ndarray
         coordinates of the checked point
     normal_t : ndarray
-        (optional) element normal vector
+        (optional) normal of another element
 
     Returns
     -------
     is_inside: bool
         true if the point is inside the element
-
     """
     point_ref = self.get_ref_point(node, point)
     s = point_ref[0]

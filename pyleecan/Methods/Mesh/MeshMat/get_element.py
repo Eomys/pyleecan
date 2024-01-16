@@ -10,6 +10,25 @@ from ....Classes.ElementMat import ElementMat
 def _check_element_name(
     element_mat_dict: Dict[str, ElementMat], element_name: Union[List[str], str]
 ) -> List[str]:
+    """Check if the element names provided are in the element dictionnary
+
+    Parameters
+    ----------
+    element_mat_dict : Dict[str, ElementMat]
+        Dict of elements
+    element_name : Union[List[str], str]
+        name of elements
+
+    Returns
+    -------
+    List[str]
+        Name of elements processed
+
+    Raises
+    ------
+    ValueError
+        A provided name is not in the dictionnary
+    """
     if isinstance(element_name, str):
         element_name = [element_name]
     elif len(element_name) == 0:
@@ -26,7 +45,7 @@ def _check_element_name(
 
 def get_element(
     self,
-    element_indices: Optional[List[int]] = None,
+    element_indices: Optional[Union[int, List[int]]] = None,
     element_name: Union[List[str], str] = [],
 ) -> Tuple[Dict[str, np.ndarray], int, Dict[str, np.ndarray]]:
     """Return the connectivity for one selected element
@@ -50,7 +69,7 @@ def get_element(
         Dict of the element element_indices for each ElementMat
     """
 
-    if not isinstance(element_indices, Iterable) and element_indices is not None:
+    if isinstance(element_indices, (int, np.integer)):
         element_indices = (element_indices,)
 
     element_name = _check_element_name(
@@ -80,7 +99,7 @@ def get_element(
                 [
                     connectivity
                     for connectivity in list_connectivity
-                    if connectivity is not None
+                    if connectivity.size
                 ]
             ).squeeze()
 
@@ -88,7 +107,7 @@ def get_element(
             dict_index[key] = [
                 index
                 for index, connectivity in zip(element_indices, list_connectivity)
-                if connectivity is not None
+                if connectivity.size
             ]
 
     return dict_connectivity, nb_element, dict_index

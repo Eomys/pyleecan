@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import copy
 
 import numpy as np
 
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
+from ....Classes.NodeMat import NodeMat
 
 
 def clear_node(self):
@@ -34,7 +32,7 @@ def clear_node(self):
     )
 
     if not np.array_equal(node_indice, common):
-        raise ValueError
+        raise ValueError("")
 
     self.node = NodeMat(
         coordinate=coord_init[index2, :],

@@ -24,7 +24,7 @@ def comp_loss(self):
     """
 
     if self.parent.parent.parent is None:
-        raise Exception("Cannot calculate core losses if simu is not in an Output")
+        raise ValueError("Cannot calculate core losses if simu is not in an Output")
     else:
         output = self.parent.parent.parent
 
@@ -59,17 +59,17 @@ def comp_loss(self):
     felec = output.elec.OP.get_felec()
 
     if output.mag is None:
-        raise Exception("Cannot calculate core losses if OutMag is None")
+        raise ValueError("Cannot calculate core losses if OutMag is None")
 
     if output.mag.meshsolution is None:
-        raise Exception("Cannot calculate core losses if OutMag.meshsolution is None")
+        raise ValueError("Cannot calculate core losses if OutMag.meshsolution is None")
     else:
         meshsol = output.mag.meshsolution
 
     group_list = list(meshsol.group.keys())
 
     if self.group not in group_list:
-        raise Exception("Cannot calculate core losses for group=" + self.group)
+        raise ValueError("Cannot calculate core losses for group=" + self.group)
 
     try:
         solution_B = meshsol.get("B")

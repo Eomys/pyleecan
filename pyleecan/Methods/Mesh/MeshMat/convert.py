@@ -25,7 +25,7 @@ def convert(
         a MeshMat object
     meshtype : str
         a type of Mesh object: MeshVTK or MeshMat
-    scale : float # TODO implement the feature
+    scale : float
         scale factor
 
         Returns
@@ -44,6 +44,7 @@ def convert(
         new_mesh.node.coordinate *= scale
         return new_mesh
 
+    # Avoiding cicular import
     from ....Classes.MeshVTK import MeshVTK
 
     elements_ = []

@@ -19,6 +19,10 @@ def is_exist(self, connectivity: np.ndarray) -> bool:
         bool
             True if the element already exist
     """
+    if self.nb_node_per_element > 3:
+        self.get_logger().warning(
+            "ElementMat.is_exist doesn't take into account quad node permutations."
+        )
 
     # Check if the element connectivity provided has the good size
     if self.nb_node_per_element != len(connectivity):
