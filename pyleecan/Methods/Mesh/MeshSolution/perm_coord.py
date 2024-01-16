@@ -15,7 +15,7 @@ def perm_coord(
     len_perm_coord_list = len(perm_coord_list)
 
     # swap mesh solution
-    for solution in self.solution_dict.values():
+    for solution in self.values():
         # swap modal shapes
         meshsol_field = solution.field
         if len_perm_coord_list != meshsol_field.shape[-1]:

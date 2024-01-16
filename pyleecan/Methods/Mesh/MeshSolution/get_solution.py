@@ -23,12 +23,12 @@ def get_solution(self, label: Optional[str] = None) -> Solution:
 
     # Return first solution
     if label is None:
-        return next(iter(self.solution_dict.values()))
+        return next(iter(self.values()))
 
     # Search for the desired solution
     try:
-        return self.solution_dict.get(label)
+        return self[label]
     except KeyError:
         raise KeyError(
-            f"Wrong solution label {label}, please use one of the following values: {list(self.solution_dict.keys())}."
+            f'Wrong solution label "{label}", please use one of the following values: {list(self.keys())}.'
         )

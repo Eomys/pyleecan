@@ -8689,7 +8689,16 @@
             "plot_glyph",
             "perm_coord",
             "get_deflection",
-            "get_glyph"
+            "get_glyph",
+            "add_solution",
+            "replace_solution",
+            "pop_solution",
+            "keys",
+            "items",
+            "values",
+            "__getitem__",
+            "__setitem__",
+            "__iter__"
         ],
         "mother": "",
         "name": "MeshSolution",
