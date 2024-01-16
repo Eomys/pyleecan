@@ -312,7 +312,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.tab_values_losses.col_header = [
             "f [Hz]",
             "B [T]",
-            "Loss [W/Lb]",
+            "Loss [W/kg]",
         ]
 
         self.tab_values_losses.si_col.hide()
