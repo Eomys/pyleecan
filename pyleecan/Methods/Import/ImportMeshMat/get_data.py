@@ -46,18 +46,6 @@ def get_data(self):
 
     # Node indices must start at 0 and be consecutive
     unique_node_indices = np.sort(np.unique(node_indices))
-    if np.any(unique_node_indices != np.arange(unique_node_indices.size)):
-        for new_index, old_index in enumerate(unique_node_indices):
-            node_indices[node_indices == old_index] = new_index
-
-            # Change indices in element connectivity value
-            for element in elements.values():
-                element[:, 1:][element[:, 1:] == old_index] = new_index
-
-    node_indices = nodes[:, 0].astype(np.int32)
-
-    # Node indices must start at 0 and be consecutive
-    unique_node_indices = np.sort(np.unique(node_indices))
     if (
         unique_node_indices[-1] != unique_node_indices.size - 1
         or unique_node_indices.size != node_indices.size
