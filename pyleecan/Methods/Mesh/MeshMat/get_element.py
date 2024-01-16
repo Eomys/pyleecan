@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from collections import Iterable
 from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np

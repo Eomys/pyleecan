@@ -59,7 +59,6 @@ def get_group(self, group_names):
 
     # 2) extract the corresponding connectivity and create a new mesh
     mesh_init = self.mesh
-    node_init = mesh_init.get_node_coordinate()
     mesh_list = list()
     for sep in sep_list:
         connect_dict, nb_element, indice_dict = mesh_init.get_element(sep)
