@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from ....Classes.MeshMat import MeshMat
-from ....Functions.MeshSolution.use_group import use_group
 from ....Functions.Plot.Pyvista.configure_plot import configure_plot
 
 
-@use_group
 def plot_mesh(
     self,
     pv_plotter=None,
-    label=None,
     indices=None,
     save_path=None,
-    group_names=None,  # Used by the decorator
     is_show_axes=False,
     is_show_fig=True,
     is_show_grid=False,
@@ -26,14 +22,10 @@ def plot_mesh(
         a MeshSolution object
     pv_plotter : a pyvista(qt) object, optional
         a pyvista object which will be used for the plot
-    label : str
-        Label of the mesh to plot
     indices : list
         list of the nodes to extract (optional)
     save_path : str
         Path to a file where to save the figure
-    group_names : [str] or str
-        List of the mesh group to plot
     is_show_axes : bool
         True to show axes
     is_show_fig : bool

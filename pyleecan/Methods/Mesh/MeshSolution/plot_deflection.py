@@ -8,7 +8,6 @@ from numpy import pi, real
 
 from ....Classes.MeshVTK import MeshVTK
 from ....definitions import config_dict
-from ....Functions.MeshSolution.use_group import use_group
 from ....Functions.Plot.Pyvista.configure_plot import configure_plot
 from ....Functions.Plot.Pyvista.plot_surf_deflection import plot_surf_deflection
 
@@ -16,7 +15,6 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 FONT_FAMILY_PYVISTA = config_dict["PLOT"]["FONT_FAMILY_PYVISTA"]
 
 
-@use_group
 def plot_deflection(
     self,
     *args,
@@ -25,7 +23,6 @@ def plot_deflection(
     clim=None,
     factor=None,
     field_name=None,
-    group_names=None,
     save_path=None,
     title="",
     win_title="",
