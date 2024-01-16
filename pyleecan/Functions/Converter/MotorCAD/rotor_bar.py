@@ -1,5 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Converts motor-cad notch into pyleecan notch slotM19
+    """Converts motor-cad into pyleecan for rotor bar
 
     Parameters
     ----------

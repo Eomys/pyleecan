@@ -17,7 +17,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
-    self.unit_type = ""
+    self.unit_type = "m"
     other_path_list = ["[Winding_Design]", "EWdg_MLT"]
     MLT = self.get_other(other_dict, other_path_list, other_unit_dict)
 
@@ -26,7 +26,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     else:
         cp = machine.stator.winding.end_winding.comp_length()
 
-    lewout = MLT / 2 - machine.stator.comp_length() - cp
+    lewout = 1 / 2 * (MLT / 2 - machine.stator.comp_length()) - cp
 
     machine.stator.winding.Lewout = lewout
     return machine

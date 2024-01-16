@@ -20,6 +20,7 @@ def add_rule_condtype11(self, is_stator):
     else:
         lam_name = "rotor"
 
+    # conversion problem, possibility of having these rules
     """
     self.rules_list.append(
         RuleSimple(
