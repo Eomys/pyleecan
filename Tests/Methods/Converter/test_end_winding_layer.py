@@ -12,28 +12,28 @@ winding_test = list()
 # Common values
 other_dict = {
     "[Winding_Design]": {
-        "EWdg_MLT": 8,
+        "EWdg_MLT": 950,
     }
 }
 
 winding_test.append(
     {
         "other_dict": other_dict,
-        "Lewout": 0.00365,
+        "Lewout": 0.0625,
     }
 )
 
 # Common values
 other_dict = {
     "[Winding_Design]": {
-        "EWdg_MLT": 20,
+        "EWdg_MLT": 1523,
     }
 }
 
 winding_test.append(
     {
         "other_dict": other_dict,
-        "Lewout": 0.00965,
+        "Lewout": 0.20575,
     }
 )
 
@@ -50,6 +50,8 @@ class TestComplexRuleEndWindingLenght(object):
         machine.stator = LamSlotWind()
         machine.stator.winding = Winding()
         machine.stator.winding.end_winding = EndWinding()
+        machine.stator.Rext = 0.5
+        machine.stator.Rint = 0.35
 
         # Define and apply the slot rule
         rule = RuleComplex(fct_name="end_winding_lenght", folder="MotorCAD")

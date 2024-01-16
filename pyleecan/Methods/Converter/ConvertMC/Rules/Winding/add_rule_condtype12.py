@@ -60,7 +60,7 @@ def add_rule_condtype12(self, is_stator):
                 },
             ],
             unit_type="m",
-            equation="y/2 + b = x",
+            equation="y/2 + b/2 = x",
             file_name=__file__,
         )
     )
