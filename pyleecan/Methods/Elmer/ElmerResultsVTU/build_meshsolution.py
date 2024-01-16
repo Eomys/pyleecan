@@ -52,8 +52,6 @@ def build_meshsolution(self):
     # store only data from store dict if available
     comp_ext = ["x", "y", "z"]
 
-    solution_dict = {}  # dict of solutions
-
     for key, value in pt_data.items():
         # check if value should be stored
         if key in self.store_dict.keys():
@@ -93,11 +91,15 @@ def build_meshsolution(self):
             # setup solution depending on number of field components
             if siz == 1:
                 field = components[0]
-                solution_dict[self.store_dict[key]["symbol"]] = SolutionData(
+                solution = SolutionData(
                     field=field,
                     type_element="point",
                     label=self.store_dict[key]["symbol"],
                 )
+
+                label = self.store_dict[key]["symbol"]
+                meshsol.add_solution(solution=solution, label=label)
+
             else:
                 comps = {}
                 for i in range(siz):
@@ -107,12 +109,13 @@ def build_meshsolution(self):
                     symbol=self.store_dict[key]["symbol"],
                     components=comps,
                 )
-                solution_dict[self.store_dict[key]["symbol"]] = SolutionVector(
+                solution = SolutionVector(
                     field=field,
                     type_element="point",
                     label=self.store_dict[key]["symbol"],
                 )
+                label = self.store_dict[key]["symbol"]
 
-    meshsol.solution_dict = solution_dict
+                meshsol.add_solution(solution=solution, label=label)
 
     return meshsol

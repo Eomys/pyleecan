@@ -45,10 +45,9 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
                 MeshSolution object containing magnetic quantities B, H, mu for each time step
     """
 
-    logger = self.get_logger()
     solution_dict = {}
 
-    for key, solution in MS_sliced.solution.items():
+    for key, solution in MS_sliced.items():
         # Define axis
         name, _ = solution.get_axes_list()
 

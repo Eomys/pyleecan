@@ -98,7 +98,7 @@ def get_group(self, group_names):
 
     # 4) select the corresponding solutions
     solution_dict = {}
-    for key, solution in self.solution_dict.items():
+    for key, solution in self.items():
         type_element_sol = solution.type_element
 
         new_sol = None

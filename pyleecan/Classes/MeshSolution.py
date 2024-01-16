@@ -72,6 +72,51 @@ try:
 except ImportError as error:
     get_glyph = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.add_solution import add_solution
+except ImportError as error:
+    add_solution = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.replace_solution import replace_solution
+except ImportError as error:
+    replace_solution = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.pop_solution import pop_solution
+except ImportError as error:
+    pop_solution = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.keys import keys
+except ImportError as error:
+    keys = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.items import items
+except ImportError as error:
+    items = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.values import values
+except ImportError as error:
+    values = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.__getitem__ import __getitem__
+except ImportError as error:
+    __getitem__ = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.__setitem__ import __setitem__
+except ImportError as error:
+    __setitem__ = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.__iter__ import __iter__
+except ImportError as error:
+    __iter__ = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -207,6 +252,98 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_glyph = get_glyph
+    # cf Methods.Mesh.MeshSolution.add_solution
+    if isinstance(add_solution, ImportError):
+        add_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method add_solution: " + str(add_solution)
+                )
+            )
+        )
+    else:
+        add_solution = add_solution
+    # cf Methods.Mesh.MeshSolution.replace_solution
+    if isinstance(replace_solution, ImportError):
+        replace_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method replace_solution: "
+                    + str(replace_solution)
+                )
+            )
+        )
+    else:
+        replace_solution = replace_solution
+    # cf Methods.Mesh.MeshSolution.pop_solution
+    if isinstance(pop_solution, ImportError):
+        pop_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method pop_solution: " + str(pop_solution)
+                )
+            )
+        )
+    else:
+        pop_solution = pop_solution
+    # cf Methods.Mesh.MeshSolution.keys
+    if isinstance(keys, ImportError):
+        keys = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshSolution method keys: " + str(keys))
+            )
+        )
+    else:
+        keys = keys
+    # cf Methods.Mesh.MeshSolution.items
+    if isinstance(items, ImportError):
+        items = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshSolution method items: " + str(items))
+            )
+        )
+    else:
+        items = items
+    # cf Methods.Mesh.MeshSolution.values
+    if isinstance(values, ImportError):
+        values = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshSolution method values: " + str(values))
+            )
+        )
+    else:
+        values = values
+    # cf Methods.Mesh.MeshSolution.__getitem__
+    if isinstance(__getitem__, ImportError):
+        __getitem__ = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method __getitem__: " + str(__getitem__)
+                )
+            )
+        )
+    else:
+        __getitem__ = __getitem__
+    # cf Methods.Mesh.MeshSolution.__setitem__
+    if isinstance(__setitem__, ImportError):
+        __setitem__ = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method __setitem__: " + str(__setitem__)
+                )
+            )
+        )
+    else:
+        __setitem__ = __setitem__
+    # cf Methods.Mesh.MeshSolution.__iter__
+    if isinstance(__iter__, ImportError):
+        __iter__ = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshSolution method __iter__: " + str(__iter__))
+            )
+        )
+    else:
+        __iter__ = __iter__
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
