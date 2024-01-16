@@ -117,6 +117,12 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.lf_alpha.value() == 0.2
         assert self.widget.w_setup.lf_cost_unit.value() == 0.21
 
+        # Test losses
+        assert (
+            self.widget.w_setup.mat.mag.LossData.value
+            == array([[20, 20, 30, 20, 20], [1, 2, 3, 4, 5], [0.1, 0.2, 0.3, 0.4, 0.5]])
+        ).all()
+
         # Test Raw Material
         backup_mat = self.material_dict[LIB_KEY][0].copy()
         self.material_dict[LIB_KEY][0].mag = None
@@ -643,8 +649,8 @@ class TestDMatSetup(object):
         mat.w_tab.cellWidget(2, 0).setValue(20)
         mat.w_tab.cellWidget(3, 1).setValue(5)
         mat.emit_save()
-        assert self.widget.w_setup.mat.mag.LossData.value[2, 0] == 20
-        assert self.widget.w_setup.mat.mag.LossData.value[3, 1] == 5
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 2] == 20
+        assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 5
         assert isfile(csv_path_Loss)
         # Load csv
         with mock.patch(
@@ -652,6 +658,7 @@ class TestDMatSetup(object):
             return_value=(csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_import.clicked.emit()
+            mat.emit_save()
 
         assert mat.si_row.value() == 25
         assert mat.si_col.value() == 3
@@ -676,13 +683,13 @@ class TestDMatSetup(object):
         assert mat.w_tab.cellWidget(23, 2).value() == 2.4
         assert mat.w_tab.cellWidget(24, 2).value() == 2.5
 
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 0] == 40
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 4
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 40
+        assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 4
 
         # Load Excel
         with mock.patch(
             "PySide2.QtWidgets.QFileDialog.getOpenFileName",
-            return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
+            return_value=(excel_path_Loss, "Excel file (*.xls .*xlsx)"),
         ):
             mat.b_import.clicked.emit()
         wimport = mat.wimport_excel
@@ -690,25 +697,32 @@ class TestDMatSetup(object):
         assert wimport.c_sheet.currentText() == "Feuil1"
         wimport.c_sheet.setCurrentIndex(1)
         assert wimport.c_sheet.currentText() == "Feuil2"
-        wimport.le_range.setText("F8:G57")
+        wimport.le_range.setText("F8:H57")
         assert wimport.b_ok.isEnabled() == True
         wimport.b_ok.clicked.emit()
 
         assert mat.si_row.value() == 50
-        assert mat.si_col.value() == 2
-        assert mat.w_tab.cellWidget(0, 0).value() == 0
-        assert mat.w_tab.cellWidget(0, 1).value() == 0
-        assert mat.w_tab.cellWidget(1, 0).value() == 0.01
-        assert mat.w_tab.cellWidget(1, 1).value() == 1.7854
-        assert mat.w_tab.cellWidget(2, 0).value() == 0.02
-        assert mat.w_tab.cellWidget(2, 1).value() == 3.5731
-        assert mat.w_tab.cellWidget(3, 0).value() == 0.03
-        assert mat.w_tab.cellWidget(3, 1).value() == 5.36544
-        assert mat.w_tab.cellWidget(49, 0).value() == 0.49
-        assert mat.w_tab.cellWidget(49, 1).value() == 87.843516
+        assert mat.si_col.value() == 3
+        assert mat.w_tab.cellWidget(0, 0).value() == 50
+        assert mat.w_tab.cellWidget(1, 0).value() == 50
+        assert mat.w_tab.cellWidget(2, 0).value() == 50
+        assert mat.w_tab.cellWidget(3, 0).value() == 50
+        assert mat.w_tab.cellWidget(49, 0).value() == 100
 
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 0] == 0.03
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 5.36544
+        assert mat.w_tab.cellWidget(0, 1).value() == 0
+        assert mat.w_tab.cellWidget(1, 1).value() == 1
+        assert mat.w_tab.cellWidget(2, 1).value() == 2
+        assert mat.w_tab.cellWidget(3, 1).value() == 3
+        assert mat.w_tab.cellWidget(49, 1).value() == 49
+
+        assert mat.w_tab.cellWidget(0, 2).value() == 0
+        assert mat.w_tab.cellWidget(1, 2).value() == 0.01
+        assert mat.w_tab.cellWidget(2, 2).value() == 0.02
+        assert mat.w_tab.cellWidget(3, 2).value() == 0.03
+        assert mat.w_tab.cellWidget(49, 2).value() == 0.49
+
+        assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 3
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 50
 
         # Load Excel with other column
         with mock.patch(
@@ -721,18 +735,18 @@ class TestDMatSetup(object):
         assert wimport.c_sheet.currentText() == "Feuil1"
         wimport.c_sheet.setCurrentIndex(1)
         assert wimport.c_sheet.currentText() == "Feuil2"
-        wimport.le_range.setText("F8:G57")
+        wimport.le_range.setText("F8:I57")
         assert wimport.b_ok.isEnabled() == True
         wimport.c_order.setCurrentIndex(1)
         wimport.b_ok.clicked.emit()
 
         assert mat.si_row.value() == 50
-        assert mat.si_col.value() == 2
-        assert mat.w_tab.cellWidget(0, 0).value() == 0
-        assert mat.w_tab.cellWidget(1, 0).value() == 1.7854
-        assert mat.w_tab.cellWidget(2, 0).value() == 3.5731
-        assert mat.w_tab.cellWidget(3, 0).value() == 5.36544
-        assert mat.w_tab.cellWidget(49, 0).value() == 87.843516
+        assert mat.si_col.value() == 3
+        assert mat.w_tab.cellWidget(0, 0).value() == 50
+        assert mat.w_tab.cellWidget(1, 0).value() == 50
+        assert mat.w_tab.cellWidget(2, 0).value() == 50
+        assert mat.w_tab.cellWidget(3, 0).value() == 50
+        assert mat.w_tab.cellWidget(49, 0).value() == 100
 
         assert mat.w_tab.cellWidget(0, 1).value() == 0
         assert mat.w_tab.cellWidget(1, 1).value() == 1
@@ -740,15 +754,15 @@ class TestDMatSetup(object):
         assert mat.w_tab.cellWidget(3, 1).value() == 3
         assert mat.w_tab.cellWidget(49, 1).value() == 49
 
-        assert mat.w_tab.cellWidget(0, 1).value() == 0
-        assert mat.w_tab.cellWidget(1, 1).value() == 0.01
-        assert mat.w_tab.cellWidget(2, 1).value() == 0.02
-        assert mat.w_tab.cellWidget(3, 1).value() == 0.03
-        assert mat.w_tab.cellWidget(49, 1).value() == 0.49
+        assert mat.w_tab.cellWidget(0, 2).value() == 0
+        assert mat.w_tab.cellWidget(1, 2).value() == 0.01
+        assert mat.w_tab.cellWidget(2, 2).value() == 0.02
+        assert mat.w_tab.cellWidget(3, 2).value() == 0.03
+        assert mat.w_tab.cellWidget(49, 2).value() == 0.49
 
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 0] == 5.36544
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 3
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 2] == 0.03
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 50
+        assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 3
+        assert self.widget.w_setup.mat.mag.LossData.value[2, 3] == 0.03
 
         # Export Csv
         save_csv_path_Loss = join(save_path, "DMatSetup_csv_export_Loss.csv").replace(
@@ -768,13 +782,11 @@ class TestDMatSetup(object):
         ):
             mat.b_import.clicked.emit()
 
-        assert mat.si_row.value() == 50
-        assert mat.si_col.value() == 3
-        assert mat.w_tab.cellWidget(0, 0).value() == 0
-        assert mat.w_tab.cellWidget(1, 0).value() == 1.7854
-        assert mat.w_tab.cellWidget(2, 0).value() == 3.5731
-        assert mat.w_tab.cellWidget(3, 0).value() == 5.36544
-        assert mat.w_tab.cellWidget(49, 0).value() == 87.843516
+        assert mat.w_tab.cellWidget(0, 0).value() == 50
+        assert mat.w_tab.cellWidget(1, 0).value() == 50
+        assert mat.w_tab.cellWidget(2, 0).value() == 50
+        assert mat.w_tab.cellWidget(3, 0).value() == 50
+        assert mat.w_tab.cellWidget(49, 0).value() == 100
 
         assert mat.w_tab.cellWidget(0, 1).value() == 0
         assert mat.w_tab.cellWidget(1, 1).value() == 1
@@ -788,16 +800,17 @@ class TestDMatSetup(object):
         assert mat.w_tab.cellWidget(3, 2).value() == 0.03
         assert mat.w_tab.cellWidget(49, 2).value() == 0.49
 
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 0] == 5.36544
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 3
-        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 2] == 0.03
+        assert self.widget.w_setup.mat.mag.LossData.value[0, 3] == 50
+        assert self.widget.w_setup.mat.mag.LossData.value[1, 3] == 3
+        assert self.widget.w_setup.mat.mag.LossData.value[2, 3] == 0.03
 
 
 if __name__ == "__main__":
     a = TestDMatSetup()
     a.setup_class()
     a.setup_method()
-    a.test_init()
+    # a.test_init()
     # a.test_set_alpha_Br()
+    a.test_BH_setup()
     a.test_losse_curve()
     print("Done")

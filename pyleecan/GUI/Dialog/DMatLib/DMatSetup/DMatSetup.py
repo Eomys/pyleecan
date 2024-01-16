@@ -331,7 +331,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         if isinstance(self.mat.mag.LossData, ImportMatrixXls):
             try:
                 self.mat.mag.LossData = ImportMatrixVal(
-                    transpose(self.mat.mag.LossData.get_data())
+                    self.mat.mag.LossData.get_data()
                 )
 
             except Exception as e:
@@ -343,18 +343,18 @@ class DMatSetup(Gen_DMatSetup, QDialog):
                     + str(e),
                 )
                 self.mat.mag.LossData = ImportMatrixVal(array([[0, 0, 0]]))
-            self.tab_values_losses.data = self.mat.mag.LossData.get_data()
+            self.tab_values_losses.data = transpose(self.mat.mag.LossData.get_data())
         elif not isinstance(self.mat.mag.LossData, ImportMatrixVal):
-            self.mat.mag.LossData = ImportMatrixVal(array([[0, 0, 0]]))
+            self.mat.mag.LossData = ImportMatrixVal(array([[0], [0], [0]]))
             self.tab_values_losses.data = array([[0, 0, 0]])
         elif self.mat.mag.LossData.get_data() is not None:
             self.tab_values_losses.data = transpose(self.mat.mag.LossData.get_data())
         else:
             self.mat.mag.LossData = ImportMatrixVal(array([[0, 0, 0]]))
-            self.tab_values_losses.data = array([[0, 0, 0]])
+            self.tab_values_losses.data = array([[0], [0], [0]])
 
         self.tab_values_losses.update()
-        self.mat.mag.LossData = transpose(self.tab_values_losses.data)
+        self.mat.mag.LossData.value = transpose(self.tab_values_losses.data)
 
     def set_default(self, attr):
         """When mat.elec or mat.mag are None, initialize with default values
@@ -966,8 +966,12 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             if not array_equal(
                 self.mat.mag.LossData.value, self.tab_values_losses.get_data()
             ):
-                self.mat.mag.LossData.value = self.tab_values_losses.get_data()
+                self.mat.mag.LossData.value = transpose(
+                    self.tab_values_losses.get_data()
+                )
                 self.set_save_needed(is_save_needed=True)
         elif isinstance(self.mat.mag.LossData, (ImportMatrixXls, ImportMatrix)):
-            self.mat.mag.LossData = ImportMatrixVal(self.tab_values_losses.get_data())
+            self.mat.mag.LossData = transpose(
+                ImportMatrixVal(self.tab_values_losses.get_data())
+            )
             self.set_save_needed(is_save_needed=True)

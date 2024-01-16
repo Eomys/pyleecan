@@ -368,15 +368,18 @@ class DTableData(Ui_DTableData, QDialog):
                 temp += 1
                 if a != data[temp, 0]:
                     one_curve = False
-                    axes.plot(data[end:temp, 1], data[end:temp, 2], label=f" {a} Hz")
+                    axes.plot(data[end:temp, 1], data[end:temp, 2], label=f" {a} [Hz]")
                     end = temp
                     a = data[temp, 0]
 
             if one_curve == True:
-                axes.plot(data[:, 1], data[:, 2], label=f" {data[0,0]} Hz")
+                axes.plot(data[:, 1], data[:, 2], label=f" {data[0,0]} [Hz]")
 
             axes.set_xlabel(self.col_header[1])
             axes.set_ylabel(self.col_header[2])
+            axes.set_xlim(auto=True)
+            axes.set_ylim(auto=True)
+
             fig.legend()
             plt.title("Curve Loss(B) depending to Frequency")
             plt.yscale("log")
