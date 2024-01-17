@@ -71,8 +71,19 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.current_class_dict = None
         self.current_class_index = None
         self.list_class_modified = list()
-        self.path_editor_py = path_editor_py
-        self.path_editor_csv = path_editor_csv
+        if is_app(path_editor_py):
+            self.path_editor_py = path_editor_py
+        else:
+            raise Exception(
+                "Application to edit python files doesn't exit at path: "
+                + path_editor_py
+            )
+        if is_app(path_editor_csv):
+            self.path_editor_csv = path_editor_csv
+        else:
+            raise Exception(
+                "Application to edit csv files doesn't exit at path: " + path_editor_csv
+            )
         self.class_gen_path = DOC_DIR.replace("\\", "/")
 
         # Show path to class generator
@@ -2233,3 +2244,20 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                     return child_path
 
         return None
+
+
+def is_app(app_path):
+    """Check if application pointed by app_path exists"""
+
+    # Check if file exists
+    if isfile(app_path):
+        return True
+    
+    # Check in all folders of environment path if file exists
+    else:
+        for dir in os.environ["PATH"].split(os.pathsep):
+            if os.path.exists(os.path.join(dir, app_path)):
+                return True
+
+    return False
+

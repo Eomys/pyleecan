@@ -10,16 +10,11 @@ except ImportError:  # Import for dev version
         "from pyleecan.GUI.Dialog.DClassGenerator.DClassGenerator import DClassGenerator"
     )
 
-# Path to prefered program to edit python files
-PATH_EDITOR_PY = (
-    "C:\\Users\\emile\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-)
-# PATH_EDITOR_PY = "notepad.exe" ;
-
-# Path to prefered program to edit csv files
-PATH_EDITOR_CSV = "C:\\Program Files\\LibreOffice\\program\\scalc.exe"
-# PATH_EDITOR_CSV = "C:\\Users\\emile\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-# PATH_EDITOR_CSV = "notepad.exe" ;
+## UPDATE paths to prefered applications
+# Path to prefered application to edit python files
+PATH_EDITOR_PY = "notepad.exe"
+# Path to prefered application to edit csv files
+PATH_EDITOR_CSV = "notepad.exe"
 
 
 def run_class_generator(argv):
