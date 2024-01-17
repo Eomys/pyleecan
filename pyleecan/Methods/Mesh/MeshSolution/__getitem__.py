@@ -1,7 +1,8 @@
 from pyleecan.Classes.Solution import Solution
+from typing import Hashable
 
 
-def __getitem__(self, label) -> Solution:
+def __getitem__(self, label: Hashable) -> Solution:
     """Mimic dict behaviour
 
     Parameters
