@@ -10,4 +10,6 @@ def select_bar_rules(self, is_stator):
 
     """
 
-    self.get_logger().info("bar, not implemented")
+    self.add_rule_rotor_bar(is_stator)
+
+    self.get_logger().error("Approximation for rotor bar conversion")

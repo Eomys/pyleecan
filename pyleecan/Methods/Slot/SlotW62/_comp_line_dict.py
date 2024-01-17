@@ -17,6 +17,7 @@ def _comp_line_dict(self):
         Dictionnary of the slot lines (key: line name, value: line object)
     """
 
+    Rbo = self.get_Rbo()
     point_dict = self._comp_point_coordinate()
     Z1 = point_dict["Z1"]
     Z2 = point_dict["Z2"]
@@ -53,6 +54,7 @@ def _comp_line_dict(self):
         line_dict["6-7"] = None
 
     line_dict["7-8"] = Segment(Z7, Z8)
+    line_dict["8-1"] = Arc1(Z8, Z1, -Rbo, is_trigo_direction=False)
 
     # Winding lines
     line_dict["w3-w4"] = Segment(Zw3, Zw4)

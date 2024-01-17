@@ -30,6 +30,7 @@ def get_surface_opening(self, alpha=0, delta=0):
         line_dict["5-6"],
         line_dict["6-7"],
         line_dict["7-8"],
+        line_dict["8-1"],
     ]
 
     curve_list = [line for line in curve_list if line is not None]
