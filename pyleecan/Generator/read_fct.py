@@ -35,7 +35,7 @@ def read_all(
     is_internal=False,
     in_path="",
     soft_name=PACKAGE_NAME,
-    is_mother_of_mother=True,
+    is_update_mother_of_mother=True,
 ):
     """Read every csv files in a directory and subdirectory and create a structure for the
     code generation
@@ -48,8 +48,8 @@ def read_all(
         True to overwrite the open source csv files by internal ones
     soft_name : str
         Name of the generated software
-    is_mother_of_mother: bool
-        True to return mother of mother in update_all_daughters
+    is_update_mother_of_mother: bool
+        True to update mother of mother in update_all_daughters
 
     Returns
     -------
@@ -85,20 +85,18 @@ def read_all(
                     gen_dict[file_name[:-4]]["is_internal"] = True
 
     # Update all the "daughters" key according to "mother" key
-    update_all_daughters(gen_dict, is_mother_of_mother=is_mother_of_mother)
+    update_all_daughters(gen_dict, is_update_mother_of_mother=is_update_mother_of_mother)
 
     return gen_dict
 
 
-def read_file(file_path, soft_name=PACKAGE_NAME, is_get_size=False):
+def read_file(file_path, soft_name=PACKAGE_NAME):
     """Read a csv file and create a dict for the class code generation
 
     Parameters
     ----------
     file_path : str
         path to the class csv file to read
-    is_get_size : bool
-        True to return size in class_dict
 
     Returns
     -------
@@ -133,7 +131,7 @@ def read_file(file_path, soft_name=PACKAGE_NAME, is_get_size=False):
         if is_side_by_side:
             get_dict_from_side_by_side(class_csv, class_dict)
         else:
-            get_dict_from_columns(class_csv, class_dict, header_index, is_get_size)
+            get_dict_from_columns(class_csv, class_dict, header_index)
     return class_dict
 
 
@@ -196,7 +194,7 @@ def get_dict_from_side_by_side(class_csv, class_dict):
         )
 
 
-def get_dict_from_columns(class_csv, class_dict, header_index, is_get_size=False):
+def get_dict_from_columns(class_csv, class_dict, header_index):
     # Get all the properties of the class
     properties = list()
     Nline = len(class_csv)
@@ -207,8 +205,7 @@ def get_dict_from_columns(class_csv, class_dict, header_index, is_get_size=False
             prop_dict = dict()
             prop_dict["name"] = name
             prop_dict["unit"] = class_csv[rx][UNIT_COL]
-            if is_get_size:
-                prop_dict["size"] = class_csv[rx][SIZE_COL]
+            prop_dict["size"] = class_csv[rx][SIZE_COL]
             prop_dict["type"] = class_csv[rx][TYPE_COL]
             prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
             prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
@@ -262,15 +259,15 @@ def get_dict_from_columns(class_csv, class_dict, header_index, is_get_size=False
         )
 
 
-def update_all_daughters(gen_dict, is_mother_of_mother=True):
+def update_all_daughters(gen_dict, is_update_mother_of_mother=True):
     """This function update all the "daughters" key according to the "mother" key
 
     Parameters
     ----------
     gen_dict : dict
         gen_dict with no daughter set
-    is_mother_of_mother: bool
-        True to return mother of mother
+    is_update_mother_of_mother: bool
+        True to update mother of mother in update_all_daughters
     """
 
     # list of classes that have a mother
@@ -287,7 +284,7 @@ def update_all_daughters(gen_dict, is_mother_of_mother=True):
         if name not in mother["daughters"]:
             mother["daughters"].append(name)
         # Update all the mother of the mother
-        if is_mother_of_mother:
+        if is_update_mother_of_mother:
             while mother["mother"] not in ["", None]:
                 mother = gen_dict[mother["mother"]]
                 if name not in mother["daughters"]:

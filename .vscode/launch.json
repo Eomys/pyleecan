@@ -16,21 +16,24 @@
             },
         },
         {
-            "name": "Python: Code gen (All)",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/pyleecan/Generator/run_generate_all.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python: Code gen (GUI no R)",
+            "name": "Python: Code gen (GUI Ui only)",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Generator/run_generate_GUI.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Code gen (Classes)",
+            "name": "Python: Code gen (GUI resources only)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pyleecan/Generator/run_generate_GUI_resources.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${cwd}"
+            },
+        },
+        {
+            "name": "Python: Code gen (Classes from csv)",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Generator/run_generate_classes.py",

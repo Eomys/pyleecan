@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
+
 class Ui_DClassGenerator(object):
     def setupUi(self, DClassGenerator):
         if not DClassGenerator.objectName():
@@ -31,7 +32,9 @@ class Ui_DClassGenerator(object):
         self.horizontalLayout = QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
@@ -47,7 +50,6 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout.addWidget(self.is_black, 0, 0, 1, 1)
 
-
         self.horizontalLayout.addLayout(self.gridLayout)
 
         self.layoutWidget1 = QWidget(DClassGenerator)
@@ -58,7 +60,9 @@ class Ui_DClassGenerator(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.gridLayout_4.addItem(self.horizontalSpacer_4, 1, 3, 1, 1)
 
@@ -72,7 +76,9 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout_4.addWidget(self.lab_param, 2, 0, 1, 2)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.gridLayout_4.addItem(self.horizontalSpacer_3, 2, 3, 1, 1)
 
@@ -91,14 +97,16 @@ class Ui_DClassGenerator(object):
         sizePolicy1 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.le_classname.sizePolicy().hasHeightForWidth())
+        sizePolicy1.setHeightForWidth(
+            self.le_classname.sizePolicy().hasHeightForWidth()
+        )
         self.le_classname.setSizePolicy(sizePolicy1)
         self.le_classname.setMaximumSize(QSize(400, 16777215))
-        self.le_classname.setStyleSheet(u"font: 700 14pt \"Arial\";\n"
-"text-decoration: underline;")
+        self.le_classname.setStyleSheet(
+            u'font: 700 14pt "Arial";\n' "text-decoration: underline;"
+        )
 
         self.gridLayout_4.addWidget(self.le_classname, 1, 0, 1, 2)
-
 
         self.verticalLayout.addLayout(self.gridLayout_4)
 
@@ -119,7 +127,9 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout_3.addWidget(self.b_addmeth, 0, 2, 1, 1)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.gridLayout_3.addItem(self.horizontalSpacer_2, 0, 4, 1, 1)
 
@@ -127,7 +137,6 @@ class Ui_DClassGenerator(object):
         self.b_browse.setObjectName(u"b_browse")
 
         self.gridLayout_3.addWidget(self.b_browse, 0, 3, 1, 1)
-
 
         self.verticalLayout.addLayout(self.gridLayout_3)
 
@@ -160,7 +169,9 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout_2.addWidget(self.lab_const, 2, 1, 1, 1)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 3, 1, 1)
 
@@ -172,7 +183,6 @@ class Ui_DClassGenerator(object):
         self.table_const.setMaximumSize(QSize(1200, 16777215))
 
         self.gridLayout_2.addWidget(self.table_const, 5, 1, 1, 3)
-
 
         self.verticalLayout.addLayout(self.gridLayout_2)
 
@@ -192,41 +202,119 @@ class Ui_DClassGenerator(object):
 
         self.horizontalLayout_2.addWidget(self.le_path_classgen)
 
-
         self.retranslateUi(DClassGenerator)
 
         QMetaObject.connectSlotsByName(DClassGenerator)
+
     # setupUi
 
     def retranslateUi(self, DClassGenerator):
-        DClassGenerator.setWindowTitle(QCoreApplication.translate("DClassGenerator", u"Pyleecan Class Generator", None))
-        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate classes", None))
-        self.is_black.setText(QCoreApplication.translate("DClassGenerator", u"Format with black", None))
-        self.lab_param.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.b_saveclass.setToolTip(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p>Save modifications made to current class</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.b_saveclass.setText(QCoreApplication.translate("DClassGenerator", u"Save current class", None))
-#if QT_CONFIG(tooltip)
-        self.b_addprop.setToolTip(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p>Add new row at the bottom of property table</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.b_addprop.setText(QCoreApplication.translate("DClassGenerator", u"Add Property", None))
-        self.le_classname.setText(QCoreApplication.translate("DClassGenerator", u"Class_name", None))
-        self.lab_methods.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.b_addmeth.setToolTip(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p>Add new row at the bottom of method list</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.b_addmeth.setText(QCoreApplication.translate("DClassGenerator", u"Add Method", None))
-#if QT_CONFIG(tooltip)
-        self.b_browse.setToolTip(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p>Browse to method folder in explorer</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.b_browse.setText(QCoreApplication.translate("DClassGenerator", u"Browse Folder", None))
-        self.lab_meta.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.b_addconst.setToolTip(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p>Add a new row at the bottom of constant table</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.b_addconst.setText(QCoreApplication.translate("DClassGenerator", u"Add Constant", None))
-        self.lab_const.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Constants</span></p></body></html>", None))
-        self.label_path_classgen.setText(QCoreApplication.translate("DClassGenerator", u"Path to generator folder:", None))
-    # retranslateUi
+        DClassGenerator.setWindowTitle(
+            QCoreApplication.translate(
+                "DClassGenerator", u"Pyleecan Class Generator", None
+            )
+        )
+        self.b_genclass.setText(
+            QCoreApplication.translate("DClassGenerator", u"Generate classes", None)
+        )
+        self.is_black.setText(
+            QCoreApplication.translate("DClassGenerator", u"Format with black", None)
+        )
+        self.lab_param.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>",
+                None,
+            )
+        )
+        # if QT_CONFIG(tooltip)
+        self.b_saveclass.setToolTip(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p>Save modifications made to current class</p></body></html>",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.b_saveclass.setText(
+            QCoreApplication.translate("DClassGenerator", u"Save current class", None)
+        )
+        # if QT_CONFIG(tooltip)
+        self.b_addprop.setToolTip(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p>Add new row at the bottom of property table</p></body></html>",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.b_addprop.setText(
+            QCoreApplication.translate("DClassGenerator", u"Add Property", None)
+        )
+        self.le_classname.setText(
+            QCoreApplication.translate("DClassGenerator", u"Class_name", None)
+        )
+        self.lab_methods.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>",
+                None,
+            )
+        )
+        # if QT_CONFIG(tooltip)
+        self.b_addmeth.setToolTip(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p>Add new row at the bottom of method list</p></body></html>",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.b_addmeth.setText(
+            QCoreApplication.translate("DClassGenerator", u"Add Method", None)
+        )
+        # if QT_CONFIG(tooltip)
+        self.b_browse.setToolTip(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p>Browse to method folder in explorer</p></body></html>",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.b_browse.setText(
+            QCoreApplication.translate("DClassGenerator", u"Browse Folder", None)
+        )
+        self.lab_meta.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>",
+                None,
+            )
+        )
+        # if QT_CONFIG(tooltip)
+        self.b_addconst.setToolTip(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p>Add a new row at the bottom of constant table</p></body></html>",
+                None,
+            )
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.b_addconst.setText(
+            QCoreApplication.translate("DClassGenerator", u"Add Constant", None)
+        )
+        self.lab_const.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Constants</span></p></body></html>",
+                None,
+            )
+        )
+        self.label_path_classgen.setText(
+            QCoreApplication.translate(
+                "DClassGenerator", u"Path to generator folder:", None
+            )
+        )
 
+    # retranslateUi
