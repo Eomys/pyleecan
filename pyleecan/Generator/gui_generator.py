@@ -24,6 +24,46 @@ MIN_SPIN = -999999
 MAX_SPIN = 999999
 
 
+def generate_gui_single_file(
+    ui_name, ui_folder_path, gen_dict, is_gen_resource=True, IS_SDT=False
+):
+    """Generate all the needed file for the GUI
+
+    Parameters
+    ----------
+    ui_folder_path : str
+        Path to the folder to scan recursively for ui files
+    gen_dict : dict
+        Dict with key = class name and value = class_dict
+    is_gen_resource : bool
+        True to genrate the resources as well
+    """
+
+    # Get all the ui files
+    file_list = find_ui_files(ui_folder_path=ui_folder_path)
+    for file_tuple in file_list:
+        if file_tuple[1] == ui_name:
+            # Convert every ui file to py
+            ui_to_py(file_tuple[0], file_tuple[1])
+
+            # Create the "Gen_" classes from the gen_list.json file (if needed)
+            gen_path = join(file_tuple[0], "gen_list.json")
+            if isfile(gen_path):
+                # If needed add a "Gen_" class to edit widget with csv values
+                with open(gen_path, "r") as load_file:
+                    gen_list = jload(load_file)
+                    gen_gui_edit_file(
+                        file_tuple[0], file_tuple[1][:-3], gen_dict, gen_list
+                    )
+    # Generate the resources
+    if is_gen_resource:
+        print("Generate GUI resources...")
+        qrc_to_py(RES_PATH, RES_NAME)
+    else:
+        print("############################")
+        print("Skipping resource generation")
+
+
 def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True, IS_SDT=False):
     """Generate all the needed file for the GUI
 
