@@ -295,7 +295,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.set_save_needed(is_save_needed=is_save_needed)
         self.blockSignals(False)
 
-        #####################
         # Setup tab values losses
         if not isinstance(self.mat.mag.LossData, ImportMatrixVal):
             self.g_losses_import.setChecked(False)

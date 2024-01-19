@@ -21,6 +21,7 @@ from .....loggers import GUI_LOG_NAME
 from .....definitions import config_dict
 from .....Functions.init_environment import save_config_dict
 from .....Functions.GUI.log_error import log_error
+from .....Classes.LossFEA import LossFEA
 
 
 class SSimu(Gen_SSimu, QWidget):
@@ -134,6 +135,15 @@ class SSimu(Gen_SSimu, QWidget):
         if "MAIN" in config_dict and "RESULT_DIR" in config_dict["MAIN"]:
             self.w_path_result.set_path_txt(config_dict["MAIN"]["RESULT_DIR"])
 
+        # setup Losses Model
+        if isinstance(self.machine, MachineSIPMSM) or isinstance(
+            self.machine, MachineIPMSM
+        ):
+            self.g_losses_model.show()
+
+        else:
+            self.g_losses_model.hide()
+
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)
         self.lf_I1.editingFinished.connect(self.set_Id_Iq)
@@ -146,6 +156,10 @@ class SSimu(Gen_SSimu, QWidget):
         self.is_per_t.toggled.connect(self.set_per_t)
         self.lf_Kmesh.editingFinished.connect(self.set_Kmesh)
         self.si_nb_worker.editingFinished.connect(self.set_nb_worker)
+
+        self.g_losses_model.toggled.connect(self.set_g_losses_model)
+        self.lf_Tsta.editingFinished.connect(self.set_Tsta)
+        self.lf_Trot.editingFinished.connect(self.set_Trot)
 
         self.b_next.clicked.connect(self.run)
 
@@ -287,6 +301,16 @@ class SSimu(Gen_SSimu, QWidget):
         except Exception as e:
             err_msg = "Error while plotting Stator winding flux:\n" + str(e)
             self.simu.get_logger().error(err_msg)
+
+        # Losses
+        try:
+            out.loss.plot_losses(
+                is_show_fig=False, save_path=(join(self.simu.path_result, "Losses.png"))
+            )
+        except Exception as e:
+            err_msg = "Error while plotting Losses: " + str(e)
+            self.simu.get_logger().error(err_msg)
+
         # Done
         QMessageBox().information(
             self,
@@ -342,3 +366,21 @@ class SSimu(Gen_SSimu, QWidget):
     def set_nb_worker(self):
         """Update nb_worker according to the widget"""
         self.simu.mag.nb_worker = self.si_nb_worker.value()
+
+    def set_g_losses_model(self):
+        """Update g_losses_model according to the widget"""
+        if self.g_losses_model.isChecked():
+            self.simu.loss = LossFEA()
+            self.simu.loss.is_get_meshsolution = True
+            self.simu.mag.is_get_meshsolution = True
+
+        else:
+            self.simu.loss = None
+
+    def set_Tsta(self):
+        """Update lf_Tsta according to the widget"""
+        self.simu.loss.Tsta = self.lf_Tsta.value()
+
+    def set_Trot(self):
+        """Update lf_Tsta according to the widget"""
+        self.simu.loss.Trot = self.lf_Trot.value()

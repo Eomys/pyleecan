@@ -20,7 +20,7 @@ class Ui_SSimu(object):
     def setupUi(self, SSimu):
         if not SSimu.objectName():
             SSimu.setObjectName(u"SSimu")
-        SSimu.resize(1209, 837)
+        SSimu.resize(1209, 841)
         SSimu.setMinimumSize(QSize(650, 550))
         self.verticalLayout_4 = QVBoxLayout(SSimu)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -58,7 +58,7 @@ class Ui_SSimu(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 774))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 786))
         self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.g_OP = QGroupBox(self.scrollAreaWidgetContents)
@@ -226,6 +226,44 @@ class Ui_SSimu(object):
 
         self.verticalLayout_2.addWidget(self.g_mag)
 
+        self.g_losses_model = QGroupBox(self.scrollAreaWidgetContents)
+        self.g_losses_model.setObjectName(u"g_losses_model")
+        self.g_losses_model.setCheckable(True)
+        self.g_losses_model.setChecked(False)
+        self.gridLayout_3 = QGridLayout(self.g_losses_model)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.in_Tsta = QLabel(self.g_losses_model)
+        self.in_Tsta.setObjectName(u"in_Tsta")
+
+        self.gridLayout_3.addWidget(self.in_Tsta, 0, 0, 1, 1)
+
+        self.unit_Tsta = QLabel(self.g_losses_model)
+        self.unit_Tsta.setObjectName(u"unit_Tsta")
+
+        self.gridLayout_3.addWidget(self.unit_Tsta, 0, 2, 1, 1)
+
+        self.lf_Trot = FloatEdit(self.g_losses_model)
+        self.lf_Trot.setObjectName(u"lf_Trot")
+
+        self.gridLayout_3.addWidget(self.lf_Trot, 1, 1, 1, 1)
+
+        self.unit_Trot = QLabel(self.g_losses_model)
+        self.unit_Trot.setObjectName(u"unit_Trot")
+
+        self.gridLayout_3.addWidget(self.unit_Trot, 1, 2, 1, 1)
+
+        self.in_Trot = QLabel(self.g_losses_model)
+        self.in_Trot.setObjectName(u"in_Trot")
+
+        self.gridLayout_3.addWidget(self.in_Trot, 1, 0, 1, 1)
+
+        self.lf_Tsta = FloatEdit(self.g_losses_model)
+        self.lf_Tsta.setObjectName(u"lf_Tsta")
+
+        self.gridLayout_3.addWidget(self.lf_Tsta, 0, 1, 1, 1)
+
+        self.verticalLayout_2.addWidget(self.g_losses_model)
+
         self.g_out = QGroupBox(self.scrollAreaWidgetContents)
         self.g_out.setObjectName(u"g_out")
         self.verticalLayout = QVBoxLayout(self.g_out)
@@ -315,7 +353,7 @@ class Ui_SSimu(object):
                 u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8.15094pt; font-weight:400; font-style:normal;\">\n"
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Only Single Speed current driven FEMM simulation is available in this GUI</span></p>\n'
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Other models, Sensitivity, Variable speed, Optimization are available in scripting mode</span></p></body></html>',
                 None,
@@ -437,6 +475,23 @@ class Ui_SSimu(object):
         self.in_nb_worker.setText(
             QCoreApplication.translate("SSimu", u"Number of workers:", None)
         )
+        self.g_losses_model.setTitle(
+            QCoreApplication.translate("SSimu", u"Losses Model", None)
+        )
+        self.in_Tsta.setText(QCoreApplication.translate("SSimu", u"Tsta", None))
+        self.unit_Tsta.setText(QCoreApplication.translate("SSimu", u"[\u00b0C]", None))
+        # if QT_CONFIG(tooltip)
+        self.lf_Trot.setToolTip(
+            QCoreApplication.translate("SSimu", u"Rotor temperature", None)
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.unit_Trot.setText(QCoreApplication.translate("SSimu", u"[\u00b0C]", None))
+        self.in_Trot.setText(QCoreApplication.translate("SSimu", u"Trot", None))
+        # if QT_CONFIG(tooltip)
+        self.lf_Tsta.setToolTip(
+            QCoreApplication.translate("SSimu", u"Stator temperature", None)
+        )
+        # endif // QT_CONFIG(tooltip)
         self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Output", None))
         self.in_name.setText(QCoreApplication.translate("SSimu", u"Simu name:", None))
         self.is_losses.setText(
