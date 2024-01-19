@@ -37,7 +37,7 @@ def test_plot_contour_1group():
     MSol.group = {"stator core": np.array([11, 12])}
 
     MSol.plot_contour(is_show_fig=False, save_path=save_path + "/plot_mesh.png")
-    Msol_stator = Msol.get_group("stator core")
+    Msol_stator = MSol.get_group("stator core")
     Msol_stator.plot_contour(
         is_show_fig=False,
         save_path=save_path + "/plot_mesh_stator.png",
