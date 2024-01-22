@@ -140,9 +140,14 @@ class SSimu(Gen_SSimu, QWidget):
             self.machine, MachineIPMSM
         ):
             self.g_losses_model.show()
+            if isinstance(self.simu.loss, LossFEA):
+                self.g_losses_model.setChecked(True)
+            else :
+                self.g_losses_model.setChecked(False)
 
         else:
             self.g_losses_model.hide()
+        
 
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)

@@ -13,15 +13,10 @@ from PySide2.QtTest import QTest
 
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 
-from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEA import LossFEA
-from pyleecan.Classes.Electrical import Electrical
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.OPdq import OPdq
 
 
 class TestSSimu(object):
@@ -40,90 +35,13 @@ class TestSSimu(object):
         self.machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
         self.widget = SSimu(machine=self.machine, material_dict=None, is_stator=None)
 
-        self.simu = Simu1(machine=self.machine)
-        self.simu.mag = MagFEMM(
-            is_periodicity_a=False,
-            is_periodicity_t=False,
-            nb_worker=4,
-            is_get_meshsolution=True,
-            is_periodicity_rotor=True,
-            is_calc_torque_energy=False,
-            T_mag=20,
-        )
-        self.simu.input = InputCurrent(
-            Nt_tot=365,
-            Na_tot=2,
-            OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
-            is_periodicity_t=True,
-            is_periodicity_a=True,
-        )
-        self.simu.loss = LossFEA(Trot=125, Tsta=124)
-
     @classmethod
     def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
-    @pytest.mark.SSimu
-    @pytest.mark.IPMSM
-    def test_init(self):
-        """Check that the Widget init is correct"""
-        assert isinstance(self.widget.simu.mag, MagFEMM)
-        assert self.widget.lf_N0.value() == 1000
-        assert self.widget.lf_I1.value() == 0  # Id
-        assert self.widget.lf_I1.value() == 0  # Iq
-        assert self.widget.lf_T_mag.value() == 20
-
-    # @pytest.mark.SSimu
-    # @pytest.mark.IPMSM
-    # def test_set_value(self):
-    #     """Check that you can set simu for simu"""
-
-    #     self.simu = Simu1(machine=self.machine)
-    #     self.simu.mag = MagFEMM(
-    #         is_periodicity_a=False,
-    #         is_periodicity_t=False,
-    #         nb_worker=4,
-    #         is_get_meshsolution=True,
-    #         is_periodicity_rotor=True,
-    #         is_calc_torque_energy=False,
-    #         T_mag=17,
-    #     )
-    #     self.simu.input = InputCurrent(
-    #         Nt_tot=365,
-    #         Na_tot=2,
-    #         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
-    #         is_periodicity_t=True,
-    #         is_periodicity_a=True,
-    #     )
-    #     self.simu.loss = LossFEA(Trot=125, Tsta=124)
-
-    #     self.widget = SSimu(self.machine, material_dict=None, is_stator=None)
-
-    #     assert not self.widget.is_per_a.isChecked()
-    #     assert not self.widget.is_per_t.isChecked()
-
-    #     assert isinstance(self.widget.simu.mag, MagFEMM)
-    #     assert self.widget.lf_N0.value() == 4000
-    #     assert self.widget.lf_I1.value() == 2.5  # Id
-    #     assert self.widget.lf_I1.value() == 1.414  # Iq
-    #     assert self.widget.lf_T_mag.value() == 17
-
-    #     assert self.widget.lf_Trot.value() == 125
-    #     assert self.widget.lf_Tsta.value() == 124
-
-    #     assert self.widget.si_Na_tot.value() == 365
-    #     assert self.widget.si_Nt_tot.value() == 2
-    #     assert self.widget.si_nb_worker.value() == 4
-
-    #     self.widget.is_losses.setChecked(True)
-    #     self.widget.is_mesh_sol.setChecked(True)
-
-    #     assert self.widget.is_losses.isChecked()
-    #     assert self.widget.is_mesh_sol.isChecked()
-
     def test_set_N0(self):
-        """Check that the Widget allow to update No"""
+        """Check that the Widget allow to update N0"""
         self.widget.lf_N0.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_N0, "4000")
         self.widget.lf_N0.editingFinished.emit()  # To trigger the slot
@@ -131,7 +49,106 @@ class TestSSimu(object):
         assert self.widget.lf_N0.value() == 4000
         assert self.widget.simu.input.OP.N0 == 4000
 
-    # continuepour Id, Iq....
+    def test_set_Id(self):
+        """Check that the Widget allow to update Id"""
+        self.widget.lf_I1.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.lf_I1, "3.14")
+        self.widget.lf_I1.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.lf_I1.value() == 3.14
+        assert self.widget.simu.input.OP.Id_ref == 3.14
+
+    def test_set_Iq(self):
+        """Check that the Widget allow to update Iq"""
+        self.widget.lf_I2.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.lf_I2, "2.5")
+        self.widget.lf_I2.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.lf_I2.value() == 2.5
+        assert self.widget.simu.input.OP.Iq_ref == 2.5
+
+    def test_set_T_mag(self):
+        """Check that the Widget allow to update T_mag"""
+        self.widget.lf_T_mag.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.lf_T_mag, "20")
+        self.widget.lf_T_mag.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.lf_T_mag.value() == 20
+        assert self.widget.simu.mag.T_mag == 20
+
+    def test_set_si_Na_tot(self):
+        """Check that the Widget allow to update si_Na_tot"""
+        self.widget.si_Na_tot.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.si_Na_tot, "354")
+        self.widget.si_Na_tot.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.si_Na_tot.value() == 354
+        assert self.widget.simu.input.Na_tot == 354
+
+    def test_set_si_Nt_tot(self):
+        """Check that the Widget allow to update si_Nt_tot"""
+        self.widget.si_Nt_tot.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.si_Nt_tot, "256")
+        self.widget.si_Nt_tot.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.si_Nt_tot.value() == 256
+        assert self.widget.simu.input.Nt_tot == 256
+
+    def test_set_kmesh(self):
+        """Check that the Widget allow to update si_Nt_tot"""
+        self.widget.lf_Kmesh.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.lf_Kmesh, "1")
+        self.widget.lf_Kmesh.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.lf_Kmesh.value() == 1
+        assert self.widget.simu.mag.Kmesh_fineness == 1
+
+    def test_set_nb_worker(self):
+        """Check that the Widget allow to update nb_worker"""
+        self.widget.si_nb_worker.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.si_nb_worker, "4")
+        self.widget.si_nb_worker.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.si_nb_worker.value() == 4
+        assert self.widget.simu.mag.nb_worker == 4
+
+    def test_set_Tsta(self):
+        """Check that the Widget allow to update lf_Tsta"""
+        self.widget.g_losses_model.setChecked(True)
+        assert self.widget.g_losses_model.isChecked()
+        assert isinstance(self.widget.simu.loss, LossFEA)
+
+        self.widget.g_losses_model.setChecked(False)
+        assert not self.widget.g_losses_model.isChecked()
+        assert self.widget.simu.loss == None
+
+        self.widget.g_losses_model.setChecked(True)
+
+        self.widget.lf_Tsta.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.lf_Tsta, "130")
+        self.widget.lf_Tsta.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.lf_Tsta.value() == 130
+        assert self.widget.simu.loss.Tsta == 130
+
+    def test_set_Trot(self):
+        """Check that the Widget allow to update lf_Trot"""
+        self.widget.g_losses_model.setChecked(True)
+        assert self.widget.g_losses_model.isChecked()
+        assert isinstance(self.widget.simu.loss, LossFEA)
+
+        self.widget.g_losses_model.setChecked(False)
+        assert not self.widget.g_losses_model.isChecked()
+        assert self.widget.simu.loss == None
+
+        self.widget.g_losses_model.setChecked(True)
+
+        self.widget.lf_Trot.clear()  # Clear the field before writing
+        QTest.keyClicks(self.widget.lf_Trot, "130")
+        self.widget.lf_Trot.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.lf_Trot.value() == 130
+        assert self.widget.simu.loss.Trot == 130
 
 
 if __name__ == "__main__":
