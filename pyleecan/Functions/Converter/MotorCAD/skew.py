@@ -58,10 +58,10 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         self.set_P(machine, skew_list, path)
 
     # set overall of skew
-    first_ele = skew_list[0]
-    last_ele = skew_list[-1]
+    min_ele = min(skew_list)
+    max_ele = max(skew_list)
 
-    angle_overall = abs(last_ele - first_ele)
+    angle_overall = abs(max_ele - min_ele)
     path_name = "machine.rotor.skew.angle_overall"
     other_value = angle_overall
     self.set_P(machine, other_value, path_name)
