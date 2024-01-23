@@ -1,5 +1,4 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleEquation import RuleEquation
+from ......Classes.RuleSimple import RuleSimple
 
 
 def add_rule_lamination(self, is_stator):

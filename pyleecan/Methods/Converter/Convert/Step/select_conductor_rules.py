@@ -2,7 +2,6 @@ from .....Classes.CondType12 import CondType12
 from .....Classes.CondType11 import CondType11
 
 
-
 def select_conductor_rules(self, is_stator):
     """selects step to add rules for conductor
 
@@ -32,8 +31,8 @@ def select_conductor_rules(self, is_stator):
 
     elif isinstance(conductor, CondType11):
         self.add_rule_condtype11(is_stator)
-	
-	else:
+
+    else:
         raise TypeError("Error type of conductor doesn't exist")
 
     if is_stator:
