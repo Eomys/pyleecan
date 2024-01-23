@@ -1,5 +1,5 @@
 def convert_material_to_P(self, path_P):
-    """Selects correct materail path and return path in file.mot
+    """Selects correct material path and return path in file.mot
 
     Parameters
     ----------
@@ -31,7 +31,7 @@ def convert_material_to_P(self, path_P):
     if "[" in path_P:
         path_P_split = path_P.split("[")
         # check if material is a hole
-        if path_P_split == "machine.rotor.hole":
+        if path_P_split[0] == "machine.rotor.hole":
             material_path = "Material_Magnet"
         else:
             IndexError("Problem in material path")
