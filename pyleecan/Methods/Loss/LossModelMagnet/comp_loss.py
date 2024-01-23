@@ -113,7 +113,7 @@ def comp_loss(self):
         raise Exception("Cannot calculate magnet losses for group=" + self.group)
 
     # Extract the solution
-    solution_A = meshsol.get("A_z^{element}")
+    solution_A = meshsol["A_z^{element}"]
 
     if solution_A.type_element != "triangle":
         raise ValueError(
@@ -121,7 +121,7 @@ def comp_loss(self):
         )
 
     # Get magnetic vector potential over time and for each element center in current group
-    Az_dt = solution_A
+    Az_dt = solution_A.field
     axes_list = Az_dt.get_axes()
     Time_orig = axes_list[0]
     Time = Time_orig.copy()
@@ -244,7 +244,7 @@ def comp_loss(self):
         L1 * per_a * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
     )
     # Sum over orders
-    A = np_sum(Af * n ** 2)
+    A = np_sum(Af * n**2)
     self.coeff_dict = {"2": A}
 
     return Pmagnet_density, freqs
