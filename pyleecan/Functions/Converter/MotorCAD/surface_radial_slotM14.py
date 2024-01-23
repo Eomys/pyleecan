@@ -29,11 +29,11 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     self.unit_type = "m"
-    try:
+    if "Magnet_Reduction" in other_dict["[Dimensions]"]:
         other_path_list = ["[Dimensions]", "Magnet_Reduction"]
         Red = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    except:
+    else:
         Red = 0
 
     Rbo = machine.rotor.get_Rbo()

@@ -3,7 +3,7 @@ from numpy import pi
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Converts motor-cad notch into pyleecan notch slotM19
+    """Converts motor-cad skew into pyleecan skew
 
     Parameters
     ----------
@@ -24,8 +24,17 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     skew_step = other_dict["[Magnetics]"]["RotorSkewSlices"]
 
+    # Exemple list of skew in dict
+    # "RotorSkewAngle_Array[0]": -4,
+    # "RotorSkewAngle_Array[1]": -2,
+    # "RotorSkewAngle_Array[2]": 0,
+    # "RotorSkewAngle_Array[3]": 2,
+    # "RotorSkewAngle_Array[4]": 4,
+
     idx_skew = 0
     skew_list = []
+
+    # selection of all parameter for skew
     for idx_skew in range(skew_step):
         try:
             skew_value = other_dict[f"[Magnetics]"][f"RotorSkewAngle_Array[{idx_skew}]"]
@@ -39,6 +48,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         except:
             pass
 
+    # add skew in obj machine
     if len(skew_list) == 0:
         other_value = None
         raise ConvertionError("Error for convertion, list of skew angle are not set")
