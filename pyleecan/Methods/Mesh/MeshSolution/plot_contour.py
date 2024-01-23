@@ -126,6 +126,10 @@ def plot_contour(
         colormap=colormap,
     )
 
+    if self.dimension:
+        # 2D view
+        pv_plotter.view_xy()
+
     ###########
     # Internal animation (cannot be combined with other plots)
     if is_animated:

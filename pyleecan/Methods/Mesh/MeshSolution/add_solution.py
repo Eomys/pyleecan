@@ -24,4 +24,4 @@ def add_solution(self, solution: Solution, label: Optional[str] = "") -> None:
     if label in self.keys():
         raise ValueError(f'A solution with label "{label}" is already in MeshSolution.')
 
-    self[label] = solution
+    self.solution_dict[label] = solution
