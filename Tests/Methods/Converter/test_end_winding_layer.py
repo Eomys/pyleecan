@@ -19,7 +19,7 @@ other_dict = {
 winding_test.append(
     {
         "other_dict": other_dict,
-        "Lewout": 0.0625,
+        "Lewout": 0.0625 / 1000,
     }
 )
 
@@ -33,7 +33,7 @@ other_dict = {
 winding_test.append(
     {
         "other_dict": other_dict,
-        "Lewout": 0.20575,
+        "Lewout": 0.20575 / 1000,
     }
 )
 

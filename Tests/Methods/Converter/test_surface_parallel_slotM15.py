@@ -13,7 +13,7 @@ other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 4,
         "Magnet_Arc_[ED]": 120,
-        "Magnet_Reduction": 1,
+        "MagnetReduction": 1,
     }
 }
 
@@ -31,7 +31,7 @@ other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,
         "Magnet_Arc_[ED]": 120,
-        "Magnet_Reduction": 7,
+        "MagnetReduction": 7,
     }
 }
 
@@ -49,7 +49,7 @@ other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,
         "Magnet_Arc_[ED]": 120,
-        "Magnet_Reduction": 8,
+        "MagnetReduction": 8,
     }
 }
 
@@ -67,7 +67,7 @@ other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,
         "Magnet_Arc_[ED]": 120,
-        "Magnet_Reduction": 0,
+        "MagnetReduction": 0,
     }
 }
 
