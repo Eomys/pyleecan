@@ -45,8 +45,7 @@ def add_rule_material(self, path_P, material):
         )
     )
 
-    try:
-        self.other_dict[f"[{material}]"]["PoissonsRatio"]
+    if "PoissonsRatio" in self.other_dict[f"[{material}]"]:
         self.rules_list.append(
             RuleSimple(
                 other_key_list=[f"[{material}]", "PoissonsRatio"],
@@ -77,12 +76,7 @@ def add_rule_material(self, path_P, material):
             )
         )
 
-    except:
-        pass
-
-    try:
-        self.other_dict[f"[{material}]"]["YoungsCoefficient"]
-
+    if "YoungsCoefficient" in self.other_dict[f"[{material}]"]:
         self.rules_list.append(
             RuleSimple(
                 other_key_list=[f"[{material}]", "YoungsCoefficient"],
@@ -111,14 +105,16 @@ def add_rule_material(self, path_P, material):
             )
         )
 
-    except:
-        pass
-
     if self.is_P_to_other == False:
-        try:
-            self.other_dict[f"[{material}]"]["YoungsCoefficient"]
-            self.other_dict[f"[{material}]"]["PoissonsRatio"]
-
+        if (
+            "YoungsCoefficient" in self.other_dict[f"[{material}]"]
+            and "PoissonsRatio" in self.other_dict[f"[{material}]"]
+        ):
+            # into file .mot
+            # a = YoungsCoefficient
+            # b = PoissonsRatio
+            # into Pyleecan
+            # x = Gxy
             self.rules_list.append(
                 RuleEquation(
                     param=[
@@ -143,6 +139,11 @@ def add_rule_material(self, path_P, material):
                     file_name=__file__,
                 )
             )
+            # into file .mot
+            # a = YoungsCoefficient
+            # b = PoissonsRatio
+            # into Pyleecan
+            # x = Gxz
             self.rules_list.append(
                 RuleEquation(
                     param=[
@@ -167,6 +168,12 @@ def add_rule_material(self, path_P, material):
                     file_name=__file__,
                 )
             )
+
+            # into file .mot
+            # a = YoungsCoefficient
+            # b = PoissonsRatio
+            # into Pyleecan
+            # x = Gyz
             self.rules_list.append(
                 RuleEquation(
                     param=[
@@ -191,6 +198,3 @@ def add_rule_material(self, path_P, material):
                     file_name=__file__,
                 )
             )
-
-        except:
-            pass
