@@ -7,7 +7,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 material_l = list()
 
-# curve B(H)
+# definition a material with curve B(H) into file .mot
 other_dict = {
     "[POSCO 30PNX1500F_red_Keddy]": {
         "Type": "Fixed_Solid",
@@ -171,6 +171,7 @@ other_dict = {
     }
 }
 
+# result expected with curve B(H)
 material_l.append(
     {
         "other_dict": other_dict,
@@ -249,7 +250,7 @@ material_l.append(
     }
 )
 
-# not curve B(H)
+# definition a material with not curve B(H) into file .mot
 other_dict = {
     "[POSCO 30PNX1500F_red_Keddy]": {
         "Type": "Fixed_Solid",
@@ -277,6 +278,7 @@ other_dict = {
     }
 }
 
+# result expected if haven't curve B(H)
 material_l.append(
     {
         "other_dict": other_dict,
@@ -298,6 +300,7 @@ class TestComplexRulecurve_B_H(object):
         # Construct the machine in which the slot will be set
         machine = MachineSIPMSM()
 
+        # selection material and path in dict .mot
         param_dict = {
             "material": "POSCO 30PNX1500F_red_Keddy",
             "path_P": "machine.stator.mat_type",
@@ -322,9 +325,10 @@ class TestComplexRulecurve_B_H(object):
         msg = f"{machine.stator.mat_type.is_isotropic} expected {is_isotropic}"
         assert machine.stator.mat_type.is_isotropic == pytest.approx(is_isotropic), msg
 
+        # check for curve B(H)
         tab_curve_expected = curve_B_H
 
-        # if file_mot haven't curve B(H), class of mag isn't change ans value doesn't exist
+        # if file_mot haven't curve B(H), class of mag isn't change and value doesn't exist
         if curve_B_H == None:
             if isinstance(machine.stator.mat_type.mag.BH_curve, ImportMatrixVal):
                 raise Exception("BH_curve.value should not be defined")
@@ -340,6 +344,7 @@ class TestComplexRulecurve_B_H(object):
                 machine.stator.mat_type.mag.BH_curve.__class__ == ImportMatrixVal
             ), msg
 
+            # if a curve is set into materail, check if all element are equivalent
             tab_curve = machine.stator.mat_type.mag.BH_curve.value
             for nb_ele, ele in enumerate(tab_curve):
                 msg = f"{ele[0]} exepected {tab_curve_expected[nb_ele][0]}"
