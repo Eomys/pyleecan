@@ -35,12 +35,12 @@ def select_hole_rules(self, is_stator):
 
     # Number of magnet in Hole
     dict_nb_magnet = {
-        "HoleM52": "1",
-        "HoleM57": "2",
-        "HoleM60": "2",
-        "HoleM61": "4",
-        "HoleM62": "1",
-        "HoleM63": "1",
+        "HoleM52": 1,
+        "HoleM57": 2,
+        "HoleM60": 2,
+        "HoleM61": 4,
+        "HoleM62": 1,
+        "HoleM63": 1,
     }
 
     # The counter solve the case where self.machine.rotor.hole = [HoleM62, HoleM57, HoleM62]
@@ -73,11 +73,11 @@ def select_hole_rules(self, is_stator):
 
         for number in range(number_magnet):
             self.select_material_rules(
-                f"machine.rotor.hole[{hole_id}].magnet_{number + 1}.mat_type"
+                f"machine.rotor.hole[{hole_id}].magnet_{number}.mat_type"
             )
 
             # set type_magnetization at parallel (type_magnetization = 1)
-            path = f"machine.rotor.hole[{hole_id}].magnet_{number + 1}"
+            path = f"self.machine.rotor.hole[{hole_id}].magnet_{number}"
             setattr(
                 eval(path),
                 "type_magnetization",

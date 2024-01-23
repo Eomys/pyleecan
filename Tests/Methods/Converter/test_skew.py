@@ -7,7 +7,7 @@ from numpy import pi
 
 skew_l = list()
 
-# skew
+# skew in dict
 other_dict = {
     "[Magnetics]": {
         "SkewType": 2,
@@ -19,6 +19,7 @@ other_dict = {
         "RotorSkewAngle_Array[4]": 4,
     }
 }
+# expected value
 skew_l.append(
     {
         "other_dict": other_dict,
@@ -36,7 +37,7 @@ skew_l.append(
 )
 
 
-# skew
+# skew with only two slice
 other_dict = {
     "[Magnetics]": {
         "SkewType": 2,

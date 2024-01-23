@@ -48,7 +48,8 @@ slotM15_test.append(
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,
-        "Magnet_Arc_[ED]": 80,
+
+        "Magnet_Arc_[ED]": 120,
         "MagnetReduction": 8,
     }
 }
@@ -56,9 +57,7 @@ other_dict = {
 slotM15_test.append(
     {
         "other_dict": other_dict,
-        "W1": 0.35007472617,
-        "W0": 0.35547956493,
-        "Rtopm": 0.6687376394434622,
+        "Rtopm": 0.8248165743381716,
     }
 )
 
@@ -66,8 +65,10 @@ slotM15_test.append(
 other_dict = {
     "[Dimensions]": {
         "Magnet_Thickness": 8,
+
         "Magnet_Arc_[ED]": 150,
-        "Magnet_Reduction": 0,
+
+        "MagnetReduction": 0,
     }
 }
 
