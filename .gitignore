@@ -25,3 +25,9 @@ run_GUI_internal.py
 /build
 /dist
 node_modules
+/Doc/Manatee_v1/Initialization
+Manatee_v1
+pySDM
+SDM
+/.vscode/settings.json
+SDM_old
