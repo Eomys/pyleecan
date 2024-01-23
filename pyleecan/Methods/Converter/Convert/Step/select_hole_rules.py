@@ -73,7 +73,7 @@ def select_hole_rules(self, is_stator):
 
         for number in range(number_magnet):
             self.select_material_rules(
-                f"machine.rotor.hole[{hole_id}].magnet_{number + 1}.mat_type"
+                f"machine.rotor.hole[{hole_id}].magnet_{number}.mat_type"
             )
 
             # set type_magnetization at parallel (type_magnetization = 1)
