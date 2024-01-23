@@ -3,6 +3,7 @@ from .....Classes.SlotW14 import SlotW14
 from .....Classes.SlotW21 import SlotW21
 from .....Classes.SlotW23 import SlotW23
 from .....Classes.SlotW29 import SlotW29
+from .....Classes.Material import Material
 
 
 def select_slot_rules(self, is_stator):

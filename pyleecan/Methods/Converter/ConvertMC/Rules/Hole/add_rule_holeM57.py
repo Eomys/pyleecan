@@ -35,7 +35,7 @@ def add_rule_holeM57(self, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"MagnetThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H2",
             unit_type="m",
             scaling_to_P=1,

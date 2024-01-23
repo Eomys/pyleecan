@@ -108,6 +108,13 @@ except ImportError as error:
     select_notch_rules = error
 
 try:
+    from ..Methods.Converter.Convert.Step.select_material_rules import (
+        select_material_rules,
+    )
+except ImportError as error:
+    select_material_rules = error
+
+try:
     from ..Methods.Converter.Convert.machine_type.select_SIPMSM_rules import (
         select_SIPMSM_rules,
     )
@@ -337,6 +344,18 @@ class Convert(FrozenClass):
         )
     else:
         select_notch_rules = select_notch_rules
+    # cf Methods.Converter.Convert.Step.select_material_rules
+    if isinstance(select_material_rules, ImportError):
+        select_material_rules = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Convert method select_material_rules: "
+                    + str(select_material_rules)
+                )
+            )
+        )
+    else:
+        select_material_rules = select_material_rules
     # cf Methods.Converter.Convert.machine_type.select_SIPMSM_rules
     if isinstance(select_SIPMSM_rules, ImportError):
         select_SIPMSM_rules = property(

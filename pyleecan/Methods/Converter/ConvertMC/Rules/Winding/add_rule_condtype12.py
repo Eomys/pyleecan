@@ -34,12 +34,14 @@ def add_rule_condtype12(self, is_stator):
         RuleSimple(
             other_key_list=["[Winding_Design]", "Copper_Diameter"],
             P_obj_path=f"machine.{lam_name}.winding.conductor.Wwire",
-            unit_type="",
+            unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
         )
     )
 
+    # Not implemented
+    """
     self.rules_list.append(
         RuleEquation(
             param=[
@@ -64,7 +66,7 @@ def add_rule_condtype12(self, is_stator):
             file_name=__file__,
         )
     )
-
+    """
     self.rules_list.append(
         RuleComplex(fct_name="end_winding_lenght", folder="MotorCAD")
     )
