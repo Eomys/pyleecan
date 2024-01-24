@@ -15,6 +15,6 @@ def plot_mesh(self, group_names=None):
         .get_group(group_names)
         .plot_contour(
             "freqs=sum",
-            label=self.name + " loss density [W/m^3]",
+            label=f"{self.name} loss density",
         )
     )

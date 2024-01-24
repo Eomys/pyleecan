@@ -55,9 +55,9 @@ def perm_coord(
 
     # convert and save into vtk
     mesh_pv = meshmat.get_mesh_pv()
-    if path_meshVTK != None:
+    if path_meshVTK is not None:
         mesh_pv.save(path_meshVTK)
-    else:
+    elif self.path is not None:
         mesh_pv.save(self.path + "/" + self.name + ".vtk")
 
     self.mesh = mesh_pv

@@ -32,7 +32,7 @@ def get_mesh_solution(self):
     ms_mag = output.mag.meshsolution
 
     Loss_density_df = DataFreq(
-        name=f"{self.name} Loss density",
+        name=f"{self.name} loss density",
         unit="W/m3",
         symbol="L",
         values=self.loss_density,
@@ -50,7 +50,7 @@ def get_mesh_solution(self):
         label=Loss_density_sd.label,
         group=ms_mag.group,
         mesh=ms_mag.mesh,
-        solution=[Loss_density_sd],
+        solution_dict={Loss_density_sd.label: Loss_density_sd},
         dimension=2,
     )
 
