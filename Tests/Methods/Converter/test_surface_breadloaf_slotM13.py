@@ -116,7 +116,6 @@ class TestComplexRuleSlotM13(object):
         msg = f"{machine.rotor.slot.W1} expected {W1}"
         assert machine.rotor.slot.W1 == pytest.approx(W1), msg
         msg = f"{machine.rotor.slot.Rtopm} expected {Rtopm}"
-        # msg = f"{machine.rotor.slot.H1} expected 0.01"
         assert machine.rotor.slot.Rtopm == pytest.approx(Rtopm), msg
 
 

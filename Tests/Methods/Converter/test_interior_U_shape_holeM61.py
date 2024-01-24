@@ -22,6 +22,7 @@ HoleM61_test.append(
     {"other_dict": other_dict, "W1": 0.003845917, "W2": 0.793921599, "H0": 0.998}
 )
 
+# test if Hole haven't magnet
 other_dict = {
     "[Dimensions]": {
         "Magnet_Inner_Diameter": 4,

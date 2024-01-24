@@ -2,7 +2,7 @@ from numpy import sin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Converts interior_U_shape motor-cad slot into pyleecan holeM61
+    """Converts interior_V_webe motor-cad slot into pyleecan holeM57
     Parameters
     ----------
     self : ConvertMC
@@ -20,6 +20,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         A pyleecan machine
     """
 
+    # selection hole_id
     if isinstance(self.param_dict["hole_id"], int):
         hole_id = self.param_dict["hole_id"]
     else:
@@ -34,7 +35,6 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     Z4 = point_dict["Z4"]
 
     # Set W2
-
     machine.rotor.hole[hole_id].W2 = (
         abs(Z9 - Z4)
         - machine.rotor.hole[hole_id].W4

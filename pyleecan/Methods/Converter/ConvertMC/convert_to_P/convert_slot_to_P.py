@@ -13,6 +13,11 @@ def convert_slot_to_P(self):
     ----------
     self : ConvertMC
         A ConvertMC object
+
+    Returns
+    ---------
+    tyoe of wedge : int
+        1 if wedge material else 0
     """
     slot_type = self.other_dict["[Calc_Options]"]["Slot_Type"]
 
@@ -77,12 +82,14 @@ def convert_slot_to_P(self):
         f"Conversion {slot_type} into {type(self.machine.stator.slot).__name__}"
     )
 
-    try:
+    # selection type of wedge
+    if "Wedge_Model" in self.other_dict["[Winding_Design]"]:
         wedge = self.other_dict["[Winding_Design]"]["Wedge_Model"]
 
-    except:
+    else:
         wedge = "Air"
 
+    # set the correct wedge
     if wedge == "Air":
         return 0
     elif wedge == "Wedge":
