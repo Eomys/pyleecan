@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+stator_slot,,Subdomain for stator slots,,Subdomain_Slot,None,,,
+rotor_magnet_surface,,Subdomain for surface magnets,,Subdomain_MagnetSurface,None,,,
+rotor_yoke,,Subdomain for rotor yoke,,Subdomain,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Simulation,SubdomainModel,set_subdomains,VERSION,1,Subdomain model for Surface Permanent Magnet Synchronous Machine assuming infinite permeability in yokes,,,
+,,solve,,,,,,

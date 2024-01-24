@@ -123,6 +123,7 @@ from ..Classes.MachineUD import MachineUD
 from ..Classes.MachineWRSM import MachineWRSM
 from ..Classes.MagElmer import MagElmer
 from ..Classes.MagFEMM import MagFEMM
+from ..Classes.MagSDM import MagSDM
 from ..Classes.Magnet import Magnet
 from ..Classes.Magnetics import Magnetics
 from ..Classes.MatEconomical import MatEconomical
@@ -241,6 +242,13 @@ from ..Classes.SolutionVector import SolutionVector
 from ..Classes.SolverInputFile import SolverInputFile
 from ..Classes.StructElmer import StructElmer
 from ..Classes.Structural import Structural
+from ..Classes.Subdomain import Subdomain
+from ..Classes.SubdomainModel import SubdomainModel
+from ..Classes.SubdomainModel_SPMSM import SubdomainModel_SPMSM
+from ..Classes.Subdomain_Airgap import Subdomain_Airgap
+from ..Classes.Subdomain_MagnetSurface import Subdomain_MagnetSurface
+from ..Classes.Subdomain_Slot import Subdomain_Slot
+from ..Classes.Subdomain_SlotOpening import Subdomain_SlotOpening
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing
 from ..Classes.Surface import Surface

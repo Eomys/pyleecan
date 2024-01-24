@@ -1,0 +1,12 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+C,,First integration constant function of harmonic number and time in slot opening subdomain,"[Zs, Nt]",ndarray,None,,,
+D,,Second integration constant function of harmonic number and time in slot opening subdomain,"[Zs, Nt]",ndarray,None,,,
+E,,Third integration constant function of harmonic number and time in slot opening subdomain,"[V*Zs, Nt]",ndarray,None,,,
+F,,Fourth integration constant function of harmonic number and time in slot opening subdomain,"[V*Zs, Nt]",ndarray,None,,,
+opening_width,rad,Angular width of slot opening,,float,None,0,,
+v,,Harmonic vector for slot opening,"[V,1]",ndarray,None,,,
+Ropening,m,Radius of slot opening / slot interface,,float,None,0,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Simulation,Subdomain_Slot,add_constants_numbers,VERSION,1,Subdomain class for slots regions,,,
+,,comp_flux_density,,,,,,

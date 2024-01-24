@@ -53,6 +53,11 @@ except ImportError as error:
     get_magnet_by_label = error
 
 try:
+    from ..Methods.Machine.LamSlotMag.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
+try:
     from ..Methods.Machine.LamSlotMag.set_Lmag import set_Lmag
 except ImportError as error:
     set_Lmag = error
@@ -146,6 +151,17 @@ class LamSlotMag(LamSlotM):
         )
     else:
         get_magnet_by_label = get_magnet_by_label
+    # cf Methods.Machine.LamSlotMag.get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
     # cf Methods.Machine.LamSlotMag.set_Lmag
     if isinstance(set_Lmag, ImportError):
         set_Lmag = property(
