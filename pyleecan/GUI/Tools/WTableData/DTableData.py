@@ -377,11 +377,11 @@ class DTableData(Ui_DTableData, QDialog):
 
             axes.set_xlabel(self.col_header[1])
             axes.set_ylabel(self.col_header[2])
-            axes.set_xlim(auto=True)
-            axes.set_ylim(auto=True)
+            axes.set_xlim(left =min(data[:, 1]))
+            axes.set_ylim(bottom = min(data[:,2]) )
 
-            fig.legend()
-            plt.title("Curve Loss(B) depending to Frequency")
+            axes.legend()
+            plt.title("Curve Loss(B)")
             plt.yscale("log")
             plt.grid(True)
             fig.show()
