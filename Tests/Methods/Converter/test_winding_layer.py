@@ -9,31 +9,52 @@ from pyleecan.Classes.SlotW21 import SlotW21
 
 winding_test = list()
 
-# Common values
+
 other_dict = {
     "[Winding_Design]": {
-        "Liner_Layers": "Single_Layer",
-    }
-}
-
-winding_test.append(
-    {
-        "other_dict": other_dict,
-        "Nlayer": 1,
-    }
-)
-
-# Common values
-other_dict = {
-    "[Winding_Design]": {
-        "Liner_Layers": "Double_Layer",
-    }
+        "Winding_Type": "Overlapping",
+    },
+    "[Magnetics]": {"MagPathType": 1},
 }
 
 winding_test.append(
     {
         "other_dict": other_dict,
         "Nlayer": 2,
+        "is_change_layer": False,
+    }
+)
+
+# Common values
+other_dict = {
+    "[Winding_Design]": {
+        "Winding_Type": "Overlapping",
+    },
+    "[Magnetics]": {"MagPathType": 2},
+}
+
+winding_test.append(
+    {
+        "other_dict": other_dict,
+        "Nlayer": 2,
+        "is_change_layer": True,
+    }
+)
+
+
+# Common values
+other_dict = {
+    "[Winding_Design]": {
+        "Winding_Type": "Single",
+    },
+    "[Magnetics]": {"MagPathType": 2},
+}
+
+winding_test.append(
+    {
+        "other_dict": other_dict,
+        "Nlayer": 1,
+        "is_change_layer": False,
     }
 )
 
@@ -59,10 +80,16 @@ class TestComplexRuleWindingLayer(object):
 
         # retreive expected value
         Nlayer = test_dict["Nlayer"]
+        is_change_layer = test_dict["is_change_layer"]
 
         # check the convertion
         msg = f"{machine.stator.winding.Nlayer} expected {Nlayer}"
         assert machine.stator.winding.Nlayer == pytest.approx(Nlayer), msg
+
+        msg = f"{machine.stator.winding.is_change_layer} expected {is_change_layer}"
+        assert machine.stator.winding.is_change_layer == pytest.approx(
+            is_change_layer
+        ), msg
 
 
 if __name__ == "__main__":

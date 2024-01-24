@@ -122,7 +122,7 @@ class TestPMSlot15(object):
 
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
-        self.test_obj.slot = SlotM15(H0=0.005, H1=0.005, W0=0.01, W1=0.01, Rtopm=0.02)
+        self.test_obj.slot = SlotM15(H0=0.005, H1=0.005, W0=0.1, W1=0.01, Rtopm=0.02)
         self.widget = PMSlot15(self.test_obj, self.material_dict)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005 [m]"
 
