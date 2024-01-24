@@ -15,3 +15,4 @@ Simulation,Subdomain,add_constants_numbers,VERSION,1,Subdomain class for slots r
 ,,comp_current_source,,,,,,
 ,,comp_flux_density,,,,,,
 ,,comp_interface_airgap,,,,,,
+,,comp_Phi_wind,,,,,,

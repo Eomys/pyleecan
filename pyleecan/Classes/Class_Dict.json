@@ -17344,9 +17344,7 @@
         ],
         "desc": "Abstract class for all subdomains",
         "is_internal": false,
-        "methods": [
-            "comp_polynoms"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Subdomain",
         "package": "Simulation",
@@ -17507,7 +17505,8 @@
         "is_internal": false,
         "methods": [
             "set_subdomains",
-            "solve"
+            "solve",
+            "store_constants"
         ],
         "mother": "SubdomainModel",
         "name": "SubdomainModel_SPMSM",
@@ -17561,7 +17560,8 @@
         "is_internal": false,
         "methods": [
             "add_constants_numbers",
-            "comp_flux_density"
+            "comp_flux_density",
+            "comp_torque"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Airgap",
@@ -17787,7 +17787,8 @@
             "comp_current_solution",
             "comp_current_source",
             "comp_flux_density",
-            "comp_interface_airgap"
+            "comp_interface_airgap",
+            "comp_Phi_wind"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Slot",

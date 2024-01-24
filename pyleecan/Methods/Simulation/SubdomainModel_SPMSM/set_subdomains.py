@@ -49,7 +49,7 @@ def set_subdomains(self, Nharm_coeff=1, Is_val=None, is_mmfr=True):
         number=polar_eq.rotor.get_Zs(),
         magnet_width=polar_eq.rotor.slot.comp_angle_active_eq(),
         Rbore=Rrbo,
-        Ryoke=Rrbo - sign_rot * polar_eq.rotor.slot.Hmag,
+        Ryoke=Rrbo - sign_rot * polar_eq.rotor.slot.comp_height_active(),
         k=self.airgap.k,
     )
     self.rotor_magnet_surface.comp_magnet_source(polar_eq.rotor, sign_rot)

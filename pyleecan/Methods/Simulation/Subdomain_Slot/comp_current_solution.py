@@ -1,6 +1,7 @@
 from numpy import pi, log
 
-from ..Subdomain.comp_polynoms import E, P
+from ....Functions.SubdomainModel.E import E
+from ....Functions.SubdomainModel.P import P
 
 
 def comp_current_solution(self, r):
@@ -23,9 +24,9 @@ def comp_current_solution(self, r):
     Ry = self.Ryoke
 
     # constant particular function
-    X_r = mu0 * (-(r ** 2) / 2 + Ry ** 2 * log(r)) / 2
+    X_r = mu0 * (-(r**2) / 2 + Ry**2 * log(r)) / 2
     # derivative of the constant particular function
-    dX_r = mu0 * (-(r ** 2) + Ry ** 2) / (2 * r)
+    dX_r = mu0 * (-(r**2) + Ry**2) / (2 * r)
 
     if self.Jik is None:
         return X_r, dX_r, None, None
@@ -54,12 +55,12 @@ def comp_current_solution(self, r):
 
 
 def f(v, r):
-    result = r ** 2 / (v ** 2 - 4)
+    result = r**2 / (v**2 - 4)
 
     is_v2 = v == 2
 
     if isinstance(r, float):
-        result[is_v2] = -(r ** 2) * (-log(r) + 1 / 4) / 4
+        result[is_v2] = -(r**2) * (-log(r) + 1 / 4) / 4
     else:
         result[is_v2] = -r[is_v2] ** 2 * (-log(r[is_v2]) + 1 / 4) / 4
 
@@ -67,7 +68,7 @@ def f(v, r):
 
 
 def df(v, r):
-    result = 2 * r / (v ** 2 - 4)
+    result = 2 * r / (v**2 - 4)
 
     is_v2 = v == 2
 

@@ -27,6 +27,13 @@ try:
 except ImportError as error:
     solve = error
 
+try:
+    from ..Methods.Simulation.SubdomainModel_SPMSM.store_constants import (
+        store_constants,
+    )
+except ImportError as error:
+    store_constants = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -62,6 +69,18 @@ class SubdomainModel_SPMSM(SubdomainModel):
         )
     else:
         solve = solve
+    # cf Methods.Simulation.SubdomainModel_SPMSM.store_constants
+    if isinstance(store_constants, ImportError):
+        store_constants = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SubdomainModel_SPMSM method store_constants: "
+                    + str(store_constants)
+                )
+            )
+        )
+    else:
+        store_constants = store_constants
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

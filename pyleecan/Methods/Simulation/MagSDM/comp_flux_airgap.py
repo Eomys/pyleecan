@@ -37,6 +37,9 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
 
     logger = self.get_logger()
 
+    # Init output
+    out_dict = dict()
+
     # Get time and angular axes
     Angle = axes_dict["angle"]
     Time = axes_dict["time"]
@@ -49,7 +52,6 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
     )
-    Na = angle.size
 
     # Check if the time axis is anti-periodic
     _, is_antiper_t = Time.get_periodicity()
@@ -70,4 +72,11 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
 
     self.subdomain_model.set_subdomains(self.Nharm_coeff, Is_val, self.is_mmfr)
 
-    self.subdomain_model.solve(angle, angle_rotor)
+    (
+        out_dict["B_{rad}"],
+        out_dict["B_{circ}"],
+        out_dict["Tem"],
+        out_dict["Phi_wind_stator"],
+    ) = self.subdomain_model.solve(angle, angle_rotor)
+
+    return out_dict

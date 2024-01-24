@@ -15,14 +15,6 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.Subdomain.comp_polynoms import comp_polynoms
-except ImportError as error:
-    comp_polynoms = error
-
-
 from numpy import array, array_equal
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -33,17 +25,6 @@ class Subdomain(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Simulation.Subdomain.comp_polynoms
-    if isinstance(comp_polynoms, ImportError):
-        comp_polynoms = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Subdomain method comp_polynoms: " + str(comp_polynoms)
-                )
-            )
-        )
-    else:
-        comp_polynoms = comp_polynoms
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

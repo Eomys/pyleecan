@@ -12,9 +12,9 @@ except ImportError:  # Import for dev version
 
 ## UPDATE paths to prefered applications
 # Path to prefered application to edit python files
-PATH_EDITOR_PY = "notepad.exe"
+PATH_EDITOR_PY = "C:/Users/emile/AppData/Local/Programs/Microsoft VS Code/Code.exe"
 # Path to prefered application to edit csv files
-PATH_EDITOR_CSV = "notepad.exe"
+PATH_EDITOR_CSV = "C:/Program Files/LibreOffice/program/scalc.exe"
 
 
 def run_class_generator(argv):

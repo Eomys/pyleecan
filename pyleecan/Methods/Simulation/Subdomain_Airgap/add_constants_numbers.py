@@ -1,4 +1,4 @@
-def set_constants(self, csts_number):
+def add_constants_numbers(self, csts_number):
     """Return the number of integration constants in airgap subdomain
 
     Parameters

@@ -1,6 +1,7 @@
 from numpy import diag, cos, sin
 
-from ..Subdomain.comp_polynoms import E, P
+from ....Functions.SubdomainModel.E import E
+from ....Functions.SubdomainModel.P import P
 
 
 def comp_interface_airgap(self, angle_rotor):

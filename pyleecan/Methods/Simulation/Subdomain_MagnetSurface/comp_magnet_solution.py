@@ -1,6 +1,7 @@
 from numpy import log
 
-from ..Subdomain.comp_polynoms import E, P
+from ....Functions.SubdomainModel.E import E
+from ....Functions.SubdomainModel.P import P
 
 
 def comp_magnet_solution(self, r):
@@ -45,7 +46,7 @@ def comp_magnet_solution(self, r):
 
 
 def f(n, r):
-    result = r / (n ** 2 - 1)
+    result = r / (n**2 - 1)
 
     is_n1 = n == 1
 
@@ -58,7 +59,7 @@ def f(n, r):
 
 
 def df(n, r):
-    result = 1 / (n ** 2 - 1)
+    result = 1 / (n**2 - 1)
 
     is_n1 = n == 1
 

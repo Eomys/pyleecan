@@ -50,6 +50,11 @@ try:
 except ImportError as error:
     comp_interface_airgap = error
 
+try:
+    from ..Methods.Simulation.Subdomain_Slot.comp_Phi_wind import comp_Phi_wind
+except ImportError as error:
+    comp_Phi_wind = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -122,6 +127,18 @@ class Subdomain_Slot(Subdomain):
         )
     else:
         comp_interface_airgap = comp_interface_airgap
+    # cf Methods.Simulation.Subdomain_Slot.comp_Phi_wind
+    if isinstance(comp_Phi_wind, ImportError):
+        comp_Phi_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Slot method comp_Phi_wind: "
+                    + str(comp_Phi_wind)
+                )
+            )
+        )
+    else:
+        comp_Phi_wind = comp_Phi_wind
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

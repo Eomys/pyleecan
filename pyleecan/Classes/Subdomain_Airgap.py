@@ -31,6 +31,11 @@ try:
 except ImportError as error:
     comp_flux_density = error
 
+try:
+    from ..Methods.Simulation.Subdomain_Airgap.comp_torque import comp_torque
+except ImportError as error:
+    comp_torque = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -67,6 +72,17 @@ class Subdomain_Airgap(Subdomain):
         )
     else:
         comp_flux_density = comp_flux_density
+    # cf Methods.Simulation.Subdomain_Airgap.comp_torque
+    if isinstance(comp_torque, ImportError):
+        comp_torque = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Airgap method comp_torque: " + str(comp_torque)
+                )
+            )
+        )
+    else:
+        comp_torque = comp_torque
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

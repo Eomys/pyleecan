@@ -29,10 +29,10 @@ def get_polar_eq(self):
 
     if np.isclose(Wmag, W0):
         # Ring magnet
-        polar_eq.slot = SlotM18(Zs=self.slot.Zs, Hmag=Hmag)
+        polar_eq.slot = SlotM18(Zs=self.slot.Zs, H0=Hmag)
     else:
         # Polar magnet
-        polar_eq.slot = SlotM11(Zs=self.slot.Zs, Hmag=Hmag, H0=H0, Wmag=Wmag, W0=W0)
+        polar_eq.slot = SlotM11(Zs=self.slot.Zs, H1=Hmag, H0=H0, W1=Wmag, W0=W0)
 
     # TODO: Polar eq for ventilations ?
     polar_eq.axial_vent = list()

@@ -1,7 +1,11 @@
 from numpy import reshape, meshgrid, pi, eye, matmul, tile
 
-from ..Subdomain.comp_polynoms import E, P
-from ..SubdomainModel.comp_interface_integrals import I_cni, I_sni, I_ckni, I_skni
+from ....Functions.SubdomainModel.E import E
+from ....Functions.SubdomainModel.P import P
+from ....Functions.SubdomainModel.I_cni import I_cni
+from ....Functions.SubdomainModel.I_sni import I_sni
+from ....Functions.SubdomainModel.I_ckni import I_ckni
+from ....Functions.SubdomainModel.I_skni import I_skni
 
 
 def comp_interface_airgap(self):
