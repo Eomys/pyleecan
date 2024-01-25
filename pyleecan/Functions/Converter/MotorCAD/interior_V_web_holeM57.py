@@ -34,6 +34,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     Z9 = point_dict["Z9"]
     Z4 = point_dict["Z4"]
 
+    # In Pyleecan to place magnet, W2 is set on top of the slot, contrary to MC equivalent at W2 is set at the bottom
     # Set W2
     machine.rotor.hole[hole_id].W2 = (
         abs(Z9 - Z4)

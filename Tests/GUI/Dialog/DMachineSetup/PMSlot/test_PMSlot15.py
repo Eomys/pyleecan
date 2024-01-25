@@ -145,6 +145,12 @@ class TestPMSlot15(object):
         # Rtopm
         self.test_obj.slot = SlotM15(H0=0.10, H1=0.10, W0=0.10, W1=0.1, Rtopm=None)
         assert self.widget.check(self.test_obj) == "You must set Rtopm !"
+        # W1 <= W0
+        self.test_obj.slot = SlotM15(H0=0.10, H1=0.10, W0=0.10, W1=0.8, Rtopm=0.1)
+        assert self.widget.check(self.test_obj) == "You must have W1 <= W0"
+        # W1 <= 2*Rtopm
+        self.test_obj.slot = SlotM15(H0=0.005, H1=0.005, W0=0.1, W1=0.01, Rtopm=0.004)
+        assert self.widget.check(self.test_obj) == "You must have W1 <= 2*Rtopm"
 
     def test_set_material(self):
         """Check that you can change the material"""
@@ -170,4 +176,5 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_check()
     print("Done")
