@@ -1,4 +1,5 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
+from ......Classes.RuleSimple import RuleSimple
+from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_holeM57(self, hole_id):
@@ -65,16 +66,6 @@ def add_rule_holeM57(self, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"VShapeMagnetSegments_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    self.rules_list.append(
-        RuleSimple(
             other_key_list=["[Dimensions]", f"WebThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W3",
             unit_type="m",
@@ -90,5 +81,13 @@ def add_rule_holeM57(self, hole_id):
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,
+        )
+    )
+
+    self.rules_list.append(
+        RuleComplex(
+            fct_name="interior_V_web_holeM57",
+            folder="MotorCAD",
+            param_dict={"hole_id": hole_id},
         )
     )

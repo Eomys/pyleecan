@@ -1,5 +1,6 @@
-from pyleecan.Classes.RuleSimple import RuleSimple
-from pyleecan.Classes.RuleComplex import RuleComplex
+from ......Classes.RuleSimple import RuleSimple
+from ......Classes.RuleEquation import RuleEquation
+from ......Classes.RuleComplex import RuleComplex
 
 
 def add_rule_holeM61(self, hole_id):
@@ -35,7 +36,7 @@ def add_rule_holeM61(self, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"UShape_BridgeThickness_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"BridgeThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].H2",
             unit_type="m",
             scaling_to_P=1,
@@ -45,28 +46,8 @@ def add_rule_holeM61(self, hole_id):
 
     self.rules_list.append(
         RuleSimple(
-            other_key_list=["[Dimensions]", f"UShape_WebThickness_Array[{hole_id}]"],
+            other_key_list=["[Dimensions]", f"WebThickness_Array[{hole_id}]"],
             P_obj_path=f"machine.rotor.hole[{hole_id}].W3",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", f"UMagnet_Length_Outer_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W2",
-            unit_type="m",
-            scaling_to_P=1,
-            file_name=__file__,
-        )
-    )
-
-    self.rules_list.append(
-        RuleSimple(
-            other_key_list=["[Dimensions]", f"UMagnet_Length_Inner_Array[{hole_id}]"],
-            P_obj_path=f"machine.rotor.hole[{hole_id}].W1",
             unit_type="m",
             scaling_to_P=1,
             file_name=__file__,

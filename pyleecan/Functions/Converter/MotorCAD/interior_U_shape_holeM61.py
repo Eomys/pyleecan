@@ -23,25 +23,46 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
         ValueError("hole_id isn't int")
 
     self.unit_type = "m"
-    other_path_list = ["[Dimensions]", f"UShape_InnerDiameter_Array[{hole_id}]"]
+    other_path_list = ["[Dimensions]", "Magnet_Inner_Diameter"]
     H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     Rbo = machine.rotor.get_Rbo()
 
+    self.unit_type = "m"
+    other_path_list = ["[Dimensions]", "Magnet_Layer_Gap_Inner"]
+    h = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    self.unit_type = "m"
+    other_path_list = ["[Dimensions]", "Magnet_Thickness"]
+    h1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+
+    # In MC length of magnet is defined in % of the length of hole
+    # In Pyleecan W1[m] and W2[m]
     # Set H0
-    machine.rotor.hole[hole_id].H0 = Rbo - H1 / 2
+    machine.rotor.hole[hole_id].H0 = Rbo - H1 / 2 - hole_id * (h + h1)
+
+    point_dict = machine.rotor.hole[hole_id]._comp_point_coordinate()
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
 
     # Set W2
-    other_path_list = ["[Dimensions]", f"UMagnet_Length_Outer_Array[{hole_id}]"]
-    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
-    if H1 == 0:
+    self.unit_type = ""
+    other_path_list = ["[Dimensions]", "Magnet_Fill_Outer"]
+    P2 = self.get_other(other_dict, other_path_list, other_unit_dict)
+    if P2 == 0:
         machine.rotor.hole[hole_id].W2 = None
+    else:
+        machine.rotor.hole[hole_id].W2 = abs(Z4 - Z3) * P2 / 100
 
     # Set W1
-    other_path_list = ["[Dimensions]", f"UMagnet_Length_Inner_Array[{hole_id}]"]
-    H2 = self.get_other(other_dict, other_path_list, other_unit_dict)
-    if H2 == 0:
+    self.unit_type = ""
+    other_path_list = ["[Dimensions]", "Magnet_Fill_Inner"]
+    P1 = self.get_other(other_dict, other_path_list, other_unit_dict)
+    if P1 == 0:
         machine.rotor.hole[hole_id].W1 = None
+    else:
+        machine.rotor.hole[hole_id].W1 = abs(Z3 - Z2) * P1 / 100
 
     return machine
 

@@ -1,4 +1,4 @@
-from numpy import sqrt, cos, arctan
+from numpy import sqrt, cos, arctan, arcsin
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
@@ -43,7 +43,10 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine.rotor.slot.W1 = slot_W1
 
     # set W0
-    machine.rotor.slot.W0 = 2 * arctan((slot_W1 / 2) / Rbo)
+    point_dict = machine.rotor.slot._comp_point_coordinate()
+    ZM4 = point_dict["ZM4"]
+
+    machine.rotor.slot.W0 = 2 * arcsin((machine.rotor.slot.W1 / 2) / abs(ZM4))
 
     machine.rotor.slot.Rtopm = Rbo + H1
 
@@ -66,12 +69,12 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     # equation cercle with 3 points
     # coordonné du centre x
     x = -(
-        (x3**2 - x2**2 + y3**2 - y2**2) / (2 * (y3 - y2))
-        - (x2**2 - x1**2 + y2**2 - y1**2) / (2 * (y2 - y1))
+        (x3 ** 2 - x2 ** 2 + y3 ** 2 - y2 ** 2) / (2 * (y3 - y2))
+        - (x2 ** 2 - x1 ** 2 + y2 ** 2 - y1 ** 2) / (2 * (y2 - y1))
     ) / (((x2 - x1) / (y2 - y1)) - ((x3 - x2) / (y3 - y2)))
 
     y = -((x2 - x1) * x / (y2 - y1)) + (
-        (x2**2 - x1**2 + y2**2 - y1**2) / (2 * (y2 - y1))
+        (x2 ** 2 - x1 ** 2 + y2 ** 2 - y1 ** 2) / (2 * (y2 - y1))
     )
 
     Rtopm = sqrt((x1 - x) ** 2 + (y1 - y) ** 2)

@@ -1,6 +1,5 @@
-from pyleecan.Classes.Notch import Notch
-from pyleecan.Classes.NotchEvenDist import NotchEvenDist
-from pyleecan.Classes.SlotM19 import SlotM19
+from .....Classes.NotchEvenDist import NotchEvenDist
+from .....Classes.SlotM19 import SlotM19
 
 
 def convert_notch_to_P(self, is_stator):
@@ -29,6 +28,8 @@ def convert_notch_to_P(self, is_stator):
             self.machine.rotor.notch[0].notch_shape = SlotM19()
 
             self.get_logger().info("Add notch for rotor")
-            self.get_logger().warning("Approximation of notch for slotM19")
+            self.get_logger().warning(
+                "Approximation: top of slot is flat in Pyleecan contrary to MC top is rounded"
+            )
     else:
         self.get_logger().error("MC machine can't have notch in stator")

@@ -61,6 +61,12 @@ class PHoleM63(Gen_PHoleM63, QWidget):
 
         if self.hole.top_flat is None:
             self.hole.top_flat = False
+
+        elif self.hole.top_flat == True:
+            self.img_slot.setPixmap(
+                QPixmap(pixmap_dict["HoleM63_mag_int_rotor_top_flat"])
+            )
+
         self.ck_is_top_flat.setChecked(self.hole.top_flat)
 
         # Set unit name (m ou mm)

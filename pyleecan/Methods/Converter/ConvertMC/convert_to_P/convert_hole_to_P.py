@@ -1,10 +1,10 @@
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM57 import HoleM57
-from pyleecan.Classes.HoleM60 import HoleM60
-from pyleecan.Classes.HoleM61 import HoleM61
-from pyleecan.Classes.HoleM62 import HoleM62
-from pyleecan.Classes.HoleM63 import HoleM63
+from .....Classes.LamHole import LamHole
+from .....Classes.HoleM52 import HoleM52
+from .....Classes.HoleM57 import HoleM57
+from .....Classes.HoleM60 import HoleM60
+from .....Classes.HoleM61 import HoleM61
+from .....Classes.HoleM62 import HoleM62
+from .....Classes.HoleM63 import HoleM63
 
 
 def convert_hole_to_P(self):
@@ -45,6 +45,9 @@ def convert_hole_to_P(self):
     elif hole_type == "Interior_Flat_Simple":
         self.machine.rotor.hole.append(HoleM63())
         self.machine.rotor.hole[0].top_flat = True
+        self.get_logger().warning(
+            f"HoleM63 : Approximation for H1, Pole Arc isn't present in Pyleecan"
+        )
 
     elif hole_type == "Interior_Flat_Web":
         self.machine.rotor.hole.append(HoleM52())
@@ -60,6 +63,9 @@ def convert_hole_to_P(self):
         number_hole = self.other_dict["[Dimensions]"]["VMagnet_Layers"]
         for hole_id in range(number_hole):
             self.machine.rotor.hole.append(HoleM57())
+            self.get_logger().warning(
+                "HoleM57 : Approximation check the settings for HoleM57"
+            )
 
     elif hole_type == "Interior_UShape":
         number_hole = self.other_dict["[Dimensions]"]["Magnet_Layers"]
@@ -77,6 +83,11 @@ def convert_hole_to_P(self):
 
     if isinstance(self.machine.rotor.hole[0], HoleM63):
         self.get_logger().warning(f"HoleM63 : Approximation for W0")
+
+    if isinstance(self.machine.rotor.hole[0], HoleM57):
+        self.get_logger().warning(
+            f"HoleM57 : Approximation Pole Arc has not equivalent in pyleecan "
+        )
 
     self.get_logger().info(
         f"Conversion {hole_type} into {type(self.machine.rotor.hole[0]).__name__}"

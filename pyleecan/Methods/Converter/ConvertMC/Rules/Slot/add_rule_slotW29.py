@@ -95,31 +95,11 @@ def add_rule_slotW29(self, is_stator):
     )
 
     self.rules_list.append(
-        RuleEquation(
-            param=[
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "Slot_Depth"],
-                    "variable": "y",
-                },
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "FormWound_WedgeThickness"],
-                    "variable": "a",
-                },
-                {
-                    "src": "other",
-                    "path": ["[Dimensions]", "FormWound_WedgeDepth"],
-                    "variable": "b",
-                },
-                {
-                    "src": "pyleecan",
-                    "path": f"machine.{lam_name}.slot.H2",
-                    "variable": "x",
-                },
-            ],
+        RuleSimple(
+            other_key_list=["[Dimensions]", "Slot_Depth"],
+            P_obj_path=f"machine.{lam_name}.slot.H2",
             unit_type="m",
-            equation="y+b+a = x",
+            scaling_to_P=1,
             file_name=__file__,
         )
     )

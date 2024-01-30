@@ -20,9 +20,6 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine : Machine
         A pyleecan machine
     """
-    self.unit_type = "m"
-    other_path_list = ["[Dimensions]", "Magnet_Thickness"]
-    H1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     # Magnet arc is equivalent at W1 in ED
     self.unit_type = "ED"
@@ -30,6 +27,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     W1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
     self.unit_type = "m"
+
     if "MagnetReduction" in other_dict["[Dimensions]"]:
         other_path_list = ["[Dimensions]", "MagnetReduction"]
         Red = self.get_other(other_dict, other_path_list, other_unit_dict)
@@ -39,11 +37,17 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     Rbo = machine.rotor.get_Rbo()
 
-    slot_W1 = sqrt(2 * (Rbo + H1) ** 2 * (1 - cos(W1)))
+    slot_W1 = sqrt(2 * (Rbo) ** 2 * (1 - cos(W1)))
     machine.rotor.slot.W1 = slot_W1
 
     # set W0
     machine.rotor.slot.W0 = slot_W1
+
+    # correction value H1 (circular segment)
+    c = machine.rotor.slot.W0
+    alpha = 2 * arcsin(c / (2 * Rbo))
+    H = Rbo * (1 - cos(alpha / 2))
+    machine.rotor.slot.H1 = machine.rotor.slot.H1 + H
 
     # define rtopm at max
 
@@ -54,8 +58,8 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
     machine.rotor.slot.Rtopm = abs(Z1)
 
+    # point selection
     point_dict = machine.rotor.slot._comp_point_coordinate()
-
     ZM0 = point_dict["ZM0"]
     ZM2 = point_dict["ZM2"]
     ZM3 = point_dict["ZM3"]

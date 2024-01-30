@@ -29,7 +29,9 @@ def convert_notch_to_other(self, is_stator):
 
         if isinstance(self.machine.rotor.notch[0].notch_shape, SlotM19):
             self.add_rule_notch(is_stator)
-            self.get_logger().warning("Approximation of notch for slotM19")
+            self.get_logger().warning(
+                "Approximation: top of slot is flat in Pyleecan contrary to MC top is rounded"
+            )
 
         else:
             self.get_logger().error("Only the slotM19 can be converted")

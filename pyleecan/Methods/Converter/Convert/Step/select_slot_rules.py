@@ -43,3 +43,6 @@ def select_slot_rules(self, is_stator):
         self.add_rule_slotW23(is_stator)
     elif isinstance(slot, SlotW29):
         self.add_rule_slotW29(is_stator)
+
+    if isinstance(self.machine.stator.slot.wedge_mat, Material):
+        self.select_material_rules("machine.stator.slot.wedge_mat")
