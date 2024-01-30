@@ -27,9 +27,9 @@ def select_slot_rules(self, is_stator):
 
     # select slot type and add it to obj machine or in dict
     if self.is_P_to_other:
-        wedge = self.convert_slot_to_other()
+        self.convert_slot_to_other()
     else:
-        wedge = self.convert_slot_to_P()
+        self.convert_slot_to_P()
 
     slot = self.machine.stator.slot
     # add the correct rule depending on the slot

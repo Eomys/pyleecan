@@ -36,7 +36,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     other_path_list = ["[Dimensions]", "Magnet_Thickness"]
     h1 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    # In MC lenght of magnet is define in %, indeed lenght of hole
+    # In MC length of magnet is defined in % of the length of hole
     # In Pyleecan W1[m] and W2[m]
     # Set H0
     machine.rotor.hole[hole_id].H0 = Rbo - H1 / 2 - hole_id * (h + h1)
