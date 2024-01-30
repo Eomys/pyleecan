@@ -97,11 +97,12 @@ def convert_slot_to_P(self):
     elif wedge == "Wound_Space":
         self.machine.stator.slot.wedge_mat = None
         self.get_logger().info(
-            f"Conversion Wound_Space for {type(self.machine.stator.slot).__name__} has not equivalent in pyleecan or has not implement"
+            f"Conversion Wound_Space for {type(self.machine.stator.slot).name} has no equivalent in pyleecan. No wedge defined in the converted slot"
         )
         self.get_logger().info(f"we define air in place of the wedge")
 
     else:
         self.machine.stator.slot.wedge_mat = None
-        self.get_logger().warning(f"Error for conversion of wedge")
-        self.get_logger().info(f"we define air in place of the wedge")
+        self.get_logger().warning(
+            f"Error for conversion of wedge (unknow wedge type: {wedge}). No wedge defined in the converted slot"
+        )
