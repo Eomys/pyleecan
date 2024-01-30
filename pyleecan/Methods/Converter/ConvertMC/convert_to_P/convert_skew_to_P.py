@@ -10,9 +10,9 @@ def convert_skew_to_P(self):
         A ConvertMC object
     """
     # conversion to pyleecan
-    try:
+    if "SkewType" in self.other_dict["[Magnetics]"]:
         skew_type = self.other_dict["[Magnetics]"]["SkewType"]
-    except:
+    else:
         skew_type = 0
 
     if skew_type == 2:

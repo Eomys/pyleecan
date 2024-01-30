@@ -1,5 +1,4 @@
 from ......Classes.RuleSimple import RuleSimple
-from ......Classes.RuleEquation import RuleEquation
 
 
 def add_rule_lamination(self, is_stator):

@@ -1,6 +1,18 @@
 def convert_material_to_P(self, path_P):
-    # dict
+    """Selects correct material path and return path in file.mot
 
+    Parameters
+    ----------
+    self : ConvertMC
+        A ConvertMC object
+
+    Returns
+    ---------
+    material_path : string
+        Path to select material in file .mot
+    """
+
+    # creation material dict
     dict_material = {
         "machine.shaft.mat_type": ("Material_Shaft_[A]"),
         "machine.frame.mat_type": (""),  # Material_Housing_Active
@@ -14,33 +26,24 @@ def convert_material_to_P(self, path_P):
         "machine.stator.mat_type": ("Material_Stator_Lam_Tooth"),
         "machine.stator.winding.conductor.cond_mat": ("Material_Copper_-_Active"),
         "machine.stator.winding.conductor.ins_mat": (""),
-        "machine.rotor.hole[0].magnet_0.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[1].magnet_0.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[2].magnet_0.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[3].magnet_0.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[4].magnet_0.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[0].magnet_1.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[1].magnet_1.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[2].magnet_1.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[3].magnet_1.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[4].magnet_1.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[0].magnet_2.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[1].magnet_2.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[2].magnet_2.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[3].magnet_2.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[4].magnet_2.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[0].magnet_3.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[1].magnet_3.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[2].magnet_3.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[3].magnet_3.mat_type": ("Material_Magnet"),
-        "machine.rotor.hole[4].magnet_3.mat_type": ("Material_Magnet"),
     }
 
-    type_material = dict_material[path_P]
-    if type_material != "":
-        try:
-            type_material = self.other_dict["[Material]"][type_material]
-        except:
-            type_material = ""
+    if "[" in path_P:
+        path_P_split = path_P.split("[")
+        # check if material is a hole
+        if path_P_split[0] == "machine.rotor.hole":
+            material_path = "Material_Magnet"
+        else:
+            IndexError("Problem in material path")
 
-    return type_material
+    # select the correct position of material into dict
+    else:
+        material_path = dict_material[path_P]
+
+    if material_path != "":
+        try:
+            material_path = self.other_dict["[Material]"][material_path]
+        except:
+            material_path = ""
+
+    return material_path

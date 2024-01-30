@@ -179,10 +179,13 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         """
         ### TODO: handle material data, i.e. "connect", set new material, etc.
 
-        # Ask the user to select a .json file to load
+        # Ask the user to select a .json or .mot file to load
         load_path = str(
             QFileDialog.getOpenFileName(
-                self, self.tr("Load file"), self.machine_path, "Machine (*.json *.mot)"
+                self,
+                self.tr("Load file"),
+                self.machine_path,
+                "Machine (*.json *.mot);; all (*.*)",
             )[0]
         )
         if load_path != "":

@@ -1,5 +1,5 @@
 def other_to_P(self, machine, other_dict, other_unit_dict=None):
-    """Conversion of the set_pole_pair_number
+    """Conversion of winding
 
     Parameters
     ----------

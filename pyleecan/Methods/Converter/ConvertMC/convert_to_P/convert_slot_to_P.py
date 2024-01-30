@@ -4,6 +4,7 @@ from .....Classes.SlotW14 import SlotW14
 from .....Classes.SlotW21 import SlotW21
 from .....Classes.SlotW23 import SlotW23
 from .....Classes.SlotW29 import SlotW29
+from .....Classes.Material import Material
 
 
 def convert_slot_to_P(self):
@@ -33,7 +34,9 @@ def convert_slot_to_P(self):
             self.machine.stator.slot.is_cstt_tooth = True
             self.machine.stator.slot.H1_is_rad = True
             self.machine.stator.is_internal = False
-            self.get_logger().warning("Approximation top of slot is flat in Pyleecan")
+            self.get_logger().warning(
+                "Approximation: top of slot is flat in Pyleecan contrary to MC top is rounded"
+            )
 
     elif slot_type == "Parallel_Tooth_SqBase":
         self.machine.stator.slot = SlotW14()
@@ -58,7 +61,9 @@ def convert_slot_to_P(self):
             self.machine.stator.slot.is_cstt_tooth = False
             self.machine.stator.slot.H1_is_rad = True
             self.machine.stator.is_internal = False
-            self.get_logger().warning("Approximation top of slot is flat in Pyleecan")
+            self.get_logger().warning(
+                "Approximation: top of slot is flat in Pyleecan contrary to MC top is rounded"
+            )
 
     elif slot_type == "Form_Wound":
         self.machine.stator.slot = SlotW29()
@@ -77,23 +82,26 @@ def convert_slot_to_P(self):
         f"Conversion {slot_type} into {type(self.machine.stator.slot).__name__}"
     )
 
-    try:
+    # selection type of wedge
+    if "Wedge_Model" in self.other_dict["[Winding_Design]"]:
         wedge = self.other_dict["[Winding_Design]"]["Wedge_Model"]
 
-    except:
+    else:
         wedge = "Air"
 
+    # set the correct wedge
     if wedge == "Air":
-        return 0
+        self.machine.stator.slot.wedge_mat = None
     elif wedge == "Wedge":
-        return 1
+        self.machine.stator.slot.wedge_mat = Material()
     elif wedge == "Wound_Space":
+        self.machine.stator.slot.wedge_mat = None
         self.get_logger().info(
             f"Conversion Wound_Space for {type(self.machine.stator.slot).__name__} has not equivalent in pyleecan or has not implement"
         )
         self.get_logger().info(f"we define air in place of the wedge")
-        return 0
+
     else:
+        self.machine.stator.slot.wedge_mat = None
         self.get_logger().warning(f"Error for conversion of wedge")
         self.get_logger().info(f"we define air in place of the wedge")
-        return 0

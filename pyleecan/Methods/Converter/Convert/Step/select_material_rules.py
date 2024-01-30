@@ -1,5 +1,5 @@
 def select_material_rules(self, path_P):
-    """selects step to add rules for slot and converts slot
+    """selects rules for material
 
     Parameters
     ----------
@@ -7,7 +7,6 @@ def select_material_rules(self, path_P):
         A ConvertMC object
     is_stator : bool
         True slot is in stator, False slot is in rotor
-    path_P : str
 
     """
 

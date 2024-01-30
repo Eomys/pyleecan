@@ -458,6 +458,7 @@ class TestNewMachineZoe(object):
         )
 
         assert self.widget.w_step.c_slot_type.count() == 5
+
         assert self.widget.w_step.c_slot_type.currentText() == "Pole Type 60"
 
         assert self.widget.w_step.test_err_msg is None

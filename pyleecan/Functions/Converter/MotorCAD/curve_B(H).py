@@ -2,7 +2,7 @@ from ....Classes.ImportMatrixVal import ImportMatrixVal
 
 
 def other_to_P(self, machine, other_dict, other_unit_dict):
-    """Converts motor-cad notch into pyleecan notch slotM19
+    """Converts motor-cad curve B(H) into pyleecan
 
     Parameters
     ----------
@@ -23,9 +23,19 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     path_P = self.param_dict["path_P"]
     material = self.param_dict["material"]
 
+    # exemple curve into file .mot
+    # "BValue[0]": "0",
+    # "HValue[0]": "0",
+    # "BValue[1]": "0.015649299",
+    # "HValue[1]": "5.925085189",
+    # "BValue[2]": "0.029080305",
+    # "HValue[2]": "9.92738115",
+
     is_BH = True
     idx_BH = 0
     curve_BH = []
+
+    # selection all value in file.mot
     while is_BH:
         try:
             B_value = other_dict[f"[{material}]"][f"BValue[{idx_BH}]"]
@@ -43,20 +53,21 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
 
         path = f"{path_P}.mag.BH_curve"
 
-        if not isinstance(path.__class__, ImportMatrixVal):
-            # set value in object machine
-            value_split = path.split(".")
+        # set class ImportMatrixVal into machine
+        # set value in object machine
+        value_split = path.split(".")
 
-            # value_split[-1] is the attribut that we want to set ("W1")
-            # path is the attribut chain to set the attribut ("machine.stator.slot")
-            path = ".".join(value_split[:-1])
+        # value_split[-1] is the attribut that we want to set ("W1")
+        # path is the attribut chain to set the attribut ("machine.stator.slot")
+        path = ".".join(value_split[:-1])
 
-            setattr(
-                eval(path),
-                value_split[-1],
-                ImportMatrixVal(),
-            )
+        setattr(
+            eval(path),
+            value_split[-1],
+            ImportMatrixVal(),
+        )
 
+        # set curve B(H) into class add previously
         path = f"{path_P}.mag.BH_curve.value"
 
         self.set_P(machine, other_value, path)

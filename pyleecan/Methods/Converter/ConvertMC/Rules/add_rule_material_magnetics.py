@@ -13,9 +13,7 @@ def add_rule_material_magnetics(self, path_P, material):
         A ConvertMC object
     """
 
-    try:
-        self.other_dict[f"[{material}]"]["MagneturValue"]
-
+    if "MagneturValue" in self.other_dict[f"[{material}]"]:
         self.rules_list.append(
             RuleSimple(
                 other_key_list=[f"[{material}]", "MagneturValue"],
@@ -26,11 +24,7 @@ def add_rule_material_magnetics(self, path_P, material):
             )
         )
 
-    except:
-        pass
-
-    try:
-        self.other_dict[f"[{material}]"]["MagnetBrValue"]
+    if "MagnetBrValue" in self.other_dict[f"[{material}]"]:
         self.rules_list.append(
             RuleSimple(
                 other_key_list=[f"[{material}]", "MagnetBrValue"],
@@ -41,12 +35,7 @@ def add_rule_material_magnetics(self, path_P, material):
             )
         )
 
-    except:
-        pass
-
-    try:
-        self.other_dict[f"[{material}]"]["MagnetTempCoefBr"]
-
+    if "MagnetTempCoefBr" in self.other_dict[f"[{material}]"]:
         self.rules_list.append(
             RuleSimple(
                 other_key_list=[f"[{material}]", "MagnetTempCoefBr"],
@@ -57,12 +46,7 @@ def add_rule_material_magnetics(self, path_P, material):
             )
         )
 
-    except:
-        pass
-
-    try:
-        self.other_dict[f"[{material}]"]["LaminationThickness"]
-
+    if "LaminationThickness" in self.other_dict[f"[{material}]"]:
         self.rules_list.append(
             RuleSimple(
                 other_key_list=[f"[{material}]", "LaminationThickness"],
@@ -72,9 +56,6 @@ def add_rule_material_magnetics(self, path_P, material):
                 file_name=__file__,
             )
         )
-
-    except:
-        pass
 
     self.rules_list.append(
         RuleComplex(
