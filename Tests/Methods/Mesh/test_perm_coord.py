@@ -71,7 +71,8 @@ def test_perm_coord():
     MSol.perm_coord(perm_coord_list=[0, 2, 1])
 
     assert (
-        MSol_before.get_solution().field[0, [0, 2, 1]] == MSol.get_solution().field[0, :]
+        MSol_before.get_solution().field[0, [0, 2, 1]]
+        == MSol.get_solution().field[0, :]
     ).all()
 
 
