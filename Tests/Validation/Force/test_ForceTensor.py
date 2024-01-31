@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
-import pytest
-
-from os.path import join
-from numpy import zeros, exp, pi, real, meshgrid, mean
-from multiprocessing import cpu_count
-from numpy.testing import assert_array_almost_equal
-from SciDataTool import DataTime, VectorField, Data1D
 import csv
-import numpy as np
+from multiprocessing import cpu_count
+from os.path import join
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pytest
+from numpy import exp, mean, meshgrid, pi, real, zeros
+from numpy.testing import assert_array_almost_equal
+from SciDataTool import Data1D, DataTime, VectorField
 
 from pyleecan.Classes.ForceTensor import ForceTensor
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.SolutionVector import SolutionVector
-
-from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 from Tests import save_plot_path as save_path
 
 DELTA = 1e-6
@@ -100,7 +99,7 @@ def test_Benchmark_Tensor():
         name="indice", values=np.array(node_number_list), is_components=True
     )
 
-    Time = out.force.meshsolution.solution[0].field.get_axes()[0]
+    Time = out.force.meshsolution.get_solution().field.get_axes()[0]
 
     fx2_data = DataTime(
         name="Nodal force 2 (x)",
@@ -121,7 +120,7 @@ def test_Benchmark_Tensor():
     components2["comp_y"] = fy2_data
 
     vec_force2 = VectorField(name="Nodal forces 2", symbol="F2", components=components2)
-    solforce2 = SolutionVector(field=vec_force2, type_cell="node", label="F2")
+    solforce2 = SolutionVector(field=vec_force2, type_element="node", label="F2")
     out.force.meshsolution.solution.append(solforce2)
 
     out.force.meshsolution.plot_glyph(
@@ -141,11 +140,11 @@ def test_Benchmark_Tensor():
     # Comparisons
 
     computed_forces_x = (
-        out.force.meshsolution.solution[0].field.components["comp_x"].values
+        out.force.meshsolution.get_solution().field.components["comp_x"].values
     )
     reference_forces_x = f2[..., 0]
     computed_forces_y = (
-        out.force.meshsolution.solution[0].field.components["comp_y"].values
+        out.force.meshsolution.get_solution().field.components["comp_y"].values
     )
     reference_forces_y = f2[..., 1]
 
@@ -203,7 +202,7 @@ def test_Benchmark_Tensor():
     vec_force_dx = VectorField(
         name="Nodal forces dx", symbol="Fdx", components=components_diff_x
     )
-    solforce_dx = SolutionVector(field=vec_force_dx, type_cell="node", label="Fdx")
+    solforce_dx = SolutionVector(field=vec_force_dx, type_element="node", label="Fdx")
     out.force.meshsolution.solution.append(solforce_dx)
 
     out.force.meshsolution.plot_glyph(

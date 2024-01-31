@@ -1,4 +1,6 @@
-from numpy import sum as np_sum, zeros, array, pi
+from numpy import array, pi
+from numpy import sum as np_sum
+from numpy import zeros
 
 
 def comp_loss(self):
@@ -19,15 +21,15 @@ def comp_loss(self):
     """
 
     if self.parent.parent is None:
-        raise Exception("Cannot calculate losses if simu is not in an Output")
+        raise ValueError("Cannot calculate losses if simu is not in an Output")
     else:
         output = self.parent.parent.parent
 
     if output.elec is None:
-        raise Exception("Cannot calculate losses if OutElec is None")
+        raise ValueError("Cannot calculate losses if OutElec is None")
 
     if self.parent.is_get_meshsolution and output.mag is None:
-        raise Exception("Cannot calculate losses if OutMag is None")
+        raise ValueError("Cannot calculate losses if OutMag is None")
 
     machine = output.simu.machine
 
@@ -82,9 +84,9 @@ def comp_loss(self):
     if output.geo.is_antiper_a:
         per_a *= 2
 
-    # Get surface cells for windings
+    # Get surface elements for windings
     ms = output.mag.meshsolution
-    Se = ms.mesh[0].get_cell_area()[ms.group["rotor core"]]
+    Se = ms.mesh.get_element_area()[ms.group["rotor core"]]
 
     # Constant component and twice the electrical frequency have same joule density values
     freqs = array([felec])

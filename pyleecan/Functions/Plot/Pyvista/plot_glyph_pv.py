@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
-from numpy import (
-    real,
-    min as np_min,
-    max as np_max,
-    abs as np_abs,
-)
-
+import numpy as np
+from pyvista import UnstructuredGrid
 
 from ....definitions import config_dict
 
@@ -15,9 +9,9 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_glyph_pv(
-    p,
-    mesh_pv,
-    vect_field,
+    pv_plotter,
+    mesh_pv: UnstructuredGrid,
+    vect_field: np.ndarray,
     is_point_arrow,
     factor=1,
     phase=1,
@@ -26,7 +20,7 @@ def plot_glyph_pv(
 
     Parameters
     ----------
-    p : pyvista.Plotter
+    pv_plotter : pyvista.Plotter
         a pyvista plotting object
     mesh_pv : UnstructuredGrid
         a pyvista mesh object
@@ -43,16 +37,34 @@ def plot_glyph_pv(
     -------
     """
 
-    # Add field to mesh
-    if is_point_arrow:
-        mesh_pv.vectors = real(vect_field * factor * phase)
-        arrows_plt = mesh_pv.arrows
-    else:
-        mesh_pv["field"] = real(vect_field * factor * phase)
-        mesh_cell = mesh_pv.point_data_to_cell_data()
-        surf = mesh_cell.extract_geometry()
-        centers2 = surf.cell_centers()
-        centers2.vectors = surf["field"] * factor
-        arrows_plt = centers2.arrows
+    field = np.real(vect_field * factor * phase)
+    is_nodal_sol = field.shape[0] == mesh_pv.n_points
 
-    p.add_mesh(arrows_plt, color="red")
+    # Add field to mesh
+    if is_nodal_sol:
+        mesh_pv.point_data["field_to_plot"] = field
+        mesh_pv.set_active_vectors("field_to_plot", "point")
+        if is_point_arrow:
+            arrows_plt = mesh_pv.arrows
+        else:
+            # Convert point_data to cell data
+            mesh_cell = mesh_pv.point_data_to_cell_data()
+            surf = mesh_cell.extract_geometry()
+            centers2 = surf.cell_centers()
+            centers2.vectors = surf["field_to_plot"]
+            arrows_plt = centers2.arrows
+
+    else:
+        mesh_pv.cell_data["field_to_plot"] = field
+        mesh_pv.active_vectors_name = "field_to_plot"
+        if is_point_arrow:
+            mesh_node = mesh_pv.cell_data_to_point_data()
+            mesh_node.set_active_vectors("field_to_plot", "cell")
+            arrows_plt = mesh_node.arrows
+
+        else:
+            cell_centers = mesh_pv.cell_centers()
+            cell_centers.set_active_vectors("field_to_plot", "cell")
+            arrows_plt = cell_centers.arrows
+
+    pv_plotter.add_mesh(arrows_plt, color="red")

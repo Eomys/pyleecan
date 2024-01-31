@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from numpy import (
-    real,
-    min as np_min,
-    max as np_max,
-    abs as np_abs,
-)
+from numpy import abs as np_abs
+from numpy import max as np_max
+from numpy import min as np_min
+from numpy import real
 
 from ....definitions import config_dict
 
@@ -13,7 +11,7 @@ COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_surf_deflection(
-    p,
+    pv_plotter,
     sargs,
     surf_pv,
     vect_field,
@@ -27,7 +25,7 @@ def plot_surf_deflection(
 
     Parameters
     ----------
-    p : pyvista.Plotter
+    pv_plotter : pyvista.Plotter
         a pyvista plotting object
     *sargs: list of strings
         List of arguments for the scalar bar
@@ -63,7 +61,8 @@ def plot_surf_deflection(
 
     # Compute pyvista object
     # Add field to surf
-    surf_pv.vectors = real(vect_field * phase) * factor
+    surf_pv.point_data[field_name] = real(vect_field * phase) * factor
+    surf_pv.active_vectors_name = field_name
 
     # Warp by vectors
     surf_warp = surf_pv.warp_by_vector()
@@ -72,10 +71,12 @@ def plot_surf_deflection(
     surf_warp[field_name] = real(field * phase)
 
     # Plot mesh
-    p.add_mesh(surf_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white")
+    pv_plotter.add_mesh(
+        surf_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white"
+    )
 
     # Plot deflection
-    p.add_mesh(
+    pv_plotter.add_mesh(
         surf_warp,
         scalars=field_name,
         opacity=1,

@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .RefCell import RefCell
+from .RefElement import RefElement
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -52,7 +52,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class RefTriangle6(RefCell):
+class RefTriangle6(RefElement):
     """Store triangle elements for 2D mesh"""
 
     VERSION = 1
@@ -149,16 +149,16 @@ class RefTriangle6(RefCell):
             if "epsilon" in list(init_dict.keys()):
                 epsilon = init_dict["epsilon"]
         # Set the properties (value check and convertion are done in setter)
-        # Call RefCell init
+        # Call RefElement init
         super(RefTriangle6, self).__init__(epsilon=epsilon)
-        # The class is frozen (in RefCell init), for now it's impossible to
+        # The class is frozen (in RefElement init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         RefTriangle6_str = ""
-        # Get the properties inherited from RefCell
+        # Get the properties inherited from RefElement
         RefTriangle6_str += super(RefTriangle6, self).__str__()
         return RefTriangle6_str
 
@@ -168,7 +168,7 @@ class RefTriangle6(RefCell):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from RefCell
+        # Check the properties inherited from RefElement
         if not super(RefTriangle6, self).__eq__(other):
             return False
         return True
@@ -182,7 +182,7 @@ class RefTriangle6(RefCell):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from RefCell
+        # Check the properties inherited from RefElement
         diff_list.extend(
             super(RefTriangle6, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -197,7 +197,7 @@ class RefTriangle6(RefCell):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from RefCell
+        # Get size of the properties inherited from RefElement
         S += super(RefTriangle6, self).__sizeof__()
         return S
 
@@ -212,7 +212,7 @@ class RefTriangle6(RefCell):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from RefCell
+        # Get the properties inherited from RefElement
         RefTriangle6_dict = super(RefTriangle6, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -235,5 +235,5 @@ class RefTriangle6(RefCell):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        # Set to None the properties inherited from RefCell
+        # Set to None the properties inherited from RefElement
         super(RefTriangle6, self)._set_None()

@@ -1,24 +1,19 @@
-from genericpath import exists
-from os.path import join, exists
-
-import pytest
+from os.path import exists, join
 
 import numpy as np
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.OPdq import OPdq
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Loss import Loss
-from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
-
-
-from pyleecan.Functions.load import load
-
-from pyleecan.definitions import DATA_DIR
-
+import pytest
+from genericpath import exists
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.Loss import Loss
+from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 
 is_show_fig = False
 
@@ -117,10 +112,9 @@ def test_FEMM_Loss_Prius():
     for i, out in enumerate(out_list):
         out.loss.loss_list.append(out.loss.loss_list[0] + out.loss.loss_list[1])
         out.loss.loss_list[2].name = f"(Id={OP_MATRIX[i,1]}, Iq={OP_MATRIX[i,2]})"
-        out.loss.loss_list[2].get_mesh_solution().plot_contour(
+        out.loss.loss_list[2].get_mesh_solution().get_group(group_names).plot_contour(
             "freqs=sum",
             label=f"{out.loss.loss_list[2].name}",
-            group_names=group_names,
             colormap=colormap,
         )
 
@@ -130,10 +124,11 @@ def test_FEMM_Loss_Prius():
             out.loss.loss_list[
                 -1
             ].name = f"(Id={OP_MATRIX[i,1]}, Iq={OP_MATRIX[i,2]}) - (Id={OP_MATRIX[j,1]}, Iq={OP_MATRIX[j,2]})"
-            out.loss.loss_list[-1].get_mesh_solution().plot_contour(
+            out.loss.loss_list[-1].get_mesh_solution().get_group(
+                group_names
+            ).plot_contour(
                 "freqs=sum",
                 label=f"{out.loss.loss_list[-1].name}",
-                group_names=group_names,
                 colormap=colormap,
             )
 

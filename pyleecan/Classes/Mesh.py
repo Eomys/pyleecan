@@ -15,6 +15,14 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Mesh.Mesh.get_node_coordinate import get_node_coordinate
+except ImportError as error:
+    get_node_coordinate = error
+
+
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -24,12 +32,24 @@ class Mesh(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Mesh.Mesh.get_node_coordinate
+    if isinstance(get_node_coordinate, ImportError):
+        get_node_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_node_coordinate: "
+                    + str(get_node_coordinate)
+                )
+            )
+        )
+    else:
+        get_node_coordinate = get_node_coordinate
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, label=None, dimension=2, init_dict=None, init_str=None):
+    def __init__(self, dimension=2, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -45,13 +65,10 @@ class Mesh(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "label" in list(init_dict.keys()):
-                label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.label = label
         self.dimension = dimension
 
         # The class is frozen, for now it's impossible to add new properties
@@ -65,7 +82,6 @@ class Mesh(FrozenClass):
             Mesh_str += "parent = None " + linesep
         else:
             Mesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Mesh_str += 'label = "' + str(self.label) + '"' + linesep
         Mesh_str += "dimension = " + str(self.dimension) + linesep
         return Mesh_str
 
@@ -73,8 +89,6 @@ class Mesh(FrozenClass):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
-            return False
-        if other.label != self.label:
             return False
         if other.dimension != self.dimension:
             return False
@@ -88,14 +102,6 @@ class Mesh(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._label != self._label:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
-                )
-                diff_list.append(name + ".label" + val_str)
-            else:
-                diff_list.append(name + ".label")
         if other._dimension != self._dimension:
             if is_add_value:
                 val_str = (
@@ -116,7 +122,6 @@ class Mesh(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.label)
         S += getsizeof(self.dimension)
         return S
 
@@ -132,7 +137,6 @@ class Mesh(FrozenClass):
         """
 
         Mesh_dict = dict()
-        Mesh_dict["label"] = self.label
         Mesh_dict["dimension"] = self.dimension
         # The class name is added to the dict for deserialisation purpose
         Mesh_dict["__class__"] = "Mesh"
@@ -142,35 +146,15 @@ class Mesh(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        label_val = self.label
         dimension_val = self.dimension
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(label=label_val, dimension=dimension_val)
+        obj_copy = type(self)(dimension=dimension_val)
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.label = None
         self.dimension = None
-
-    def _get_label(self):
-        """getter of label"""
-        return self._label
-
-    def _set_label(self, value):
-        """setter of label"""
-        check_var("label", value, "str")
-        self._label = value
-
-    label = property(
-        fget=_get_label,
-        fset=_set_label,
-        doc=u"""Description of the mesh
-
-        :Type: str
-        """,
-    )
 
     def _get_dimension(self):
         """getter of dimension"""

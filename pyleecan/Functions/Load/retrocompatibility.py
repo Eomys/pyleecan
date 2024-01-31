@@ -1,8 +1,14 @@
-from ...Functions.Load.import_class import import_class
-from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
 from logging import getLogger
-from ...loggers import GUI_LOG_NAME
+
 from numpy import array
+
+from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
+from ...Functions.Load.import_class import import_class
+from ...loggers import GUI_LOG_NAME
+
+
+class RetroCompatibilityError(Exception):
+    pass
 
 
 def convert_init_dict(init_dict):
@@ -67,6 +73,8 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
         parent[parent_index] = convert_optidesignvar(obj_dict)
     elif update_dict["WmagHmag"] and is_Wmag_Hmag(obj_dict):
         parent[parent_index] = convert_Wmag_Hmag(obj_dict)
+    elif update_dict["MeshSolution"] and is_MeshSolution_dict(obj_dict):
+        parent[parent_index] = convert_meshsolution_mesh(obj_dict)
     else:
         # walk through the dict
         for key, value in obj_dict.items():
@@ -469,7 +477,65 @@ def convert_Wmag_Hmag(Wmag_Hmag_dict):
     return Wmag_Hmag_dict_news
 
 
-def is_before_version(ref_version, check_version):
+######################
+# v 1.5.0 => 1.5.1
+# MeshSolution.mesh is now a single mesh instead of a list of meshes
+######################
+MeshSolution_VERSION = "1.5.1"
+
+
+def is_MeshSolution_dict(obj_dict):
+    """Check if the object need to be updated for MeshSolution"""
+    return "__class__" in obj_dict.keys() and obj_dict["__class__"] in [
+        "MeshSolution",
+    ]
+
+
+def convert_meshsolution_mesh(meshsolution_dict):
+    """Update MeshSolution with a single mesh"""
+    getLogger(GUI_LOG_NAME).info(
+        "Old simulation version detected, Updating the MeshSolution object"
+    )
+    # Copy dict to keep original version
+    meshsolution_dict_new = meshsolution_dict.copy()
+
+    MeshSolution = import_class("pyleecan.Classes", "MeshSolution")
+
+    if isinstance(meshsolution_dict_new["mesh"], list):
+        if len(meshsolution_dict_new["mesh"]) == 0:
+            meshsolution_dict_new["mesh"] = None
+        elif len(meshsolution_dict_new["mesh"]) == 1:
+            meshsolution_dict_new["mesh"] = meshsolution_dict_new["mesh"][0]
+        else:
+            raise RetroCompatibilityError(
+                f"MeshSolution object only supports one mesh for version >= {MeshSolution_VERSION}"
+            )
+
+    # Convert list of solution stored in solution to dict of solution stored in solution_dict
+    list_solution = meshsolution_dict_new.get("solution", None)
+    if isinstance(list_solution, list):
+        list_label = [solution["label"] for solution in list_solution]
+
+        # Check if solution labels are unique
+        if len(set(list_label)) == len(list_label):
+            meshsolution_dict_new["solution_dict"] = {
+                solution["label"]: solution for solution in list_solution
+            }
+        else:  # Duplicated labels
+            getLogger(GUI_LOG_NAME).warning(
+                f"MeshSolution constains solutions with same label, instancing solution_dict with \"{meshsolution_dict_new['label']}_i\""
+            )
+            meshsolution_dict_new["solution_dict"] = {
+                f"{meshsolution_dict_new['label']}_{k}": solution
+                for k, solution in enumerate(list_solution, 1)
+            }
+
+        del meshsolution_dict_new["solution"]
+
+    return MeshSolution(init_dict=meshsolution_dict_new)
+
+
+def is_before_version(ref_version, check_version=None):
     """Check if a version str is before another version str
 
     Parameters
@@ -503,6 +569,21 @@ def is_before_version(ref_version, check_version):
         return True
 
 
+# Match object type with compatibility change version
+OBJECT_VERSION_DICT = {
+    "Winding": WIND_VERSION,
+    "HoleUD": HoleUD_VERSION,
+    "OP": OP_VERSION,
+    "OP_matrix": OP_MAT_VERSION,
+    "Yoke_Notch": Yoke_Notch_VERSION,
+    "VarParam": VARPARAM_VERSION,
+    "OptiConstraint": OptiConstraint_VERSION,
+    "OptiDesignVar": OptiDesignVar_VERSION,
+    "WmagHmag": WmagRenaming_VERSION,
+    "MeshSolution": MeshSolution_VERSION,
+}
+
+
 def create_update_dict(file_version):
     """Create a dict to know which parameter to update
 
@@ -516,30 +597,14 @@ def create_update_dict(file_version):
     update_dict : dict
         Dictionnary Key: What to update, value: is update needed
     """
-    update_dict = dict()
-    if file_version is None:
-        update_dict["Winding"] = True
-        update_dict["HoleUD"] = True
-        update_dict["OP"] = True
-        update_dict["OP_matrix"] = True
-        update_dict["Yoke_Notch"] = True
-        update_dict["VarParam"] = True
-        update_dict["OptiConstraint"] = True
-        update_dict["OptiDesignVar"] = True
-        update_dict["WmagHmag"] = True
 
+    # Set every parameter to update if the version is not defined
+    if file_version is None:
+        update_dict = {class_obj: True for class_obj in OBJECT_VERSION_DICT.keys()}
     else:
-        update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
-        update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
-        update_dict["OP"] = is_before_version(OP_VERSION, file_version)
-        update_dict["OP_matrix"] = is_before_version(OP_MAT_VERSION, file_version)
-        update_dict["Yoke_Notch"] = is_before_version(Yoke_Notch_VERSION, file_version)
-        update_dict["VarParam"] = is_before_version(VARPARAM_VERSION, file_version)
-        update_dict["OptiConstraint"] = is_before_version(
-            OptiConstraint_VERSION, file_version
-        )
-        update_dict["OptiDesignVar"] = is_before_version(
-            OptiDesignVar_VERSION, file_version
-        )
-        update_dict["WmagHmag"] = is_before_version(WmagRenaming_VERSION, file_version)
+        update_dict = {
+            class_obj: is_before_version(version, file_version)
+            for class_obj, version in OBJECT_VERSION_DICT.items()
+        }
+
     return update_dict

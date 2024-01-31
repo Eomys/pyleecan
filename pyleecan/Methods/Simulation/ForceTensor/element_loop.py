@@ -1,6 +1,7 @@
 import numpy as np
+
 import matplotlib.pyplot as plt
-import csv
+import numpy as np
 
 
 def element_loop(
@@ -18,65 +19,56 @@ def element_loop(
 
     from publications:
 
-
     Parameters
     ----------
     self : ForceTensor
         A ForceTensor object
-
-    mesh :
+    mesh : MeshMat
         A Mesh object
-
-
-
-
-    polynomial_coeffs : 2x3 List, optional
-        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2
+    polynomial_coeffs : List
+        alpha(i,j) coeffs for polynomal expression of alpha1 and alpha2. Shape of (s2*3)
 
     Return
     ----------
-    f : (nb_nodes*dim*Nt_tot) array
-        nodal forces
-
-    connect : (nb_element*nb_node_per_cell) array
-        table of mesh connectivity
+    f : ndarray
+        nodal forces of shape (nb_nodes*dim*Nt_tot)
+    connect :  ndarray
+        table of mesh connectivity of shape (nb_element*nb_node_per_element)
 
     """
 
     # For every type of element (now only Triangle3, TO BE extended)
-    for key in mesh.cell:
-        # mesh.cell[key].interpolation = Interpolation()
-        # mesh.cell[key].interpolation.init_key(key=key, nb_gauss=1)
+    for key in mesh.element_dict:
+        # Number of nodes per element
+        nb_node_per_element = mesh.element_dict[key].nb_node_per_element
 
-        nb_node_per_cell = mesh.cell[
-            key
-        ].nb_node_per_cell  # Number of nodes per element
+        mesh_element_key = mesh.element_dict[key]
 
-        mesh_cell_key = mesh.cell[key]
-        connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
+        # Each row of connect is an element
+        connect = mesh.element_dict[key].get_connectivity()
 
-        nb_elem = len(connect)
-
-        nb_node = mesh.node.nb_node  # Total nodes number
+        # Total nodes number
+        nb_node = mesh.node.nb_node
 
         # Nodal forces init
         f = np.zeros((nb_node, dim, Nt_tot), dtype=np.float)
 
-        # ref_cell = mesh.cell[key].interpolation.ref_cell // pas besoin d'interpoler car tout est cst
+        # ref_element = mesh.element_dict[key].ref_element // pas besoin d'interpoler car tout est cst
 
         # Gauss nodes
-        # pts_gauss, poidsGauss, nb_gauss = mesh.cell[
+        # pts_gauss, poidsGauss, nb_gauss = mesh.element_dict[
         #     key
-        # ].interpolation.gauss_point.get_gauss_points()
+        # ].gauss_point.get_gauss_points()
 
-        # indice_elem = mesh.cell[key].indice
+        # indice_elem = mesh.element_dict[key].indice
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-            node_number = mesh_cell_key.get_connectivity(
-                elt_number
-            )  # elt nodes numbers, can differ from indices
-            vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
+            # elt nodes numbers, can differ from indices
+            node_number = mesh_element_key.get_connectivity(elt_number)
+
+            # elt nodes coordonates
+            element_coordinate = mesh.get_element_coordinate(elt_number)[key]
 
             # elt physical fields values
             Be = B[elt_indice, :, :]
@@ -84,9 +76,8 @@ def element_loop(
             mue = mu[elt_indice, :]
             mu_0 = 4 * np.pi * 1e-7
 
-            Me = np.reshape(
-                Be / mu_0 - He, (dim, 1, Nt_tot)
-            )  # reshaped for matrix product purpose
+            # reshaped for matrix product purpose
+            Me = np.reshape(Be / mu_0 - He, (dim, 1, Nt_tot))
 
             # Total tensor initalization
             total_tensor = np.zeros((dim, dim, Nt_tot))
@@ -100,30 +91,33 @@ def element_loop(
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
-                np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
+                np.cross(
+                    element_coordinate[1] - element_coordinate[0],
+                    element_coordinate[2] - element_coordinate[0],
+                )
             )
 
             # Loop on edges
-            for n in range(nb_node_per_cell):
+            for n in range(nb_node_per_element):
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
                 node_indice = np.where(mesh.node.indice == node_number[n])[0][0]
 
                 next_node_indice = np.where(
-                    mesh.node.indice == node_number[(n + 1) % nb_node_per_cell]
+                    mesh.node.indice == node_number[(n + 1) % nb_node_per_element]
                 )[0][0]
 
                 # Edge cooordinates
                 edge_vector = (
-                    vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
+                    element_coordinate[(n + 1) % nb_node_per_element]
+                    - element_coordinate[n % nb_node_per_element]
                 )  # coordonées du vecteur nn+1
 
                 # Volume ratio (Green Ostrogradski)
-                L = np.linalg.norm(edge_vector)
-                Ve0 = L
+                Ve0 = np.linalg.norm(edge_vector)
 
                 # Normalized normal vector n, that has to be directed outside the element (i.e. normal ^ edge same sign as the orientation)
                 normal_to_edge_unoriented = (
-                    np.array((edge_vector[1], -edge_vector[0])) / L
+                    np.array((edge_vector[1], -edge_vector[0])) / Ve0
                 )
                 normal_to_edge = (
                     normal_to_edge_unoriented

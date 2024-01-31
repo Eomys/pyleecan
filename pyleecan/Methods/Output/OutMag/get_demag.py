@@ -23,7 +23,7 @@ def get_demag(self, Hmax, group_name=None):
         total magnets surface area as a reference
 
     indices : list
-        list of cells indices that exceed the max. field strength
+        list of elements indices that exceed the max. field strength
 
     """
     if group_name is None:

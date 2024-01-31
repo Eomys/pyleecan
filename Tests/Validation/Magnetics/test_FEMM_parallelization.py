@@ -5,16 +5,16 @@ import pytest
 from numpy import array, pi
 from numpy.testing import assert_allclose
 
-from Tests import save_validation_path as save_path
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.definitions import DATA_DIR
+from Tests import save_validation_path as save_path
 
 
 @pytest.mark.long_5s
@@ -186,14 +186,14 @@ def test_FEMM_parallelization_meshsolution():
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_mesh(
-        group_names="stator core",
+    out.mag.meshsolution.get_group("stator core").plot_mesh(
         save_path=join(save_path, simu.name + "_mesh_stator_not_parallel.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_mesh(
-        group_names=["stator core", "/", "airgap", "stator winding"],
+    out.mag.meshsolution.get_group(
+        ["stator core", "/", "airgap", "stator winding"]
+    ).plot_mesh(
         save_path=join(
             save_path,
             simu.name + "_mesh_stator_interface_not_parallel.png",
@@ -223,14 +223,14 @@ def test_FEMM_parallelization_meshsolution():
         save_path=join(save_path, simu.name + "_mesh_parallel.png"), is_show_fig=False
     )
 
-    out2.mag.meshsolution.plot_mesh(
-        group_names="stator core",
+    out2.mag.meshsolution.get_group("stator core").plot_mesh(
         save_path=join(save_path, simu.name + "_mesh_stator_parallel.png"),
         is_show_fig=False,
     )
 
-    out2.mag.meshsolution.plot_mesh(
-        group_names=["stator core", "/", "airgap", "stator winding"],
+    out2.mag.meshsolution.get_group(
+        ["stator core", "/", "airgap", "stator winding"]
+    ).plot_mesh(
         save_path=join(
             save_path,
             simu.name + "_mesh_stator_interface_parallel.png",

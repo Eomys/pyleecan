@@ -1,8 +1,20 @@
+from typing import Dict, Optional
+
+import numpy as np
+
+from ...Classes.Mesh import Mesh
 from ...Classes.MeshSolution import MeshSolution
+from ...Classes.Solution import Solution
 
 
-def build_meshsolution(list_solution, list_mesh, label="", dimension=2, group=None):
-    """Build the MeshSolution objets from FEMM outputs.
+def build_meshsolution(
+    solution_dict: Dict[str, Solution],
+    mesh: Mesh,
+    label: str = "",
+    dimension: int = 2,
+    group: Optional[Dict[str, np.ndarray]] = None,
+) -> MeshSolution:
+    """Build the MeshSolution object from FEMM outputs.
 
     Parameters
     ----------
@@ -20,14 +32,11 @@ def build_meshsolution(list_solution, list_mesh, label="", dimension=2, group=No
     meshsol: MeshSolution
         a MeshSolution object with FEMM outputs at every time step
     """
-    if len(list_mesh) == 1:
-        is_same_mesh = True
 
     meshsol = MeshSolution(
         label=label,
-        mesh=list_mesh,
-        solution=list_solution,
-        is_same_mesh=is_same_mesh,
+        mesh=mesh,
+        solution_dict=solution_dict,
         dimension=dimension,
         group=group,
     )

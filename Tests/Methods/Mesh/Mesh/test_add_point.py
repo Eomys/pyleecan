@@ -22,6 +22,6 @@ class Test_add_node(object):
         return mesh
 
     def test_add_node(self, setup):
-        """unittest with CellMat and NodeMat objects, only Triangle3 elements are defined"""
+        """unittest with ElementMat and NodeMat objects, only Triangle3 elements are defined"""
 
         assert setup.node.add_node(np.array([1, 2])) == None

@@ -1,8 +1,8 @@
 import numpy as np
-
 from SciDataTool import DataFreq
-from ....Classes.SolutionData import SolutionData
+
 from ....Classes.MeshSolution import MeshSolution
+from ....Classes.SolutionData import SolutionData
 
 
 def get_mesh_solution(self):
@@ -22,7 +22,7 @@ def get_mesh_solution(self):
     # group = meshsol.group
     axes_dict = self.parent.axes_dict
     # freqs = axes_dict["freqs"].get_values()
-    # Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
+    # Nelem = meshsol.mesh.element["triangle"].nb_element
 
     # If = np.argmin(np.abs(freqs[:, None] - self.freqs[None, :]), axis=0)[:, None]
     # Ie = np.array(group[self.group])[None, :]
@@ -32,7 +32,7 @@ def get_mesh_solution(self):
     ms_mag = output.mag.meshsolution
 
     Loss_density_df = DataFreq(
-        name=f"{self.name} Loss density",
+        name=f"{self.name} loss density",
         unit="W/m3",
         symbol="L",
         values=self.loss_density,
@@ -49,9 +49,8 @@ def get_mesh_solution(self):
     ms_loss = MeshSolution(
         label=Loss_density_sd.label,
         group=ms_mag.group,
-        is_same_mesh=True,
         mesh=ms_mag.mesh,
-        solution=[Loss_density_sd],
+        solution_dict={Loss_density_sd.label: Loss_density_sd},
         dimension=2,
     )
 

@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
+
+from ....Classes.Solution import Solution
 
 
-def get_solution(self, label=None, index=None):
-    """Return the solution corresponding to label or an index.
+def get_solution(self, label: Optional[str] = None) -> Solution:
+    """Return the solution corresponding to label or the first solution by default.
 
     Parameters
     ----------
     self : MeshSolution
         an MeshSolution object
     label : str
-        a label
-    index : int
-        an index
+        solution label
 
     Returns
     -------
@@ -20,10 +21,14 @@ def get_solution(self, label=None, index=None):
 
     """
 
-    if index is None:
-        index = 0
-        if label is not None:
-            for i, solution in enumerate(self.solution):
-                if solution.label == label:
-                    index = i
-    return self.solution[index]
+    # Return first solution
+    if label is None:
+        return next(iter(self.values()))
+
+    # Search for the desired solution
+    try:
+        return self[label]
+    except KeyError:
+        raise KeyError(
+            f'Wrong solution label "{label}", please use one of the following values: {list(self.keys())}.'
+        )

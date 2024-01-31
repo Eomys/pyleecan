@@ -1,13 +1,12 @@
-from os import remove
-from os.path import splitext, isfile
 from os import remove, rename
+from os.path import isfile, splitext
 
-from numpy import zeros, pi, roll, cos, sin, max as np_max, abs as np_abs, all as np_all
+from numpy import pi, roll, sin, zeros, cos, all
 
 from ....Classes._FEMMHandler import _FEMMHandler
-from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
-from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
+from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
+from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 
 
 def solve_FEMM(
@@ -161,9 +160,9 @@ def solve_FEMM(
     A_elem = None
 
     # Check current values
-    if np_all(Is == 0):
+    if all(Is == 0):
         Is = None
-    if np_all(Ir == 0):
+    if all(Ir == 0):
         Ir = None
 
     k1 = 0
@@ -270,10 +269,10 @@ def solve_FEMM(
 
             # Initialize mesh and magnetic quantities for first time step
             if ii == start_t:
-                meshFEMM = [meshFEMMi]
+                meshFEMM = meshFEMMi
                 groups = groupsi
-                Nelem = meshFEMM[0].cell["triangle"].nb_cell
-                Nnode = meshFEMM[0].node.nb_node
+                Nelem = meshFEMM.element_dict["triangle"].nb_element
+                Nnode = meshFEMM.node.nb_node
                 Nt0 = end_t - start_t
                 B_elem = zeros([Nt0, Nelem, 3])
                 H_elem = zeros([Nt0, Nelem, 3])
