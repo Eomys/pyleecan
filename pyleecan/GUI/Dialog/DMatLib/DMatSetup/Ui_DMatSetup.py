@@ -317,18 +317,29 @@ class Ui_DMatSetup(object):
         self.g_losses_import.setObjectName(u"g_losses_import")
         self.g_losses_import.setCheckable(True)
         self.g_losses_import.setChecked(False)
-        self.verticalLayout_10 = QVBoxLayout(self.g_losses_import)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.tab_values_losses = DTableData(self.g_losses_import)
-        self.tab_values_losses.setObjectName(u"tab_values_losses")
-
-        self.verticalLayout_10.addWidget(self.tab_values_losses)
-
+        self.gridLayout_6 = QGridLayout(self.g_losses_import)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.verticalSpacer_8 = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_10.addItem(self.verticalSpacer_8)
+        self.gridLayout_6.addItem(self.verticalSpacer_8, 2, 1, 1, 1)
+
+        self.b_plot_losses = QPushButton(self.g_losses_import)
+        self.b_plot_losses.setObjectName(u"b_plot_losses")
+
+        self.gridLayout_6.addWidget(self.b_plot_losses, 1, 1, 1, 1)
+
+        self.horizontalSpacer_12 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout_6.addItem(self.horizontalSpacer_12, 1, 0, 1, 1)
+
+        self.tab_values_losses = DTableData(self.g_losses_import)
+        self.tab_values_losses.setObjectName(u"tab_values_losses")
+
+        self.gridLayout_6.addWidget(self.tab_values_losses, 0, 0, 1, 2)
 
         self.verticalLayout_13.addWidget(self.g_losses_import)
 
@@ -837,6 +848,9 @@ class Ui_DMatSetup(object):
         )
         self.g_losses_import.setTitle(
             QCoreApplication.translate("DMatSetup", u"Losses", None)
+        )
+        self.b_plot_losses.setText(
+            QCoreApplication.translate("DMatSetup", u"Plot Loss(B)", None)
         )
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_losses),

@@ -55,6 +55,7 @@ class SSimu(Gen_SSimu, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.last_out = None  # To store the last output for tests
+        self.test_err_msg = None  # For test of popup
 
         # Plot the machine
         try:
@@ -140,14 +141,9 @@ class SSimu(Gen_SSimu, QWidget):
             self.machine, MachineIPMSM
         ):
             self.g_losses_model.show()
-            if isinstance(self.simu.loss, LossFEA):
-                self.g_losses_model.setChecked(True)
-            else :
-                self.g_losses_model.setChecked(False)
 
         else:
             self.g_losses_model.hide()
-        
 
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)
@@ -308,22 +304,27 @@ class SSimu(Gen_SSimu, QWidget):
             self.simu.get_logger().error(err_msg)
 
         # Losses
-        try:
-            out.loss.plot_losses(
-                is_show_fig=False, save_path=(join(self.simu.path_result, "Losses.png"))
-            )
-        except Exception as e:
-            err_msg = "Error while plotting Losses: " + str(e)
-            self.simu.get_logger().error(err_msg)
+        if self.simu.loss is not None:
+            try:
+                out.loss.plot_losses(
+                    is_show_fig=False,
+                    save_path=(join(self.simu.path_result, "Losses.png")),
+                )
+            except Exception as e:
+                err_msg = "Error while plotting Losses: " + str(e)
+                self.simu.get_logger().error(err_msg)
 
         # Done
-        QMessageBox().information(
-            self,
-            self.tr("Simlation finished"),
+        self.test_err_msg = (
             "Simulation "
             + self.simu.name
             + " is finished.\nResults available at "
-            + self.simu.path_result,
+            + self.simu.path_result
+        )
+        QMessageBox().information(
+            self,
+            self.tr("Simlation finished"),
+            self.test_err_msg,
         )
 
     def set_N0(self):

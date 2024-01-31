@@ -16,6 +16,9 @@ from .....Classes.ImportMatrixXls import ImportMatrixXls
 from .....Functions.path_tools import rel_file_path
 from .....loggers import GUI_LOG_NAME
 
+import matplotlib.pyplot as plt
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+
 
 class DMatSetup(Gen_DMatSetup, QDialog):
     # Signal to DMatLib to update material treeview
@@ -100,6 +103,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         # Losses
         self.tab_values_losses.saveNeeded.connect(self.set_table_values_losses)
+        self.b_plot_losses.clicked.connect(self.s_plot_losses)
+        
+        self.ax = None
+        self.fig = None
 
         # Connect buttons
         self.b_delete.clicked.connect(lambda: self.materialToDelete.emit())
@@ -316,17 +323,16 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         self.tab_values_losses.si_col.hide()
         self.tab_values_losses.in_col.hide()
+        self.tab_values_losses.b_plot.hide()
 
         self.tab_values_losses.in_row.show()
         self.tab_values_losses.si_row.show()
-
-        self.tab_values_losses.b_plot.show()
-        self.tab_values_losses.button_plot_title = "Loss(B)"
 
         self.tab_values_losses.b_close.hide()
         self.tab_values_losses.b_import.setHidden(False)
         self.tab_values_losses.b_export.setHidden(False)
 
+        # Matrix is save with 3 line in file .json and in object simu but in GUI it's display with 3 colum
         if isinstance(self.mat.mag.LossData, ImportMatrixXls):
             try:
                 self.mat.mag.LossData = ImportMatrixVal(
@@ -974,3 +980,62 @@ class DMatSetup(Gen_DMatSetup, QDialog):
                 ImportMatrixVal(self.tab_values_losses.get_data())
             )
             self.set_save_needed(is_save_needed=True)
+
+    def s_plot_losses(self):
+        """Signal to plot the value of the Loss table
+
+        Parameters
+        ----------
+        self :
+            A DMatSetup object
+
+        Returns
+        -------
+        None
+        """
+        try:
+            data = self.tab_values_losses.data
+        except Exception as e:
+            QMessageBox.critical(self, self.tr("Error"), str(e))
+            return
+
+        if len(data.shape) == 2 and data.shape[1] == 3:
+            # Data in column
+            self.fig, self.ax = plt.subplots()
+            a = data[0, 0]
+            temp = 0
+            end = 0
+            one_curve = True
+            while temp < data.shape[0] - 1:
+                temp += 1
+                if a != data[temp, 0]:
+                    one_curve = False
+                    self.ax.plot(
+                        data[end:temp, 1], data[end:temp, 2], label=f" {a} [Hz]"
+                    )
+                    end = temp
+                    a = data[temp, 0]
+
+            if one_curve:
+                self.ax.plot(data[:, 1], data[:, 2], label=f" {data[0,0]} [Hz]")
+
+            else:
+                self.ax.plot(data[end:temp, 1], data[end:temp, 2], label=f" {a} [Hz]")
+
+            self.ax.set_xlabel("B [T]")
+            self.ax.set_ylabel("Loss [W/Kg]")
+            self.ax.set_xlim(left=min(data[:, 1]))
+            self.ax.set_ylim(bottom=min(data[:, 2]))
+
+            self.ax.legend()
+            self.ax.set_yscale("log")
+            self.ax.grid(True)
+            self.ax.set_title("Curve Loss(B)")
+
+            manager = plt.get_current_fig_manager()
+            if manager is not None:
+                manager.set_window_title(f"{self.mat.name}: Curve Loss(B)")
+
+            self.fig.show()
+
+        set_plot_gui_icon()
