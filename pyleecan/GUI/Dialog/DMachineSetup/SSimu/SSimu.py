@@ -309,11 +309,8 @@ class SSimu(Gen_SSimu, QWidget):
             try:
                 out.mag.meshsolution.plot_contour(
                     label="B",
-                    group_names="stator core",
                     clim=[0, 3],
-                    save_path=(
-                        join(self.simu.path_result, "B_meshsolution_stator.png")
-                    ),
+                    save_path=(join(self.simu.path_result, "B_meshsolution.png")),
                 )
             except Exception as e:
                 err_msg = "Error while plotting B meshsolution : " + str(e)
@@ -322,10 +319,10 @@ class SSimu(Gen_SSimu, QWidget):
             # save mesh
             try:
                 out.mag.meshsolution.save_mesh(
-                    save_path=(join(self.simu.path_result, "Mesh_mag.png")),
+                    save_path=(join(self.simu.path_result, "MeshSolution.mat")),
                 )
             except Exception as e:
-                err_msg = "Error while saving mesh mag: " + str(e)
+                err_msg = "Error while saving mesh solution: " + str(e)
                 self.simu.get_logger().error(err_msg)
 
         # Losses
@@ -339,16 +336,6 @@ class SSimu(Gen_SSimu, QWidget):
                 err_msg = "Error while plotting Losses: " + str(e)
                 self.simu.get_logger().error(err_msg)
 
-            # save mesh
-            # try:
-            #     out.loss.meshsolution.save_mesh(
-            #         save_path=(join(self.simu.path_result, "Mesh_loss.png")),
-            #     )
-            # except Exception as e:
-            #     err_msg = "Error while saving mesh loss: " + str(e)
-            #     self.simu.get_logger().error(err_msg)
-
-        if self.simu.loss.is_get_meshsolution:
             # Overall on stator
             try:
                 out.loss["overall"].plot_mesh(

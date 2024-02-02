@@ -85,7 +85,9 @@ def read_all(
                     gen_dict[file_name[:-4]]["is_internal"] = True
 
     # Update all the "daughters" key according to "mother" key
-    update_all_daughters(gen_dict, is_update_mother_of_mother=is_update_mother_of_mother)
+    update_all_daughters(
+        gen_dict, is_update_mother_of_mother=is_update_mother_of_mother
+    )
 
     return gen_dict
 
