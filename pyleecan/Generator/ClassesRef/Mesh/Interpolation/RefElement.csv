@@ -1,0 +1,6 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+epsilon,-,Precision criterion,0,float,5.00E-02,0.00E+00,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Mesh,,interpolation,VERSION,1,Store shape functions definition in the reference element,,,
+,,get_element_area,,,,,,

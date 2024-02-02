@@ -20,4 +20,3 @@ Mesh,,get_mesh,VERSION,1,Abstract class to associate a mesh with one or several 
 ,,perm_coord,,,,,,
 ,,get_deflection,,,,,,
 ,,get_glyph,,,,,,
-,,save_mesh,,,,,,
