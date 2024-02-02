@@ -1,16 +1,15 @@
 import os
-import numpy as np
-
-from ....definitions import MAIN_DIR
-from ....Classes.MeshMat import MeshMat
-from ....Classes.CellMat import CellMat
-from ....Classes.NodeMat import NodeMat
-from ....Classes.RefTriangle3 import RefTriangle3
-from ....Classes.FPGNTri import FPGNTri
-from ....Classes.ScalarProductL2 import ScalarProductL2
-
 from os.path import join
 
+import numpy as np
+
+from ....Classes.ElementMat import ElementMat
+from ....Classes.FPGNTri import FPGNTri
+from ....Classes.MeshMat import MeshMat
+from ....Classes.NodeMat import NodeMat
+from ....Classes.RefTriangle3 import RefTriangle3
+from ....Classes.ScalarProductL2 import ScalarProductL2
+from ....definitions import MAIN_DIR
 from ....Functions.FEMM import FEMM_GROUPS
 
 
@@ -82,7 +81,9 @@ def get_meshsolution(
     results_nodes = np.loadtxt(path_node, delimiter=" ")
     if is_get_mesh:
         # Read the nodes and elements files
-        listElem0 = np.loadtxt(path_element, dtype="i", delimiter=" ")
+        listElem0 = np.loadtxt(path_element, dtype="f", delimiter=" ").astype(
+            np.float64
+        )
         NbNd = len(results_nodes)
         NbElem = len(listElem0)
 
@@ -96,16 +97,15 @@ def get_meshsolution(
         listElem = listElem0[:, 0:3] - 1
 
         mesh = MeshMat()
-        mesh.label = "FEMM"
-        mesh.cell["triangle"] = CellMat(
+        mesh.element_dict["triangle"] = ElementMat(
             connectivity=listElem,
-            nb_cell=NbElem,
-            nb_node_per_cell=3,
+            nb_element=NbElem,
+            nb_node_per_element=3,
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
-        mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
-        mesh.cell["triangle"].interpolation.gauss_point = FPGNTri(nb_gauss_point=1)
-        mesh.cell["triangle"].interpolation.scalar_product = ScalarProductL2()
+        mesh.element_dict["triangle"].ref_element = RefTriangle3(epsilon=1e-9)
+        mesh.element_dict["triangle"].gauss_point = FPGNTri(nb_gauss_point=1)
+        mesh.element_dict["triangle"].scalar_product = ScalarProductL2()
 
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2],
@@ -127,7 +127,7 @@ def get_meshsolution(
                         if ind_i.size > 0:
                             # Store the list of indices for the ith subgroup
                             groups[name_i] = (
-                                mesh.cell["triangle"].indice[ind_i].tolist()
+                                mesh.element_dict["triangle"].indice[ind_i].tolist()
                             )
                             # Concatenate all sub groups to keep the main group of rotor magnets
                             ind = np.concatenate((ind, ind_i))
@@ -136,7 +136,7 @@ def get_meshsolution(
                     ind = np.where(listElem0[:, 6] == idx)[0]
 
                 if ind.size > 0:
-                    groups[name] = mesh.cell["triangle"].indice[ind].tolist()
+                    groups[name] = mesh.element_dict["triangle"].indice[ind].tolist()
     else:
         mesh = None
         groups = None

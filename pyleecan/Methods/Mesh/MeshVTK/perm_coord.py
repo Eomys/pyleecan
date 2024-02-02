@@ -1,6 +1,6 @@
-from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.CellMat import CellMat
+from ....Classes.ElementMat import ElementMat
+from ....Classes.MeshMat import MeshMat
+from ....Classes.NodeMat import NodeMat
 
 
 def perm_coord(
@@ -29,8 +29,8 @@ def perm_coord(
     mesh_mat = self.convert(meshtype="MeshMat", scale=1)
 
     # extract nodes en elements
-    mesh_mat_node = mesh_mat.get_node()
-    mesh_mat_cell = mesh_mat.get_cell()
+    mesh_mat_node = mesh_mat.get_node_coordinate()
+    mesh_mat_element = mesh_mat.get_element()
 
     # swap axis
     mesh_mat_node = mesh_mat_node.T[perm_coord_list].T
@@ -40,25 +40,24 @@ def perm_coord(
     nb_node = len(mesh_mat_node)
     nodemat = NodeMat(coordinate=mesh_mat_node, nb_node=nb_node)
 
-    # 2. create CellMat
-    cellMat = CellMat()
-    CellMatDict = dict()
+    # 2. create ElementMat
+    elementMatDict = dict()
 
-    for key in mesh_mat_cell[0]:
-        cellMat = CellMat(
-            connectivity=mesh_mat_cell[0][key],
-            nb_cell=len(mesh_mat_cell[0][key]),
+    for key in mesh_mat_element[0]:
+        element_mat = ElementMat(
+            connectivity=mesh_mat_element[0][key],
+            nb_element=len(mesh_mat_element[0][key]),
         )
-        CellMatDict[key] = cellMat
+        elementMatDict[key] = element_mat
 
     # 3. create MeshMat
-    meshmat = MeshMat(cell=CellMatDict, node=nodemat)
+    meshmat = MeshMat(element_dict=elementMatDict, node=nodemat)
 
     # convert and save into vtk
     mesh_pv = meshmat.get_mesh_pv()
-    if path_meshVTK != None:
+    if path_meshVTK is not None:
         mesh_pv.save(path_meshVTK)
-    else:
+    elif self.path is not None:
         mesh_pv.save(self.path + "/" + self.name + ".vtk")
 
     self.mesh = mesh_pv

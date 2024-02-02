@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
+
+from numpy.typing import ArrayLike
 
 
-def get_node_indice(self, coordinates=None):
+def get_node_indice(self, coordinates: Optional[ArrayLike] = None) -> ArrayLike:
     """Return a matrix of nodes coordinates.
 
     Parameters
     ----------
     self : Mesh
         an Mesh object
-    indices : list
-        Indices of the targeted nodes. If None, return all.
-    is_indice: bool
-        Option to return the nodes indices (useful for unsorted
+    coordinates: ndarray
+        nodes coordinates
 
     Returns
     -------
-    coordinates: ndarray
-        nodes coordinates
     indices : ndarray
         nodes indices
 
@@ -25,4 +24,4 @@ def get_node_indice(self, coordinates=None):
     if coordinates is None:
         return self.node.get_indice()
     else:
-        pass  # TODO Search for indice of a node from coordiantes
+        raise NotImplementedError("Providing coordinates is not supported yet.")

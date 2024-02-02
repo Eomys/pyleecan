@@ -3,15 +3,17 @@
 import numpy as np
 
 
-def get_ref_point(self, vertice, point):
-    """Return the coordinate of the equivalent point in the ref cell
+def get_ref_point(
+    self, element_coordinate: np.ndarray, point: np.ndarray
+) -> np.ndarray:
+    """Return the coordinate of the equivalent point in the ref element
 
     Parameters
     ----------
     self : RefTriangle3
         a RefTriangle3 object
-    vertice : ndarray
-        vertice of the cell
+    element_coordinate : ndarray
+        coordinates of the element
     point : ndarray
         coordinates of a point
 
@@ -21,8 +23,8 @@ def get_ref_point(self, vertice, point):
         coordinates of the ref point
     """
 
-    [jacob, detJ] = self.jacobian(point, vertice)
+    jacob, _ = self.jacobian(point, element_coordinate)
     inv_jacob = np.linalg.inv(jacob)
-    point_ref = np.dot((point - vertice[0, :]), inv_jacob)
+    point_ref = np.dot((point - element_coordinate[0, :]), inv_jacob)
 
     return point_ref

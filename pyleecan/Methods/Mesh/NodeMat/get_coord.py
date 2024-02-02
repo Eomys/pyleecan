@@ -1,31 +1,24 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from numpy.typing import ArrayLike
 
 
-def get_coord(self, node_indice):
+def get_coord(self, node_indices: ArrayLike) -> np.ndarray:
     """Return the coordinates of node(s).
 
     Parameters
     ----------
-    self : NodeMat
-        an NodeMat object
-    node_indice : np.array
-        an array of node indice
+    node_indices : ArrayLike
+        Array of node indices
 
     Returns
     -------
-    coord: np.array
-        an array of node coordinates
-
+    np.ndarray
+        Array of node coordinates
     """
 
-    coord = list()
-    indices_all = self.indice
-    coordinate = self.coordinate
+    # Extract position of the given node indices in the index vector
+    coord_indices = [(self.indice == index).nonzero()[0][0] for index in node_indices]
 
-    for ind in node_indice:
-        Ipos = np.where(indices_all == ind)[0][0]
-        coord.append(self.coordinate[Ipos, :])
-
-    return np.array(coord)
+    return self.coordinate[coord_indices]

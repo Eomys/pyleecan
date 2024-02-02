@@ -11,6 +11,7 @@ from ..definitions import PACKAGE_NAME
 NAME_COL = 0  # attribue name
 UNIT_COL = 1  # value unit
 EN_DESC_COL = 2  # english description
+SIZE_COL = 3  # size
 TYPE_COL = 4  # type
 DEF_VAL_COL = 5  # default value
 MIN_VAL_COL = 6  # minimum value
@@ -29,7 +30,13 @@ CLASS_DEF_COL = 14  # class description
 COLUMN_OFFSET = PACK_COL
 
 
-def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
+def read_all(
+    path,
+    is_internal=False,
+    in_path="",
+    soft_name=PACKAGE_NAME,
+    is_update_mother_of_mother=True,
+):
     """Read every csv files in a directory and subdirectory and create a structure for the
     code generation
 
@@ -41,6 +48,8 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
         True to overwrite the open source csv files by internal ones
     soft_name : str
         Name of the generated software
+    is_update_mother_of_mother: bool
+        True to update mother of mother in update_all_daughters
 
     Returns
     -------
@@ -76,7 +85,7 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
                     gen_dict[file_name[:-4]]["is_internal"] = True
 
     # Update all the "daughters" key according to "mother" key
-    update_all_daughters(gen_dict)
+    update_all_daughters(gen_dict, is_update_mother_of_mother=is_update_mother_of_mother)
 
     return gen_dict
 
@@ -88,7 +97,6 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
     ----------
     file_path : str
         path to the class csv file to read
-
 
     Returns
     -------
@@ -197,6 +205,7 @@ def get_dict_from_columns(class_csv, class_dict, header_index):
             prop_dict = dict()
             prop_dict["name"] = name
             prop_dict["unit"] = class_csv[rx][UNIT_COL]
+            prop_dict["size"] = class_csv[rx][SIZE_COL]
             prop_dict["type"] = class_csv[rx][TYPE_COL]
             prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
             prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
@@ -250,13 +259,15 @@ def get_dict_from_columns(class_csv, class_dict, header_index):
         )
 
 
-def update_all_daughters(gen_dict):
+def update_all_daughters(gen_dict, is_update_mother_of_mother=True):
     """This function update all the "daughters" key according to the "mother" key
 
     Parameters
     ----------
     gen_dict : dict
         gen_dict with no daughter set
+    is_update_mother_of_mother: bool
+        True to update mother of mother in update_all_daughters
     """
 
     # list of classes that have a mother
@@ -270,11 +281,14 @@ def update_all_daughters(gen_dict):
     for name, daughter in iter(sorted(list(daughter_dict.items()))):
         # Update the mother
         mother = gen_dict[daughter["mother"]]
-        mother["daughters"].append(name)
-        # Update all the mother of the mother
-        while mother["mother"] not in ["", None]:
-            mother = gen_dict[mother["mother"]]
+        if name not in mother["daughters"]:
             mother["daughters"].append(name)
+        # Update all the mother of the mother
+        if is_update_mother_of_mother:
+            while mother["mother"] not in ["", None]:
+                mother = gen_dict[mother["mother"]]
+                if name not in mother["daughters"]:
+                    mother["daughters"].append(name)
 
 
 def get_value_str(value, type_val):

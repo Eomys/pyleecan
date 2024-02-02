@@ -1,14 +1,14 @@
 classDiagram
 direction TB
-class CellMat{
+class ElementMat{
 	connectivity : ndarray
-	nb_cell : int
-	nb_node_per_cell : int
+	nb_element : int
+	nb_node_per_element : int
 	indice : ndarray
 	interpolation : Interpolation
-	add_cell()
+	add_element()
 	get_connectivity()
-	get_node2cell()
+	get_node2element()
 	is_exist()
 }
 class FPGNSeg{
@@ -22,7 +22,7 @@ class FPGNTri{
 class GaussPoint{
 }
 class Interpolation{
-	ref_cell : RefCell
+	ref_element : RefElement
 	gauss_point : GaussPoint
 	scalar_product : ScalarProduct
 }
@@ -31,24 +31,24 @@ class Mesh{
 	dimension : int
 }
 class MeshMat{
-	cell : dict~CellMat~
+	element : dict~ElementMat~
 	node : NodeMat
 	_is_renum : bool
 	sym : int
 	is_antiper_a : bool
 	get_node()
 	get_node_indice()
-	get_cell()
+	get_element()
 	get_mesh_pv()
-	get_cell_area()
+	get_element_area()
 	get_vertice()
-	get_node2cell()
-	add_cell()
+	get_node2element()
+	add_element()
 	renum()
-	find_cell()
+	find_element()
 	interface()
 	clear_node()
-	clear_cell()
+	clear_element()
 }
 class MeshSolution{
 	label : str
@@ -84,10 +84,10 @@ class MeshVTK{
 	node_normals : ndarray
 	get_mesh_pv()
 	get_node()
-	get_cell()
+	get_element()
 	get_normals()
 	get_surf()
-	get_cell_area()
+	get_element_area()
 	convert()
 	perm_coord()
 	get_path()
@@ -102,7 +102,7 @@ class NodeMat{
 	is_exist()
 	get_indice()
 }
-class RefCell{
+class RefElement{
 	epsilon : float
 	interpolation()
 }
@@ -146,7 +146,7 @@ class RefTriangle3{
 	get_real_point()
 	get_ref_point()
 	is_inside()
-	get_cell_area()
+	get_element_area()
 	get_normal()
 }
 class RefTriangle6{
@@ -163,7 +163,7 @@ class ScalarProductL2{
 	scalar_product()
 }
 class Solution{
-	type_cell : str
+	type_element : str
 	label : str
 	dimension : int
 	unit : str
@@ -189,24 +189,24 @@ class SolutionVector{
 	get_axes_list()
 	get_solution()
 }
-CellMat *--> Interpolation
+ElementMat *--> Interpolation
 GaussPoint  <|--> FPGNSeg
 GaussPoint  <|--> FPGNTri
 Interpolation *--> GaussPoint
-Interpolation *--> RefCell
+Interpolation *--> RefElement
 Interpolation *--> ScalarProduct
 Mesh  <|--> MeshMat
 Mesh  <|--> MeshVTK
-MeshMat *--> CellMat
+MeshMat *--> ElementMat
 MeshMat *--> NodeMat
 MeshSolution *--> Mesh
 MeshSolution *--> Solution
-RefCell  <|--> RefLine3
-RefCell  <|--> RefQuad4
-RefCell  <|--> RefQuad9
-RefCell  <|--> RefSegmentP1
-RefCell  <|--> RefTriangle3
-RefCell  <|--> RefTriangle6
+RefElement  <|--> RefLine3
+RefElement  <|--> RefQuad4
+RefElement  <|--> RefQuad9
+RefElement  <|--> RefSegmentP1
+RefElement  <|--> RefTriangle3
+RefElement  <|--> RefTriangle6
 ScalarProduct  <|--> ScalarProductL2
 Solution  <|--> SolutionData
 Solution  <|--> SolutionMat

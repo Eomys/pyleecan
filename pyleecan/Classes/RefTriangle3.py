@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .RefCell import RefCell
+from .RefElement import RefElement
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -48,9 +48,9 @@ except ImportError as error:
     is_inside = error
 
 try:
-    from ..Methods.Mesh.RefTriangle3.get_cell_area import get_cell_area
+    from ..Methods.Mesh.RefTriangle3.get_element_area import get_element_area
 except ImportError as error:
-    get_cell_area = error
+    get_element_area = error
 
 try:
     from ..Methods.Mesh.RefTriangle3.get_normal import get_normal
@@ -62,7 +62,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class RefTriangle3(RefCell):
+class RefTriangle3(RefElement):
     """Store triangle elements for 2D mesh"""
 
     VERSION = 1
@@ -135,17 +135,18 @@ class RefTriangle3(RefCell):
         )
     else:
         is_inside = is_inside
-    # cf Methods.Mesh.RefTriangle3.get_cell_area
-    if isinstance(get_cell_area, ImportError):
-        get_cell_area = property(
+    # cf Methods.Mesh.RefTriangle3.get_element_area
+    if isinstance(get_element_area, ImportError):
+        get_element_area = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RefTriangle3 method get_cell_area: " + str(get_cell_area)
+                    "Can't use RefTriangle3 method get_element_area: "
+                    + str(get_element_area)
                 )
             )
         )
     else:
-        get_cell_area = get_cell_area
+        get_element_area = get_element_area
     # cf Methods.Mesh.RefTriangle3.get_normal
     if isinstance(get_normal, ImportError):
         get_normal = property(
@@ -181,16 +182,16 @@ class RefTriangle3(RefCell):
             if "epsilon" in list(init_dict.keys()):
                 epsilon = init_dict["epsilon"]
         # Set the properties (value check and convertion are done in setter)
-        # Call RefCell init
+        # Call RefElement init
         super(RefTriangle3, self).__init__(epsilon=epsilon)
-        # The class is frozen (in RefCell init), for now it's impossible to
+        # The class is frozen (in RefElement init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         RefTriangle3_str = ""
-        # Get the properties inherited from RefCell
+        # Get the properties inherited from RefElement
         RefTriangle3_str += super(RefTriangle3, self).__str__()
         return RefTriangle3_str
 
@@ -200,7 +201,7 @@ class RefTriangle3(RefCell):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from RefCell
+        # Check the properties inherited from RefElement
         if not super(RefTriangle3, self).__eq__(other):
             return False
         return True
@@ -214,7 +215,7 @@ class RefTriangle3(RefCell):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from RefCell
+        # Check the properties inherited from RefElement
         diff_list.extend(
             super(RefTriangle3, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -229,7 +230,7 @@ class RefTriangle3(RefCell):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from RefCell
+        # Get size of the properties inherited from RefElement
         S += super(RefTriangle3, self).__sizeof__()
         return S
 
@@ -244,7 +245,7 @@ class RefTriangle3(RefCell):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from RefCell
+        # Get the properties inherited from RefElement
         RefTriangle3_dict = super(RefTriangle3, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -267,5 +268,5 @@ class RefTriangle3(RefCell):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        # Set to None the properties inherited from RefCell
+        # Set to None the properties inherited from RefElement
         super(RefTriangle3, self)._set_None()

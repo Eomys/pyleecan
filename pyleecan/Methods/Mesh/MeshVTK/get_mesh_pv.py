@@ -2,6 +2,7 @@
 
 import pyvista as pv
 from meshio import read
+import numpy as np
 
 
 def get_mesh_pv(self, indices=None):
@@ -25,7 +26,7 @@ def get_mesh_pv(self, indices=None):
         # Extract submesh
         if indices is not None:
             mesh = self.mesh
-            mesh["mask"] = zeros(mesh.points.shape)
+            mesh["mask"] = np.zeros(mesh.points.shape)
             mesh["mask"][indices] = 1
             mesh.set_active_scalars("mask")
             thresh = mesh.threshold(1)

@@ -13,7 +13,6 @@ from ..Classes.BoreFlower import BoreFlower
 from ..Classes.BoreLSRPM import BoreLSRPM
 from ..Classes.BoreSinePole import BoreSinePole
 from ..Classes.BoreUD import BoreUD
-from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
 from ..Classes.CondType11 import CondType11
 from ..Classes.CondType12 import CondType12
@@ -33,6 +32,7 @@ from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
 from ..Classes.ElecLUTdq import ElecLUTdq
 from ..Classes.Electrical import Electrical
+from ..Classes.ElementMat import ElementMat
 from ..Classes.Elmer import Elmer
 from ..Classes.ElmerResults import ElmerResults
 from ..Classes.ElmerResultsVTU import ElmerResultsVTU
@@ -83,7 +83,6 @@ from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
 from ..Classes.InputVoltage import InputVoltage
-from ..Classes.Interpolation import Interpolation
 from ..Classes.LUT import LUT
 from ..Classes.LUTdq import LUTdq
 from ..Classes.LUTslip import LUTslip
@@ -184,7 +183,7 @@ from ..Classes.PostFunction import PostFunction
 from ..Classes.PostLUT import PostLUT
 from ..Classes.PostMethod import PostMethod
 from ..Classes.PostPlot import PostPlot
-from ..Classes.RefCell import RefCell
+from ..Classes.RefElement import RefElement
 from ..Classes.RefLine3 import RefLine3
 from ..Classes.RefQuad4 import RefQuad4
 from ..Classes.RefQuad9 import RefQuad9

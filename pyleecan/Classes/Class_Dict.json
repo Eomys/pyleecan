@@ -503,79 +503,6 @@
             }
         ]
     },
-    "CellMat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
-        "is_internal": false,
-        "methods": [
-            "add_cell",
-            "get_connectivity",
-            "get_node2cell",
-            "is_exist"
-        ],
-        "mother": "",
-        "name": "CellMat",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/CellMat.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "Matrix of connectivity for one element type",
-                "max": "",
-                "min": "",
-                "name": "connectivity",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "as_dict": "",
-                "desc": "Total number of elements",
-                "max": "",
-                "min": "",
-                "name": "nb_cell",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Define the number of node per cell",
-                "max": "",
-                "min": "",
-                "name": "nb_node_per_cell",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Element indices",
-                "max": "",
-                "min": "",
-                "name": "indice",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "as_dict": "",
-                "desc": "Define FEA interpolation",
-                "max": "",
-                "min": "",
-                "name": "interpolation",
-                "type": "Interpolation",
-                "unit": "",
-                "value": ""
-            }
-        ]
-    },
     "Circle": {
         "constants": [
             {
@@ -1058,180 +985,6 @@
                 "value": ""
             }
         ]
-    },
-    "Convert": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "ConvertMC"
-        ],
-        "desc": "initialisation of conversion abstract",
-        "is_internal": false,
-        "methods": [
-            "convert_to_other",
-            "convert_to_P",
-            "select_LamSlotWind_rules",
-            "select_machine_rules",
-            "Step.select_slot_rotor_rules",
-            "Step.select_slot_rules",
-            "Step.select_lamination_rules",
-            "Step.select_winding_rules",
-            "Step.select_conductor_rules",
-            "Step.select_hole_rules",
-            "Step.select_pole_rules",
-            "Step.select_magnet_rules",
-            "Step.select_skew_rules",
-            "Step.select_bar_rules",
-            "Step.select_duct_rules",
-            "Step.select_notch_rules",
-            "Step.select_material_rules",
-            "machine_type.select_SIPMSM_rules",
-            "machine_type.select_IPMSM_rules",
-            "machine_type.select_SCIM_rules",
-            "machine_type.select_WRSM_rules"
-        ],
-        "mother": "",
-        "name": "Convert",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Convert.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "convertion unit file .mot into unit_dict",
-                "max": "",
-                "min": "",
-                "name": "other_unit_dict",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
-            },
-            {
-                "as_dict": "",
-                "desc": "convertion file .mot in dict",
-                "max": "",
-                "min": "",
-                "name": "other_dict",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
-            },
-            {
-                "as_dict": "",
-                "desc": "machine pyleecan",
-                "max": "",
-                "min": "",
-                "name": "machine",
-                "type": "Machine",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "list differents rules",
-                "max": "",
-                "min": "",
-                "name": "rules_list",
-                "type": "list",
-                "unit": "-",
-                "value": []
-            },
-            {
-                "as_dict": "",
-                "desc": "booleen to select the direction of conversion",
-                "max": "",
-                "min": "",
-                "name": "is_P_to_other",
-                "type": "bool",
-                "unit": "-",
-                "value": false
-            }
-        ]
-    },
-    "ConvertMC": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "convertorMC abstract",
-        "is_internal": false,
-        "methods": [
-            "convert_to_P.convert_other_to_dict",
-            "convert_to_P.convert_slot_to_P",
-            "convert_to_P.convert_slot_rotor_to_P",
-            "convert_to_P.convert_machine_to_P",
-            "convert_to_P.convert_magnet_to_P",
-            "convert_to_P.convert_hole_to_P",
-            "convert_to_P.convert_pole_to_P",
-            "convert_to_P.convert_duct_to_P",
-            "convert_to_P.convert_notch_to_P",
-            "convert_to_P.convert_conductor_to_P",
-            "convert_to_P.convert_material_to_P",
-            "convert_to_P.convert_skew_to_P",
-            "convert_to_other.convert_slot_rotor_to_other",
-            "convert_to_other.init_other_unit",
-            "convert_to_other.convert_slot_to_other",
-            "convert_to_other.convert_machine_to_other",
-            "convert_to_other.convert_magnet_to_other",
-            "convert_to_other.convert_hole_to_other",
-            "convert_to_other.convert_duct_to_other",
-            "convert_to_other.convert_notch_to_other",
-            "convert_to_other.convert_pole_to_other",
-            "convert_to_other.convert_conductor_to_other",
-            "convert_to_other.convert_material_to_other",
-            "convert_to_other.convert_skew_to_other",
-            "Rules.add_rule_machine_dimension",
-            "Rules.add_rule_machine_dimension_surface_magnet",
-            "Rules.add_rule_machine_type",
-            "Rules.Slot.add_rule_slotW11",
-            "Rules.Slot.add_rule_slotW29",
-            "Rules.Slot.add_rule_slotW21",
-            "Rules.Slot.add_rule_slotW14",
-            "Rules.Slot.add_rule_slotW23",
-            "Rules.Slot.rotor.add_rule_rotor_slotW30",
-            "Rules.Slot.rotor.add_rule_rotor_slotW23",
-            "Rules.Slot.rotor.add_rule_rotor_slotW11_2",
-            "Rules.Slot.rotor.add_rule_rotor_slotW26",
-            "Rules.Lamination.add_rule_ventilationCirc",
-            "Rules.Lamination.add_rule_ventilationPolar",
-            "Rules.Lamination.add_rule_ventilationTrap",
-            "Rules.Lamination.add_rule_notch_slotM19",
-            "Rules.Lamination.add_rule_lamination",
-            "Rules.Rotor_Magnet.add_rule_slotM14",
-            "Rules.Rotor_Magnet.add_rule_slotM13",
-            "Rules.Rotor_Magnet.add_rule_slotM16",
-            "Rules.Rotor_Magnet.add_rule_slotM11",
-            "Rules.Rotor_Magnet.add_rule_slotM15",
-            "Rules.Rotor_Magnet.add_rule_slotM12",
-            "select_SIPMSM_machine_dimension",
-            "Rules.Hole.add_rule_holeM61",
-            "Rules.Hole.add_rule_holeM57",
-            "Rules.Hole.add_rule_holeM60",
-            "Rules.Hole.add_rule_holeM63",
-            "Rules.Hole.add_rule_holeM52",
-            "Rules.Hole.add_rule_holeM62",
-            "Rules.Pole.add_rule_parallel_tooth_slotW63",
-            "Rules.Pole.add_rule_salient_pole_slotW62",
-            "Rules.Pole.add_rule_parallel_slot_slotW29",
-            "Rules.Winding.add_rule_winding",
-            "Rules.Winding.add_rule_condtype11",
-            "Rules.Winding.add_rule_condtype12",
-            "Rules.Winding.add_rule_rotor_bar",
-            "Rules.add_rule_material_magnetics",
-            "Rules.add_rule_material",
-            "Rules.add_rule_skew"
-        ],
-        "mother": "Convert",
-        "name": "ConvertMC",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/ConvertMC.csv",
-        "properties": []
     },
     "DXFImport": {
         "constants": [
@@ -2147,6 +1900,100 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            }
+        ]
+    },
+    "ElementMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
+        "is_internal": false,
+        "methods": [
+            "add_element",
+            "get_connectivity",
+            "get_node2element",
+            "is_exist",
+            "interpolate"
+        ],
+        "mother": "",
+        "name": "ElementMat",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/ElementMat.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Matrix of connectivity for one element type",
+                "max": "",
+                "min": "",
+                "name": "connectivity",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Total number of elements",
+                "max": "",
+                "min": "",
+                "name": "nb_element",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Define the number of node per element",
+                "max": "",
+                "min": "",
+                "name": "nb_node_per_element",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Element indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "ref_element",
+                "type": "RefElement",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "gauss_point",
+                "type": "GaussPoint",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "scalar_product",
+                "type": "ScalarProductL2",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -5738,54 +5585,6 @@
             }
         ]
     },
-    "Interpolation": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Store shape functions",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Interpolation",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/Interpolation.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "ref_cell",
-                "type": "RefCell",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "gauss_point",
-                "type": "GaussPoint",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "scalar_product",
-                "type": "ScalarProduct",
-                "unit": "",
-                "value": null
-            }
-        ]
-    },
     "LUT": {
         "constants": [
             {
@@ -8765,22 +8564,14 @@
         ],
         "desc": "Abstract Class for mesh related classes",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_node_coordinate"
+        ],
         "mother": "",
         "name": "Mesh",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Mesh.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Description of the mesh",
-                "max": "",
-                "min": "",
-                "name": "label",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
             {
                 "as_dict": "",
                 "desc": "Dimension of the physical problem",
@@ -8804,19 +8595,21 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_node",
+            "get_node_coordinate",
             "get_node_indice",
-            "get_cell",
+            "get_element",
             "get_mesh_pv",
-            "get_cell_area",
-            "get_vertice",
-            "get_node2cell",
-            "add_cell",
+            "get_element_area",
+            "get_element_coordinate",
+            "get_node2element",
+            "add_element",
             "renum",
-            "find_cell",
+            "find_element",
             "interface",
             "clear_node",
-            "clear_cell"
+            "clear_element",
+            "get_element_nb",
+            "convert"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -8828,8 +8621,8 @@
                 "desc": "Storing connectivity",
                 "max": "",
                 "min": "",
-                "name": "cell",
-                "type": "{CellMat}",
+                "name": "element_dict",
+                "type": "{ElementMat}",
                 "unit": "",
                 "value": ""
             },
@@ -8845,7 +8638,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "True if renumering the nodes and cells is useful when renum method is called (saving calculation time)",
+                "desc": "True if renumering the nodes and elements is useful when renum method is called (saving calculation time)",
                 "max": "",
                 "min": "",
                 "name": "_is_renum",
@@ -8886,7 +8679,6 @@
         "desc": "Abstract class to associate a mesh with one or several solutions",
         "is_internal": false,
         "methods": [
-            "get_mesh",
             "get_solution",
             "get_field",
             "get_group",
@@ -8898,7 +8690,15 @@
             "perm_coord",
             "get_deflection",
             "get_glyph",
-            "save_mesh"
+            "add_solution",
+            "replace_solution",
+            "pop_solution",
+            "keys",
+            "items",
+            "values",
+            "__getitem__",
+            "__setitem__",
+            "__iter__"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -8917,37 +8717,27 @@
             },
             {
                 "as_dict": "",
-                "desc": "A list of Mesh objects. ",
+                "desc": "A Mesh object. ",
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "[Mesh]",
+                "type": "Mesh",
                 "unit": "",
                 "value": ""
             },
             {
                 "as_dict": "",
-                "desc": "1 if the mesh is the same at each step (time, mode etc.)",
+                "desc": "A dictionary of Solution objects",
                 "max": "",
                 "min": "",
-                "name": "is_same_mesh",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "as_dict": "",
-                "desc": "A list of Solution objects",
-                "max": "",
-                "min": "",
-                "name": "solution",
-                "type": "[Solution]",
+                "name": "solution_dict",
+                "type": "{Solution}",
                 "unit": "",
                 "value": ""
             },
             {
                 "as_dict": "",
-                "desc": "Dict sorted by groups name with list of cells indices. ",
+                "desc": "Dict sorted by groups name with list of elements indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
@@ -8989,11 +8779,11 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_node",
-            "get_cell",
+            "get_node_coordinate",
+            "get_element",
             "get_normals",
             "get_surf",
-            "get_cell_area",
+            "get_element_area",
             "convert",
             "perm_coord",
             "get_path"
@@ -9095,7 +8885,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Array of normals to nodes (cell vertices)",
+                "desc": "Array of normals to nodes (element vertices)",
                 "max": "",
                 "min": "",
                 "name": "node_normals",
@@ -12143,7 +11933,7 @@
             }
         ]
     },
-    "RefCell": {
+    "RefElement": {
         "constants": [
             {
                 "name": "VERSION",
@@ -12161,12 +11951,13 @@
         "desc": "Store shape functions definition in the reference element",
         "is_internal": false,
         "methods": [
-            "interpolation"
+            "interpolation",
+            "get_element_area"
         ],
         "mother": "",
-        "name": "RefCell",
+        "name": "RefElement",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefCell.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefElement.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -12198,7 +11989,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefLine3",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefLine3.csv",
@@ -12222,7 +12013,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefQuad4",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad4.csv",
@@ -12246,7 +12037,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefQuad9",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad9.csv",
@@ -12271,7 +12062,7 @@
             "get_ref_point",
             "get_normal"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefSegmentP1",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv",
@@ -12294,10 +12085,10 @@
             "get_real_point",
             "get_ref_point",
             "is_inside",
-            "get_cell_area",
+            "get_element_area",
             "get_normal"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefTriangle3",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
@@ -12321,214 +12112,11 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefTriangle6",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle6.csv",
         "properties": []
-    },
-    "Rule": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "RuleComplex",
-            "RuleEquation",
-            "RuleSimple"
-        ],
-        "desc": "abstract class for rules",
-        "is_internal": false,
-        "methods": [
-            "set_P",
-            "get_P",
-            "set_other",
-            "get_other",
-            "get_name"
-        ],
-        "mother": "",
-        "name": "Rule",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/Rule.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "unit",
-                "max": "",
-                "min": "",
-                "name": "unit_type",
-                "type": "str",
-                "unit": "-",
-                "value": "m"
-            }
-        ]
-    },
-    "RuleComplex": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "complex rules",
-        "is_internal": false,
-        "methods": [
-            "convert_to_P",
-            "convert_to_other",
-            "_set_fct_name"
-        ],
-        "mother": "Rule",
-        "name": "RuleComplex",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/RuleComplex.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "fonction name to convert",
-                "max": "",
-                "min": "",
-                "name": "fct_name",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "name source",
-                "max": "",
-                "min": "",
-                "name": "folder",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "dict to pass param ",
-                "max": "",
-                "min": "",
-                "name": "param_dict",
-                "type": "dict",
-                "unit": "-",
-                "value": {}
-            }
-        ]
-    },
-    "RuleEquation": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "simple rules",
-        "is_internal": false,
-        "methods": [
-            "convert_to_P",
-            "convert_to_other",
-            "solve_equation"
-        ],
-        "mother": "Rule",
-        "name": "RuleEquation",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/RuleEquation.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "dict all parameters",
-                "max": "",
-                "min": "",
-                "name": "param",
-                "type": "list",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "conversion paramter to pyleecan (Y are always on other side",
-                "max": "",
-                "min": "",
-                "name": "equation",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "use just to debug, give name of file",
-                "max": "",
-                "min": "",
-                "name": "file_name",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            }
-        ]
-    },
-    "RuleSimple": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "simple rules",
-        "is_internal": false,
-        "methods": [
-            "convert_to_P",
-            "convert_to_other"
-        ],
-        "mother": "Rule",
-        "name": "RuleSimple",
-        "package": "Converter",
-        "path": "pyleecan/Generator/ClassesRef/Converter/RuleSimple.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "parameter ",
-                "max": "",
-                "min": "",
-                "name": "other_key_list",
-                "type": "list",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "path pyleecan parameter in object machine ",
-                "max": "",
-                "min": "",
-                "name": "P_obj_path",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "conversion paramter to pyleecan",
-                "max": "",
-                "min": "",
-                "name": "scaling_to_P",
-                "type": "float",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "as_dict": "",
-                "desc": "use just to debug, give name of file",
-                "max": "",
-                "min": "",
-                "name": "file_name",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            }
-        ]
     },
     "ScalarProduct": {
         "constants": [
@@ -13193,7 +12781,6 @@
             "SlotUD2",
             "SlotW10",
             "SlotW11",
-            "SlotW11_2",
             "SlotW12",
             "SlotW13",
             "SlotW14",
@@ -13208,11 +12795,8 @@
             "SlotW27",
             "SlotW28",
             "SlotW29",
-            "SlotW30",
             "SlotW60",
             "SlotW61",
-            "SlotW62",
-            "SlotW63",
             "SlotWLSRPM"
         ],
         "desc": "Generic class for slot (abstract)",
@@ -14667,145 +14251,6 @@
             }
         ]
     },
-    "SlotW11_2": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_SYMMETRICAL",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "",
-        "is_internal": false,
-        "methods": [
-            "_comp_line_dict",
-            "_comp_point_coordinate",
-            "_set_W3",
-            "_comp_W",
-            "build_geometry",
-            "check",
-            "comp_angle_opening",
-            "comp_height",
-            "comp_height_active",
-            "comp_surface",
-            "comp_surface_opening",
-            "get_H1",
-            "get_surface_active",
-            "get_surface_opening",
-            "plot_schematics",
-            "plot_schematics_constant_tooth"
-        ],
-        "mother": "Slot",
-        "name": "SlotW11_2",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW11_2.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "Slot isthmus width.",
-                "max": "",
-                "min": "0",
-                "name": "W0",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot isthmus height.",
-                "max": "",
-                "min": "0",
-                "name": "H0",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "height or angle  (See Schematics)",
-                "max": "",
-                "min": "0",
-                "name": "H1",
-                "type": "float",
-                "unit": "m/rad",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "H1 unit, 0 for m, 1 for rad",
-                "max": "",
-                "min": "",
-                "name": "H1_is_rad",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot top width.",
-                "max": "",
-                "min": "0",
-                "name": "W1",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot height below wedge ",
-                "max": "",
-                "min": "0",
-                "name": "H2",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot bottom width.",
-                "max": "",
-                "min": "0",
-                "name": "W2",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "True: use W3 to define the slot, False: use W2 and W1",
-                "max": "",
-                "min": "",
-                "name": "is_cstt_tooth",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Tooth width",
-                "max": "",
-                "min": "0",
-                "name": "W3",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot bottom radius",
-                "max": "",
-                "min": "0",
-                "name": "R1",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            }
-        ]
-    },
     "SlotW12": {
         "constants": [
             {
@@ -15029,8 +14474,7 @@
             "get_surface_active",
             "get_surface_wedge",
             "get_surface_opening",
-            "plot_schematics",
-            "get_H1"
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW14",
@@ -15059,13 +14503,13 @@
             },
             {
                 "as_dict": "",
-                "desc": "height or angle (See Schematics)",
+                "desc": "Slot intermediate height.",
                 "max": "",
                 "min": "0",
                 "name": "H1",
                 "type": "float",
-                "unit": "m/rad",
-                "value": 0
+                "unit": "m",
+                "value": 0.0015
             },
             {
                 "as_dict": "",
@@ -15096,16 +14540,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
-            },
-            {
-                "as_dict": "",
-                "desc": "H1 unit, 0 for m, 1 for rad",
-                "max": "",
-                "min": "",
-                "name": "H1_is_rad",
-                "type": "bool",
-                "unit": "",
-                "value": false
             }
         ]
     },
@@ -16144,101 +15578,6 @@
             }
         ]
     },
-    "SlotW30": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_SYMMETRICAL",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "",
-        "is_internal": false,
-        "methods": [
-            "_comp_line_dict",
-            "_comp_point_coordinate",
-            "build_geometry",
-            "check",
-            "comp_angle_opening",
-            "comp_height",
-            "comp_height_active",
-            "comp_surface",
-            "comp_surface_opening",
-            "get_surface_active",
-            "get_surface_opening",
-            "plot_schematics"
-        ],
-        "mother": "Slot",
-        "name": "SlotW30",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW30.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "Slot isthmus width.",
-                "max": "",
-                "min": "0",
-                "name": "W0",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0122
-            },
-            {
-                "as_dict": "",
-                "desc": "Tooth width",
-                "max": "",
-                "min": "0",
-                "name": "W3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0122
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot isthmus height.",
-                "max": "",
-                "min": "0",
-                "name": "H0",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "as_dict": "",
-                "desc": "Slot active height.",
-                "max": "",
-                "min": "0",
-                "name": "H1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.006
-            },
-            {
-                "as_dict": "",
-                "desc": "Top radius",
-                "max": "",
-                "min": "0",
-                "name": "R1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            },
-            {
-                "as_dict": "",
-                "desc": "Bottom radius",
-                "max": "",
-                "min": "0",
-                "name": "R2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.001
-            }
-        ]
-    },
     "SlotW60": {
         "constants": [
             {
@@ -16481,218 +15820,6 @@
             }
         ]
     },
-    "SlotW62": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_SYMMETRICAL",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "",
-        "is_internal": false,
-        "methods": [
-            "_comp_line_dict",
-            "_comp_point_coordinate",
-            "build_geometry",
-            "build_geometry_active",
-            "check",
-            "comp_angle_opening",
-            "comp_height",
-            "comp_height_active",
-            "comp_surface",
-            "comp_surface_active",
-            "get_surface_active",
-            "get_surface_opening",
-            "plot_schematics"
-        ],
-        "mother": "Slot",
-        "name": "SlotW62",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW62.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "Pole bottom width",
-                "max": "",
-                "min": "0",
-                "name": "W0",
-                "type": "float",
-                "unit": "m",
-                "value": 0.314
-            },
-            {
-                "as_dict": "",
-                "desc": "Pole top width",
-                "max": "",
-                "min": "0",
-                "name": "W1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.02
-            },
-            {
-                "as_dict": "",
-                "desc": "Pole bottom height",
-                "max": "",
-                "min": "0",
-                "name": "H0",
-                "type": "float",
-                "unit": "m",
-                "value": 0.003
-            },
-            {
-                "as_dict": "",
-                "desc": "Pole top height",
-                "max": "",
-                "min": "0",
-                "name": "H1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
-            },
-            {
-                "as_dict": "",
-                "desc": "Width Ploe",
-                "max": "",
-                "min": "0",
-                "name": "W2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0
-            },
-            {
-                "as_dict": "",
-                "desc": "Heigh Ploe",
-                "max": "",
-                "min": "0",
-                "name": "H2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0
-            },
-            {
-                "as_dict": "",
-                "desc": "Distance Ploe-coil ",
-                "max": "",
-                "min": "0",
-                "name": "W3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0
-            },
-            {
-                "as_dict": "",
-                "desc": "Top Distance Ploe-coil ",
-                "max": "",
-                "min": "0",
-                "name": "H3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0
-            }
-        ]
-    },
-    "SlotW63": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            },
-            {
-                "name": "IS_SYMMETRICAL",
-                "value": "0"
-            }
-        ],
-        "daughters": [],
-        "desc": "",
-        "is_internal": false,
-        "methods": [
-            "_comp_line_dict",
-            "_comp_point_coordinate",
-            "build_geometry",
-            "build_geometry_active",
-            "check",
-            "comp_angle_opening",
-            "comp_height",
-            "comp_height_active",
-            "comp_surface",
-            "comp_surface_active",
-            "get_surface_active",
-            "get_surface_opening",
-            "plot_schematics"
-        ],
-        "mother": "Slot",
-        "name": "SlotW63",
-        "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW63.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "Pole bottom width",
-                "max": "",
-                "min": "0",
-                "name": "W0",
-                "type": "float",
-                "unit": "m",
-                "value": 0.314
-            },
-            {
-                "as_dict": "",
-                "desc": "Pole top width",
-                "max": "",
-                "min": "0",
-                "name": "W1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.02
-            },
-            {
-                "as_dict": "",
-                "desc": "Pole bottom height",
-                "max": "",
-                "min": "0",
-                "name": "H0",
-                "type": "float",
-                "unit": "m",
-                "value": 0.003
-            },
-            {
-                "as_dict": "",
-                "desc": "Pole top height",
-                "max": "",
-                "min": "0",
-                "name": "H1",
-                "type": "float",
-                "unit": "m",
-                "value": 0.05
-            },
-            {
-                "as_dict": "",
-                "desc": "Heigh Ploe",
-                "max": "",
-                "min": "0",
-                "name": "H2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0
-            },
-            {
-                "as_dict": "",
-                "desc": "Width Ploe",
-                "max": "",
-                "min": "0",
-                "name": "W2",
-                "type": "float",
-                "unit": "m",
-                "value": 0.0
-            }
-        ]
-    },
     "SlotWLSRPM": {
         "constants": [
             {
@@ -16799,10 +15926,10 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Type of cell (Point, Segment2, Triangle3, etc.)",
+                "desc": "Type of element (Point, Segment2, Triangle3, etc.)",
                 "max": "",
                 "min": "",
-                "name": "type_cell",
+                "name": "type_element",
                 "type": "str",
                 "unit": "-",
                 "value": "triangle"
@@ -16905,7 +16032,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Indices of loaded cells. Set to None if all cells are loaded",
+                "desc": "Indices of loaded elements. Set to None if all elements are loaded",
                 "max": "",
                 "min": "",
                 "name": "indice",

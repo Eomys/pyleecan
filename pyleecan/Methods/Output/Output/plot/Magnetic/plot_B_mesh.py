@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from numpy import real, min as np_min, max as np_max
+from numpy import abs as np_abs
+from numpy import exp, linspace
+from numpy import max as np_max
+from numpy import min as np_min
+from numpy import pi, real
 from numpy.linalg import norm
 
 from pyleecan.definitions import config_dict
-
-from numpy import (
-    pi,
-    real,
-    min as np_min,
-    max as np_max,
-    abs as np_abs,
-    linspace,
-    exp,
-)
-
 from pyleecan.Functions.Plot.Pyvista.configure_plot import configure_plot
 from pyleecan.Functions.Plot.Pyvista.plot_mesh_field import plot_mesh_field
 
@@ -37,7 +30,7 @@ def plot_B_mesh(
     win_title=None,
     is_animated=False,
     title="",
-    p=None,
+    pv_plotter=None,
     is_contour=True,
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
@@ -59,7 +52,7 @@ def plot_B_mesh(
     is_radial : bool
         radial component only
     is_center : bool
-        field at cell-centers
+        field at element-centers
     clim : list
         a list of 2 elements for the limits of the colorbar
     field_name : str
@@ -84,15 +77,18 @@ def plot_B_mesh(
         MS_B_plot = MS_B
 
     # Init figure
-    if p is None:
+    if pv_plotter is None:
         if title != "" and win_title == "":
             win_title = title
         elif win_title != "" and title == "":
             title = win_title
 
-        p, sargs = configure_plot(p=p, win_title=win_title, save_path=save_path)
+        pv_plotter, sargs = configure_plot(
+            pv_plotter=pv_plotter,
+            win_title=win_title,
+        )
 
-        p.add_text(
+        pv_plotter.add_text(
             title,
             position="upper_edge",
             color="black",
@@ -126,7 +122,7 @@ def plot_B_mesh(
             clim[1] = abs(clim[1])
 
     plot_mesh_field(
-        p,
+        pv_plotter,
         sargs,
         field_name,
         clim=clim,
@@ -135,12 +131,7 @@ def plot_B_mesh(
     )
 
     if is_contour:
-        lab_ind = None
-        for ii, sol in enumerate(MS_B_plot.solution):
-            if sol.label == "A_z" and sol.type_cell == "node":
-                lab_ind = ii
-                break
-        if lab_ind is None:
+        if MS_B_plot["A_z"].type_element != "node":
             raise Exception(
                 "Cannot field lines if A_z calculated on nodes is not in meshsolution"
             )
@@ -152,26 +143,25 @@ def plot_B_mesh(
             is_radial=is_radial,
             is_center=is_center,
             field_name=field_name,
-            index=lab_ind,
         )
         mesh_pv_Az[field_name_A] = field_A
         contours = mesh_pv_Az.contour()
-        p.add_mesh(contours, color="black", line_width=5)
+        pv_plotter.add_mesh(contours, color="black", line_width=5)
 
     ###########
     # Internal animation (cannot be combined with other plots)
     if is_animated:
-        p.add_text(
+        pv_plotter.add_text(
             'Adjust 3D view and press "Q"',
             position="lower_edge",
             color="gray",
             font_size=10,
             font="arial",
         )
-        p.show(auto_close=False)
+        pv_plotter.show(auto_close=False)
 
-        p.open_gif(save_path)
-        p.clear()
+        pv_plotter.open_gif(save_path)
+        pv_plotter.clear()
 
         if len(args) == 0 or "time" in args:
             mesh_pv_B, field_B, field_name_B = MS_B_plot.get_mesh_field_pv(
@@ -210,7 +200,7 @@ def plot_B_mesh(
                     field_At = field_A
             # Compute pyvista object
             plot_mesh_field(
-                p,
+                pv_plotter,
                 sargs,
                 field_name_B,
                 clim=clim,
@@ -222,28 +212,22 @@ def plot_B_mesh(
             if is_contour:
                 mesh_pv_Az[field_name_A] = real(field_At * phase)
                 contours = mesh_pv_Az.contour()
-                p.add_mesh(contours, color="black", line_width=5)
+                pv_plotter.add_mesh(contours, color="black", line_width=5)
 
-            p.add_text(
+            pv_plotter.add_text(
                 title,
                 position="upper_edge",
                 color="black",
                 font_size=10,
                 font="arial",
             )
-            p.write_frame()
-            p.clear()
-        p.close()
+            pv_plotter.write_frame()
+            pv_plotter.clear()
+        pv_plotter.close()
 
     else:
         # Save figure
         if save_path is None and is_show_fig:
-            p.show()
+            pv_plotter.show()
         elif save_path is not None:
-            p.show(interactive=False, screenshot=save_path)
-    ############################################
-
-    # if save_path is None and is_show_fig:
-    #     p.show()
-    # elif save_path is not None:
-    #     p.show(interactive=False, screenshot=save_path)
+            pv_plotter.show(interactive=False, screenshot=save_path)
