@@ -104,7 +104,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # Losses
         self.tab_values_losses.saveNeeded.connect(self.set_table_values_losses)
         self.b_plot_losses.clicked.connect(self.s_plot_losses)
-        
+
         self.ax = None
         self.fig = None
 

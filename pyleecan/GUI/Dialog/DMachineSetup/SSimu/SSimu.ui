@@ -330,12 +330,8 @@ p, li { white-space: pre-wrap; }
             <string>Magnetic Model</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="is_per_a">
-              <property name="text">
-               <string>Angular periodicity</string>
-              </property>
-             </widget>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="si_Na_tot"/>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="in_Na_tot">
@@ -353,8 +349,24 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="si_Na_tot"/>
+            <item row="4" column="1">
+             <widget class="FloatEdit" name="lf_Kmesh">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Stator external radius</string>
+              </property>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QSpinBox" name="si_nb_worker"/>
             </item>
             <item row="2" column="0">
              <widget class="QCheckBox" name="is_per_t">
@@ -398,22 +410,6 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="FloatEdit" name="lf_Kmesh">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Stator external radius</string>
-              </property>
-              <property name="text">
-               <string>1</string>
-              </property>
-             </widget>
-            </item>
             <item row="5" column="0">
              <widget class="QLabel" name="in_nb_worker">
               <property name="minimumSize">
@@ -430,8 +426,12 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
-             <widget class="QSpinBox" name="si_nb_worker"/>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="is_per_a">
+              <property name="text">
+               <string>Angular periodicity</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -526,13 +526,6 @@ p, li { white-space: pre-wrap; }
                 <width>100</width>
                 <height>0</height>
                </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="is_losses">
-              <property name="text">
-               <string>Compute core and Joule losses</string>
               </property>
              </widget>
             </item>

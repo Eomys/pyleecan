@@ -123,8 +123,6 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_Kmesh.setValue(1)
         self.si_nb_worker.setValue(self.simu.mag.nb_worker)
         self.le_name.setText(self.simu.name)
-        self.is_losses.hide()  # Not available Yet
-        self.is_mesh_sol.hide()  # Not available Yet
 
         # Setup path result selection
         self.w_path_result.obj = None
@@ -141,9 +139,11 @@ class SSimu(Gen_SSimu, QWidget):
             self.machine, MachineIPMSM
         ):
             self.g_losses_model.show()
+            self.is_mesh_sol.show()
 
         else:
             self.g_losses_model.hide()
+            self.is_mesh_sol.hide()
 
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)
@@ -158,6 +158,7 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_Kmesh.editingFinished.connect(self.set_Kmesh)
         self.si_nb_worker.editingFinished.connect(self.set_nb_worker)
 
+        self.is_mesh_sol.toggled.connect(self.set_mesh_sol)
         self.g_losses_model.toggled.connect(self.set_g_losses_model)
         self.lf_Tsta.editingFinished.connect(self.set_Tsta)
         self.lf_Trot.editingFinished.connect(self.set_Trot)
@@ -303,6 +304,30 @@ class SSimu(Gen_SSimu, QWidget):
             err_msg = "Error while plotting Stator winding flux:\n" + str(e)
             self.simu.get_logger().error(err_msg)
 
+        # mag mesh solution
+        if self.simu.mag.is_get_meshsolution:
+            try:
+                out.mag.meshsolution.plot_contour(
+                    label="B",
+                    group_names="stator core",
+                    clim=[0, 3],
+                    save_path=(
+                        join(self.simu.path_result, "B_meshsolution_stator.png")
+                    ),
+                )
+            except Exception as e:
+                err_msg = "Error while plotting B meshsolution : " + str(e)
+                self.simu.get_logger().error(err_msg)
+
+            # save mesh
+            try:
+                out.mag.meshsolution.save_mesh(
+                    save_path=(join(self.simu.path_result, "Mesh_mag.png")),
+                )
+            except Exception as e:
+                err_msg = "Error while saving mesh mag: " + str(e)
+                self.simu.get_logger().error(err_msg)
+
         # Losses
         if self.simu.loss is not None:
             try:
@@ -312,6 +337,46 @@ class SSimu(Gen_SSimu, QWidget):
                 )
             except Exception as e:
                 err_msg = "Error while plotting Losses: " + str(e)
+                self.simu.get_logger().error(err_msg)
+
+            # save mesh
+            # try:
+            #     out.loss.meshsolution.save_mesh(
+            #         save_path=(join(self.simu.path_result, "Mesh_loss.png")),
+            #     )
+            # except Exception as e:
+            #     err_msg = "Error while saving mesh loss: " + str(e)
+            #     self.simu.get_logger().error(err_msg)
+
+        if self.simu.loss.is_get_meshsolution:
+            # Overall on stator
+            try:
+                out.loss["overall"].plot_mesh(
+                    group_names=["stator core", "stator winding"],
+                    save_path=(
+                        join(self.simu.path_result, "Losses_meshsolution_stator.png")
+                    ),
+                )
+            except Exception as e:
+                err_msg = (
+                    "Error while plotting Losses meshsolution (Overall on stator): "
+                    + str(e)
+                )
+                self.simu.get_logger().error(err_msg)
+
+            # rotor core with magnets
+            try:
+                out.loss["overall"].plot_mesh(
+                    group_names=["rotor core", "rotor magnets"],
+                    save_path=(
+                        join(self.simu.path_result, "Losses_meshsolution_rotor.png")
+                    ),
+                )
+            except Exception as e:
+                err_msg = (
+                    "Error while plotting Losses meshsolution (rotor core with magnets): "
+                    + str(e)
+                )
                 self.simu.get_logger().error(err_msg)
 
         # Done
@@ -379,9 +444,14 @@ class SSimu(Gen_SSimu, QWidget):
             self.simu.loss = LossFEA()
             self.simu.loss.is_get_meshsolution = True
             self.simu.mag.is_get_meshsolution = True
+            self.simu.mag.is_save_meshsolution_as_file = True
+
+            self.is_mesh_sol.setChecked(True)
+            self.is_mesh_sol.setDisabled(True)
 
         else:
             self.simu.loss = None
+            self.is_mesh_sol.setDisabled(False)
 
     def set_Tsta(self):
         """Update lf_Tsta according to the widget"""
@@ -390,3 +460,12 @@ class SSimu(Gen_SSimu, QWidget):
     def set_Trot(self):
         """Update lf_Tsta according to the widget"""
         self.simu.loss.Trot = self.lf_Trot.value()
+
+    def set_mesh_sol(self):
+        """Update is_mesh_sol according to the widget"""
+        if self.is_mesh_sol.isChecked():
+            self.simu.mag.is_get_meshsolution = True
+            self.simu.mag.is_save_meshsolution_as_file = True
+        else:
+            self.simu.mag.is_get_meshsolution = False
+            self.simu.mag.is_save_meshsolution_as_file = False

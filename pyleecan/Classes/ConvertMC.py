@@ -207,13 +207,6 @@ except ImportError as error:
     add_rule_machine_type = error
 
 try:
-    from ..Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension import (
-        add_rule_machine_dimension,
-    )
-except ImportError as error:
-    add_rule_machine_dimension = error
-
-try:
     from ..Methods.Converter.ConvertMC.Rules.Slot.add_rule_slotW11 import (
         add_rule_slotW11,
     )
@@ -805,18 +798,6 @@ class ConvertMC(Convert):
         )
     else:
         add_rule_machine_type = add_rule_machine_type
-    # cf Methods.Converter.ConvertMC.Rules.add_rule_machine_dimension
-    if isinstance(add_rule_machine_dimension, ImportError):
-        add_rule_machine_dimension = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ConvertMC method add_rule_machine_dimension: "
-                    + str(add_rule_machine_dimension)
-                )
-            )
-        )
-    else:
-        add_rule_machine_dimension = add_rule_machine_dimension
     # cf Methods.Converter.ConvertMC.Rules.Slot.add_rule_slotW11
     if isinstance(add_rule_slotW11, ImportError):
         add_rule_slotW11 = property(

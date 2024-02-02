@@ -1189,7 +1189,6 @@
             "Rules.add_rule_machine_dimension",
             "Rules.add_rule_machine_dimension_surface_magnet",
             "Rules.add_rule_machine_type",
-            "Rules.add_rule_machine_dimension",
             "Rules.Slot.add_rule_slotW11",
             "Rules.Slot.add_rule_slotW29",
             "Rules.Slot.add_rule_slotW21",
@@ -8898,7 +8897,8 @@
             "plot_glyph",
             "perm_coord",
             "get_deflection",
-            "get_glyph"
+            "get_glyph",
+            "save_mesh"
         ],
         "mother": "",
         "name": "MeshSolution",

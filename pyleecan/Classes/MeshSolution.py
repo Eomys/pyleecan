@@ -77,6 +77,11 @@ try:
 except ImportError as error:
     get_glyph = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.save_mesh import save_mesh
+except ImportError as error:
+    save_mesh = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -221,6 +226,17 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_glyph = get_glyph
+    # cf Methods.Mesh.MeshSolution.save_mesh
+    if isinstance(save_mesh, ImportError):
+        save_mesh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method save_mesh: " + str(save_mesh)
+                )
+            )
+        )
+    else:
+        save_mesh = save_mesh
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
