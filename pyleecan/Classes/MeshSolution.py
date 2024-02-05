@@ -118,9 +118,9 @@ except ImportError as error:
     __iter__ = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.save_mesh import save_mesh
+    from ..Methods.Mesh.MeshSolution.export_to_mat import export_to_mat
 except ImportError as error:
-    save_mesh = error
+    export_to_mat = error
 
 
 from numpy import isnan
@@ -349,17 +349,17 @@ class MeshSolution(FrozenClass):
         )
     else:
         __iter__ = __iter__
-    # cf Methods.Mesh.MeshSolution.save_mesh
-    if isinstance(save_mesh, ImportError):
-        save_mesh = property(
+    # cf Methods.Mesh.MeshSolution.export_to_mat
+    if isinstance(export_to_mat, ImportError):
+        export_to_mat = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshSolution method save_mesh: " + str(save_mesh)
+                    "Can't use MeshSolution method export_to_mat: " + str(export_to_mat)
                 )
             )
         )
     else:
-        save_mesh = save_mesh
+        export_to_mat = export_to_mat
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

@@ -32,7 +32,7 @@ def plot_B_mesh(
     title="",
     pv_plotter=None,
     is_contour=True,
-    is_dimension_2D=False
+    is_2D=False
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 
@@ -65,6 +65,8 @@ def plot_B_mesh(
     is_show_fig : bool
         To call show at the end of the method
     is_animated : True to animate magnetic flux density
+    is_2D : bool
+        True plot in 2 dimensions, False stayed in 3 Dimensions
 
     Returns
     -------
@@ -122,7 +124,7 @@ def plot_B_mesh(
             clim[0] = -abs(clim[1])
             clim[1] = abs(clim[1])
 
-    if is_dimension_2D:
+    if is_2D:
         # 2D view
         pv_plotter.view_xy()
 

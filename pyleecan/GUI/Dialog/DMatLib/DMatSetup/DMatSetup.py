@@ -18,6 +18,7 @@ from .....loggers import GUI_LOG_NAME
 
 import matplotlib.pyplot as plt
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from decimal import *
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
@@ -996,8 +997,14 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         try:
             data = self.tab_values_losses.data
         except Exception as e:
-            QMessageBox.critical(self, self.tr("Error"), str(e))
-            return
+            error_message = f"Error while plotting losses, {e}"
+            log_error(
+                self,
+                error_message,
+                self.mat.mag.get_logger(),
+                is_popup=True,
+                is_warning=False,
+            )
 
         if len(data.shape) == 2 and data.shape[1] == 3:
             # Data in column
@@ -1011,16 +1018,24 @@ class DMatSetup(Gen_DMatSetup, QDialog):
                 if a != data[temp, 0]:
                     one_curve = False
                     self.ax.plot(
-                        data[end:temp, 1], data[end:temp, 2], label=f" {a} [Hz]"
+                        data[end:temp, 1], data[end:temp, 2], label=f" {Decimal(a).to_integral()} [Hz]"
                     )
                     end = temp
                     a = data[temp, 0]
 
             if one_curve:
-                self.ax.plot(data[:, 1], data[:, 2], label=f" {data[0,0]} [Hz]")
+                self.ax.plot(
+                    data[:, 1],
+                    data[:, 2],
+                    label=f" {Decimal(data[0, 0]).to_integral()} [Hz]",
+                )
 
             else:
-                self.ax.plot(data[end:temp, 1], data[end:temp, 2], label=f" {a} [Hz]")
+                self.ax.plot(
+                    data[end:temp, 1],
+                    data[end:temp, 2],
+                    label=f" {Decimal(a).to_integral()} [Hz]",
+                )
 
             self.ax.set_xlabel("B [T]")
             self.ax.set_ylabel("Loss [W/Kg]")
