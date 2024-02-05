@@ -307,8 +307,9 @@ class SSimu(Gen_SSimu, QWidget):
         # mag mesh solution
         if self.simu.mag.is_get_meshsolution:
             try:
-                out.mag.meshsolution.plot_contour(
-                    label="B",
+                out.plot_B_mesh(
+                    is_show_fig=False,
+                    is_dimension_2D=True,
                     clim=[0, 3],
                     save_path=(join(self.simu.path_result, "B_meshsolution.png")),
                 )
@@ -319,7 +320,7 @@ class SSimu(Gen_SSimu, QWidget):
             # save mesh
             try:
                 out.mag.meshsolution.save_mesh(
-                    save_path=(join(self.simu.path_result, "MeshSolution.mat")),
+                    save_path=(join(self.simu.path_result, "MagMeshSolution.mat")),
                 )
             except Exception as e:
                 err_msg = "Error while saving mesh solution: " + str(e)

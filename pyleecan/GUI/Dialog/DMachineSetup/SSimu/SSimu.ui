@@ -330,8 +330,21 @@ p, li { white-space: pre-wrap; }
             <string>Magnetic Model</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="si_Na_tot"/>
+            <item row="4" column="0">
+             <widget class="QLabel" name="in_Kmesh">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Stator external radius</string>
+              </property>
+              <property name="text">
+               <string>Mesh fineness factor:</string>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="in_Na_tot">
@@ -349,31 +362,8 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="FloatEdit" name="lf_Kmesh">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Stator external radius</string>
-              </property>
-              <property name="text">
-               <string>1</string>
-              </property>
-             </widget>
-            </item>
             <item row="5" column="1">
              <widget class="QSpinBox" name="si_nb_worker"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="is_per_t">
-              <property name="text">
-               <string>Time periodicity</string>
-              </property>
-             </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="in_Nt_tot">
@@ -388,25 +378,6 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="text">
                <string>Time steps (over one turn)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QSpinBox" name="si_Nt_tot"/>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="in_Kmesh">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Stator external radius</string>
-              </property>
-              <property name="text">
-               <string>Mesh fineness factor:</string>
               </property>
              </widget>
             </item>
@@ -426,10 +397,103 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="si_Nt_tot"/>
+            </item>
             <item row="0" column="0">
              <widget class="QCheckBox" name="is_per_a">
               <property name="text">
                <string>Angular periodicity</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="si_Na_tot"/>
+            </item>
+            <item row="4" column="1">
+             <widget class="FloatEdit" name="lf_Kmesh">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Stator external radius</string>
+              </property>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="is_per_t">
+              <property name="text">
+               <string>Time periodicity</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="is_mesh_sol">
+              <property name="text">
+               <string>Save Mesh Solution</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="g_losses_model">
+           <property name="title">
+            <string>Losses Model</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="2">
+             <widget class="QLabel" name="unit_Tsta">
+              <property name="text">
+               <string>[°C]</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="FloatEdit" name="lf_Trot">
+              <property name="toolTip">
+               <string>Rotor temperature</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="FloatEdit" name="lf_Tsta">
+              <property name="toolTip">
+               <string>Stator temperature</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="in_Tsta">
+              <property name="text">
+               <string>Tsta</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="in_Trot">
+              <property name="text">
+               <string>Trot</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="unit_Trot">
+              <property name="text">
+               <string>[°C]</string>
               </property>
              </widget>
             </item>
@@ -442,63 +506,6 @@ p, li { white-space: pre-wrap; }
             <string>Output</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <widget class="QGroupBox" name="g_losses_model">
-              <property name="title">
-               <string>Losses Model</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_3">
-               <item row="0" column="2">
-                <widget class="QLabel" name="unit_Tsta">
-                 <property name="text">
-                  <string>[°C]</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="FloatEdit" name="lf_Trot">
-                 <property name="toolTip">
-                  <string>Rotor temperature</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="FloatEdit" name="lf_Tsta">
-                 <property name="toolTip">
-                  <string>Stator temperature</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="in_Tsta">
-                 <property name="text">
-                  <string>Tsta</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="in_Trot">
-                 <property name="text">
-                  <string>Trot</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="unit_Trot">
-                 <property name="text">
-                  <string>[°C]</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
@@ -526,13 +533,6 @@ p, li { white-space: pre-wrap; }
                 <width>100</width>
                 <height>0</height>
                </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="is_mesh_sol">
-              <property name="text">
-               <string>Save Mesh Solution</string>
               </property>
              </widget>
             </item>

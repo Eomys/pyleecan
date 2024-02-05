@@ -169,10 +169,11 @@ class Ui_SSimu(object):
         self.g_mag.setObjectName(u"g_mag")
         self.gridLayout_2 = QGridLayout(self.g_mag)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.si_Na_tot = QSpinBox(self.g_mag)
-        self.si_Na_tot.setObjectName(u"si_Na_tot")
+        self.in_Kmesh = QLabel(self.g_mag)
+        self.in_Kmesh.setObjectName(u"in_Kmesh")
+        self.in_Kmesh.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout_2.addWidget(self.si_Na_tot, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.in_Kmesh, 4, 0, 1, 1)
 
         self.in_Na_tot = QLabel(self.g_mag)
         self.in_Na_tot.setObjectName(u"in_Na_tot")
@@ -180,21 +181,10 @@ class Ui_SSimu(object):
 
         self.gridLayout_2.addWidget(self.in_Na_tot, 1, 0, 1, 1)
 
-        self.lf_Kmesh = FloatEdit(self.g_mag)
-        self.lf_Kmesh.setObjectName(u"lf_Kmesh")
-        self.lf_Kmesh.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout_2.addWidget(self.lf_Kmesh, 4, 1, 1, 1)
-
         self.si_nb_worker = QSpinBox(self.g_mag)
         self.si_nb_worker.setObjectName(u"si_nb_worker")
 
         self.gridLayout_2.addWidget(self.si_nb_worker, 5, 1, 1, 1)
-
-        self.is_per_t = QCheckBox(self.g_mag)
-        self.is_per_t.setObjectName(u"is_per_t")
-
-        self.gridLayout_2.addWidget(self.is_per_t, 2, 0, 1, 1)
 
         self.in_Nt_tot = QLabel(self.g_mag)
         self.in_Nt_tot.setObjectName(u"in_Nt_tot")
@@ -202,35 +192,46 @@ class Ui_SSimu(object):
 
         self.gridLayout_2.addWidget(self.in_Nt_tot, 3, 0, 1, 1)
 
-        self.si_Nt_tot = QSpinBox(self.g_mag)
-        self.si_Nt_tot.setObjectName(u"si_Nt_tot")
-
-        self.gridLayout_2.addWidget(self.si_Nt_tot, 3, 1, 1, 1)
-
-        self.in_Kmesh = QLabel(self.g_mag)
-        self.in_Kmesh.setObjectName(u"in_Kmesh")
-        self.in_Kmesh.setMinimumSize(QSize(0, 0))
-
-        self.gridLayout_2.addWidget(self.in_Kmesh, 4, 0, 1, 1)
-
         self.in_nb_worker = QLabel(self.g_mag)
         self.in_nb_worker.setObjectName(u"in_nb_worker")
         self.in_nb_worker.setMinimumSize(QSize(0, 0))
 
         self.gridLayout_2.addWidget(self.in_nb_worker, 5, 0, 1, 1)
 
+        self.si_Nt_tot = QSpinBox(self.g_mag)
+        self.si_Nt_tot.setObjectName(u"si_Nt_tot")
+
+        self.gridLayout_2.addWidget(self.si_Nt_tot, 3, 1, 1, 1)
+
         self.is_per_a = QCheckBox(self.g_mag)
         self.is_per_a.setObjectName(u"is_per_a")
 
         self.gridLayout_2.addWidget(self.is_per_a, 0, 0, 1, 1)
 
+        self.si_Na_tot = QSpinBox(self.g_mag)
+        self.si_Na_tot.setObjectName(u"si_Na_tot")
+
+        self.gridLayout_2.addWidget(self.si_Na_tot, 1, 1, 1, 1)
+
+        self.lf_Kmesh = FloatEdit(self.g_mag)
+        self.lf_Kmesh.setObjectName(u"lf_Kmesh")
+        self.lf_Kmesh.setMaximumSize(QSize(16777215, 16777215))
+
+        self.gridLayout_2.addWidget(self.lf_Kmesh, 4, 1, 1, 1)
+
+        self.is_per_t = QCheckBox(self.g_mag)
+        self.is_per_t.setObjectName(u"is_per_t")
+
+        self.gridLayout_2.addWidget(self.is_per_t, 2, 0, 1, 1)
+
+        self.is_mesh_sol = QCheckBox(self.g_mag)
+        self.is_mesh_sol.setObjectName(u"is_mesh_sol")
+
+        self.gridLayout_2.addWidget(self.is_mesh_sol, 6, 0, 1, 1)
+
         self.verticalLayout_2.addWidget(self.g_mag)
 
-        self.g_out = QGroupBox(self.scrollAreaWidgetContents)
-        self.g_out.setObjectName(u"g_out")
-        self.verticalLayout = QVBoxLayout(self.g_out)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.g_losses_model = QGroupBox(self.g_out)
+        self.g_losses_model = QGroupBox(self.scrollAreaWidgetContents)
         self.g_losses_model.setObjectName(u"g_losses_model")
         self.g_losses_model.setCheckable(True)
         self.g_losses_model.setChecked(False)
@@ -266,8 +267,12 @@ class Ui_SSimu(object):
 
         self.gridLayout_3.addWidget(self.unit_Trot, 1, 2, 1, 1)
 
-        self.verticalLayout.addWidget(self.g_losses_model)
+        self.verticalLayout_2.addWidget(self.g_losses_model)
 
+        self.g_out = QGroupBox(self.scrollAreaWidgetContents)
+        self.g_out.setObjectName(u"g_out")
+        self.verticalLayout = QVBoxLayout(self.g_out)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.in_name = QLabel(self.g_out)
@@ -294,11 +299,6 @@ class Ui_SSimu(object):
         self.w_path_result.setMinimumSize(QSize(100, 0))
 
         self.verticalLayout.addWidget(self.w_path_result)
-
-        self.is_mesh_sol = QCheckBox(self.g_out)
-        self.is_mesh_sol.setObjectName(u"is_mesh_sol")
-
-        self.verticalLayout.addWidget(self.is_mesh_sol)
 
         self.verticalLayout_2.addWidget(self.g_out)
 
@@ -425,6 +425,14 @@ class Ui_SSimu(object):
             QCoreApplication.translate("SSimu", u"Magnetic Model", None)
         )
         # if QT_CONFIG(tooltip)
+        self.in_Kmesh.setToolTip(
+            QCoreApplication.translate("SSimu", u"Stator external radius", None)
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.in_Kmesh.setText(
+            QCoreApplication.translate("SSimu", u"Mesh fineness factor:", None)
+        )
+        # if QT_CONFIG(tooltip)
         self.in_Na_tot.setToolTip(
             QCoreApplication.translate("SSimu", u"Stator external radius", None)
         )
@@ -435,29 +443,12 @@ class Ui_SSimu(object):
             )
         )
         # if QT_CONFIG(tooltip)
-        self.lf_Kmesh.setToolTip(
-            QCoreApplication.translate("SSimu", u"Stator external radius", None)
-        )
-        # endif // QT_CONFIG(tooltip)
-        self.lf_Kmesh.setText(QCoreApplication.translate("SSimu", u"1", None))
-        self.is_per_t.setText(
-            QCoreApplication.translate("SSimu", u"Time periodicity", None)
-        )
-        # if QT_CONFIG(tooltip)
         self.in_Nt_tot.setToolTip(
             QCoreApplication.translate("SSimu", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
         self.in_Nt_tot.setText(
             QCoreApplication.translate("SSimu", u"Time steps (over one turn)", None)
-        )
-        # if QT_CONFIG(tooltip)
-        self.in_Kmesh.setToolTip(
-            QCoreApplication.translate("SSimu", u"Stator external radius", None)
-        )
-        # endif // QT_CONFIG(tooltip)
-        self.in_Kmesh.setText(
-            QCoreApplication.translate("SSimu", u"Mesh fineness factor:", None)
         )
         # if QT_CONFIG(tooltip)
         self.in_nb_worker.setToolTip(
@@ -470,7 +461,18 @@ class Ui_SSimu(object):
         self.is_per_a.setText(
             QCoreApplication.translate("SSimu", u"Angular periodicity", None)
         )
-        self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Output", None))
+        # if QT_CONFIG(tooltip)
+        self.lf_Kmesh.setToolTip(
+            QCoreApplication.translate("SSimu", u"Stator external radius", None)
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.lf_Kmesh.setText(QCoreApplication.translate("SSimu", u"1", None))
+        self.is_per_t.setText(
+            QCoreApplication.translate("SSimu", u"Time periodicity", None)
+        )
+        self.is_mesh_sol.setText(
+            QCoreApplication.translate("SSimu", u"Save Mesh Solution", None)
+        )
         self.g_losses_model.setTitle(
             QCoreApplication.translate("SSimu", u"Losses Model", None)
         )
@@ -488,10 +490,8 @@ class Ui_SSimu(object):
         self.in_Tsta.setText(QCoreApplication.translate("SSimu", u"Tsta", None))
         self.in_Trot.setText(QCoreApplication.translate("SSimu", u"Trot", None))
         self.unit_Trot.setText(QCoreApplication.translate("SSimu", u"[\u00b0C]", None))
+        self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Output", None))
         self.in_name.setText(QCoreApplication.translate("SSimu", u"Simu name:", None))
-        self.is_mesh_sol.setText(
-            QCoreApplication.translate("SSimu", u"Save Mesh Solution", None)
-        )
         self.b_previous.setText(QCoreApplication.translate("SSimu", u"Previous", None))
         self.b_next.setText(QCoreApplication.translate("SSimu", u"Run", None))
 

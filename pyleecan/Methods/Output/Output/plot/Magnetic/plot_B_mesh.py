@@ -32,6 +32,7 @@ def plot_B_mesh(
     title="",
     pv_plotter=None,
     is_contour=True,
+    is_dimension_2D=False
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 
@@ -120,6 +121,10 @@ def plot_B_mesh(
         if (clim[1] - clim[0]) / clim[1] < 0.01:
             clim[0] = -abs(clim[1])
             clim[1] = abs(clim[1])
+
+    if is_dimension_2D:
+        # 2D view
+        pv_plotter.view_xy()
 
     plot_mesh_field(
         pv_plotter,
@@ -230,4 +235,5 @@ def plot_B_mesh(
         if save_path is None and is_show_fig:
             pv_plotter.show()
         elif save_path is not None:
+            pv_plotter.reset_camera()
             pv_plotter.show(interactive=False, screenshot=save_path)

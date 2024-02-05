@@ -144,7 +144,9 @@ class TestSSimu(object):
 
         self.widget.g_losses_model.setChecked(True)
         assert self.widget.g_losses_model.isChecked()
+        assert self.widget.is_mesh_sol.isChecked()
         assert isinstance(self.widget.simu.loss, LossFEA)
+        assert self.widget.simu.mag.is_get_meshsolution == True
 
         self.widget.g_losses_model.setChecked(False)
         assert not self.widget.g_losses_model.isChecked()
@@ -164,7 +166,9 @@ class TestSSimu(object):
         assert self.widget.simu.loss is None
         self.widget.g_losses_model.setChecked(True)
         assert self.widget.g_losses_model.isChecked()
+        assert self.widget.is_mesh_sol.isChecked()
         assert isinstance(self.widget.simu.loss, LossFEA)
+        assert self.widget.simu.mag.is_get_meshsolution == True
 
         self.widget.g_losses_model.setChecked(False)
         assert not self.widget.g_losses_model.isChecked()
@@ -179,6 +183,18 @@ class TestSSimu(object):
         assert self.widget.lf_Trot.value() == 130
         assert self.widget.simu.loss.Trot == 130
 
+    def test_set_save_mesh_solution(self):
+        """Check that the Widget allow to update mesh solution"""
+        assert self.widget.simu.mag.is_get_meshsolution == False
+
+        self.widget.is_mesh_sol.setChecked(True)
+        assert self.widget.is_mesh_sol.isChecked()
+        assert self.widget.simu.mag.is_get_meshsolution == True
+
+        self.widget.is_mesh_sol.setChecked(False)
+        assert not self.widget.is_mesh_sol.isChecked()
+        assert self.widget.simu.mag.is_get_meshsolution == False
+
     def test_simu(self):
         """Check the simu"""
         self.widget.si_Nt_tot.clear()  # Clear the field before writing
@@ -192,12 +208,6 @@ class TestSSimu(object):
         self.widget.lf_Kmesh.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_Kmesh, "0.3")
         self.widget.lf_Kmesh.editingFinished.emit()  # To trigger the slot
-
-        self.widget.g_losses_model.setChecked(True)
-
-        self.widget.lf_Trot.clear()  # Clear the field before writing
-        QTest.keyClicks(self.widget.lf_Trot, "20")
-        self.widget.lf_Trot.editingFinished.emit()  # To trigger the slot
 
         # set Loss
         self.widget.g_losses_model.setChecked(True)
@@ -230,9 +240,10 @@ class TestSSimu(object):
         assert os.path.exists(path_result)
 
         list_file = os.listdir(path_result)
-        assert len(list_file) == 20
+        assert len(list_file) == 24
 
         list_file_expected = [
+            "B_meshsolution.png",
             "Femm",
             "FEMM_Toyota_Prius.json",
             "FEMM_Toyota_Prius.log",
@@ -247,6 +258,9 @@ class TestSSimu(object):
             "flux FFT over wavenumber_radial.png",
             "flux FFT over wavenumber_tangential.png",
             "Losses.png",
+            "Losses_meshsolution_rotor.png",
+            "Losses_meshsolution_stator.png",
+            "MagMeshSolution.mat",
             "Result.h5",
             "Result.mat",
             "Stator winding flux.png",

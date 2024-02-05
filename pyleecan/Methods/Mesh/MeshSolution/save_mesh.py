@@ -24,18 +24,39 @@ def save_mesh(self, save_path):
     for value in self.solution_dict:
         mesh_dict["solution"][f"{value}"] = self.solution_dict[f"{value}"].as_dict()
 
-    mesh_dict = del_key_value_None(mesh_dict)
+    # To save meshsolution in file .mat, dict mesh_dict must not have value = None and value = {} (empty dict)
+    mesh_dict["solution"] = del_value_None(mesh_dict["solution"])
     # Save result
     savemat(save_path, mesh_dict)
 
 
-def del_key_value_None(mesh_dict):
+def del_value_None(mesh_dict):
+    """Delate value set at None in dict
+
+    Parameters
+    ----------
+    mesh_dict : dict
+        dict Mesh Solution
+
+    """
     for key, value in mesh_dict.items():
         if isinstance(value, dict):
-            pass
-            # del_key_value_None(mesh_dict[key])
+            if len(mesh_dict[key]) == 0:
+                mesh_dict.pop(key)
+                del_value_None(mesh_dict)
+                break
+
+            else:
+                del_value_None(mesh_dict[key])
+
+        elif isinstance(value, list):
+            for ele in value:
+                if isinstance(ele, dict):
+                    del_value_None(ele)
 
         elif value == None:
             del mesh_dict[key]
+            del_value_None(mesh_dict)
+            break
 
     return mesh_dict
