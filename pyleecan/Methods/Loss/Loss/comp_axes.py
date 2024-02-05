@@ -1,5 +1,4 @@
 from numpy import concatenate, unique
-
 from SciDataTool import Data1D
 
 
@@ -19,7 +18,7 @@ def comp_axes(self, output):
         Dict containing Time and Angle axes including (anti-)periodicties used in any Force module
     """
 
-    axes_list = output.mag.meshsolution.solution[0].field.get_axes()
+    axes_list = output.mag.meshsolution.get_solution().field.get_axes()
     Time = axes_list[0]
 
     freqs = Time.get_values(is_oneperiod=True, operation="time_to_freqs")

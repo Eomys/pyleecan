@@ -2,12 +2,12 @@
 import pytest
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
 
 @pytest.mark.MeshSol
-class Test_get_node(object):
+class Test_get_node_coordinate(object):
     """unittest for nodes getter methods"""
 
     @classmethod
@@ -21,9 +21,9 @@ class Test_get_node(object):
         self.mesh.node.add_node(np.array([3, 3]))
 
     def test_MeshMat_triangle3(self):
-        """unittest with CellMat and NodeMat objects, only Triangle3 elements are defined"""
+        """unittest with ElementMat and NodeMat objects, only Triangle3 elements are defined"""
 
-        nodes = self.mesh.get_node(indices=[1, 2])
+        nodes = self.mesh.get_node_coordinate(indices=[1, 2])
         solution = np.array([[1, 0], [1, 2]])
 
         testA = np.sum(abs(solution - nodes))

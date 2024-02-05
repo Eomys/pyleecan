@@ -3,17 +3,18 @@
 import numpy as np
 
 
-def grad_shape_function(self, point):
-    """Return the gradient of linear shape functions in reference triangle for a given point"""
+def grad_shape_function(self, point: np.ndarray) -> np.ndarray:
+    """Return the gradient of linear shape functions in reference triangle for a given point
 
-    values = np.zeros([2, 3], dtype=float)
-    (x, y) = point[0:2]
+    Parameters
+    ----------
+    point : np.ndarray
+        point where to compute the shape functions gradient values
 
-    values[0, 0] = -1
-    values[0, 1] = 1
-    values[0, 2] = 0
-    values[1, 0] = -1
-    values[1, 1] = 0
-    values[1, 2] = 1
+    Returns
+    -------
+    np.ndarray
+        shape function gradient values
+    """
 
-    return values
+    return np.array([[-1, 1, 0], [-1, 0, 1]], dtype=np.float64)

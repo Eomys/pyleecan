@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from numpy import array as np_array, where, vstack, hstack
 import numpy as np
 import pyuff
+from numpy import array as np_array
+from numpy import hstack, newaxis, stack, vstack
 
 
 def get_data(self):
@@ -30,24 +31,32 @@ def get_data(self):
     for dataset in datasets:
         # If nodes dataset
         if dataset["type"] == 15:
-            nodes = vstack(
+            nodes = stack(
                 (
-                    [int(x) for x in dataset["node_nums"]],
+                    np_array(dataset["node_nums"], np.int32),
                     dataset["x"],
                     dataset["y"],
                     dataset["z"],
-                )
-            ).T
+                ),
+                axis=1,
+            )
 
         # If element dataset
         elif dataset["type"] == 2412:
             # Store connectivities
             elements = dict()
             for elt_type, elt_dict in dataset.items():
-                if elt_type != "type":
-                    elements[elt_type] = vstack(
-                        (elt_dict["element_nums"], np_array(elt_dict["nodes_nums"]).T)
-                    ).T
+                if (
+                    elt_type != "type"
+                    and isinstance(elt_type, str)
+                    and isinstance(elt_dict, dict)
+                ):
+                    elements[elt_type] = hstack(
+                        (
+                            np_array(elt_dict["element_nums"])[:, newaxis],
+                            elt_dict["nodes_nums"],
+                        )
+                    )
 
         elif dataset["type"] == 82:
             # Store connectivities

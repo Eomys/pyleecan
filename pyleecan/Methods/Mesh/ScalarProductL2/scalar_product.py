@@ -11,11 +11,11 @@ def scalar_product(self, funca, funcb, detJ, weights, nb_gauss_points):
     self : ScalarProductL2
         a ScalarProductL2 object
     funca : ndarray
-        vertice of the cell
+        coordinates of the element
     nba : ndarray
         coordinates of a point
     funcb : ndarray
-        vertice of the cell
+        coordinates of the element
     nbb : ndarray
         coordinates of a point
     detJ : ndarray

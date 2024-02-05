@@ -1,28 +1,26 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import numpy as np
 import pytest
 
+from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.ForceTensor import ForceTensor
-
-from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.MeshMat import MeshMat
-from pyleecan.Classes.CellMat import CellMat
-
-import numpy as np
-import matplotlib.pyplot as plt
+from pyleecan.Classes.NodeMat import NodeMat
 from Tests import save_plot_path as save_path
 
 
 @pytest.mark.skip
 @pytest.mark.NodeMat
 @pytest.mark.MeshMat
-@pytest.mark.CellMat
+@pytest.mark.ElementMat
 @pytest.mark.ForceTensor
-def test_element_loop_1cell():
+def test_element_loop_1element():
     """Validation of element_loop method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
     # Mesh object
     mesh = MeshMat()
-    mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
+    mesh.element_dict["triangle3"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
 
     mesh.node.add_node(np.array([0, 0]))
@@ -30,7 +28,7 @@ def test_element_loop_1cell():
     mesh.node.add_node(np.array([0, 1]))
 
     nodes_test = np.array([0, 1, 2])
-    mesh.add_cell(nodes_test, "triangle3")
+    mesh.add_element(nodes_test, "triangle3")
 
     indice = [0]
 
@@ -69,7 +67,7 @@ def test_element_loop_1cell():
 
 
 @pytest.mark.ForceTensor
-def test_comp_magnetostrictive_tensor_1cell():
+def test_comp_magnetostrictive_tensor_1element():
     """Validation of comp_magnetostrictive_tensor method from ForceTensor module by comparing with analytical solution on an elementary triangle."""
 
     # Physical quantities
@@ -116,7 +114,7 @@ def test_comp_normal_to_edge():
 
     ## Mesh object
     mesh = MeshMat()
-    mesh.cell["triangle3"] = CellMat(nb_node_per_cell=3)
+    mesh.element_dict["triangle3"] = ElementMat(nb_node_per_element=3)
     mesh.node = NodeMat()
 
     mesh.node.add_node(np.array([1, 1.22]))
@@ -124,7 +122,7 @@ def test_comp_normal_to_edge():
     mesh.node.add_node(np.array([-1, 1]))
 
     nodes_test = np.array([0, 1, 2])
-    mesh.add_cell(nodes_test, "triangle3")
+    mesh.add_element(nodes_test, "triangle3")
 
     indice = [0]
 
@@ -132,32 +130,40 @@ def test_comp_normal_to_edge():
 
     dim = 2
 
-    for key in mesh.cell:
-        nb_node_per_cell = mesh.cell[
+    for key in mesh.element_dict:
+        nb_node_per_element = mesh.element_dict[
             key
-        ].nb_node_per_cell  # Number of nodes per element
+        ].nb_node_per_element  # Number of nodes per element
 
-        mesh_cell_key = mesh.cell[key]
-        connect = mesh.cell[key].get_connectivity()  # Each row of connect is an element
+        mesh_element_key = mesh.element_dict[key]
+        connect = mesh.element_dict[
+            key
+        ].get_connectivity()  # Each row of connect is an element
         nb_elem = len(connect)
 
         nb_node = mesh.node.nb_node  # Total nodes number
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-            node_number = mesh_cell_key.get_connectivity(
+            node_number = mesh_element_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
-            vertice = mesh.get_vertice(elt_number)[key]  # elt nodes coordonates
+            element_coordinate = mesh.get_element_coordinate(elt_number)[
+                key
+            ]  # elt nodes coordonates
 
             # Triangle orientation, needed for normal orientation. 1 if trigo oriented, -1 otherwise
             orientation_sign = np.sign(
-                np.cross(vertice[1] - vertice[0], vertice[2] - vertice[0])
+                np.cross(
+                    element_coordinate[1] - element_coordinate[0],
+                    element_coordinate[2] - element_coordinate[0],
+                )
             )
 
-            for n in range(nb_node_per_cell):
+            for n in range(nb_node_per_element):
                 edge_vector = (
-                    vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
+                    element_coordinate[(n + 1) % nb_node_per_element]
+                    - element_coordinate[n % nb_node_per_element]
                 )  # coordonées du vecteur nn+1
 
                 L = np.linalg.norm(edge_vector)
@@ -174,22 +180,30 @@ def test_comp_normal_to_edge():
 
                 # x_normal.append(
                 #     normal_to_edge[0]
-                #     + (vertice[n][0] + vertice[(n + 1) % nb_node_per_cell][0]) / 2
+                #     + (element_coordinate[n][0] + element_coordinate[(n + 1) % nb_node_per_element][0]) / 2
                 # )
                 vec_x.append(normal_to_edge[0])
                 vec_y.append(normal_to_edge[1])
                 x_normal.append(
-                    (vertice[n][0] + vertice[(n + 1) % nb_node_per_cell][0]) / 2
+                    (
+                        element_coordinate[n][0]
+                        + element_coordinate[(n + 1) % nb_node_per_element][0]
+                    )
+                    / 2
                 )
-                x_nodes.append(vertice[n][0])
+                x_nodes.append(element_coordinate[n][0])
                 # y_normal.append(
                 #     normal_to_edge[1]
-                #     + (vertice[n][1] + vertice[(n + 1) % nb_node_per_cell][1]) / 2
+                #     + (element_coordinate[n][1] + element_coordinate[(n + 1) % nb_node_per_element][1]) / 2
                 # )
                 y_normal.append(
-                    (vertice[n][1] + vertice[(n + 1) % nb_node_per_cell][1]) / 2
+                    (
+                        element_coordinate[n][1]
+                        + element_coordinate[(n + 1) % nb_node_per_element][1]
+                    )
+                    / 2
                 )
-                y_nodes.append(vertice[n][1])
+                y_nodes.append(element_coordinate[n][1])
                 # print(np.linalg.norm(normal_to_edge))
                 # plt.plot(edge_vector[0],edge_vector[1],'b')
                 # plt.plot(normal_to_edge[0],normal_to_edge[1],'r')
@@ -207,5 +221,5 @@ def test_comp_normal_to_edge():
 
 if __name__ == "__main__":
     test_comp_normal_to_edge()
-    test_comp_magnetostrictive_tensor_1cell()
-    # test_element_loop_1cell()
+    test_comp_magnetostrictive_tensor_1element()
+    # test_element_loop_1element()

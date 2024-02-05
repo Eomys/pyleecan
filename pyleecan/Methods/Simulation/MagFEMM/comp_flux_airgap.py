@@ -1,17 +1,12 @@
-from os.path import isfile
-from shutil import copyfile
-
 from numpy import zeros
-
 from SciDataTool import Data1D
 
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Classes.OutMagFEMM import OutMagFEMM
-
-from ....Functions.labels import STATOR_LAB
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
-from ....Functions.MeshSolution.build_solution_data import build_solution_data
+from ....Functions.labels import STATOR_LAB
 from ....Functions.MeshSolution.build_meshsolution import build_meshsolution
+from ....Functions.MeshSolution.build_solution_data import build_solution_data
 from ....Functions.MeshSolution.build_solution_vector import build_solution_vector
 
 
@@ -192,14 +187,14 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     if self.is_get_meshsolution and B_elem is not None:
         # Define axis
         Time = Time.copy()
-        meshFEMM[0].sym = sym
-        meshFEMM[0].is_antiper_a = is_antiper_a
-        indices_cell = meshFEMM[0].cell["triangle"].indice
-        Indices_Cell = Data1D(
-            name="indice", values=indices_cell, is_components=True, is_overlay=False
+        meshFEMM.sym = sym
+        meshFEMM.is_antiper_a = is_antiper_a
+        indices_element = meshFEMM.element_dict["triangle"].indice
+        Indices_Element = Data1D(
+            name="indice", values=indices_element, is_components=True, is_overlay=False
         )
         # Slice = axes_dict["z"]
-        axis_list = [Time, Indices_Cell]
+        axis_list = [Time, Indices_Element]
 
         B_sol = build_solution_vector(
             field=B_elem[:, :, None, :],  # quick fix for slice issue
@@ -230,7 +225,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             unit="Wb/m",
         )
 
-        indices_nodes = meshFEMM[0].node.indice
+        indices_nodes = meshFEMM.node.indice
         Indices_Nodes = Data1D(name="indice", values=indices_nodes, is_components=True)
         axis_list_node = [Time, Indices_Nodes]
 
@@ -241,14 +236,17 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             symbol="A_z",
             unit="Wb/m",
         )
-        An_sol.type_cell = "node"
+        An_sol.type_element = "node"
 
-        list_solution = [B_sol, H_sol, mu_sol, An_sol, Ae_sol]
+        solution_dict = {
+            solution.label: solution
+            for solution in [B_sol, H_sol, mu_sol, An_sol, Ae_sol]
+        }
 
         out_dict["meshsolution"] = build_meshsolution(
-            list_solution=list_solution,
+            solution_dict=solution_dict,
             label="FEMM 2D Magnetostatic",
-            list_mesh=meshFEMM,
+            mesh=meshFEMM,
             group=groups,
         )
 

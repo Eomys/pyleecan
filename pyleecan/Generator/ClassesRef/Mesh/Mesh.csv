@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-label,-,Description of the mesh,,str,None,,
-dimension,,Dimension of the physical problem,,int,2,1,3
-,
-Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Mesh,,,VERSION,1,Abstract Class for mesh related classes
+dimension,,Dimension of the physical problem,,int,2,1,3,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Mesh,,,VERSION,1,Abstract Class for mesh related classes,,,
+,,get_node_coordinate,,,,,,

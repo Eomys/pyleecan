@@ -1,8 +1,9 @@
-from numpy import sum as np_sum, abs as np_abs, pi, matmul, zeros
-
 import numpy as np
+from numpy import abs as np_abs
+from numpy import matmul, pi
+from numpy import sum as np_sum
+from numpy import zeros
 
-from ....Classes.CondType21 import CondType21
 from ....Classes.HoleM50 import HoleM50
 from ....Classes.HoleM51 import HoleM51
 from ....Classes.HoleM52 import HoleM52
@@ -111,18 +112,16 @@ def comp_loss(self):
     if self.group not in group_list:
         raise Exception("Cannot calculate magnet losses for group=" + self.group)
 
-    lab_ind = None
-    for ii, sol in enumerate(meshsol.solution):
-        if sol.label == "A_z^{element}" and sol.type_cell == "triangle":
-            lab_ind = ii
-            break
-    if lab_ind is None:
-        raise Exception(
+    # Extract the solution
+    solution_A = meshsol["A_z^{element}"]
+
+    if solution_A.type_element != "triangle":
+        raise ValueError(
             "Cannot calculate magnet losses if A_z calculated on element center is not in meshsolution"
         )
 
     # Get magnetic vector potential over time and for each element center in current group
-    Az_dt = meshsol.solution[lab_ind].field
+    Az_dt = solution_A.field
     axes_list = Az_dt.get_axes()
     Time_orig = axes_list[0]
     Time = Time_orig.copy()
@@ -137,7 +136,7 @@ def comp_loss(self):
         Az_dt.axes[0] = Time
 
     # Get all element surfaces
-    Se = meshsol.mesh[0].get_cell_area()
+    Se = meshsol.mesh.get_element_area()
 
     # Get list of element indices for each magnet
     list_Imag = list()

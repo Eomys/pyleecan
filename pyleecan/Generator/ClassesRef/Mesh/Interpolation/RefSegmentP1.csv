@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 ,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Mesh,RefCell,shape_function,VERSION,1,Store segment elements for 2D mesh
+Mesh,RefElement,shape_function,VERSION,1,Store segment elements for 2D mesh
 ,,jacobian,,,
 ,,grad_shape_function,,,
 ,,get_real_point,,,

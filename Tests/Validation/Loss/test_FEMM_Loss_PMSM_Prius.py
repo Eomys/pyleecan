@@ -1,32 +1,27 @@
+from multiprocessing import cpu_count
 from os.path import join
 
-import pytest
-from multiprocessing import cpu_count
-import numpy as np
-from numpy.testing import assert_almost_equal
-from numpy.testing import assert_allclose
 import matplotlib.pyplot as plt
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.Skew import Skew
-from pyleecan.Classes.OPdq import OPdq
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.LossFEA import LossFEA
-from pyleecan.Classes.Loss import Loss
-from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelBertotti import LossModelBertotti
-from pyleecan.Classes.LossModelJoule import LossModelJoule
-from pyleecan.Classes.LossModelProximity import LossModelProximity
-from pyleecan.Classes.LossModelMagnet import LossModelMagnet
-from pyleecan.Classes.LossModelWindagePyrhonen import LossModelWindagePyrhonen
-
-
-from pyleecan.Functions.load import load
-
-from pyleecan.definitions import DATA_DIR
-
+import numpy as np
+import pytest
+from numpy.testing import assert_allclose, assert_almost_equal
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.Loss import Loss
+from pyleecan.Classes.LossFEA import LossFEA
+from pyleecan.Classes.LossModelBertotti import LossModelBertotti
+from pyleecan.Classes.LossModelJoule import LossModelJoule
+from pyleecan.Classes.LossModelMagnet import LossModelMagnet
+from pyleecan.Classes.LossModelProximity import LossModelProximity
+from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.LossModelWindagePyrhonen import LossModelWindagePyrhonen
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.Skew import Skew
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 
 is_show_fig = False
 

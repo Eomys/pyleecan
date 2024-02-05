@@ -1,29 +1,28 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 
 
-def get_normal(self, vertice):
+def get_normal(self, element_coordinate: np.ndarray) -> np.ndarray:
     """Return the array of the normals coordinates.
 
     Parameters
     ----------
-    self : MeshVTK
-        a MeshVTK object
-    indices : list
-        list of the points to extract (optional)
-    loc : str
-        localization of the normals ("center" or "point")
+    element_coordinate : ndarray
+        Coordinate of the element
 
     Returns
     -------
-    normals: ndarray
-        Normals coordinates
+    normal : ndarray
+        Normal vectors
+
+    Raises
+    ------
+    NotImplementedError
+        RefTriangle3.get_normal is not implemented.
     """
 
-    # u1 = vertice[1, :] - vertice[0, :]
-    # u2 = vertice[2, :] - vertice[0, :]
+    # u1 = element_coordinate[1, :] - element_coordinate[0, :]
+    # u2 = element_coordinate[2, :] - element_coordinate[0, :]
     # n = np.cross(u1, u2)
     # n = n / np.linalg.norm(n)
-
-    return None
+    raise NotImplementedError("RefTriangle3.get_normal is not implemented.")

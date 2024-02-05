@@ -503,79 +503,6 @@
             }
         ]
     },
-    "CellMat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
-        "is_internal": false,
-        "methods": [
-            "add_cell",
-            "get_connectivity",
-            "get_node2cell",
-            "is_exist"
-        ],
-        "mother": "",
-        "name": "CellMat",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/CellMat.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "Matrix of connectivity for one element type",
-                "max": "",
-                "min": "",
-                "name": "connectivity",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "as_dict": "",
-                "desc": "Total number of elements",
-                "max": "",
-                "min": "",
-                "name": "nb_cell",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Define the number of node per cell",
-                "max": "",
-                "min": "",
-                "name": "nb_node_per_cell",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Element indices",
-                "max": "",
-                "min": "",
-                "name": "indice",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "as_dict": "",
-                "desc": "Define FEA interpolation",
-                "max": "",
-                "min": "",
-                "name": "interpolation",
-                "type": "Interpolation",
-                "unit": "",
-                "value": ""
-            }
-        ]
-    },
     "Circle": {
         "constants": [
             {
@@ -2148,6 +2075,100 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            }
+        ]
+    },
+    "ElementMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
+        "is_internal": false,
+        "methods": [
+            "add_element",
+            "get_connectivity",
+            "get_node2element",
+            "is_exist",
+            "interpolate"
+        ],
+        "mother": "",
+        "name": "ElementMat",
+        "package": "Mesh",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/ElementMat.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Matrix of connectivity for one element type",
+                "max": "",
+                "min": "",
+                "name": "connectivity",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Total number of elements",
+                "max": "",
+                "min": "",
+                "name": "nb_element",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Define the number of node per element",
+                "max": "",
+                "min": "",
+                "name": "nb_node_per_element",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Element indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "ref_element",
+                "type": "RefElement",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "gauss_point",
+                "type": "GaussPoint",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "scalar_product",
+                "type": "ScalarProductL2",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -5739,54 +5760,6 @@
             }
         ]
     },
-    "Interpolation": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Store shape functions",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Interpolation",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/Interpolation.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "ref_cell",
-                "type": "RefCell",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "gauss_point",
-                "type": "GaussPoint",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "",
-                "max": "",
-                "min": "",
-                "name": "scalar_product",
-                "type": "ScalarProduct",
-                "unit": "",
-                "value": null
-            }
-        ]
-    },
     "LUT": {
         "constants": [
             {
@@ -8766,22 +8739,14 @@
         ],
         "desc": "Abstract Class for mesh related classes",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_node_coordinate"
+        ],
         "mother": "",
         "name": "Mesh",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Mesh.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Description of the mesh",
-                "max": "",
-                "min": "",
-                "name": "label",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
             {
                 "as_dict": "",
                 "desc": "Dimension of the physical problem",
@@ -8805,19 +8770,21 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_node",
+            "get_node_coordinate",
             "get_node_indice",
-            "get_cell",
+            "get_element",
             "get_mesh_pv",
-            "get_cell_area",
-            "get_vertice",
-            "get_node2cell",
-            "add_cell",
+            "get_element_area",
+            "get_element_coordinate",
+            "get_node2element",
+            "add_element",
             "renum",
-            "find_cell",
+            "find_element",
             "interface",
             "clear_node",
-            "clear_cell"
+            "clear_element",
+            "get_element_nb",
+            "convert"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -8829,8 +8796,8 @@
                 "desc": "Storing connectivity",
                 "max": "",
                 "min": "",
-                "name": "cell",
-                "type": "{CellMat}",
+                "name": "element_dict",
+                "type": "{ElementMat}",
                 "unit": "",
                 "value": ""
             },
@@ -8846,7 +8813,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "True if renumering the nodes and cells is useful when renum method is called (saving calculation time)",
+                "desc": "True if renumering the nodes and elements is useful when renum method is called (saving calculation time)",
                 "max": "",
                 "min": "",
                 "name": "_is_renum",
@@ -8887,7 +8854,6 @@
         "desc": "Abstract class to associate a mesh with one or several solutions",
         "is_internal": false,
         "methods": [
-            "get_mesh",
             "get_solution",
             "get_field",
             "get_group",
@@ -8898,7 +8864,16 @@
             "plot_glyph",
             "perm_coord",
             "get_deflection",
-            "get_glyph"
+            "get_glyph",
+            "add_solution",
+            "replace_solution",
+            "pop_solution",
+            "keys",
+            "items",
+            "values",
+            "__getitem__",
+            "__setitem__",
+            "__iter__"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -8917,37 +8892,27 @@
             },
             {
                 "as_dict": "",
-                "desc": "A list of Mesh objects. ",
+                "desc": "A Mesh object. ",
                 "max": "",
                 "min": "",
                 "name": "mesh",
-                "type": "[Mesh]",
+                "type": "Mesh",
                 "unit": "",
                 "value": ""
             },
             {
                 "as_dict": "",
-                "desc": "1 if the mesh is the same at each step (time, mode etc.)",
+                "desc": "A dictionary of Solution objects",
                 "max": "",
                 "min": "",
-                "name": "is_same_mesh",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "as_dict": "",
-                "desc": "A list of Solution objects",
-                "max": "",
-                "min": "",
-                "name": "solution",
-                "type": "[Solution]",
+                "name": "solution_dict",
+                "type": "{Solution}",
                 "unit": "",
                 "value": ""
             },
             {
                 "as_dict": "",
-                "desc": "Dict sorted by groups name with list of cells indices. ",
+                "desc": "Dict sorted by groups name with list of elements indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
@@ -8989,11 +8954,11 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_node",
-            "get_cell",
+            "get_node_coordinate",
+            "get_element",
             "get_normals",
             "get_surf",
-            "get_cell_area",
+            "get_element_area",
             "convert",
             "perm_coord",
             "get_path"
@@ -9095,7 +9060,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Array of normals to nodes (cell vertices)",
+                "desc": "Array of normals to nodes (element vertices)",
                 "max": "",
                 "min": "",
                 "name": "node_normals",
@@ -12143,7 +12108,7 @@
             }
         ]
     },
-    "RefCell": {
+    "RefElement": {
         "constants": [
             {
                 "name": "VERSION",
@@ -12161,12 +12126,13 @@
         "desc": "Store shape functions definition in the reference element",
         "is_internal": false,
         "methods": [
-            "interpolation"
+            "interpolation",
+            "get_element_area"
         ],
         "mother": "",
-        "name": "RefCell",
+        "name": "RefElement",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefCell.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefElement.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -12198,7 +12164,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefLine3",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefLine3.csv",
@@ -12222,7 +12188,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefQuad4",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad4.csv",
@@ -12246,7 +12212,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefQuad9",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefQuad9.csv",
@@ -12271,7 +12237,7 @@
             "get_ref_point",
             "get_normal"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefSegmentP1",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv",
@@ -12294,10 +12260,10 @@
             "get_real_point",
             "get_ref_point",
             "is_inside",
-            "get_cell_area",
+            "get_element_area",
             "get_normal"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefTriangle3",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
@@ -12321,7 +12287,7 @@
             "get_ref_point",
             "is_inside"
         ],
-        "mother": "RefCell",
+        "mother": "RefElement",
         "name": "RefTriangle6",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle6.csv",
@@ -16799,10 +16765,10 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Type of cell (Point, Segment2, Triangle3, etc.)",
+                "desc": "Type of element (Point, Segment2, Triangle3, etc.)",
                 "max": "",
                 "min": "",
-                "name": "type_cell",
+                "name": "type_element",
                 "type": "str",
                 "unit": "-",
                 "value": "triangle"
@@ -16905,7 +16871,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Indices of loaded cells. Set to None if all cells are loaded",
+                "desc": "Indices of loaded elements. Set to None if all elements are loaded",
                 "max": "",
                 "min": "",
                 "name": "indice",

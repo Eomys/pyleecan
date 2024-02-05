@@ -1,40 +1,41 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from numpy.typing import ArrayLike
+from typing import Union
 
 
-def add_node(self, coord):
-    """Define a new NodeMat object based on a set of elements.
+def add_node(self, coordinate: ArrayLike) -> Union[None, int]:
+    """Add a new node defined by its coordinates to the NodeMat
+    (if a node of this coordinate already exist, do nothing)
 
     Parameters
     ----------
     self : NodeMat
         an NodeMat object
-    element : Element
-        an Element object
+    coordinate : ArrayLike
+        The list of coordinates (length must match mesh dimension)
 
     Returns
     -------
-    node: Node
-        a Node object corresponding to Element
-
+    Union[None,int]
+        Index of the new node or None if the node already exists
     """
-    if self.is_exist(coord):
+    if self.is_exist(coordinate):
         return None
-    else:
-        if self.coordinate is not None and self.coordinate.size > 0:
-            self.coordinate = np.vstack((self.coordinate, coord))
-            new_ind = max(self.indice) + 1
-            self.indice = np.concatenate((self.indice, np.array([new_ind], dtype=int)))
-            self.nb_node = self.nb_node + 1
-        else:
-            if self.coordinate is not None:
-                self.coordinate = np.concatenate((self.coordinate, coord))
-            else:
-                self.coordinate = np.array(coord)
-            new_ind = 0
-            self.indice = np.array([], dtype=int)
-            self.indice = np.concatenate((self.indice, np.array([new_ind], dtype=int)))
-            self.nb_node = self.nb_node + 1
 
-    return new_ind
+    # Empty coordinate case
+    if self.coordinate is None or self.coordinate.size == 0:
+        self.coordinate = np.array([coordinate])
+        self.nb_node = 1
+        self.indice = np.array([0], dtype=np.int32)
+
+        return 0
+
+    # Add node only if it doesn't already exist
+    self.coordinate = np.vstack((self.coordinate, coordinate))
+    new_index = np.max(self.indice) + 1
+    self.indice = np.concatenate((self.indice, np.array([new_index])))
+    self.nb_node += 1
+
+    return new_index

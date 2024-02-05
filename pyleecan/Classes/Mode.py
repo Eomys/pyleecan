@@ -105,7 +105,7 @@ class Mode(SolutionMat):
         indice=None,
         axis_name=None,
         axis_size=None,
-        type_cell="triangle",
+        type_element="triangle",
         label=None,
         dimension=2,
         unit="",
@@ -141,8 +141,8 @@ class Mode(SolutionMat):
                 axis_name = init_dict["axis_name"]
             if "axis_size" in list(init_dict.keys()):
                 axis_size = init_dict["axis_size"]
-            if "type_cell" in list(init_dict.keys()):
-                type_cell = init_dict["type_cell"]
+            if "type_element" in list(init_dict.keys()):
+                type_element = init_dict["type_element"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
@@ -159,7 +159,7 @@ class Mode(SolutionMat):
             indice=indice,
             axis_name=axis_name,
             axis_size=axis_size,
-            type_cell=type_cell,
+            type_element=type_element,
             label=label,
             dimension=dimension,
             unit=unit,
@@ -317,7 +317,7 @@ class Mode(SolutionMat):
             axis_size_val = None
         else:
             axis_size_val = self.axis_size.copy()
-        type_cell_val = self.type_cell
+        type_element_val = self.type_element
         label_val = self.label
         dimension_val = self.dimension
         unit_val = self.unit
@@ -330,7 +330,7 @@ class Mode(SolutionMat):
             indice=indice_val,
             axis_name=axis_name_val,
             axis_size=axis_size_val,
-            type_cell=type_cell_val,
+            type_element=type_element_val,
             label=label_val,
             dimension=dimension_val,
             unit=unit_val,

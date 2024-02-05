@@ -25,3 +25,4 @@ run_GUI_internal.py
 /build
 /dist
 node_modules
+/.venv
