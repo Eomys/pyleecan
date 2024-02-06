@@ -23,20 +23,15 @@ def save_vtk(self, save_path):
             log_error(
                 self,
                 err_msg,
-                self.mesh.get_logger(),
+                self.get_logger(),
                 is_popup=False,
                 is_warning=False,
             )
 
     # Check if save_path exist
-    save_path.replace("\\", "/")
-    save_path_L = save_path.split("/")
+    save_path_2 = os.path.dirname(save_path)
 
-    save_path_2 = save_path_L[0]
-    for num in range(1, len(save_path_L) - 1):
-        save_path_2 = f"{save_path_2}/{save_path_L[num]}"
-
-    if not os.path.exists(save_path_2):
+    if not os.path.isdir(save_path_2):
         raise KeyError("Error save path doesn't exist")
 
     self.get_mesh_pv().save(save_path)

@@ -5,7 +5,7 @@ from ....Functions.GUI.log_error import log_error
 
 
 def export_to_mat(self, save_path):
-    """Save mesh to a .mat file
+    """Save mesh and all solutions to a .mat file
 
     Parameters
     ----------
@@ -31,14 +31,9 @@ def export_to_mat(self, save_path):
             )
 
     # Check if save_path exist
-    save_path.replace("\\", "/")
-    save_path_L = save_path.split("/")
+    save_path_2 = os.path.dirname(save_path)
 
-    save_path_2 = save_path_L[0]
-    for num in range(1, len(save_path_L) - 1):
-        save_path_2 = f"{save_path_2}/{save_path_L[num]}"
-
-    if not os.path.exists(save_path_2):
+    if not os.path.isdir(save_path_2):
         raise KeyError("Error save path doesn't exist")
 
     # dict to save
@@ -48,8 +43,8 @@ def export_to_mat(self, save_path):
     mesh_dict["mesh"]["cells_connectivity"] = self.mesh.get_mesh_pv().cells
 
     mesh_dict["solution"] = {}
-    for value in self.solution_dict:
-        mesh_dict["solution"][f"{value}"] = self.solution_dict[f"{value}"].as_dict()
+    for key in self.solution_dict:
+        mesh_dict["solution"][key] = self.solution_dict[f"{key}"].as_dict()
 
     # To save meshsolution in file .mat, dict mesh_dict must not have value = None and value = {} (empty dict)
     mesh_dict["solution"] = del_value_None(mesh_dict["solution"])

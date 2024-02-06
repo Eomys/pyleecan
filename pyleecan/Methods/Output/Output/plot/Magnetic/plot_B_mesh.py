@@ -66,7 +66,7 @@ def plot_B_mesh(
         To call show at the end of the method
     is_animated : True to animate magnetic flux density
     is_2D : bool
-        True plot in 2 dimensions, False stayed in 3 Dimensions
+        True plot in 2 dimensions (view on XY)
 
     Returns
     -------
