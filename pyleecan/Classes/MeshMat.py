@@ -92,6 +92,11 @@ try:
 except ImportError as error:
     convert = error
 
+try:
+    from ..Methods.Mesh.MeshMat.save_vtk import save_vtk
+except ImportError as error:
+    save_vtk = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -258,6 +263,15 @@ class MeshMat(Mesh):
         )
     else:
         convert = convert
+    # cf Methods.Mesh.MeshMat.save_vtk
+    if isinstance(save_vtk, ImportError):
+        save_vtk = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method save_vtk: " + str(save_vtk))
+            )
+        )
+    else:
+        save_vtk = save_vtk
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

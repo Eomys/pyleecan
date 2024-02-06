@@ -9317,7 +9317,8 @@
             "clear_node",
             "clear_element",
             "get_element_nb",
-            "convert"
+            "convert",
+            "save_vtk"
         ],
         "mother": "Mesh",
         "name": "MeshMat",

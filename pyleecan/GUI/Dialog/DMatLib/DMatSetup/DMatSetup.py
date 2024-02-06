@@ -1018,7 +1018,9 @@ class DMatSetup(Gen_DMatSetup, QDialog):
                 if a != data[temp, 0]:
                     one_curve = False
                     self.ax.plot(
-                        data[end:temp, 1], data[end:temp, 2], label=f" {Decimal(a).to_integral()} [Hz]"
+                        data[end:temp, 1],
+                        data[end:temp, 2],
+                        label=f" {Decimal(a).to_integral()} [Hz]",
                     )
                     end = temp
                     a = data[temp, 0]

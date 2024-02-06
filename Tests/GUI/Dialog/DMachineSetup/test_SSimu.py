@@ -240,7 +240,7 @@ class TestSSimu(object):
         assert os.path.exists(path_result)
 
         list_file = os.listdir(path_result)
-        assert len(list_file) == 24
+        assert len(list_file) == 25
 
         list_file_expected = [
             "B_meshsolution.png",
@@ -260,6 +260,7 @@ class TestSSimu(object):
             "Losses.png",
             "Losses_meshsolution_rotor.png",
             "Losses_meshsolution_stator.png",
+            "MagMesh.vtk",
             "MagMeshSolution.mat",
             "Result.h5",
             "Result.mat",

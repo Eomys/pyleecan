@@ -353,6 +353,20 @@ class SSimu(Gen_SSimu, QWidget):
                     is_popup=False,
                     is_warning=False,
                 )
+            # save mesh file vtk
+            try:
+                out.mag.meshsolution.mesh.save_vtk(
+                    save_path=(join(self.simu.path_result, "MagMesh.vtk")),
+                )
+            except Exception as e:
+                err_msg = "Error while saving mesh : " + str(e)
+                log_error(
+                    self,
+                    error_msg,
+                    self.simu.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
 
         # Losses
         if self.simu.loss is not None:
