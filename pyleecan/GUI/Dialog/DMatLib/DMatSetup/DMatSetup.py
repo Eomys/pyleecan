@@ -18,7 +18,6 @@ from .....loggers import GUI_LOG_NAME
 
 import matplotlib.pyplot as plt
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from decimal import Decimal
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
