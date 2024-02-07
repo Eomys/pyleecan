@@ -237,7 +237,7 @@ class SSimu(Gen_SSimu, QWidget):
             err_msg = "Error while plotting torque as fct of time: " + str(e)
             log_error(
                 self,
-                error_msg,
+                err_msg,
                 self.simu.get_logger(),
                 is_popup=False,
                 is_warning=False,
@@ -253,7 +253,7 @@ class SSimu(Gen_SSimu, QWidget):
             err_msg = "Error while plotting torque FFT over freq: " + str(e)
             log_error(
                 self,
-                error_msg,
+                err_msg,
                 self.simu.get_logger(),
                 is_popup=False,
                 is_warning=False,
@@ -314,7 +314,7 @@ class SSimu(Gen_SSimu, QWidget):
             err_msg = "Error while plotting Stator winding flux:\n" + str(e)
             log_error(
                 self,
-                error_msg,
+                err_msg,
                 self.simu.get_logger(),
                 is_popup=False,
                 is_warning=False,
@@ -330,10 +330,10 @@ class SSimu(Gen_SSimu, QWidget):
                     save_path=(join(self.simu.path_result, "B_meshsolution.png")),
                 )
             except Exception as e:
-                error_msg = f"Error while plotting B meshsolution : {e}"
+                err_msg = f"Error while plotting B meshsolution : {e}"
                 log_error(
                     self,
-                    error_msg,
+                    err_msg,
                     self.simu.mag.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -348,7 +348,7 @@ class SSimu(Gen_SSimu, QWidget):
                 err_msg = "Error while saving mesh solution: " + str(e)
                 log_error(
                     self,
-                    error_msg,
+                    err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -362,7 +362,7 @@ class SSimu(Gen_SSimu, QWidget):
                 err_msg = "Error while saving mesh : " + str(e)
                 log_error(
                     self,
-                    error_msg,
+                    err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -379,7 +379,7 @@ class SSimu(Gen_SSimu, QWidget):
                 err_msg = "Error while plotting Losses: " + str(e)
                 log_error(
                     self,
-                    error_msg,
+                    err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -400,7 +400,7 @@ class SSimu(Gen_SSimu, QWidget):
                 )
                 log_error(
                     self,
-                    error_msg,
+                    err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -421,7 +421,7 @@ class SSimu(Gen_SSimu, QWidget):
                 )
                 log_error(
                     self,
-                    error_msg,
+                    err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,

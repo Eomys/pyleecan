@@ -869,8 +869,8 @@ class TestDMatSetup(object):
 
         line = self.widget.w_setup.ax.get_lines()
         assert len(line) == 2
-        assert line[0]._label == " 20.0 [Hz]"
-        assert line[1]._label == " 30.0 [Hz]"
+        assert line[0]._label == " 20 [Hz]"
+        assert line[1]._label == " 30 [Hz]"
 
 
 if __name__ == "__main__":
