@@ -9507,7 +9507,8 @@
             "get_element_area",
             "convert",
             "perm_coord",
-            "get_path"
+            "get_path",
+            "save_vtk"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
