@@ -4,7 +4,7 @@ import shutil
 
 
 def save_vtk(self, save_path):
-    """Copy file vtk use for object meshVTK in file save_path
+    """Copy file vtk use for object meshVTK into path give by save_path
 
     Parameters
     ----------
