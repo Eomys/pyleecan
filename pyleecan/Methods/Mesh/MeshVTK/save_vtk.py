@@ -33,6 +33,8 @@ def save_vtk(self, save_path):
     save_path_2 = os.path.dirname(save_path)
 
     if not os.path.isdir(save_path_2):
-        raise KeyError("Error save path doesn't exist")
+        raise Exception(
+            f"Error while saving mesh to vtk, save path doesn't exist: {save_path}"
+        )
 
     shutil.copy(self.path, save_path)

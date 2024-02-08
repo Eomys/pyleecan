@@ -70,8 +70,16 @@ class SSimu(Gen_SSimu, QWidget):
                 is_max_sym=True,
             )
         except Exception as e:
-            err_msg = "Error while plotting machine in Simulation Step:\n" + str(e)
-            log_error(self, err_msg)
+            self.test_err_msg = (
+                "Error while plotting machine in Simulation Step:\n" + str(e)
+            )
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         self.w_viewer.draw()
 
         # Adapt OP widgets to machine type
@@ -205,9 +213,14 @@ class SSimu(Gen_SSimu, QWidget):
         try:
             out = self.simu.run()
         except Exception as e:
-            err_msg = "Error while running simulation:\n" + str(e)
-            log_error(self, err_msg)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while running simulation:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Store output for test
         self.last_out = out
         # Save results
@@ -215,9 +228,14 @@ class SSimu(Gen_SSimu, QWidget):
             out.save(join(self.simu.path_result, "Result.h5"))
             out.export_to_mat(join(self.simu.path_result, "Result.mat"))
         except Exception as e:
-            err_msg = "Error while saving results:\n" + str(e)
-            log_error(self, err_msg)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while saving results:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Machine
         out.simu.machine.plot(
             is_max_sym=self.simu.mag.is_periodicity_a,
@@ -234,10 +252,10 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "torque as fct of time.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting torque as fct of time: " + str(e)
+            self.test_err_msg = "Error while plotting torque as fct of time: " + str(e)
             log_error(
                 self,
-                err_msg,
+                self.test_err_msg,
                 self.simu.get_logger(),
                 is_popup=False,
                 is_warning=False,
@@ -250,10 +268,10 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "torque FFT over freq.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting torque FFT over freq: " + str(e)
+            self.test_err_msg = "Error while plotting torque FFT over freq: " + str(e)
             log_error(
                 self,
-                err_msg,
+                self.test_err_msg,
                 self.simu.get_logger(),
                 is_popup=False,
                 is_warning=False,
@@ -299,9 +317,14 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "flux 3D FFT.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting flux:\n" + str(e)
-            log_error(self, err_msg)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while plotting flux:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Phi_wind_stator
         try:
             out.mag.Phi_wind_stator.plot_2D_Data(
@@ -311,10 +334,10 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "Stator winding flux.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting Stator winding flux:\n" + str(e)
+            self.test_err_msg = "Error while plotting Stator winding flux:\n" + str(e)
             log_error(
                 self,
-                err_msg,
+                self.test_err_msg,
                 self.simu.get_logger(),
                 is_popup=False,
                 is_warning=False,
@@ -330,10 +353,10 @@ class SSimu(Gen_SSimu, QWidget):
                     save_path=(join(self.simu.path_result, "B_meshsolution.png")),
                 )
             except Exception as e:
-                err_msg = f"Error while plotting B meshsolution : {e}"
+                self.test_err_msg = f"Error while plotting B meshsolution : {e}"
                 log_error(
                     self,
-                    err_msg,
+                    self.test_err_msg,
                     self.simu.mag.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -345,10 +368,10 @@ class SSimu(Gen_SSimu, QWidget):
                     save_path=(join(self.simu.path_result, "MagMeshSolution.mat")),
                 )
             except Exception as e:
-                err_msg = "Error while saving mesh solution: " + str(e)
+                self.test_err_msg = "Error while saving mesh solution: " + str(e)
                 log_error(
                     self,
-                    err_msg,
+                    self.test_err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -359,10 +382,10 @@ class SSimu(Gen_SSimu, QWidget):
                     save_path=(join(self.simu.path_result, "MagMesh.vtk")),
                 )
             except Exception as e:
-                err_msg = "Error while saving mesh : " + str(e)
+                self.test_err_msg = "Error while saving mesh : " + str(e)
                 log_error(
                     self,
-                    err_msg,
+                    self.test_err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -376,10 +399,10 @@ class SSimu(Gen_SSimu, QWidget):
                     save_path=(join(self.simu.path_result, "Losses.png")),
                 )
             except Exception as e:
-                err_msg = "Error while plotting Losses: " + str(e)
+                self.test_err_msg = "Error while plotting Losses: " + str(e)
                 log_error(
                     self,
-                    err_msg,
+                    self.test_err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -394,13 +417,13 @@ class SSimu(Gen_SSimu, QWidget):
                     ),
                 )
             except Exception as e:
-                err_msg = (
+                self.test_err_msg = (
                     "Error while plotting Losses meshsolution (Overall on stator): "
                     + str(e)
                 )
                 log_error(
                     self,
-                    err_msg,
+                    self.test_err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
@@ -415,13 +438,13 @@ class SSimu(Gen_SSimu, QWidget):
                     ),
                 )
             except Exception as e:
-                err_msg = (
+                self.test_err_msg = (
                     "Error while plotting Losses meshsolution (rotor core with magnets): "
                     + str(e)
                 )
                 log_error(
                     self,
-                    err_msg,
+                    self.test_err_msg,
                     self.simu.get_logger(),
                     is_popup=False,
                     is_warning=False,
