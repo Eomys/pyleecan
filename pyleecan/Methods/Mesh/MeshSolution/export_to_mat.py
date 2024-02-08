@@ -34,7 +34,9 @@ def export_to_mat(self, save_path):
     save_path_2 = os.path.dirname(save_path)
 
     if not os.path.isdir(save_path_2):
-        raise KeyError("Error save path doesn't exist")
+        raise Exception(
+            f"Error while saving mesh solution, save path doesn't exist: {save_path}"
+        )
 
     # dict to save
     mesh_dict = dict()
