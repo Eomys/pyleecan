@@ -1,5 +1,6 @@
 from ....Classes._check import check_var
 
+
 def _set_fct_name(self, value):
     """find the path of a function
 
