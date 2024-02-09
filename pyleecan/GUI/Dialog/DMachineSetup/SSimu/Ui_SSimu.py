@@ -471,7 +471,7 @@ class Ui_SSimu(object):
             QCoreApplication.translate("SSimu", u"Time periodicity", None)
         )
         self.is_mesh_sol.setText(
-            QCoreApplication.translate("SSimu", u"Save Mesh Solution", None)
+            QCoreApplication.translate("SSimu", u"Export FEA result", None)
         )
         self.g_losses_model.setTitle(
             QCoreApplication.translate("SSimu", u"Losses Model", None)

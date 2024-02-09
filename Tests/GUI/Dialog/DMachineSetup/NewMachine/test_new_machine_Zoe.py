@@ -68,7 +68,6 @@ class TestNewMachineZoe(object):
         """Run at the begining of every test to setup the gui"""
         # MatLib widget
         material_dict = load_matlib(matlib_path=matlib_path)
-        self.test_config_dict = {"GUI": {}, "MAIN": {}, "PLOT": {}}
         self.widget = DMachineSetup(
             material_dict=material_dict, machine_path=join(DATA_DIR, "Machine")
         )
