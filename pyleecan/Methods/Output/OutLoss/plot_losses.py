@@ -2,7 +2,7 @@ from numpy import linspace, array
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 
-def plot_losses(self, N0_array=None):
+def plot_losses(self, N0_array=None, save_path=None, is_show_fig=True):
     """Plot the losses as a fct of speed
 
     Parameters
@@ -11,6 +11,10 @@ def plot_losses(self, N0_array=None):
         An OutLoss object
     N0_array : ndarray
         speed array to use as X axis [rpm]
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
+    is_show_fig : bool
+        True to show figure after plot
     """
 
     if N0_array is None:
@@ -31,4 +35,6 @@ def plot_losses(self, N0_array=None):
         xlabel="Speed [rpm]",
         ylabel="Losses [W]",
         legend_list=[out_loss.name for out_loss in self.loss_dict.values()],
+        is_show_fig=is_show_fig,
+        save_path=save_path,
     )
