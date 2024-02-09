@@ -2,7 +2,8 @@
 
 import sys
 import os
-from os.path import join
+from os.path import isdir, isfile, join
+from os import makedirs, listdir
 import pytest
 from numpy import pi
 from numpy.testing import assert_almost_equal
@@ -12,13 +13,16 @@ import numpy as np
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 
-
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
-
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
-
 from pyleecan.Classes.LossFEA import LossFEA
+
+from Tests import save_gui_path as save_path
+
+save_path = join(save_path, "Test_SSimu")
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 class TestSSimu(object):
@@ -35,7 +39,13 @@ class TestSSimu(object):
     def setup_method(self):
         """Create widget before each test"""
         self.machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-        self.widget = SSimu(machine=self.machine, material_dict=None, is_stator=None)
+        self.test_config_dict = {"GUI": {}, "MAIN": {}, "PLOT": {}}
+        self.widget = SSimu(
+            machine=self.machine,
+            material_dict=None,
+            is_stator=None,
+            test_config_dict=self.test_config_dict,
+        )
 
     @classmethod
     def teardown_class(cls):
@@ -220,6 +230,18 @@ class TestSSimu(object):
         QTest.keyClicks(self.widget.lf_Tsta, "20")
         self.widget.lf_Tsta.editingFinished.emit()  # To trigger the slot
 
+        assert self.widget.w_path_result.le_path.text() == ""
+        assert "RESULT_DIR" not in self.test_config_dict["MAIN"]
+        res_path = join(save_path, "Simu_Results")
+        makedirs(res_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getExistingDirectory", return_value=res_path
+        ):
+            # To trigger the slot
+            self.widget.w_path_result.b_path.clicked.emit()
+        res_path = res_path.replace("\\", "/")
+        assert self.widget.w_path_result.le_path.text() == res_path
+
         assert self.widget.test_err_msg is None
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.information",
@@ -233,6 +255,10 @@ class TestSSimu(object):
             + " is finished.\nResults available at "
             + self.widget.simu.path_result
         )
+        # result dir is updated during run
+        dir_path_result = os.path.dirname(self.widget.simu.path_result)
+        assert dir_path_result == res_path
+        assert self.test_config_dict["MAIN"]["RESULT_DIR"] == res_path
 
         path_result = self.widget.simu.path_result
 

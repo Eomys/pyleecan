@@ -32,7 +32,7 @@ class SSimu(Gen_SSimu, QWidget):
     # Information for DMachineSetup nav
     step_name = "FEMM Simulation"
 
-    def __init__(self, machine, material_dict, is_stator):
+    def __init__(self, machine, material_dict, is_stator, test_config_dict=None):
         """Initialize the GUI according to machine
 
         Parameters
@@ -45,6 +45,8 @@ class SSimu(Gen_SSimu, QWidget):
             Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor (unused)
+        test_config_dict : None
+            To overwritte the current config_dict (for testing only)
         """
 
         # Build the interface according to the .ui file
@@ -56,6 +58,7 @@ class SSimu(Gen_SSimu, QWidget):
         self.material_dict = material_dict
         self.last_out = None  # To store the last output for tests
         self.test_err_msg = None  # For test of popup
+        self.test_config_dict = test_config_dict  # to avoid saving config dict in test
 
         # Plot the machine
         try:
@@ -139,7 +142,10 @@ class SSimu(Gen_SSimu, QWidget):
         self.w_path_result.extension = None
         self.w_path_result.is_file = False
         self.w_path_result.update()
-        if "MAIN" in config_dict and "RESULT_DIR" in config_dict["MAIN"]:
+        if self.test_config_dict is not None:
+            if "MAIN" in test_config_dict and "RESULT_DIR" in test_config_dict["MAIN"]:
+                self.w_path_result.set_path_txt(test_config_dict["MAIN"]["RESULT_DIR"])
+        elif "MAIN" in config_dict and "RESULT_DIR" in config_dict["MAIN"]:
             self.w_path_result.set_path_txt(config_dict["MAIN"]["RESULT_DIR"])
 
         # setup Losses Model
@@ -178,8 +184,12 @@ class SSimu(Gen_SSimu, QWidget):
                 self, self.tr("Error"), "Please select a result folder"
             )
             return
-        config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
-        save_config_dict(config_dict)
+        if self.test_config_dict is None:
+            config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
+            save_config_dict(config_dict)
+        else:
+            self.test_config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
+
         if self.le_name.text() in [None, ""]:
             QMessageBox().critical(
                 self, self.tr("Error"), "Please set a simulation name"
