@@ -352,6 +352,7 @@ class DTableData(Ui_DTableData, QDialog):
             axes.set_xlabel(self.col_header[0])
             axes.set_ylabel(self.col_header[1])
             fig.show()
+
         if self.col_header is not None:
             fig.canvas.manager.set_window_title(self.col_header[0] + " plot")
         set_plot_gui_icon()

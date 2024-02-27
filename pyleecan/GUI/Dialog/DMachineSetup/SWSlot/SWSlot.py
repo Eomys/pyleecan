@@ -13,6 +13,8 @@ from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....Classes.Slot import Slot
 from .....Classes.SlotUD import SlotUD
 from .....Classes.SlotUD2 import SlotUD2
+from .....Classes.SlotW11 import SlotW11
+from .....Classes.SlotW11_2 import SlotW11_2
 from .....Classes.Slot import Slot
 from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
@@ -33,6 +35,7 @@ from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot26.PWSlot26 import PWSlot26
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot27.PWSlot27 import PWSlot27
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.PWSlot28 import PWSlot28
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
+from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot30.PWSlot30 import PWSlot30
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
@@ -54,6 +57,7 @@ WIDGET_LIST = [
     PWSlot27,
     PWSlot28,
     PWSlot29,
+    PWSlot30,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
@@ -126,6 +130,8 @@ class SWSlot(Gen_SWSlot, QWidget):
         # Set the correct index for the type checkbox and display the object
         if isinstance(self.obj.slot, SlotUD2):
             index = 0
+        elif isinstance(self.obj.slot, SlotW11_2):
+            index = INIT_INDEX.index(SlotW11)
         else:
             index = INIT_INDEX.index(type(self.obj.slot))
         self.c_slot_type.setCurrentIndex(index)
@@ -337,6 +343,8 @@ class SWSlot(Gen_SWSlot, QWidget):
             # different check method)
             if isinstance(lam.slot, SlotUD2):
                 index = 0
+            elif isinstance(lam.slot, SlotW11_2):
+                index = INIT_INDEX.index(SlotW11)
             else:
                 index = INIT_INDEX.index(type(lam.slot))
             return WIDGET_LIST[index].check(lam)

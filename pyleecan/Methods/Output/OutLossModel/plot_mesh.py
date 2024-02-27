@@ -1,4 +1,4 @@
-def plot_mesh(self, group_names=None):
+def plot_mesh(self, group_names=None, save_path=None):
     """Plot the losses on the mesh solution
 
     Parameters
@@ -7,6 +7,8 @@ def plot_mesh(self, group_names=None):
         An OutLossModel object
     group_names : list
         a list of str corresponding to group name(s)
+    save_path : str
+        path to save the figure
 
     """
 
@@ -16,5 +18,6 @@ def plot_mesh(self, group_names=None):
         .plot_contour(
             "freqs=sum",
             label=f"{self.name} loss density",
+            save_path=save_path,
         )
     )

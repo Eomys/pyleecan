@@ -21,6 +21,7 @@ from .....loggers import GUI_LOG_NAME
 from .....definitions import config_dict
 from .....Functions.init_environment import save_config_dict
 from .....Functions.GUI.log_error import log_error
+from .....Classes.LossFEA import LossFEA
 
 
 class SSimu(Gen_SSimu, QWidget):
@@ -31,7 +32,7 @@ class SSimu(Gen_SSimu, QWidget):
     # Information for DMachineSetup nav
     step_name = "FEMM Simulation"
 
-    def __init__(self, machine, material_dict, is_stator):
+    def __init__(self, machine, material_dict, is_stator, test_config_dict=None):
         """Initialize the GUI according to machine
 
         Parameters
@@ -44,6 +45,8 @@ class SSimu(Gen_SSimu, QWidget):
             Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor (unused)
+        test_config_dict : None
+            To overwritte the current config_dict (for testing only)
         """
 
         # Build the interface according to the .ui file
@@ -54,6 +57,8 @@ class SSimu(Gen_SSimu, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.last_out = None  # To store the last output for tests
+        self.test_err_msg = None  # For test of popup
+        self.test_config_dict = test_config_dict  # to avoid saving config dict in test
 
         # Plot the machine
         try:
@@ -68,8 +73,16 @@ class SSimu(Gen_SSimu, QWidget):
                 is_max_sym=True,
             )
         except Exception as e:
-            err_msg = "Error while plotting machine in Simulation Step:\n" + str(e)
-            log_error(self, err_msg)
+            self.test_err_msg = (
+                "Error while plotting machine in Simulation Step:\n" + str(e)
+            )
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         self.w_viewer.draw()
 
         # Adapt OP widgets to machine type
@@ -121,8 +134,6 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_Kmesh.setValue(1)
         self.si_nb_worker.setValue(self.simu.mag.nb_worker)
         self.le_name.setText(self.simu.name)
-        self.is_losses.hide()  # Not available Yet
-        self.is_mesh_sol.hide()  # Not available Yet
 
         # Setup path result selection
         self.w_path_result.obj = None
@@ -131,8 +142,20 @@ class SSimu(Gen_SSimu, QWidget):
         self.w_path_result.extension = None
         self.w_path_result.is_file = False
         self.w_path_result.update()
-        if "MAIN" in config_dict and "RESULT_DIR" in config_dict["MAIN"]:
+        if self.test_config_dict is not None:
+            if "MAIN" in test_config_dict and "RESULT_DIR" in test_config_dict["MAIN"]:
+                self.w_path_result.set_path_txt(test_config_dict["MAIN"]["RESULT_DIR"])
+        elif "MAIN" in config_dict and "RESULT_DIR" in config_dict["MAIN"]:
             self.w_path_result.set_path_txt(config_dict["MAIN"]["RESULT_DIR"])
+
+        # setup Losses Model
+        if isinstance(self.machine, MachineSIPMSM) or isinstance(
+            self.machine, MachineIPMSM
+        ):
+            self.g_losses_model.show()
+
+        else:
+            self.g_losses_model.hide()
 
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)
@@ -147,6 +170,11 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_Kmesh.editingFinished.connect(self.set_Kmesh)
         self.si_nb_worker.editingFinished.connect(self.set_nb_worker)
 
+        self.is_mesh_sol.toggled.connect(self.set_mesh_sol)
+        self.g_losses_model.toggled.connect(self.set_g_losses_model)
+        self.lf_Tsta.editingFinished.connect(self.set_Tsta)
+        self.lf_Trot.editingFinished.connect(self.set_Trot)
+
         self.b_next.clicked.connect(self.run)
 
     def run(self):
@@ -156,8 +184,12 @@ class SSimu(Gen_SSimu, QWidget):
                 self, self.tr("Error"), "Please select a result folder"
             )
             return
-        config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
-        save_config_dict(config_dict)
+        if self.test_config_dict is None:
+            config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
+            save_config_dict(config_dict)
+        else:
+            self.test_config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
+
         if self.le_name.text() in [None, ""]:
             QMessageBox().critical(
                 self, self.tr("Error"), "Please set a simulation name"
@@ -191,9 +223,14 @@ class SSimu(Gen_SSimu, QWidget):
         try:
             out = self.simu.run()
         except Exception as e:
-            err_msg = "Error while running simulation:\n" + str(e)
-            log_error(self, err_msg)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while running simulation:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Store output for test
         self.last_out = out
         # Save results
@@ -201,9 +238,14 @@ class SSimu(Gen_SSimu, QWidget):
             out.save(join(self.simu.path_result, "Result.h5"))
             out.export_to_mat(join(self.simu.path_result, "Result.mat"))
         except Exception as e:
-            err_msg = "Error while saving results:\n" + str(e)
-            log_error(self, err_msg)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while saving results:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Machine
         out.simu.machine.plot(
             is_max_sym=self.simu.mag.is_periodicity_a,
@@ -220,8 +262,14 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "torque as fct of time.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting torque as fct of time: " + str(e)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while plotting torque as fct of time: " + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Torque FFT
         try:
             out.mag.Tem.plot_2D_Data(
@@ -230,8 +278,14 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "torque FFT over freq.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting torque FFT over freq: " + str(e)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while plotting torque FFT over freq: " + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Flux
         try:
             out.mag.B.plot_2D_Data(
@@ -273,9 +327,14 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "flux 3D FFT.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting flux:\n" + str(e)
-            log_error(self, err_msg)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while plotting flux:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
         # Phi_wind_stator
         try:
             out.mag.Phi_wind_stator.plot_2D_Data(
@@ -285,16 +344,133 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "Stator winding flux.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting Stator winding flux:\n" + str(e)
-            self.simu.get_logger().error(err_msg)
+            self.test_err_msg = "Error while plotting Stator winding flux:\n" + str(e)
+            log_error(
+                self,
+                self.test_err_msg,
+                self.simu.get_logger(),
+                is_popup=False,
+                is_warning=False,
+            )
+
+        # mag mesh solution
+        if self.simu.mag.is_get_meshsolution:
+            try:
+                out.plot_B_mesh(
+                    is_show_fig=False,
+                    is_2D=True,
+                    clim=[0, 3],
+                    save_path=(join(self.simu.path_result, "B_meshsolution.png")),
+                )
+            except Exception as e:
+                self.test_err_msg = f"Error while plotting B meshsolution : {e}"
+                log_error(
+                    self,
+                    self.test_err_msg,
+                    self.simu.mag.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
+
+            # save mesh
+            try:
+                out.mag.meshsolution.export_to_mat(
+                    save_path=(join(self.simu.path_result, "MagMeshSolution.mat")),
+                )
+            except Exception as e:
+                self.test_err_msg = "Error while saving mesh solution: " + str(e)
+                log_error(
+                    self,
+                    self.test_err_msg,
+                    self.simu.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
+            # save mesh file vtk
+            try:
+                out.mag.meshsolution.mesh.save_vtk(
+                    save_path=(join(self.simu.path_result, "MagMesh.vtk")),
+                )
+            except Exception as e:
+                self.test_err_msg = "Error while saving mesh : " + str(e)
+                log_error(
+                    self,
+                    self.test_err_msg,
+                    self.simu.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
+
+        # Losses
+        if self.simu.loss is not None:
+            try:
+                out.loss.plot_losses(
+                    is_show_fig=False,
+                    save_path=(join(self.simu.path_result, "Losses.png")),
+                )
+            except Exception as e:
+                self.test_err_msg = "Error while plotting Losses: " + str(e)
+                log_error(
+                    self,
+                    self.test_err_msg,
+                    self.simu.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
+
+            # Overall on stator
+            try:
+                out.loss["overall"].plot_mesh(
+                    group_names=["stator core", "stator winding"],
+                    save_path=(
+                        join(self.simu.path_result, "Losses_meshsolution_stator.png")
+                    ),
+                )
+            except Exception as e:
+                self.test_err_msg = (
+                    "Error while plotting Losses meshsolution (Overall on stator): "
+                    + str(e)
+                )
+                log_error(
+                    self,
+                    self.test_err_msg,
+                    self.simu.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
+
+            # rotor core with magnets
+            try:
+                out.loss["overall"].plot_mesh(
+                    group_names=["rotor core", "rotor magnets"],
+                    save_path=(
+                        join(self.simu.path_result, "Losses_meshsolution_rotor.png")
+                    ),
+                )
+            except Exception as e:
+                self.test_err_msg = (
+                    "Error while plotting Losses meshsolution (rotor core with magnets): "
+                    + str(e)
+                )
+                log_error(
+                    self,
+                    self.test_err_msg,
+                    self.simu.get_logger(),
+                    is_popup=False,
+                    is_warning=False,
+                )
+
         # Done
-        QMessageBox().information(
-            self,
-            self.tr("Simlation finished"),
+        self.test_err_msg = (
             "Simulation "
             + self.simu.name
             + " is finished.\nResults available at "
-            + self.simu.path_result,
+            + self.simu.path_result
+        )
+        QMessageBox().information(
+            self,
+            self.tr("Simlation finished"),
+            self.test_err_msg,
         )
 
     def set_N0(self):
@@ -342,3 +518,35 @@ class SSimu(Gen_SSimu, QWidget):
     def set_nb_worker(self):
         """Update nb_worker according to the widget"""
         self.simu.mag.nb_worker = self.si_nb_worker.value()
+
+    def set_g_losses_model(self):
+        """Update g_losses_model according to the widget"""
+        if self.g_losses_model.isChecked():
+            self.simu.loss = LossFEA()
+            self.simu.loss.is_get_meshsolution = True
+            self.simu.mag.is_get_meshsolution = True
+            self.simu.mag.is_save_meshsolution_as_file = True
+
+            self.is_mesh_sol.setChecked(True)
+            self.is_mesh_sol.setDisabled(True)
+
+        else:
+            self.simu.loss = None
+            self.is_mesh_sol.setDisabled(False)
+
+    def set_Tsta(self):
+        """Update lf_Tsta according to the widget"""
+        self.simu.loss.Tsta = self.lf_Tsta.value()
+
+    def set_Trot(self):
+        """Update lf_Tsta according to the widget"""
+        self.simu.loss.Trot = self.lf_Trot.value()
+
+    def set_mesh_sol(self):
+        """Update is_mesh_sol according to the widget"""
+        if self.is_mesh_sol.isChecked():
+            self.simu.mag.is_get_meshsolution = True
+            self.simu.mag.is_save_meshsolution_as_file = True
+        else:
+            self.simu.mag.is_get_meshsolution = False
+            self.simu.mag.is_save_meshsolution_as_file = False

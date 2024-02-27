@@ -23,7 +23,7 @@ from pyleecan.Classes.Skew import Skew
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 
-is_show_fig = True
+is_show_fig = False
 
 
 @pytest.mark.long_5s

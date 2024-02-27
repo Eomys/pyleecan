@@ -20,6 +20,8 @@ from ..Classes.CondType13 import CondType13
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
+from ..Classes.Convert import Convert
+from ..Classes.ConvertMC import ConvertMC
 from ..Classes.DXFImport import DXFImport
 from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
@@ -188,6 +190,10 @@ from ..Classes.RefQuad9 import RefQuad9
 from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
 from ..Classes.RefTriangle6 import RefTriangle6
+from ..Classes.Rule import Rule
+from ..Classes.RuleComplex import RuleComplex
+from ..Classes.RuleEquation import RuleEquation
+from ..Classes.RuleSimple import RuleSimple
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2
 from ..Classes.Section import Section
@@ -216,6 +222,7 @@ from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotUD2 import SlotUD2
 from ..Classes.SlotW10 import SlotW10
 from ..Classes.SlotW11 import SlotW11
+from ..Classes.SlotW11_2 import SlotW11_2
 from ..Classes.SlotW12 import SlotW12
 from ..Classes.SlotW13 import SlotW13
 from ..Classes.SlotW14 import SlotW14
@@ -230,8 +237,11 @@ from ..Classes.SlotW26 import SlotW26
 from ..Classes.SlotW27 import SlotW27
 from ..Classes.SlotW28 import SlotW28
 from ..Classes.SlotW29 import SlotW29
+from ..Classes.SlotW30 import SlotW30
 from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
+from ..Classes.SlotW62 import SlotW62
+from ..Classes.SlotW63 import SlotW63
 from ..Classes.SlotWLSRPM import SlotWLSRPM
 from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData

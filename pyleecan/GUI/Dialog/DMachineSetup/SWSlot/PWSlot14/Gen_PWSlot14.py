@@ -43,13 +43,13 @@ class Gen_PWSlot14(Ui_PWSlot14):
         self.lf_H0.setToolTip(txt)
 
         # Setup of in_H1
-        txt = self.tr(u"""Slot intermediate height.""")
+        txt = self.tr(u"""height or angle  (See Schematics)""")
         self.in_H1.setWhatsThis(txt)
         self.in_H1.setToolTip(txt)
 
         # Setup of lf_H1
         self.lf_H1.validator().setBottom(0)
-        txt = self.tr(u"""Slot intermediate height.""")
+        txt = self.tr(u"""height or angle  (See Schematics)""")
         self.lf_H1.setWhatsThis(txt)
         self.lf_H1.setToolTip(txt)
 

@@ -19,7 +19,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         Number of tangentiel layer
     is_simplified : bool
         boolean to specify if the coincident lines are considered as one
-         or different lines (Default value = False)
+        or different lines (Default value = False)
     alpha : float
         Angle for rotation (Default value = 0) [rad]
     delta : complex

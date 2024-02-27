@@ -46,6 +46,9 @@ def check(self):
     elif self.is_cstt_tooth and self.W3 is None:
         return "In constant tooth mode, you must set W3 !"
 
+    if self.R1 <= 0:
+        raise S11_R1CheckError("You must have R1 > 0")
+
     if self.H1_is_rad and self.H1 >= pi / 2:
         raise S11_H1rCheckError("With H1 in radian, you must have H1 < pi/2")
         # return "With H1 in radian, you must have H1 < pi/2"

@@ -52,7 +52,7 @@ def load_init_dict(file_path):
         return load_json(file_path)
     else:
         raise Exception(
-            "Load error: Only hdf5, h5 and json format supported: " + file_path
+            "Load error: Only hdf5, h5, mot and json format supported: " + file_path
         )
 
 

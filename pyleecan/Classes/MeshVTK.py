@@ -62,6 +62,11 @@ try:
 except ImportError as error:
     get_path = error
 
+try:
+    from ..Methods.Mesh.MeshVTK.save_vtk import save_vtk
+except ImportError as error:
+    save_vtk = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -175,6 +180,15 @@ class MeshVTK(Mesh):
         )
     else:
         get_path = get_path
+    # cf Methods.Mesh.MeshVTK.save_vtk
+    if isinstance(save_vtk, ImportError):
+        save_vtk = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshVTK method save_vtk: " + str(save_vtk))
+            )
+        )
+    else:
+        save_vtk = save_vtk
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

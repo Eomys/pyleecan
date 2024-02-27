@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+other_key_list,-,parameter ,0,list,None,,,
+P_obj_path,-,path pyleecan parameter in object machine ,0,str,None,,,
+scaling_to_P,-,conversion paramter to pyleecan,0,float,1,,,
+file_name,-,"use just to debug, give name of file",0,str,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Converter,Rule,convert_to_P,VERSION,1,simple rules,,,
+,,convert_to_other,,,,,,

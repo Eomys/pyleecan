@@ -117,6 +117,11 @@ try:
 except ImportError as error:
     __iter__ = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.export_to_mat import export_to_mat
+except ImportError as error:
+    export_to_mat = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -344,6 +349,17 @@ class MeshSolution(FrozenClass):
         )
     else:
         __iter__ = __iter__
+    # cf Methods.Mesh.MeshSolution.export_to_mat
+    if isinstance(export_to_mat, ImportError):
+        export_to_mat = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method export_to_mat: " + str(export_to_mat)
+                )
+            )
+        )
+    else:
+        export_to_mat = export_to_mat
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

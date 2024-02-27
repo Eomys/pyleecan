@@ -2252,7 +2252,7 @@ def is_app(app_path):
     # Check if file exists
     if isfile(app_path):
         return True
-    
+
     # Check in all folders of environment path if file exists
     else:
         for dir in os.environ["PATH"].split(os.pathsep):
@@ -2260,4 +2260,3 @@ def is_app(app_path):
                 return True
 
     return False
-
