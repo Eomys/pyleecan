@@ -21,6 +21,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 from ....Classes.Magnetics import Magnetics
 from ....Functions.labels import (
     AIRGAP_LAB,
+    ROTOR_LAB,
     ROTOR_LAB_S,
     short_label,
     decode_label,
@@ -334,7 +335,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                 pass
 
         # The following bodies are not in the dictionary
-        bodies[ROTOR_LAB_S + "-0_" + AIRGAP_LAB + BOT_LAB]["bf"] = 1
+        bodies[ROTOR_LAB + "-0_" + AIRGAP_LAB + BOT_LAB]["bf"] = 1
         bodies[NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB]["bf"] = 1  # Sliding band bottom
 
         No_Magnets = pm_index - 6
