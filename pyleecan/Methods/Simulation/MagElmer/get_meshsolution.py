@@ -100,7 +100,7 @@ def get_meshsolution(self, output):
         },
     }
     comp_ext = ["x", "y", "z"]
-    sol_list = []
+    sol_dict = dict()
     # for key, value in pt_data.items():
     for key, value in cell_data.items():
         if key in store_dict.keys():
@@ -133,7 +133,7 @@ def get_meshsolution(self, output):
 
             if siz == 1:
                 field = components[0]
-                sol_list.append(
+                sol_dict[store_dict[key]["symbol"]] = (
                     SolutionData(
                         field=field,
                         # type_element="point",
@@ -150,7 +150,7 @@ def get_meshsolution(self, output):
                     symbol=store_dict[key]["symbol"],
                     components=comps,
                 )
-                sol_list.append(
+                sol_dict[store_dict[key]["symbol"]] = (
                     SolutionVector(
                         field=field,
                         # type_element="point",
@@ -159,7 +159,7 @@ def get_meshsolution(self, output):
                     )
                 )
 
-    meshsol.solution = sol_list
+    meshsol.solution_dict = sol_dict
     output.mag.meshsolution = meshsol
 
     return True
