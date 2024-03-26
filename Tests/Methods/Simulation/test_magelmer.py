@@ -179,3 +179,4 @@ def test_spm_Elmer():
 if __name__ == "__main__":
     out = test_ipm_Elmer()
     out = test_spm_Elmer()
+    print("Done")
