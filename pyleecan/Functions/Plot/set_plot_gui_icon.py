@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from PySide2.QtCore import QSize
-from PySide2.QtGui import QIcon
+from qtpy.QtCore import QSize
+from qtpy.QtGui import QIcon
 
 from ...GUI.Resources import pixmap_dict
 

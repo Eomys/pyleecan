@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QSpinBox
+from qtpy.QtWidgets import QSpinBox
 
 
 class SpinBox(QSpinBox):

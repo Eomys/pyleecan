@@ -5,7 +5,7 @@ from os import listdir, mkdir, remove
 from os.path import abspath, basename, isdir, isfile, join
 from shutil import copyfile, rmtree
 
-from PySide2 import QtWidgets
+from qtpy import QtWidgets
 
 from pyleecan.Functions.load import load, load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup

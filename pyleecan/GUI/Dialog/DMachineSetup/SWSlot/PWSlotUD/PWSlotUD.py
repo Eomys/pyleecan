@@ -1,9 +1,9 @@
 from numpy import pi
-from PySide2.QtCore import Signal
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QWidget, QDialog
-from PySide2.QtWidgets import QMessageBox
-from PySide2.QtCore import Qt
+from qtpy.QtCore import Signal
+from qtpy.QtGui import QPixmap
+from qtpy.QtWidgets import QWidget, QDialog
+from qtpy.QtWidgets import QMessageBox
+from qtpy.QtCore import Qt
 
 from ......Functions.GUI.log_error import log_error
 from ......Functions.load import load

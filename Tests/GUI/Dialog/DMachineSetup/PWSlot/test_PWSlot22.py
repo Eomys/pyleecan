@@ -3,9 +3,9 @@
 import sys
 
 from numpy import pi
-from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
-from PySide2.QtCore import Qt
+from qtpy import QtWidgets
+from qtpy.QtTest import QTest
+from qtpy.QtCore import Qt
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
 from Tests.GUI import gui_option  # Set unit as [m]

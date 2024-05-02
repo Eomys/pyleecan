@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot

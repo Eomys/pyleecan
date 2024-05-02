@@ -1,8 +1,8 @@
 import sys
 from Tests.GUI import gui_option  # Set unit as [m]
 import pytest
-from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
+from qtpy import QtWidgets
+from qtpy.QtTest import QTest
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.Classes.LamHole import LamHole

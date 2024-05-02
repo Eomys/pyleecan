@@ -5,8 +5,8 @@ import sys
 import logging
 import mock
 
-from PySide2.QtGui import *
-from PySide2 import QtWidgets
+from qtpy.QtGui import *
+from qtpy import QtWidgets
 
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
@@ -51,7 +51,7 @@ class TestSaveEmit(object):
         assert self.widget.is_save_needed == True
 
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.question",
+            "qtpy.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.No,
         ):
             self.widget.close()

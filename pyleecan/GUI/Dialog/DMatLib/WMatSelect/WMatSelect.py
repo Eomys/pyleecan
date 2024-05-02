@@ -1,12 +1,12 @@
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QWidget
 
 from .....GUI.Dialog.DMatLib.DMatLib import DMatLib
 from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
 from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
 from .....Functions.GUI.log_error import log_error
-from PySide2.QtWidgets import QWidget
-from PySide2.QtCore import Signal
+from qtpy.QtWidgets import QWidget
+from qtpy.QtCore import Signal
 from .....Classes.Machine import Machine
 
 

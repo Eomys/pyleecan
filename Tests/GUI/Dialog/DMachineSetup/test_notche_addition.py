@@ -1,5 +1,5 @@
-from PySide2 import QtWidgets
-from PySide2.QtWidgets import QTabBar
+from qtpy import QtWidgets
+from qtpy.QtWidgets import QTabBar
 from os.path import join, isfile
 from os import remove
 import mock
@@ -56,7 +56,7 @@ class TestNotcheAddition(object):
             "Json (*.json)",
         )
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit()
@@ -319,7 +319,7 @@ class TestNotcheAddition(object):
 
         return_value = (file_path, "Json (*.json)")
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_save.clicked.emit()
@@ -381,7 +381,7 @@ class TestNotcheAddition(object):
         assert self.widget.machine.stator.notch in [list(), None]
 
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.question",
+            "qtpy.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.No,
         ):
             self.widget.close()
@@ -419,7 +419,7 @@ class TestNotcheAddition(object):
 
         # Detecting that an error is raised after clicking on preview of DNotchTab
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.critical",
+            "qtpy.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.notches_win.b_plot.clicked.emit()
@@ -431,7 +431,7 @@ class TestNotcheAddition(object):
 
         # Detecting that an error is raised after clicking on preview of WNotch
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.critical",
+            "qtpy.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             notche_wid.b_plot.clicked.emit()
@@ -440,7 +440,7 @@ class TestNotcheAddition(object):
 
         # Detecting that an error is raised after clicking on ok button of DNotchTab
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.critical",
+            "qtpy.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.notches_win.b_ok.clicked.emit()
@@ -453,7 +453,7 @@ class TestNotcheAddition(object):
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.question",
+            "qtpy.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.No,
         ):
             self.widget.close()
@@ -498,7 +498,7 @@ class TestNotcheAddition(object):
 
         # Detecting that an error is raised after clicking on preview of DNotchTab
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.critical",
+            "qtpy.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.notches_win.b_plot.clicked.emit()
@@ -510,7 +510,7 @@ class TestNotcheAddition(object):
 
         # Detecting that an error is raised after clicking on ok button of DNotchTab
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.critical",
+            "qtpy.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.notches_win.b_ok.clicked.emit()
@@ -523,7 +523,7 @@ class TestNotcheAddition(object):
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.question",
+            "qtpy.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.No,
         ):
             self.widget.close()
@@ -563,7 +563,7 @@ class TestNotcheAddition(object):
 
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.question",
+            "qtpy.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.No,
         ):
             self.widget.close()

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import Signal, Qt
-from PySide2.QtWidgets import QWidget, QApplication
+from qtpy.QtCore import Signal, Qt
+from qtpy.QtWidgets import QWidget, QApplication
 
 from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,

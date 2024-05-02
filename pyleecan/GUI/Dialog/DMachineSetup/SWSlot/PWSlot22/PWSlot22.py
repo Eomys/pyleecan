@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import PySide2.QtCore
+import qtpy.QtCore
 from numpy import pi
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget, QListView
-from PySide2.QtGui import QPixmap
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QWidget, QListView
+from qtpy.QtGui import QPixmap
 from ......Classes.SlotW22 import SlotW22
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot22.Gen_PWSlot22 import Gen_PWSlot22
@@ -12,7 +12,7 @@ from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
 
 
-translate = PySide2.QtCore.QCoreApplication.translate
+translate = qtpy.QtCore.QCoreApplication.translate
 
 
 class PWSlot22(Gen_PWSlot22, QWidget):

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from re import compile, search
 
-from PySide2 import QtGui
-from PySide2.QtGui import QDoubleValidator
-from PySide2.QtWidgets import QLineEdit
+from qtpy import QtGui
+from qtpy.QtGui import QDoubleValidator
+from qtpy.QtWidgets import QLineEdit
 
 from ...GUI import gui_option
 

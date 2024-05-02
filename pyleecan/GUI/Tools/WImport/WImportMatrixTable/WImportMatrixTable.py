@@ -2,8 +2,8 @@ from os.path import join
 
 import matplotlib.pyplot as plt
 from pandas import DataFrame
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QFileDialog, QMessageBox, QWidget
 
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Classes.ImportMatrixVal import ImportMatrixVal

@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets, QtGui, QtCore
+from qtpy import QtWidgets, QtGui, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.pyplot import subplots
 

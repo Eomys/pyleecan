@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget, QListView
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QWidget, QListView
 
 from .....Classes.CondType11 import CondType11
 from .....Classes.CondType12 import CondType12

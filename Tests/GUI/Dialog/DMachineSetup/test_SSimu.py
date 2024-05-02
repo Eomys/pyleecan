@@ -10,8 +10,8 @@ from numpy.testing import assert_almost_equal
 import mock
 from multiprocessing import cpu_count
 import numpy as np
-from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
+from qtpy import QtWidgets
+from qtpy.QtTest import QTest
 
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.Functions.load import load
@@ -235,7 +235,7 @@ class TestSSimu(object):
         res_path = join(save_path, "Simu_Results")
         makedirs(res_path)
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getExistingDirectory", return_value=res_path
+            "qtpy.QtWidgets.QFileDialog.getExistingDirectory", return_value=res_path
         ):
             # To trigger the slot
             self.widget.w_path_result.b_path.clicked.emit()
@@ -244,7 +244,7 @@ class TestSSimu(object):
 
         assert self.widget.test_err_msg is None
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.information",
+            "qtpy.QtWidgets.QMessageBox.information",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.b_next.clicked.emit()

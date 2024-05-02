@@ -51,6 +51,7 @@ install_requires = [
     "vtk>=9.2.6",
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
+    "qtpy>=2.4.1",
 ]
 # Pyleecan optional dependancies
 full_require = [

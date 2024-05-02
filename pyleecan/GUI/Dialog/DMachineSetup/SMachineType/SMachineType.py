@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QMessageBox, QWidget
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtGui import QPixmap
+from qtpy.QtWidgets import QMessageBox, QWidget
 
 from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 from .....Classes.Winding import Winding

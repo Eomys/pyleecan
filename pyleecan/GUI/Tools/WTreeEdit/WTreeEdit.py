@@ -2,10 +2,10 @@
 
 # from numpy import ndarray
 
-from PySide2 import QtGui
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QLabel, QSplitter, QStatusBar, QTreeView, QWidget
-from PySide2.QtWidgets import QVBoxLayout, QSizePolicy
+from qtpy import QtGui
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtWidgets import QLabel, QSplitter, QStatusBar, QTreeView, QWidget
+from qtpy.QtWidgets import QVBoxLayout, QSizePolicy
 
 from ....Classes._ClassInfo import ClassInfo
 
@@ -208,7 +208,7 @@ class WTreeEdit(QWidget):
             self.leftSplitter.addWidget(widget)
         else:
             self.leftSplitter.replaceWidget(1, widget)
-            widget.setParent(self.leftSplitter)  # workaround for PySide2 replace bug
+            widget.setParent(self.leftSplitter)  # workaround for qtpy replace bug
             widget.show()
         pass
 

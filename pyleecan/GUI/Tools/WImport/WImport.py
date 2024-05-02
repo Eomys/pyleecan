@@ -1,5 +1,5 @@
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QWidget
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtWidgets import QWidget
 
 from ....Classes.ImportGenVectLin import ImportGenVectLin
 from ....GUI.Tools.WImport.Ui_WImport import Ui_WImport

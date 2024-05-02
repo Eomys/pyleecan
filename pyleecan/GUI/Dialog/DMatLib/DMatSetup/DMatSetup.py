@@ -1,10 +1,10 @@
 from os.path import join, dirname, isfile
-from PySide2.QtWidgets import QDialog, QMessageBox, QLayout
-from PySide2.QtCore import Qt, Signal
+from qtpy.QtWidgets import QDialog, QMessageBox, QLayout
+from qtpy.QtCore import Qt, Signal
 from logging import getLogger
 from numpy import pi, array, array_equal, transpose
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QDialog, QMessageBox
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QDialog, QMessageBox
 from .....GUI import gui_option
 from pyleecan.Functions.GUI.log_error import log_error
 
