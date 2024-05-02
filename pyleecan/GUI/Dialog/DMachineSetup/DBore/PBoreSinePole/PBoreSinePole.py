@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import PySide2.QtCore
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
-from PySide2.QtGui import QPixmap
+import qtpy.QtCore
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QWidget
+from qtpy.QtGui import QPixmap
 from ......Classes.BoreSinePole import BoreSinePole
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.DBore.PBoreSinePole.Gen_PBoreSinePole import (
@@ -11,7 +11,7 @@ from ......GUI.Dialog.DMachineSetup.DBore.PBoreSinePole.Gen_PBoreSinePole import
 )
 from numpy import pi
 
-translate = PySide2.QtCore.QCoreApplication.translate
+translate = qtpy.QtCore.QCoreApplication.translate
 
 
 class PBoreSinePole(Gen_PBoreSinePole, QWidget):

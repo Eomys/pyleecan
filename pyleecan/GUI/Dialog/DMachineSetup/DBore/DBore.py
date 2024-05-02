@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PySide2.QtCore import Qt
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QDialog
+from qtpy.QtCore import Qt
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
 from .....loggers import GUI_LOG_NAME
 from .....Classes.BoreFlower import BoreFlower

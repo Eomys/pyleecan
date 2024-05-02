@@ -1,7 +1,7 @@
 from ....GUI.Tools.WPathSelector.Ui_WPathSelector import Ui_WPathSelector
-from PySide2.QtWidgets import QWidget, QMessageBox, QDialog, QFileDialog
+from qtpy.QtWidgets import QWidget, QMessageBox, QDialog, QFileDialog
 from os.path import isfile, isdir
-from PySide2.QtCore import Signal
+from qtpy.QtCore import Signal
 from ....definitions import config_dict
 
 

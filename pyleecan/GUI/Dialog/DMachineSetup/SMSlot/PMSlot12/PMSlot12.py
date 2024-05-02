@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import PySide2.QtCore
+import qtpy.QtCore
 from numpy import pi
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QWidget
 
 from ......Classes.SlotM12 import SlotM12
 from ......GUI import gui_option
@@ -11,7 +11,7 @@ from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.Gen_PMSlot12 import Gen_PMSl
 from ......Methods.Slot.Slot import SlotCheckError
 
 
-translate = PySide2.QtCore.QCoreApplication.translate
+translate = qtpy.QtCore.QCoreApplication.translate
 
 
 class PMSlot12(Gen_PMSlot12, QWidget):

@@ -4,9 +4,9 @@ import sys
 from random import uniform
 
 import pytest
-from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
-from PySide2.QtTest import QTest
+from qtpy import QtWidgets
+from qtpy.QtCore import Qt
+from qtpy.QtTest import QTest
 
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.LamHole import LamHole

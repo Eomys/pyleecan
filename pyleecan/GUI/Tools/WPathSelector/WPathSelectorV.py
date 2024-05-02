@@ -1,5 +1,5 @@
 from ....GUI.Tools.WPathSelector.Ui_WPathSelector import Ui_WPathSelector
-from PySide2.QtWidgets import (
+from qtpy.QtWidgets import (
     QPushButton,
     QLineEdit,
     QMessageBox,
@@ -10,7 +10,7 @@ from PySide2.QtWidgets import (
     QSizePolicy,
 )
 from os.path import isfile, isdir
-from PySide2.QtCore import Signal, QSize
+from qtpy.QtCore import Signal, QSize
 from ....definitions import config_dict
 
 

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import PySide2.QtCore
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
+import qtpy.QtCore
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QWidget
 
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWPole.PWSlot62.Gen_PWSlot62 import Gen_PWSlot62
 from ......Methods.Slot.Slot import SlotCheckError
 
-translate = PySide2.QtCore.QCoreApplication.translate
+translate = qtpy.QtCore.QCoreApplication.translate
 
 
 class PWSlot62(Gen_PWSlot62, QWidget):

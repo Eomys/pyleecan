@@ -1,5 +1,5 @@
-from PySide2.QtCore import QSize, Signal
-from PySide2.QtWidgets import (
+from qtpy.QtCore import QSize, Signal
+from qtpy.QtWidgets import (
     QGroupBox,
     QLabel,
     QVBoxLayout,

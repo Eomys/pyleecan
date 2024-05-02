@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from PySide2.QtWidgets import QFileDialog, QMessageBox, QMenu, QInputDialog
+from qtpy.QtWidgets import QFileDialog, QMessageBox, QMenu, QInputDialog
 
 from ....Functions.Load.import_class import import_class
 from ....Functions.load import load

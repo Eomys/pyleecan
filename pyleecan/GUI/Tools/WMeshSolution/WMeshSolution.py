@@ -3,8 +3,8 @@ import matplotlib.cm as cm
 
 from numpy import sqrt
 
-from PySide2.QtWidgets import QAbstractSpinBox, QSpinBox, QWidget, QLabel
-from PySide2.QtWidgets import QVBoxLayout, QHBoxLayout
+from qtpy.QtWidgets import QAbstractSpinBox, QSpinBox, QWidget, QLabel
+from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout
 
 from ..MPLWidget import MPLWidget
 from ..CheckableComboBox import CheckableComboBox

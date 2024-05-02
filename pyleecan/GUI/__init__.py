@@ -8,7 +8,7 @@ from ..definitions import config_dict
 from os.path import abspath, dirname, join, normpath
 
 # Set Matplotlib backend
-use("Qt5Agg")  # Use PySide2 backend
+use("Qt5Agg")  # Use qtpy backend
 
 gui_option = GUIOption()
 gui_option.unit.unit_m = config_dict["GUI"]["UNIT_M"]  # Use mm

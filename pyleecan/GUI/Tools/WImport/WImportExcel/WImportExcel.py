@@ -3,8 +3,8 @@ from os.path import isfile
 import numpy
 import re
 from pandas import ExcelFile, read_excel
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QDialog
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QDialog
 
 from .....Classes.ImportMatrixVal import ImportMatrixVal
 from .....Classes.ImportMatrixXls import ImportMatrixXls

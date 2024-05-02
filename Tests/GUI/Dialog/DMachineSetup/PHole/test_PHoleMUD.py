@@ -4,7 +4,7 @@ import sys
 import mock
 from os.path import join
 
-from PySide2 import QtWidgets
+from qtpy import QtWidgets
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleUD import HoleUD
@@ -56,7 +56,7 @@ class TestPHoleMUD(object):
         ).replace("\\", "/")
         return_value = (file_path, "Json (*.json)")
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the import of dxf json
             self.widget.b_load.clicked.emit()

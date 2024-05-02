@@ -3,8 +3,8 @@
 import sys
 from os.path import join, isfile
 from random import uniform
-from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
+from qtpy import QtWidgets
+from qtpy.QtCore import Qt
 import mock
 import pytest
 from pyleecan.Classes.LamSlotWind import LamSlotWind
@@ -148,7 +148,7 @@ class TestSWinding(object):
 
         assert not isfile(return_value[0])
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_export.clicked.emit()
@@ -158,7 +158,7 @@ class TestSWinding(object):
         self.widget.c_wind_type.setCurrentIndex(1)
         assert not self.widget.b_import.isHidden()
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_import.clicked.emit()

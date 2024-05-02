@@ -3,8 +3,8 @@ from logging import getLogger
 from multiprocessing import cpu_count
 from os.path import join
 
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtWidgets import QMessageBox, QWidget
 
 from .....Classes._FEMMHandler import _FEMMHandler
 from .....Classes.InputCurrent import InputCurrent

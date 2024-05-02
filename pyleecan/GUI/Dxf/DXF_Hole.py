@@ -7,9 +7,9 @@ from matplotlib.backends.backend_qt5agg import (
 )
 from ezdxf import readfile
 import numpy as np
-from PySide2.QtCore import QUrl, Qt
-from PySide2.QtGui import QIcon, QPixmap, QDesktopServices
-from PySide2.QtWidgets import (
+from qtpy.QtCore import QUrl, Qt
+from qtpy.QtGui import QIcon, QPixmap, QDesktopServices
+from qtpy.QtWidgets import (
     QComboBox,
     QDialog,
     QFileDialog,

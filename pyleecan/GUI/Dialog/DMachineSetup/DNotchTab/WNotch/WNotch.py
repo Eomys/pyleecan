@@ -1,5 +1,5 @@
-from PySide2.QtCore import Signal, Qt
-from PySide2.QtWidgets import QWidget, QMessageBox, QApplication
+from qtpy.QtCore import Signal, Qt
+from qtpy.QtWidgets import QWidget, QMessageBox, QApplication
 from numpy import pi
 from logging import getLogger
 

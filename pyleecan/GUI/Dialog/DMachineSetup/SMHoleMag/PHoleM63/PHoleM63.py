@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PySide2.QtCore import Signal
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtGui import QPixmap
+from qtpy.QtWidgets import QWidget
 from pyleecan.Classes.HoleM63 import HoleM63
 from pyleecan.GUI import gui_option
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM63.Gen_PHoleM63 import (

@@ -1,9 +1,9 @@
-from PySide2.QtWidgets import QWidget
+from qtpy.QtWidgets import QWidget
 
 from .....Classes.ImportGenVectLin import ImportGenVectLin
 from .....GUI.Tools.WImport.WImportLinspace.Ui_WImportLinspace import Ui_WImportLinspace
-from PySide2.QtCore import Qt
-from PySide2.QtCore import Signal
+from qtpy.QtCore import Qt
+from qtpy.QtCore import Signal
 
 
 class WImportLinspace(Ui_WImportLinspace, QWidget):

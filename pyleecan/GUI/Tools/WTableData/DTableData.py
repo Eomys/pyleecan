@@ -1,14 +1,14 @@
 from numpy import hstack, vstack, zeros, savetxt
-from PySide2.QtWidgets import QDialog, QFileDialog
+from qtpy.QtWidgets import QDialog, QFileDialog
 from pandas import read_csv
 from ....GUI.Tools.FloatEdit import FloatEdit
 from ....GUI.Tools.WTableData.Ui_DTableData import Ui_DTableData
 from os.path import isfile
-from PySide2.QtWidgets import QMessageBox
+from qtpy.QtWidgets import QMessageBox
 from ..WImport.WImportExcel.WImportExcel import WImportExcel
 import matplotlib.pyplot as plt
 from ....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from PySide2.QtCore import Signal
+from qtpy.QtCore import Signal
 
 
 class DTableData(Ui_DTableData, QDialog):

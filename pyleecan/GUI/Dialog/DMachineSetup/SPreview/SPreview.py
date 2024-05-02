@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QWidget
 from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
 from .....Functions.GUI.log_error import log_error
 

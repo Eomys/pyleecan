@@ -6,7 +6,7 @@ import pytest
 from numpy import pi
 from numpy.testing import assert_almost_equal
 
-from PySide2 import QtWidgets
+from qtpy import QtWidgets
 
 from pyleecan.Classes.Skew import Skew
 from pyleecan.GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew

@@ -4,8 +4,8 @@ from os.path import basename, join, dirname, isfile
 from logging import getLogger
 from ....Functions.GUI.log_error import log_error
 from ....loggers import GUI_LOG_NAME
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtWidgets import QFileDialog, QMessageBox, QWidget
 
 from ....Functions.load import load, load_machine_materials
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list

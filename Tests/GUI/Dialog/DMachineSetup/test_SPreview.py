@@ -3,7 +3,7 @@ from os.path import join, isfile, isdir
 from os import makedirs
 import mock
 import pytest
-from PySide2 import QtWidgets
+from qtpy import QtWidgets
 
 from Tests import save_gui_path
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
@@ -86,7 +86,7 @@ class TestSPreview(object):
 
         return_value = (test_dict["file_path"], "Json (*.json)")
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit()
@@ -119,7 +119,7 @@ class TestSPreview(object):
             "FEMM (*.fem)",
         )
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
         ):
             self.widget.w_step.tab_machine.b_FEMM.clicked.emit()
         assert isfile(femm_path)
