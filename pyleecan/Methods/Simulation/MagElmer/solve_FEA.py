@@ -932,17 +932,16 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     # setup Elmer solver
     # ElmerSolver v8.4 must be installed and in the PATH
 
-    elmer_settings = join(project_name, "pyleecan_elmer.sif")
     ElmerSolver_binary = get_path_binary("ElmerSolver")
     cmd_elmersolver = [
         ElmerSolver_binary,
-        elmer_settings,
+        "pyleecan_elmer.sif",
     ]
     self.get_logger().info(
         "Calling ElmerSolver: " + " ".join(map(str, cmd_elmersolver))
     )
     elmersolver = subprocess.Popen(
-        cmd_elmersolver, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        cmd_elmersolver, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=project_name
     )
     (stdout, stderr) = elmersolver.communicate()
     elmersolver.wait()
