@@ -8,7 +8,7 @@ import pytest
 from numpy import pi
 from numpy.testing import assert_almost_equal
 import mock
-
+from multiprocessing import cpu_count
 import numpy as np
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
@@ -138,15 +138,15 @@ class TestSSimu(object):
 
     def test_set_nb_worker(self):
         """Check that the Widget allow to update nb_worker"""
-        assert self.widget.si_nb_worker.value() == 8
-        assert self.widget.simu.mag.nb_worker == 8
+        assert self.widget.si_nb_worker.value() == cpu_count()
+        assert self.widget.simu.mag.nb_worker == cpu_count()
 
         self.widget.si_nb_worker.clear()  # Clear the field before writing
-        QTest.keyClicks(self.widget.si_nb_worker, "4")
+        QTest.keyClicks(self.widget.si_nb_worker, str(cpu_count()//2))
         self.widget.si_nb_worker.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.si_nb_worker.value() == 4
-        assert self.widget.simu.mag.nb_worker == 4
+        assert self.widget.si_nb_worker.value() == cpu_count()//2
+        assert self.widget.simu.mag.nb_worker == cpu_count()//2
 
     def test_set_Tsta(self):
         """Check that the Widget allow to update lf_Tsta"""
@@ -303,8 +303,6 @@ if __name__ == "__main__":
     a = TestSSimu()
     a.setup_class()
     a.setup_method()
-    a.test_set_N0()
-    a.test_set_Tsta()
-    a.test_simu()
+    a.test_set_nb_worker()
 
     print("Done")
