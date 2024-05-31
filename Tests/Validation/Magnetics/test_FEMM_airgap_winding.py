@@ -27,7 +27,7 @@ def test_FEMM_airgap_winding():
 
     simu.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=-80, Iq_ref=-80),
-        Na_tot=2 ** 6,
+        Na_tot=2**6,
         Nt_tot=8,
     )
 

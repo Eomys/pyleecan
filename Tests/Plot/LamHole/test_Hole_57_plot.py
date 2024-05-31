@@ -22,7 +22,6 @@ from Tests import save_plot_path as save_path
 
 
 class Test_Hole_57_plot(object):
-
     """pytest for Machine with Hole 57 plot"""
 
     def setup_method(self, method):

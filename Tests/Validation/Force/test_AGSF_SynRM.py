@@ -41,7 +41,7 @@ def test_AGSF_SynRM(nb_worker=int(cpu_count() / 2)):
     freq0 = 50  # supply frequency [Hz]
     qs = 3  # Number of phases
     p = 2  # Number of pole pairs
-    Nt_tot = 2 ** 6  # Number of time step for each current angle Phi0
+    Nt_tot = 2**6  # Number of time step for each current angle Phi0
     Imax = 28.6878  # Nominal stator current magnitude [A]
     # to have one torque ripple period since torque ripple appears at multiple of 6*freq0
     Nrev = 1

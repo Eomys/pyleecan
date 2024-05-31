@@ -156,7 +156,7 @@ def test_FEMM_meshsolution_plots_slotless():
     simu.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
-        Na_tot=2 ** 6,
+        Na_tot=2**6,
         Nt_tot=1,
     )
 
