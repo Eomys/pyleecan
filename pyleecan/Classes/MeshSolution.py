@@ -656,7 +656,7 @@ class MeshSolution(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""(Optional) Descriptive name of the mesh
+        doc="""(Optional) Descriptive name of the mesh
 
         :Type: str
         """,
@@ -691,7 +691,7 @@ class MeshSolution(FrozenClass):
     mesh = property(
         fget=_get_mesh,
         fset=_set_mesh,
-        doc=u"""A Mesh object. 
+        doc="""A Mesh object. 
 
         :Type: Mesh
         """,
@@ -731,7 +731,7 @@ class MeshSolution(FrozenClass):
     solution_dict = property(
         fget=_get_solution_dict,
         fset=_set_solution_dict,
-        doc=u"""A dictionary of Solution objects
+        doc="""A dictionary of Solution objects
 
         :Type: {Solution}
         """,
@@ -751,7 +751,7 @@ class MeshSolution(FrozenClass):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Dict sorted by groups name with list of elements indices. 
+        doc="""Dict sorted by groups name with list of elements indices. 
 
         :Type: dict
         """,
@@ -769,7 +769,7 @@ class MeshSolution(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem
+        doc="""Dimension of the physical problem
 
         :Type: int
         :min: 1
@@ -789,7 +789,7 @@ class MeshSolution(FrozenClass):
     path = property(
         fget=_get_path,
         fset=_set_path,
-        doc=u"""Path where the MeshSolution is stored as a file
+        doc="""Path where the MeshSolution is stored as a file
 
         :Type: str
         """,

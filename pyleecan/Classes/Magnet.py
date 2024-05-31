@@ -261,7 +261,7 @@ class Magnet(FrozenClass):
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
-        doc=u"""The Magnet material
+        doc="""The Magnet material
 
         :Type: Material
         """,
@@ -279,7 +279,7 @@ class Magnet(FrozenClass):
     type_magnetization = property(
         fget=_get_type_magnetization,
         fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential
+        doc="""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential
 
         :Type: int
         :min: 0
@@ -299,7 +299,7 @@ class Magnet(FrozenClass):
     Lmag = property(
         fget=_get_Lmag,
         fset=_set_Lmag,
-        doc=u"""Magnet axial length
+        doc="""Magnet axial length
 
         :Type: float
         :min: 0
@@ -318,7 +318,7 @@ class Magnet(FrozenClass):
     Nseg = property(
         fget=_get_Nseg,
         fset=_set_Nseg,
-        doc=u"""Number of segments
+        doc="""Number of segments
 
         :Type: int
         :min: 1

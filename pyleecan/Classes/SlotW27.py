@@ -584,7 +584,7 @@ class SlotW27(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc="""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -603,7 +603,7 @@ class SlotW27(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot first part height
+        doc="""Slot first part height
 
         :Type: float
         :min: 0
@@ -622,7 +622,7 @@ class SlotW27(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Slot second part height
+        doc="""Slot second part height
 
         :Type: float
         :min: 0
@@ -641,7 +641,7 @@ class SlotW27(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width.
+        doc="""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -660,7 +660,7 @@ class SlotW27(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot top width.
+        doc="""Slot top width.
 
         :Type: float
         :min: 0
@@ -679,7 +679,7 @@ class SlotW27(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Slot middle width
+        doc="""Slot middle width
 
         :Type: float
         :min: 0
@@ -698,7 +698,7 @@ class SlotW27(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Slot bottom width.
+        doc="""Slot bottom width.
 
         :Type: float
         :min: 0
@@ -717,7 +717,7 @@ class SlotW27(Slot):
     is_trap_wind = property(
         fget=_get_is_trap_wind,
         fset=_set_is_trap_wind,
-        doc=u"""If True, split the winding on the  trapezium bases. Else split at the middle height as usual
+        doc="""If True, split the winding on the  trapezium bases. Else split at the middle height as usual
 
         :Type: bool
         """,

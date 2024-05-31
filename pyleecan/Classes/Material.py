@@ -414,7 +414,7 @@ class Material(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""name of the material
+        doc="""name of the material
 
         :Type: str
         """,
@@ -432,7 +432,7 @@ class Material(FrozenClass):
     is_isotropic = property(
         fget=_get_is_isotropic,
         fset=_set_is_isotropic,
-        doc=u"""If Isotropic, uniformity in all orientations
+        doc="""If Isotropic, uniformity in all orientations
 
         :Type: bool
         """,
@@ -467,7 +467,7 @@ class Material(FrozenClass):
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
-        doc=u"""Electrical properties of the material
+        doc="""Electrical properties of the material
 
         :Type: MatElectrical
         """,
@@ -502,7 +502,7 @@ class Material(FrozenClass):
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
-        doc=u"""Magnetic properties of the material
+        doc="""Magnetic properties of the material
 
         :Type: MatMagnetics
         """,
@@ -539,7 +539,7 @@ class Material(FrozenClass):
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
-        doc=u"""Structural properties of the material
+        doc="""Structural properties of the material
 
         :Type: MatStructural
         """,
@@ -574,7 +574,7 @@ class Material(FrozenClass):
     HT = property(
         fget=_get_HT,
         fset=_set_HT,
-        doc=u"""Heat Transfer properties of the material
+        doc="""Heat Transfer properties of the material
 
         :Type: MatHT
         """,
@@ -609,7 +609,7 @@ class Material(FrozenClass):
     eco = property(
         fget=_get_eco,
         fset=_set_eco,
-        doc=u"""Economical properties of the material
+        doc="""Economical properties of the material
 
         :Type: MatEconomical
         """,
@@ -627,7 +627,7 @@ class Material(FrozenClass):
     desc = property(
         fget=_get_desc,
         fset=_set_desc,
-        doc=u"""material description
+        doc="""material description
 
         :Type: str
         """,
@@ -645,7 +645,7 @@ class Material(FrozenClass):
     path = property(
         fget=_get_path,
         fset=_set_path,
-        doc=u"""Path to the material file
+        doc="""Path to the material file
 
         :Type: str
         """,

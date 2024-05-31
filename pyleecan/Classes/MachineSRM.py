@@ -362,7 +362,7 @@ class MachineSRM(MachineSync):
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
-        doc=u"""Machine's Rotor
+        doc="""Machine's Rotor
 
         :Type: LamSlot
         """,
@@ -399,7 +399,7 @@ class MachineSRM(MachineSync):
     stator = property(
         fget=_get_stator,
         fset=_set_stator,
-        doc=u"""Machine's Stator
+        doc="""Machine's Stator
 
         :Type: LamSlotWind
         """,

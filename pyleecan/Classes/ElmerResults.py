@@ -349,7 +349,7 @@ class ElmerResults(Elmer):
     data = property(
         fget=_get_data,
         fset=_set_data,
-        doc=u"""Dict with simulation results
+        doc="""Dict with simulation results
 
         :Type: dict
         """,
@@ -367,7 +367,7 @@ class ElmerResults(Elmer):
     file = property(
         fget=_get_file,
         fset=_set_file,
-        doc=u"""Filename of the results data file
+        doc="""Filename of the results data file
 
         :Type: str
         """,
@@ -387,7 +387,7 @@ class ElmerResults(Elmer):
     usecols = property(
         fget=_get_usecols,
         fset=_set_usecols,
-        doc=u"""List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.
+        doc="""List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.
 
         :Type: list
         """,
@@ -407,7 +407,7 @@ class ElmerResults(Elmer):
     columns = property(
         fget=_get_columns,
         fset=_set_columns,
-        doc=u"""List of columns data names
+        doc="""List of columns data names
 
         :Type: list
         """,
@@ -425,7 +425,7 @@ class ElmerResults(Elmer):
     is_scalars = property(
         fget=_get_is_scalars,
         fset=_set_is_scalars,
-        doc=u"""Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed
+        doc="""Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed
 
         :Type: bool
         """,

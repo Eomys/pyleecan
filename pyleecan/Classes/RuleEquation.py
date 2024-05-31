@@ -292,7 +292,7 @@ class RuleEquation(Rule):
     param = property(
         fget=_get_param,
         fset=_set_param,
-        doc=u"""dict all parameters
+        doc="""dict all parameters
 
         :Type: list
         """,
@@ -310,7 +310,7 @@ class RuleEquation(Rule):
     equation = property(
         fget=_get_equation,
         fset=_set_equation,
-        doc=u"""conversion paramter to pyleecan (Y are always on other side
+        doc="""conversion paramter to pyleecan (Y are always on other side
 
         :Type: str
         """,
@@ -328,7 +328,7 @@ class RuleEquation(Rule):
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""use just to debug, give name of file
+        doc="""use just to debug, give name of file
 
         :Type: str
         """,

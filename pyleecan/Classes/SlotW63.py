@@ -534,7 +534,7 @@ class SlotW63(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Pole bottom width
+        doc="""Pole bottom width
 
         :Type: float
         :min: 0
@@ -553,7 +553,7 @@ class SlotW63(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Pole top width
+        doc="""Pole top width
 
         :Type: float
         :min: 0
@@ -572,7 +572,7 @@ class SlotW63(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Pole bottom height
+        doc="""Pole bottom height
 
         :Type: float
         :min: 0
@@ -591,7 +591,7 @@ class SlotW63(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Pole top height
+        doc="""Pole top height
 
         :Type: float
         :min: 0
@@ -610,7 +610,7 @@ class SlotW63(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Heigh Ploe
+        doc="""Heigh Ploe
 
         :Type: float
         :min: 0
@@ -629,7 +629,7 @@ class SlotW63(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Width Ploe
+        doc="""Width Ploe
 
         :Type: float
         :min: 0

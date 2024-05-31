@@ -388,7 +388,7 @@ class ParamExplorerInterval(ParamExplorer):
     min_value = property(
         fget=_get_min_value,
         fset=_set_min_value,
-        doc=u"""Minumum value of the interval
+        doc="""Minumum value of the interval
 
         :Type: float
         """,
@@ -406,7 +406,7 @@ class ParamExplorerInterval(ParamExplorer):
     max_value = property(
         fget=_get_max_value,
         fset=_set_max_value,
-        doc=u"""Maximum value of the interval
+        doc="""Maximum value of the interval
 
         :Type: float
         """,
@@ -424,7 +424,7 @@ class ParamExplorerInterval(ParamExplorer):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Number of value to take in the interval
+        doc="""Number of value to take in the interval
 
         :Type: int
         :min: 2
@@ -443,7 +443,7 @@ class ParamExplorerInterval(ParamExplorer):
     type_value_gen = property(
         fget=_get_type_value_gen,
         fset=_set_type_value_gen,
-        doc=u"""How to generate the value list. 0: linspace, 1: random (Not available yet)
+        doc="""How to generate the value list. 0: linspace, 1: random (Not available yet)
 
         :Type: int
         :min: 0
@@ -463,7 +463,7 @@ class ParamExplorerInterval(ParamExplorer):
     type_value = property(
         fget=_get_type_value,
         fset=_set_type_value,
-        doc=u"""Type of the value: 0:float, 1:int
+        doc="""Type of the value: 0:float, 1:int
 
         :Type: int
         :min: 0

@@ -18,6 +18,6 @@ def comp_surface_opening(self):
     """
     Rbo = self.get_Rbo()
 
-    S0 = (pi * Rbo ** 2 - pi * (Rbo - self.H0) ** 2) * self.W0 / (2 * pi)
+    S0 = (pi * Rbo**2 - pi * (Rbo - self.H0) ** 2) * self.W0 / (2 * pi)
 
     return S0

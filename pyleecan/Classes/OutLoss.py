@@ -377,7 +377,7 @@ class OutLoss(FrozenClass):
     axes_dict = property(
         fget=_get_axes_dict,
         fset=_set_axes_dict,
-        doc=u"""Dict containing axes data used for Magnetics
+        doc="""Dict containing axes data used for Magnetics
 
         :Type: {SciDataTool.Classes.DataND.Data}
         """,
@@ -417,7 +417,7 @@ class OutLoss(FrozenClass):
     loss_dict = property(
         fget=_get_loss_dict,
         fset=_set_loss_dict,
-        doc=u"""Dict containing OutLossModel obects for each type of loss
+        doc="""Dict containing OutLossModel obects for each type of loss
 
         :Type: {OutLossModel}
         """,
@@ -435,7 +435,7 @@ class OutLoss(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,

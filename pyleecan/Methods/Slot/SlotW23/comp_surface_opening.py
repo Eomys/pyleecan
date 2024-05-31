@@ -31,13 +31,13 @@ def comp_surface_opening(self):
         # Arc between opening H0 and wedge H1
         Sarc = ((Rbo + self.H0) ** 2.0) / 2.0 * (alpha - sin(alpha))
         # The opening part is radial
-        S1 = (pi * ((Rbo + self.H0) ** 2) - pi * (Rbo ** 2)) * alpha / (2 * pi) - Sarc
+        S1 = (pi * ((Rbo + self.H0) ** 2) - pi * (Rbo**2)) * alpha / (2 * pi) - Sarc
     else:
         Wint = 2 * sin(alpha / 2) * (Rbo - self.H0)
         # Arc between opening H0 and wedge H1
         Sarc = ((Rbo - self.H0) ** 2.0) / 2.0 * (alpha - sin(alpha))
         # The opening part is radial
-        S1 = (pi * (Rbo ** 2) - pi * ((Rbo - self.H0) ** 2)) * alpha / (2 * pi) + Sarc
+        S1 = (pi * (Rbo**2) - pi * ((Rbo - self.H0) ** 2)) * alpha / (2 * pi) + Sarc
 
     S2 = 0.5 * self.get_H1() * (Wint + self.W1)
 

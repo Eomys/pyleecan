@@ -179,7 +179,7 @@ class MatEconomical(FrozenClass):
     cost_unit = property(
         fget=_get_cost_unit,
         fset=_set_cost_unit,
-        doc=u"""Cost of one kilo of material
+        doc="""Cost of one kilo of material
 
         :Type: float
         :min: 0
@@ -198,7 +198,7 @@ class MatEconomical(FrozenClass):
     unit_name = property(
         fget=_get_unit_name,
         fset=_set_unit_name,
-        doc=u"""Name of the unit
+        doc="""Name of the unit
 
         :Type: str
         """,

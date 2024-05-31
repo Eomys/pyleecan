@@ -76,6 +76,6 @@ def comp_skin_effect_inductance(
     psip = 1 / ksi * (sinh(ksi) + sin(ksi)) / (cosh(ksi) + cos(ksi))
 
     # average resistance factor  Eq(4.91) p.257
-    kl_skin = phip / zt ** 2 + ((zt ** 2 - 1) / zt ** 2) * psip
+    kl_skin = phip / zt**2 + ((zt**2 - 1) / zt**2) * psip
 
     return kl_skin

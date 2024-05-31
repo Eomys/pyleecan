@@ -37,7 +37,7 @@ def _comp_point_coordinate(self):
 
     sign = -1 if self.is_outwards() else 1
     x = abs(Z2) - sign * (
-        -self.H1 + self.Rtopm - (self.Rtopm ** 2 - self.W1 ** 2 / 4) ** 0.5
+        -self.H1 + self.Rtopm - (self.Rtopm**2 - self.W1**2 / 4) ** 0.5
     )
     ZM2 = x - 1j * self.W1 / 2
 

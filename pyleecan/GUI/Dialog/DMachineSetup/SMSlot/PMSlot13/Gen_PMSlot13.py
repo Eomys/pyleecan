@@ -10,56 +10,56 @@ class Gen_PMSlot13(Ui_PMSlot13):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PMSlot13.setupUi(self, PMSlot13)
         # Setup of in_W0
-        txt = self.tr(u"""Slot isthmus width.""")
+        txt = self.tr("""Slot isthmus width.""")
         self.in_W0.setWhatsThis(txt)
         self.in_W0.setToolTip(txt)
 
         # Setup of lf_W0
         self.lf_W0.validator().setBottom(0)
-        txt = self.tr(u"""Slot isthmus width.""")
+        txt = self.tr("""Slot isthmus width.""")
         self.lf_W0.setWhatsThis(txt)
         self.lf_W0.setToolTip(txt)
 
         # Setup of in_W1
-        txt = self.tr(u"""Magnet width""")
+        txt = self.tr("""Magnet width""")
         self.in_W1.setWhatsThis(txt)
         self.in_W1.setToolTip(txt)
 
         # Setup of lf_W1
         self.lf_W1.validator().setBottom(0)
-        txt = self.tr(u"""Magnet width""")
+        txt = self.tr("""Magnet width""")
         self.lf_W1.setWhatsThis(txt)
         self.lf_W1.setToolTip(txt)
 
         # Setup of in_Rtopm
-        txt = self.tr(u"""Radius of the magnet top""")
+        txt = self.tr("""Radius of the magnet top""")
         self.in_Rtopm.setWhatsThis(txt)
         self.in_Rtopm.setToolTip(txt)
 
         # Setup of lf_Rtopm
         self.lf_Rtopm.validator().setBottom(0)
-        txt = self.tr(u"""Radius of the magnet top""")
+        txt = self.tr("""Radius of the magnet top""")
         self.lf_Rtopm.setWhatsThis(txt)
         self.lf_Rtopm.setToolTip(txt)
 
         # Setup of in_H0
-        txt = self.tr(u"""Slot isthmus height.""")
+        txt = self.tr("""Slot isthmus height.""")
         self.in_H0.setWhatsThis(txt)
         self.in_H0.setToolTip(txt)
 
         # Setup of lf_H0
         self.lf_H0.validator().setBottom(0)
-        txt = self.tr(u"""Slot isthmus height.""")
+        txt = self.tr("""Slot isthmus height.""")
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)
 
         # Setup of in_H1
-        txt = self.tr(u"""Magnet Height""")
+        txt = self.tr("""Magnet Height""")
         self.in_H1.setWhatsThis(txt)
         self.in_H1.setToolTip(txt)
 
         # Setup of lf_H1
         self.lf_H1.validator().setBottom(0)
-        txt = self.tr(u"""Magnet Height""")
+        txt = self.tr("""Magnet Height""")
         self.lf_H1.setWhatsThis(txt)
         self.lf_H1.setToolTip(txt)

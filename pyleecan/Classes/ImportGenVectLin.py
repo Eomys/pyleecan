@@ -311,7 +311,7 @@ class ImportGenVectLin(ImportMatrix):
     start = property(
         fget=_get_start,
         fset=_set_start,
-        doc=u"""Begin point of the linspace
+        doc="""Begin point of the linspace
 
         :Type: float
         """,
@@ -329,7 +329,7 @@ class ImportGenVectLin(ImportMatrix):
     stop = property(
         fget=_get_stop,
         fset=_set_stop,
-        doc=u"""End point of the linspace
+        doc="""End point of the linspace
 
         :Type: float
         """,
@@ -347,7 +347,7 @@ class ImportGenVectLin(ImportMatrix):
     num = property(
         fget=_get_num,
         fset=_set_num,
-        doc=u"""Number of value in the linspace
+        doc="""Number of value in the linspace
 
         :Type: float
         """,
@@ -365,7 +365,7 @@ class ImportGenVectLin(ImportMatrix):
     endpoint = property(
         fget=_get_endpoint,
         fset=_set_endpoint,
-        doc=u"""If True, stop is the last sample. Otherwise, it is not included
+        doc="""If True, stop is the last sample. Otherwise, it is not included
 
         :Type: bool
         """,

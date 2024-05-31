@@ -430,7 +430,7 @@ class Section(Elmer):
     section = property(
         fget=_get_section,
         fset=_set_section,
-        doc=u"""Name of the section
+        doc="""Name of the section
 
         :Type: str
         """,
@@ -448,7 +448,7 @@ class Section(Elmer):
     id = property(
         fget=_get_id,
         fset=_set_id,
-        doc=u"""Index of a numbered section
+        doc="""Index of a numbered section
 
         :Type: int
         """,
@@ -466,7 +466,7 @@ class Section(Elmer):
     comment = property(
         fget=_get_comment,
         fset=_set_comment,
-        doc=u"""Section global comment
+        doc="""Section global comment
 
         :Type: str
         """,
@@ -486,7 +486,7 @@ class Section(Elmer):
     _statements = property(
         fget=_get__statements,
         fset=_set__statements,
-        doc=u"""internal dict to store the sections statements
+        doc="""internal dict to store the sections statements
 
         :Type: dict
         """,
@@ -506,7 +506,7 @@ class Section(Elmer):
     _comments = property(
         fget=_get__comments,
         fset=_set__comments,
-        doc=u"""internal dict to store comments on single statements
+        doc="""internal dict to store comments on single statements
 
         :Type: dict
         """,

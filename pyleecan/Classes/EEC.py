@@ -581,7 +581,7 @@ class EEC(FrozenClass):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
+        doc="""Skin effect for resistance and inductance
 
         :Type: int
         """,
@@ -616,7 +616,7 @@ class EEC(FrozenClass):
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""Operating Point
+        doc="""Operating Point
 
         :Type: OP
         """,
@@ -634,7 +634,7 @@ class EEC(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for operational EEC calculation
+        doc="""Average stator temperature for operational EEC calculation
 
         :Type: float
         """,
@@ -652,7 +652,7 @@ class EEC(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for operational EEC calculation
+        doc="""Average rotor temperature for operational EEC calculation
 
         :Type: float
         """,
@@ -670,7 +670,7 @@ class EEC(FrozenClass):
     Xkr_skinS = property(
         fget=_get_Xkr_skinS,
         fset=_set_Xkr_skinS,
-        doc=u"""Skin effect coefficient for resistances at stator side
+        doc="""Skin effect coefficient for resistances at stator side
 
         :Type: float
         """,
@@ -688,7 +688,7 @@ class EEC(FrozenClass):
     Xke_skinS = property(
         fget=_get_Xke_skinS,
         fset=_set_Xke_skinS,
-        doc=u"""Skin effect coefficient for inductances at stator side
+        doc="""Skin effect coefficient for inductances at stator side
 
         :Type: float
         """,
@@ -706,7 +706,7 @@ class EEC(FrozenClass):
     Xkr_skinR = property(
         fget=_get_Xkr_skinR,
         fset=_set_Xkr_skinR,
-        doc=u"""Skin effect coefficient for resistances at rotor side
+        doc="""Skin effect coefficient for resistances at rotor side
 
         :Type: float
         """,
@@ -724,7 +724,7 @@ class EEC(FrozenClass):
     Xke_skinR = property(
         fget=_get_Xke_skinR,
         fset=_set_Xke_skinR,
-        doc=u"""Skin effect coefficient for inductances at rotor side
+        doc="""Skin effect coefficient for inductances at rotor side
 
         :Type: float
         """,
@@ -742,7 +742,7 @@ class EEC(FrozenClass):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Stator phase resistance
+        doc="""Stator phase resistance
 
         :Type: float
         """,
@@ -779,7 +779,7 @@ class EEC(FrozenClass):
     fluxlink = property(
         fget=_get_fluxlink,
         fset=_set_fluxlink,
-        doc=u"""Magnetic model for flux linkage calculation
+        doc="""Magnetic model for flux linkage calculation
 
         :Type: Magnetics
         """,

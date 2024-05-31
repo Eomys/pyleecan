@@ -168,7 +168,7 @@ class Mesh(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem
+        doc="""Dimension of the physical problem
 
         :Type: int
         :min: 1

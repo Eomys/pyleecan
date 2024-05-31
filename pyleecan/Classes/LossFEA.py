@@ -309,7 +309,7 @@ class LossFEA(Loss):
     k_ed = property(
         fget=_get_k_ed,
         fset=_set_k_ed,
-        doc=u"""eddy current loss coefficients
+        doc="""eddy current loss coefficients
 
         :Type: float
         """,
@@ -327,7 +327,7 @@ class LossFEA(Loss):
     k_hy = property(
         fget=_get_k_hy,
         fset=_set_k_hy,
-        doc=u"""hysteresis loss coefficients
+        doc="""hysteresis loss coefficients
 
         :Type: float
         """,
@@ -345,7 +345,7 @@ class LossFEA(Loss):
     k_p = property(
         fget=_get_k_p,
         fset=_set_k_p,
-        doc=u"""proximity loss coefficients
+        doc="""proximity loss coefficients
 
         :Type: float
         """,
@@ -363,7 +363,7 @@ class LossFEA(Loss):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance calculation (0 to ignore skin effect, 1 to consider it)
+        doc="""Skin effect for resistance calculation (0 to ignore skin effect, 1 to consider it)
 
         :Type: int
         """,

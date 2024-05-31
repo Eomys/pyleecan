@@ -301,7 +301,7 @@ class OutStruct(FrozenClass):
     axes_dict = property(
         fget=_get_axes_dict,
         fset=_set_axes_dict,
-        doc=u"""Dict containing axes data used for Structural
+        doc="""Dict containing axes data used for Structural
 
         :Type: {SciDataTool.Classes.DataND.Data}
         """,
@@ -319,7 +319,7 @@ class OutStruct(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -358,7 +358,7 @@ class OutStruct(FrozenClass):
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
-        doc=u"""FEA software mesh and solution
+        doc="""FEA software mesh and solution
 
         :Type: MeshSolution
         """,
@@ -378,7 +378,7 @@ class OutStruct(FrozenClass):
     FEA_dict = property(
         fget=_get_FEA_dict,
         fset=_set_FEA_dict,
-        doc=u"""dictionary containing the main FEA parameter
+        doc="""dictionary containing the main FEA parameter
 
         :Type: dict
         """,

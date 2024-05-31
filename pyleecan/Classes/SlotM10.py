@@ -452,7 +452,7 @@ class SlotM10(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width.
+        doc="""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -471,7 +471,7 @@ class SlotM10(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc="""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -490,7 +490,7 @@ class SlotM10(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Magnet width
+        doc="""Magnet width
 
         :Type: float
         :min: 0
@@ -509,7 +509,7 @@ class SlotM10(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Magnet Height
+        doc="""Magnet Height
 
         :Type: float
         :min: 0

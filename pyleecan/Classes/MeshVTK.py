@@ -554,7 +554,7 @@ class MeshVTK(Mesh):
     mesh = property(
         fget=_get_mesh,
         fset=_set_mesh,
-        doc=u"""Pyvista object of the mesh (optional)
+        doc="""Pyvista object of the mesh (optional)
 
         :Type: vtk.vtkPointSet
         """,
@@ -572,7 +572,7 @@ class MeshVTK(Mesh):
     is_pyvista_mesh = property(
         fget=_get_is_pyvista_mesh,
         fset=_set_is_pyvista_mesh,
-        doc=u"""Store the pyvista object
+        doc="""Store the pyvista object
 
         :Type: bool
         """,
@@ -590,7 +590,7 @@ class MeshVTK(Mesh):
     format = property(
         fget=_get_format,
         fset=_set_format,
-        doc=u"""Format in which the mesh is stored
+        doc="""Format in which the mesh is stored
 
         :Type: str
         """,
@@ -608,7 +608,7 @@ class MeshVTK(Mesh):
     path = property(
         fget=_get_path,
         fset=_set_path,
-        doc=u"""Path where the mesh is stored
+        doc="""Path where the mesh is stored
 
         :Type: str
         """,
@@ -626,7 +626,7 @@ class MeshVTK(Mesh):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the mesh file
+        doc="""Name of the mesh file
 
         :Type: str
         """,
@@ -646,7 +646,7 @@ class MeshVTK(Mesh):
     surf = property(
         fget=_get_surf,
         fset=_set_surf,
-        doc=u"""Pyvista object of the outer surface
+        doc="""Pyvista object of the outer surface
 
         :Type: pyvista.core.pointset.PolyData
         """,
@@ -664,7 +664,7 @@ class MeshVTK(Mesh):
     is_vtk_surf = property(
         fget=_get_is_vtk_surf,
         fset=_set_is_vtk_surf,
-        doc=u"""Save the surface mesh in a vtk file
+        doc="""Save the surface mesh in a vtk file
 
         :Type: bool
         """,
@@ -682,7 +682,7 @@ class MeshVTK(Mesh):
     surf_path = property(
         fget=_get_surf_path,
         fset=_set_surf_path,
-        doc=u"""Path where the outer surface is stored
+        doc="""Path where the outer surface is stored
 
         :Type: str
         """,
@@ -700,7 +700,7 @@ class MeshVTK(Mesh):
     surf_name = property(
         fget=_get_surf_name,
         fset=_set_surf_name,
-        doc=u"""Name of the outer surface file
+        doc="""Name of the outer surface file
 
         :Type: str
         """,
@@ -725,7 +725,7 @@ class MeshVTK(Mesh):
     node_normals = property(
         fget=_get_node_normals,
         fset=_set_node_normals,
-        doc=u"""Array of normals to nodes (element vertices)
+        doc="""Array of normals to nodes (element vertices)
 
         :Type: ndarray
         """,

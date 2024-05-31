@@ -244,7 +244,7 @@ def comp_loss(self):
         L1 * per_a * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
     )
     # Sum over orders
-    A = np_sum(Af * n ** 2)
+    A = np_sum(Af * n**2)
     self.coeff_dict = {"2": A}
 
     return Pmagnet_density, freqs

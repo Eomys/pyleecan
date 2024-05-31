@@ -364,7 +364,7 @@ class BoreSinePole(Bore):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Number of Poles
+        doc="""Number of Poles
 
         :Type: int
         :min: 0
@@ -383,7 +383,7 @@ class BoreSinePole(Bore):
     k = property(
         fget=_get_k,
         fset=_set_k,
-        doc=u"""pole width modifier
+        doc="""pole width modifier
 
         :Type: float
         :min: 0
@@ -402,7 +402,7 @@ class BoreSinePole(Bore):
     delta_d = property(
         fget=_get_delta_d,
         fset=_set_delta_d,
-        doc=u"""d-axis air gap width
+        doc="""d-axis air gap width
 
         :Type: float
         :min: 0
@@ -421,7 +421,7 @@ class BoreSinePole(Bore):
     delta_q = property(
         fget=_get_delta_q,
         fset=_set_delta_q,
-        doc=u"""q-axis air gap width
+        doc="""q-axis air gap width
 
         :Type: float
         :min: 0
@@ -440,7 +440,7 @@ class BoreSinePole(Bore):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Width of the pole
+        doc="""Width of the pole
 
         :Type: float
         :min: 0

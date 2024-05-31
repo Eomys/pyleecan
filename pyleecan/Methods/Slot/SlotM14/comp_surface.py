@@ -26,7 +26,7 @@ def comp_surface(self):
     R1 = abs(Z1)
     R2 = abs(Z2)
 
-    S1 = pi * R1 ** 2 * (self.W0 / (2 * pi))
-    S2 = pi * R2 ** 2 * (self.W0 / (2 * pi))
+    S1 = pi * R1**2 * (self.W0 / (2 * pi))
+    S2 = pi * R2**2 * (self.W0 / (2 * pi))
 
     return abs(S1 - S2)

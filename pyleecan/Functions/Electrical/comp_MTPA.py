@@ -86,7 +86,7 @@ def comp_MTPA(
         np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
     )
     Id, Iq = Id.ravel(), Iq.ravel()
-    Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
+    Imax_interp = np.sqrt(Id**2 + Iq**2)
 
     simu_MTPA = Simu1(name=machine.name + "_comp_MTPA", machine=machine)
 

@@ -29,6 +29,6 @@ def comp_loss_joule(lam, T_op, OP, type_skin_effect):
         Rs *= kr_skin
 
     # Calculate overall joule losses
-    Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
+    Pjoule = qs * Rs * (OP.Id_ref**2 + OP.Iq_ref**2)
 
     return Pjoule

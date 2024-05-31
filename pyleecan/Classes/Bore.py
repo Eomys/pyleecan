@@ -326,7 +326,7 @@ class Bore(FrozenClass):
     type_merge_slot = property(
         fget=_get_type_merge_slot,
         fset=_set_type_merge_slot,
-        doc=u"""how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)
+        doc="""how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)
 
         :Type: int
         :min: 0
@@ -346,7 +346,7 @@ class Bore(FrozenClass):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""Angular offset for the bore shape
+        doc="""Angular offset for the bore shape
 
         :Type: float
         """,

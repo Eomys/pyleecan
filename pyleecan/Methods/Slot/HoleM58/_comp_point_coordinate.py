@@ -39,116 +39,68 @@ def _comp_point_coordinate(self):
     Yc = Zc1.imag
     # Solved with Sympy
     X3 = (
-        R0 ** 2 * X2
-        - R0 ** 2 * Xc
+        R0**2 * X2
+        - R0**2 * Xc
         - R0
         * Y2
-        * sqrt(
-            -(R0 ** 2)
-            + X2 ** 2
-            - 2 * X2 * Xc
-            + Xc ** 2
-            + Y2 ** 2
-            - 2 * Y2 * Yc
-            + Yc ** 2
-        )
+        * sqrt(-(R0**2) + X2**2 - 2 * X2 * Xc + Xc**2 + Y2**2 - 2 * Y2 * Yc + Yc**2)
         + R0
         * Yc
-        * sqrt(
-            -(R0 ** 2)
-            + X2 ** 2
-            - 2 * X2 * Xc
-            + Xc ** 2
-            + Y2 ** 2
-            - 2 * Y2 * Yc
-            + Yc ** 2
-        )
-        + X2 ** 2 * Xc
-        - 2 * X2 * Xc ** 2
-        + Xc ** 3
-        + Xc * Y2 ** 2
+        * sqrt(-(R0**2) + X2**2 - 2 * X2 * Xc + Xc**2 + Y2**2 - 2 * Y2 * Yc + Yc**2)
+        + X2**2 * Xc
+        - 2 * X2 * Xc**2
+        + Xc**3
+        + Xc * Y2**2
         - 2 * Xc * Y2 * Yc
-        + Xc * Yc ** 2
-    ) / (X2 ** 2 - 2 * X2 * Xc + Xc ** 2 + Y2 ** 2 - 2 * Y2 * Yc + Yc ** 2)
+        + Xc * Yc**2
+    ) / (X2**2 - 2 * X2 * Xc + Xc**2 + Y2**2 - 2 * Y2 * Yc + Yc**2)
     Y3 = (
-        R0 ** 2 * Y2
-        - R0 ** 2 * Yc
+        R0**2 * Y2
+        - R0**2 * Yc
         + R0
         * (X2 - Xc)
-        * sqrt(
-            -(R0 ** 2)
-            + X2 ** 2
-            - 2 * X2 * Xc
-            + Xc ** 2
-            + Y2 ** 2
-            - 2 * Y2 * Yc
-            + Yc ** 2
-        )
-        + X2 ** 2 * Yc
+        * sqrt(-(R0**2) + X2**2 - 2 * X2 * Xc + Xc**2 + Y2**2 - 2 * Y2 * Yc + Yc**2)
+        + X2**2 * Yc
         - 2 * X2 * Xc * Yc
-        + Xc ** 2 * Yc
-        + Y2 ** 2 * Yc
-        - 2 * Y2 * Yc ** 2
-        + Yc ** 3
-    ) / (X2 ** 2 - 2 * X2 * Xc + Xc ** 2 + Y2 ** 2 - 2 * Y2 * Yc + Yc ** 2)
+        + Xc**2 * Yc
+        + Y2**2 * Yc
+        - 2 * Y2 * Yc**2
+        + Yc**3
+    ) / (X2**2 - 2 * X2 * Xc + Xc**2 + Y2**2 - 2 * Y2 * Yc + Yc**2)
     Z3 = X3 + 1j * Y3
 
     # Same for Z4
     X5 = Z5.real
     Y5 = Z5.imag
     X4 = (
-        R0 ** 2 * X5
-        - R0 ** 2 * Xc
+        R0**2 * X5
+        - R0**2 * Xc
         + R0
         * Y5
-        * sqrt(
-            -(R0 ** 2)
-            + X5 ** 2
-            - 2 * X5 * Xc
-            + Xc ** 2
-            + Y5 ** 2
-            - 2 * Y5 * Yc
-            + Yc ** 2
-        )
+        * sqrt(-(R0**2) + X5**2 - 2 * X5 * Xc + Xc**2 + Y5**2 - 2 * Y5 * Yc + Yc**2)
         - R0
         * Yc
-        * sqrt(
-            -(R0 ** 2)
-            + X5 ** 2
-            - 2 * X5 * Xc
-            + Xc ** 2
-            + Y5 ** 2
-            - 2 * Y5 * Yc
-            + Yc ** 2
-        )
-        + X5 ** 2 * Xc
-        - 2 * X5 * Xc ** 2
-        + Xc ** 3
-        + Xc * Y5 ** 2
+        * sqrt(-(R0**2) + X5**2 - 2 * X5 * Xc + Xc**2 + Y5**2 - 2 * Y5 * Yc + Yc**2)
+        + X5**2 * Xc
+        - 2 * X5 * Xc**2
+        + Xc**3
+        + Xc * Y5**2
         - 2 * Xc * Y5 * Yc
-        + Xc * Yc ** 2
-    ) / (X5 ** 2 - 2 * X5 * Xc + Xc ** 2 + Y5 ** 2 - 2 * Y5 * Yc + Yc ** 2)
+        + Xc * Yc**2
+    ) / (X5**2 - 2 * X5 * Xc + Xc**2 + Y5**2 - 2 * Y5 * Yc + Yc**2)
     Y4 = (
-        R0 ** 2 * Y5
-        - R0 ** 2 * Yc
+        R0**2 * Y5
+        - R0**2 * Yc
         - R0
         * (X5 - Xc)
-        * sqrt(
-            -(R0 ** 2)
-            + X5 ** 2
-            - 2 * X5 * Xc
-            + Xc ** 2
-            + Y5 ** 2
-            - 2 * Y5 * Yc
-            + Yc ** 2
-        )
-        + X5 ** 2 * Yc
+        * sqrt(-(R0**2) + X5**2 - 2 * X5 * Xc + Xc**2 + Y5**2 - 2 * Y5 * Yc + Yc**2)
+        + X5**2 * Yc
         - 2 * X5 * Xc * Yc
-        + Xc ** 2 * Yc
-        + Y5 ** 2 * Yc
-        - 2 * Y5 * Yc ** 2
-        + Yc ** 3
-    ) / (X5 ** 2 - 2 * X5 * Xc + Xc ** 2 + Y5 ** 2 - 2 * Y5 * Yc + Yc ** 2)
+        + Xc**2 * Yc
+        + Y5**2 * Yc
+        - 2 * Y5 * Yc**2
+        + Yc**3
+    ) / (X5**2 - 2 * X5 * Xc + Xc**2 + Y5**2 - 2 * Y5 * Yc + Yc**2)
     Z4 = X4 + 1j * Y4
 
     Z9 = Z4.conjugate()

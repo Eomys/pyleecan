@@ -19,4 +19,4 @@ def comp_surface(self):
 
     """
 
-    return pi / 2 * (self.parent.Rext ** 2 - self.parent.Rint ** 2)
+    return pi / 2 * (self.parent.Rext**2 - self.parent.Rint**2)

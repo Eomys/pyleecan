@@ -32,9 +32,9 @@ def comp_surfaces(self):
     Ryoke = self.get_Ryoke()
     Hyoke = self.comp_height_yoke()
     if self.is_internal:
-        S_dict["Syoke"] = pi * ((Ryoke + Hyoke) ** 2 - Ryoke ** 2) - S_dict["Svent"]
+        S_dict["Syoke"] = pi * ((Ryoke + Hyoke) ** 2 - Ryoke**2) - S_dict["Svent"]
     else:
-        S_dict["Syoke"] = pi * (Ryoke ** 2 - (Ryoke - Hyoke) ** 2) - S_dict["Svent"]
+        S_dict["Syoke"] = pi * (Ryoke**2 - (Ryoke - Hyoke) ** 2) - S_dict["Svent"]
 
     S_dict["Smag"] = Smag
     S_dict["Shole"] = Shole

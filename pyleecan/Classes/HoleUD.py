@@ -421,7 +421,7 @@ class HoleUD(HoleMag):
     surf_list = property(
         fget=_get_surf_list,
         fset=_set_surf_list,
-        doc=u"""List of surface to draw the Hole. Surfaces must be ordered in trigo order, label must contain HoleMagnet for Magnet and Hole for holes
+        doc="""List of surface to draw the Hole. Surfaces must be ordered in trigo order, label must contain HoleMagnet for Magnet and Hole for holes
 
         :Type: [Surface]
         """,
@@ -461,7 +461,7 @@ class HoleUD(HoleMag):
     magnet_dict = property(
         fget=_get_magnet_dict,
         fset=_set_magnet_dict,
-        doc=u"""dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)
+        doc="""dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)
 
         :Type: {Magnet}
         """,
@@ -479,7 +479,7 @@ class HoleUD(HoleMag):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the hole (for save)
+        doc="""Name of the hole (for save)
 
         :Type: str
         """,

@@ -327,7 +327,7 @@ class PostPlot(PostMethod):
     method = property(
         fget=_get_method,
         fset=_set_method,
-        doc=u"""Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)
+        doc="""Name of the plot method to call (e.g. plot_2D_Data, plot_contour, plot_multi)
 
         :Type: str
         """,
@@ -345,7 +345,7 @@ class PostPlot(PostMethod):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the plot to use when saving the figure after plotting
+        doc="""Name of the plot to use when saving the figure after plotting
 
         :Type: str
         """,
@@ -365,7 +365,7 @@ class PostPlot(PostMethod):
     param_list = property(
         fget=_get_param_list,
         fset=_set_param_list,
-        doc=u"""dictionary of parameters to pass to the plot method when executing it
+        doc="""dictionary of parameters to pass to the plot method when executing it
 
         :Type: list
         """,
@@ -385,7 +385,7 @@ class PostPlot(PostMethod):
     param_dict = property(
         fget=_get_param_dict,
         fset=_set_param_dict,
-        doc=u"""dictionary of parameters to pass to the plot method when executing it
+        doc="""dictionary of parameters to pass to the plot method when executing it
 
         :Type: dict
         """,
@@ -403,7 +403,7 @@ class PostPlot(PostMethod):
     save_format = property(
         fget=_get_save_format,
         fset=_set_save_format,
-        doc=u"""File format extension ("png", "svg", "eps") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying "save_path"=path_str or not save the figure by specifying "save_path"=None in param_dict, if the plot_method enables it.
+        doc="""File format extension ("png", "svg", "eps") in which to save the figure. The PostPlot automatically saves the figure in the results folder. The user can specify a different folder by specifying "save_path"=path_str or not save the figure by specifying "save_path"=None in param_dict, if the plot_method enables it.
 
         :Type: str
         """,
@@ -421,7 +421,7 @@ class PostPlot(PostMethod):
     quantity = property(
         fget=_get_quantity,
         fset=_set_quantity,
-        doc=u"""Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)
+        doc="""Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)
 
         :Type: str
         """,

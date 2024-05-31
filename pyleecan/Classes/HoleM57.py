@@ -583,7 +583,7 @@ class HoleM57(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""V angle
+        doc="""V angle
 
         :Type: float
         :min: 0
@@ -603,7 +603,7 @@ class HoleM57(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Distance from the lamination Bore
+        doc="""Distance from the lamination Bore
 
         :Type: float
         :min: 0
@@ -622,7 +622,7 @@ class HoleM57(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Tooth width (at V bottom)
+        doc="""Tooth width (at V bottom)
 
         :Type: float
         :min: 0
@@ -641,7 +641,7 @@ class HoleM57(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Magnet height
+        doc="""Magnet height
 
         :Type: float
         :min: 0
@@ -660,7 +660,7 @@ class HoleM57(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Distance Magnet to top of the V
+        doc="""Distance Magnet to top of the V
 
         :Type: float
         :min: 0
@@ -679,7 +679,7 @@ class HoleM57(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth width (at V top)
+        doc="""Tooth width (at V top)
 
         :Type: float
         :min: 0
@@ -698,7 +698,7 @@ class HoleM57(HoleMag):
     W4 = property(
         fget=_get_W4,
         fset=_set_W4,
-        doc=u"""Magnet Width
+        doc="""Magnet Width
 
         :Type: float
         :min: 0
@@ -736,7 +736,7 @@ class HoleM57(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""First Magnet
+        doc="""First Magnet
 
         :Type: Magnet
         """,
@@ -773,7 +773,7 @@ class HoleM57(HoleMag):
     magnet_1 = property(
         fget=_get_magnet_1,
         fset=_set_magnet_1,
-        doc=u"""Second Magnet
+        doc="""Second Magnet
 
         :Type: Magnet
         """,

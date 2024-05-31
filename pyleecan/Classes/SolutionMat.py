@@ -373,7 +373,7 @@ class SolutionMat(Solution):
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Matrix/Vector of the numerical values of the solutions.
+        doc="""Matrix/Vector of the numerical values of the solutions.
 
         :Type: ndarray
         """,
@@ -398,7 +398,7 @@ class SolutionMat(Solution):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Indices of loaded elements. Set to None if all elements are loaded
+        doc="""Indices of loaded elements. Set to None if all elements are loaded
 
         :Type: ndarray
         """,
@@ -418,7 +418,7 @@ class SolutionMat(Solution):
     axis_name = property(
         fget=_get_axis_name,
         fset=_set_axis_name,
-        doc=u"""List of axis names (e.g. "time", "direction")
+        doc="""List of axis names (e.g. "time", "direction")
 
         :Type: list
         """,
@@ -438,7 +438,7 @@ class SolutionMat(Solution):
     axis_size = property(
         fget=_get_axis_size,
         fset=_set_axis_size,
-        doc=u"""List of axis sizes
+        doc="""List of axis sizes
 
         :Type: list
         """,

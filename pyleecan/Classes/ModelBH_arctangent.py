@@ -20,7 +20,7 @@ from ._check import InitUnKnowClassError
 
 
 class ModelBH_arctangent(ModelBH):
-    """Abstract class for BH curve model """
+    """Abstract class for BH curve model"""
 
     VERSION = 1
 
@@ -214,7 +214,7 @@ class ModelBH_arctangent(ModelBH):
     k = property(
         fget=_get_k,
         fset=_set_k,
-        doc=u"""BH curve parameter
+        doc="""BH curve parameter
 
         :Type: float
         """,
@@ -232,7 +232,7 @@ class ModelBH_arctangent(ModelBH):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Saturation permeability parameter
+        doc="""Saturation permeability parameter
 
         :Type: float
         """,

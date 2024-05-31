@@ -317,7 +317,7 @@ class ImportGenToothSaw(ImportMatrix):
     type_signal = property(
         fget=_get_type_signal,
         fset=_set_type_signal,
-        doc=u"""0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw
+        doc="""0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw
 
         :Type: int
         :min: 0
@@ -337,7 +337,7 @@ class ImportGenToothSaw(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""Frequency of the signal to generate
+        doc="""Frequency of the signal to generate
 
         :Type: float
         :min: 0
@@ -356,7 +356,7 @@ class ImportGenToothSaw(ImportMatrix):
     A = property(
         fget=_get_A,
         fset=_set_A,
-        doc=u"""Amplitude of the signal to generate
+        doc="""Amplitude of the signal to generate
 
         :Type: float
         """,
@@ -374,7 +374,7 @@ class ImportGenToothSaw(ImportMatrix):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Length of the signal to generate
+        doc="""Length of the signal to generate
 
         :Type: int
         :min: 0
@@ -393,7 +393,7 @@ class ImportGenToothSaw(ImportMatrix):
     Tf = property(
         fget=_get_Tf,
         fset=_set_Tf,
-        doc=u"""End time of the signal generation
+        doc="""End time of the signal generation
 
         :Type: float
         :min: 0
@@ -412,7 +412,7 @@ class ImportGenToothSaw(ImportMatrix):
     Dt = property(
         fget=_get_Dt,
         fset=_set_Dt,
-        doc=u"""Time offset
+        doc="""Time offset
 
         :Type: float
         """,

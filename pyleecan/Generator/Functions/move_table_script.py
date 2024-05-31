@@ -2,6 +2,7 @@
 to two tables on top of eachother (properties on top, method bellow)
 It also add the "as_dict Type" column for properties
 """
+
 from os import walk, remove, rename
 from os.path import isfile, join
 from pyleecan.definitions import DOC_DIR

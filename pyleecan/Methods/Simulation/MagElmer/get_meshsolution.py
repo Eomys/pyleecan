@@ -133,13 +133,11 @@ def get_meshsolution(self, output):
 
             if siz == 1:
                 field = components[0]
-                sol_dict[store_dict[key]["symbol"]] = (
-                    SolutionData(
-                        field=field,
-                        # type_element="point",
-                        type_element="triangle",
-                        label=store_dict[key]["symbol"],
-                    )
+                sol_dict[store_dict[key]["symbol"]] = SolutionData(
+                    field=field,
+                    # type_element="point",
+                    type_element="triangle",
+                    label=store_dict[key]["symbol"],
                 )
             else:
                 comps = {}
@@ -150,13 +148,11 @@ def get_meshsolution(self, output):
                     symbol=store_dict[key]["symbol"],
                     components=comps,
                 )
-                sol_dict[store_dict[key]["symbol"]] = (
-                    SolutionVector(
-                        field=field,
-                        # type_element="point",
-                        type_element="triangle",
-                        label=store_dict[key]["symbol"],
-                    )
+                sol_dict[store_dict[key]["symbol"]] = SolutionVector(
+                    field=field,
+                    # type_element="point",
+                    type_element="triangle",
+                    label=store_dict[key]["symbol"],
                 )
 
     meshsol.solution_dict = sol_dict

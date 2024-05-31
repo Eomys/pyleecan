@@ -237,7 +237,7 @@ class DriveWave(Drive):
     wave = property(
         fget=_get_wave,
         fset=_set_wave,
-        doc=u"""Wave generator
+        doc="""Wave generator
 
         :Type: Import
         """,

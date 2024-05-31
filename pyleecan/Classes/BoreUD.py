@@ -321,7 +321,7 @@ class BoreUD(Bore):
     line_list = property(
         fget=_get_line_list,
         fset=_set_line_list,
-        doc=u"""List of line to draw the full bore
+        doc="""List of line to draw the full bore
 
         :Type: [Line]
         """,
@@ -339,7 +339,7 @@ class BoreUD(Bore):
     sym = property(
         fget=_get_sym,
         fset=_set_sym,
-        doc=u"""Symmetry factor (1= full machine, 2= half of the machine...)
+        doc="""Symmetry factor (1= full machine, 2= half of the machine...)
 
         :Type: int
         :min: 1
@@ -358,7 +358,7 @@ class BoreUD(Bore):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the bore (for save)
+        doc="""Name of the bore (for save)
 
         :Type: str
         """,

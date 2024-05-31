@@ -20,4 +20,4 @@ def comp_surface(self):
     Rint = abs(self.point_ref) - self.height / 2
     Rext = Rint + self.height
 
-    return (pi * Rext ** 2 - pi * Rint ** 2) * (self.angle / (2 * pi))
+    return (pi * Rext**2 - pi * Rint**2) * (self.angle / (2 * pi))

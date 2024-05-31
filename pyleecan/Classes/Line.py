@@ -174,7 +174,7 @@ class Line(FrozenClass):
     prop_dict = property(
         fget=_get_prop_dict,
         fset=_set_prop_dict,
-        doc=u"""Property dictionary
+        doc="""Property dictionary
 
         :Type: dict
         """,

@@ -42,7 +42,7 @@ def get_bore_line(self, prop_dict=None):
     YC1 = ZC1.imag
 
     # Z2
-    X2 = sqrt(self.Rarc ** 2 - (self.W1 + YC1) ** 2) + XC1
+    X2 = sqrt(self.Rarc**2 - (self.W1 + YC1) ** 2) + XC1
     Y2 = -self.W1
     Z2 = X2 + 1j * Y2
 

@@ -45,7 +45,7 @@ def gen_input(self):
             Is_val = zeros((1, 6), dtype=complex)
             Id = self.OP.get_Id_Iq()["Id"]
             Iq = self.OP.get_Id_Iq()["Iq"]
-            I0 = sqrt(Id ** 2 + Iq ** 2) * sqrt(2)
+            I0 = sqrt(Id**2 + Iq**2) * sqrt(2)
             if Iq == 0:
                 phi0 = 0 if Id >= 0 else -pi
             else:

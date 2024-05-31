@@ -517,7 +517,7 @@ class CondType13(Conductor):
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]
+        doc="""cf schematics, single wire diameter without insulation [m]
 
         :Type: float
         :min: 0
@@ -536,7 +536,7 @@ class CondType13(Conductor):
     Wins_cond = property(
         fget=_get_Wins_cond,
         fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]
+        doc="""(advanced) cf schematics, winding coil insulation diameter [m]
 
         :Type: float
         :min: 0
@@ -555,7 +555,7 @@ class CondType13(Conductor):
     Nwppc_rad = property(
         fget=_get_Nwppc_rad,
         fset=_set_Nwppc_rad,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
+        doc="""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
 
         :Type: int
         :min: 1
@@ -574,7 +574,7 @@ class CondType13(Conductor):
     Nwppc_tan = property(
         fget=_get_Nwppc_tan,
         fset=_set_Nwppc_tan,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
+        doc="""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
 
         :Type: int
         :min: 1
@@ -593,7 +593,7 @@ class CondType13(Conductor):
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+        doc="""(advanced) cf schematics, winding strand insulation thickness [m]
 
         :Type: float
         :min: 0
@@ -612,7 +612,7 @@ class CondType13(Conductor):
     Kwoh = property(
         fget=_get_Kwoh,
         fset=_set_Kwoh,
-        doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
+        doc="""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
 
         :Type: float
         :min: 0

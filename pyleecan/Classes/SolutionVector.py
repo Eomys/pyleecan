@@ -276,7 +276,7 @@ class SolutionVector(Solution):
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
+        doc="""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,

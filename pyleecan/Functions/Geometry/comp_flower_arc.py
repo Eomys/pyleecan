@@ -31,12 +31,10 @@ def comp_flower_arc(alpha, Rarc, Rext):
     # Computation of the angle of the Arc (analitical solution for
     # equation : tan(alpha_mag/2) = Rsin(alpha)/(Rext-R(1-cos(alpha))
     alpha_lim1 = -2 * arctan(
-        (R + sqrt(R ** 2 + 2 * R * Rext * T ** 2 - Rext ** 2 * T ** 2))
-        / (T * (2 * (R - Rext)))
+        (R + sqrt(R**2 + 2 * R * Rext * T**2 - Rext**2 * T**2)) / (T * (2 * (R - Rext)))
     )
     alpha_lim2 = -2 * arctan(
-        (R - sqrt(R ** 2 + 2 * R * Rext * T ** 2 - Rext ** 2 * T ** 2))
-        / (T * (2 * R - Rext))
+        (R - sqrt(R**2 + 2 * R * Rext * T**2 - Rext**2 * T**2)) / (T * (2 * R - Rext))
     )
     alpha_lim = min(abs(alpha_lim1), abs(alpha_lim2))
 

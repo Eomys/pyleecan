@@ -48,7 +48,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotUD(Slot):
-    """"User defined" Slot from a line list. """
+    """ "User defined" Slot from a line list."""
 
     VERSION = 1
 
@@ -427,7 +427,7 @@ class SlotUD(Slot):
     line_list = property(
         fget=_get_line_list,
         fset=_set_line_list,
-        doc=u"""list of line to draw the edges of the slot
+        doc="""list of line to draw the edges of the slot
 
         :Type: [Line]
         """,
@@ -445,7 +445,7 @@ class SlotUD(Slot):
     wind_begin_index = property(
         fget=_get_wind_begin_index,
         fset=_set_wind_begin_index,
-        doc=u"""Index of the first line to include in the winding
+        doc="""Index of the first line to include in the winding
 
         :Type: int
         """,
@@ -463,7 +463,7 @@ class SlotUD(Slot):
     wind_end_index = property(
         fget=_get_wind_end_index,
         fset=_set_wind_end_index,
-        doc=u"""Index of the last line to include in the winding
+        doc="""Index of the last line to include in the winding
 
         :Type: int
         """,
@@ -481,7 +481,7 @@ class SlotUD(Slot):
     type_line_wind = property(
         fget=_get_type_line_wind,
         fset=_set_type_line_wind,
-        doc=u"""0 to close winding with Segment, 1 for Arc1
+        doc="""0 to close winding with Segment, 1 for Arc1
 
         :Type: int
         :min: 0
@@ -501,7 +501,7 @@ class SlotUD(Slot):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the slot (for save)
+        doc="""Name of the slot (for save)
 
         :Type: str
         """,

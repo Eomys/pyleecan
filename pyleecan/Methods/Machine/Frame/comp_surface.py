@@ -19,8 +19,8 @@ def comp_surface(self):
     """
 
     # Surface of the external disk
-    S_ext = (self.Rext ** 2) * pi
+    S_ext = (self.Rext**2) * pi
     # Surface of the internal disk
-    S_int = (self.Rint ** 2) * pi
+    S_int = (self.Rint**2) * pi
 
     return S_ext - S_int

@@ -384,7 +384,7 @@ class Slot19(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot top width
+        doc="""Slot top width
 
         :Type: float
         :min: 0
@@ -403,7 +403,7 @@ class Slot19(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot height
+        doc="""Slot height
 
         :Type: float
         :min: 0
@@ -422,7 +422,7 @@ class Slot19(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot bottom width.
+        doc="""Slot bottom width.
 
         :Type: float
         :min: 0
@@ -441,7 +441,7 @@ class Slot19(Slot):
     Wx_is_rad = property(
         fget=_get_Wx_is_rad,
         fset=_set_Wx_is_rad,
-        doc=u"""Wx unit, 0 for m, 1 for rad
+        doc="""Wx unit, 0 for m, 1 for rad
 
         :Type: bool
         """,

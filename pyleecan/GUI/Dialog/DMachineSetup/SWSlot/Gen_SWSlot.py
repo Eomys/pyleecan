@@ -10,13 +10,13 @@ class Gen_SWSlot(Ui_SWSlot):
         """Abstract class to update the widget according to the csv doc"""
         Ui_SWSlot.setupUi(self, SWSlot)
         # Setup of in_Zs
-        txt = self.tr(u"""slot number""")
+        txt = self.tr("""slot number""")
         self.in_Zs.setWhatsThis(txt)
         self.in_Zs.setToolTip(txt)
 
         # Setup of si_Zs
         self.si_Zs.setMinimum(0)
         self.si_Zs.setMaximum(999999)
-        txt = self.tr(u"""slot number""")
+        txt = self.tr("""slot number""")
         self.si_Zs.setWhatsThis(txt)
         self.si_Zs.setToolTip(txt)

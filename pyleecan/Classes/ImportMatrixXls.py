@@ -322,7 +322,7 @@ class ImportMatrixXls(ImportMatrix):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path of the file to load
+        doc="""Path of the file to load
 
         :Type: str
         """,
@@ -340,7 +340,7 @@ class ImportMatrixXls(ImportMatrix):
     sheet = property(
         fget=_get_sheet,
         fset=_set_sheet,
-        doc=u"""Name of the sheet to load
+        doc="""Name of the sheet to load
 
         :Type: str
         """,
@@ -358,7 +358,7 @@ class ImportMatrixXls(ImportMatrix):
     skiprows = property(
         fget=_get_skiprows,
         fset=_set_skiprows,
-        doc=u"""To skip some rows in the file (header)
+        doc="""To skip some rows in the file (header)
 
         :Type: int
         :min: 0
@@ -377,7 +377,7 @@ class ImportMatrixXls(ImportMatrix):
     usecols = property(
         fget=_get_usecols,
         fset=_set_usecols,
-        doc=u"""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")
+        doc="""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")
 
         :Type: str
         """,
@@ -397,7 +397,7 @@ class ImportMatrixXls(ImportMatrix):
     axes_colrows = property(
         fget=_get_axes_colrows,
         fset=_set_axes_colrows,
-        doc=u"""To read axes in first line/column
+        doc="""To read axes in first line/column
 
         :Type: dict
         """,
@@ -415,7 +415,7 @@ class ImportMatrixXls(ImportMatrix):
     is_allsheets = property(
         fget=_get_is_allsheets,
         fset=_set_is_allsheets,
-        doc=u"""To read all sheets in a 3D matrix
+        doc="""To read all sheets in a 3D matrix
 
         :Type: bool
         """,

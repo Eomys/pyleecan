@@ -529,7 +529,7 @@ class Simulation(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the simulation
+        doc="""Name of the simulation
 
         :Type: str
         """,
@@ -547,7 +547,7 @@ class Simulation(FrozenClass):
     desc = property(
         fget=_get_desc,
         fset=_set_desc,
-        doc=u"""Simulation description
+        doc="""Simulation description
 
         :Type: str
         """,
@@ -584,7 +584,7 @@ class Simulation(FrozenClass):
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
-        doc=u"""Machine to simulate
+        doc="""Machine to simulate
 
         :Type: Machine
         """,
@@ -621,7 +621,7 @@ class Simulation(FrozenClass):
     input = property(
         fget=_get_input,
         fset=_set_input,
-        doc=u"""Input of the simulation
+        doc="""Input of the simulation
 
         :Type: Input
         """,
@@ -639,7 +639,7 @@ class Simulation(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -676,7 +676,7 @@ class Simulation(FrozenClass):
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
-        doc=u"""Multi-simulation definition
+        doc="""Multi-simulation definition
 
         :Type: VarSimu
         """,
@@ -718,7 +718,7 @@ class Simulation(FrozenClass):
     postproc_list = property(
         fget=_get_postproc_list,
         fset=_set_postproc_list,
-        doc=u"""List of postprocessings to run on Output after the simulation
+        doc="""List of postprocessings to run on Output after the simulation
 
         :Type: [Post]
         """,
@@ -736,7 +736,7 @@ class Simulation(FrozenClass):
     index = property(
         fget=_get_index,
         fset=_set_index,
-        doc=u"""Index of the simulation (if part of a multi-simulation)
+        doc="""Index of the simulation (if part of a multi-simulation)
 
         :Type: int
         :min: 0
@@ -755,7 +755,7 @@ class Simulation(FrozenClass):
     path_result = property(
         fget=_get_path_result,
         fset=_set_path_result,
-        doc=u"""Path to the Result folder to use (None to use default one)
+        doc="""Path to the Result folder to use (None to use default one)
 
         :Type: str
         """,
@@ -773,7 +773,7 @@ class Simulation(FrozenClass):
     layer = property(
         fget=_get_layer,
         fset=_set_layer,
-        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+        doc="""Layer of the simulation in a multi-simulation (0 is top simulation)
 
         :Type: int
         :min: 0
@@ -792,7 +792,7 @@ class Simulation(FrozenClass):
     layer_log_warn = property(
         fget=_get_layer_log_warn,
         fset=_set_layer_log_warn,
-        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
+        doc="""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
 
         :Type: int
         :min: 0

@@ -49,7 +49,7 @@ def _comp_point_coordinate(self):
     ZM4 = ZM4h * exp(1j * angle(Z1 - Z2)) + Z2
 
     # Revert translation to center left hole in machine's center
-    Z = 1j * (sqrt((Rbo - self.H1) ** 2 - Z3.real ** 2) - Z3.imag)
+    Z = 1j * (sqrt((Rbo - self.H1) ** 2 - Z3.real**2) - Z3.imag)
     Z0 += Z
     Z1 += Z
     Z2 += Z

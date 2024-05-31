@@ -470,7 +470,7 @@ class Hole(FrozenClass):
     Zh = property(
         fget=_get_Zh,
         fset=_set_Zh,
-        doc=u"""Number of Hole around the circumference
+        doc="""Number of Hole around the circumference
 
         :Type: int
         :min: 0
@@ -508,7 +508,7 @@ class Hole(FrozenClass):
     mat_void = property(
         fget=_get_mat_void,
         fset=_set_mat_void,
-        doc=u"""Material of the void part of the hole (Air in general)
+        doc="""Material of the void part of the hole (Air in general)
 
         :Type: Material
         """,
@@ -528,7 +528,7 @@ class Hole(FrozenClass):
     magnetization_dict_offset = property(
         fget=_get_magnetization_dict_offset,
         fset=_set_magnetization_dict_offset,
-        doc=u"""Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])
+        doc="""Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])
 
         :Type: dict
         """,
@@ -546,7 +546,7 @@ class Hole(FrozenClass):
     Alpha0 = property(
         fget=_get_Alpha0,
         fset=_set_Alpha0,
-        doc=u"""Shift angle of the holes around circumference
+        doc="""Shift angle of the holes around circumference
 
         :Type: float
         :min: 0

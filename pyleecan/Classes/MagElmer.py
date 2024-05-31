@@ -701,7 +701,7 @@ class MagElmer(Magnetics):
     Kmesh_fineness = property(
         fget=_get_Kmesh_fineness,
         fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness (1 : default , > 1 : finner , < 1 : less fine)
+        doc="""global coefficient to adjust mesh fineness (1 : default , > 1 : finner , < 1 : less fine)
 
         :Type: float
         """,
@@ -719,7 +719,7 @@ class MagElmer(Magnetics):
     Kgeo_fineness = property(
         fget=_get_Kgeo_fineness,
         fset=_set_Kgeo_fineness,
-        doc=u"""global coefficient to adjust geometry fineness (1 : default , > 1 : finner , < 1 : less fine)
+        doc="""global coefficient to adjust geometry fineness (1 : default , > 1 : finner , < 1 : less fine)
 
         :Type: float
         """,
@@ -737,7 +737,7 @@ class MagElmer(Magnetics):
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""Name of the file to save the Elmer model
+        doc="""Name of the file to save the Elmer model
 
         :Type: str
         """,
@@ -757,7 +757,7 @@ class MagElmer(Magnetics):
     FEA_dict = property(
         fget=_get_FEA_dict,
         fset=_set_FEA_dict,
-        doc=u"""To enforce user-defined values for Elmer main parameters 
+        doc="""To enforce user-defined values for Elmer main parameters 
 
         :Type: dict
         """,
@@ -775,7 +775,7 @@ class MagElmer(Magnetics):
     is_get_mesh = property(
         fget=_get_is_get_mesh,
         fset=_set_is_get_mesh,
-        doc=u"""To save FEA mesh for latter post-procesing 
+        doc="""To save FEA mesh for latter post-procesing 
 
         :Type: bool
         """,
@@ -793,7 +793,7 @@ class MagElmer(Magnetics):
     is_save_FEA = property(
         fget=_get_is_save_FEA,
         fset=_set_is_save_FEA,
-        doc=u"""To save FEA mesh and solution in a file
+        doc="""To save FEA mesh and solution in a file
 
         :Type: bool
         """,
@@ -813,7 +813,7 @@ class MagElmer(Magnetics):
     transform_list = property(
         fget=_get_transform_list,
         fset=_set_transform_list,
-        doc=u"""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+        doc="""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
 
         :Type: list
         """,
@@ -850,7 +850,7 @@ class MagElmer(Magnetics):
     rotor_dxf = property(
         fget=_get_rotor_dxf,
         fset=_set_rotor_dxf,
-        doc=u"""To use a dxf version of the rotor instead of build_geometry
+        doc="""To use a dxf version of the rotor instead of build_geometry
 
         :Type: DXFImport
         """,
@@ -887,7 +887,7 @@ class MagElmer(Magnetics):
     stator_dxf = property(
         fget=_get_stator_dxf,
         fset=_set_stator_dxf,
-        doc=u"""To use a dxf version of the rotor instead of build_geometry
+        doc="""To use a dxf version of the rotor instead of build_geometry
 
         :Type: DXFImport
         """,
@@ -905,7 +905,7 @@ class MagElmer(Magnetics):
     import_file = property(
         fget=_get_import_file,
         fset=_set_import_file,
-        doc=u"""To import an existing simulation file
+        doc="""To import an existing simulation file
 
         :Type: str
         """,
@@ -923,7 +923,7 @@ class MagElmer(Magnetics):
     nb_worker = property(
         fget=_get_nb_worker,
         fset=_set_nb_worker,
-        doc=u"""To run Elmer in parallel (the parallelization is on the time loop)
+        doc="""To run Elmer in parallel (the parallelization is on the time loop)
 
         :Type: int
         """,

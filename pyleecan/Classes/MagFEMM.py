@@ -903,7 +903,7 @@ class MagFEMM(Magnetics):
     Kmesh_fineness = property(
         fget=_get_Kmesh_fineness,
         fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+        doc="""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
 
         :Type: float
         """,
@@ -921,7 +921,7 @@ class MagFEMM(Magnetics):
     Kgeo_fineness = property(
         fget=_get_Kgeo_fineness,
         fset=_set_Kgeo_fineness,
-        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+        doc="""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
 
         :Type: float
         """,
@@ -939,7 +939,7 @@ class MagFEMM(Magnetics):
     type_calc_leakage = property(
         fget=_get_type_calc_leakage,
         fset=_set_type_calc_leakage,
-        doc=u"""0 no leakage calculation /  1 calculation using single slot 
+        doc="""0 no leakage calculation /  1 calculation using single slot 
 
         :Type: int
         :min: 0
@@ -959,7 +959,7 @@ class MagFEMM(Magnetics):
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""Name of the file to save the FEMM model
+        doc="""Name of the file to save the FEMM model
 
         :Type: str
         """,
@@ -979,7 +979,7 @@ class MagFEMM(Magnetics):
     FEMM_dict_enforced = property(
         fget=_get_FEMM_dict_enforced,
         fset=_set_FEMM_dict_enforced,
-        doc=u"""To enforce user-defined values for FEMM main parameters 
+        doc="""To enforce user-defined values for FEMM main parameters 
 
         :Type: dict
         """,
@@ -997,7 +997,7 @@ class MagFEMM(Magnetics):
     is_get_meshsolution = property(
         fget=_get_is_get_meshsolution,
         fset=_set_is_get_meshsolution,
-        doc=u"""To save FEA and mesh for latter post-procesing 
+        doc="""To save FEA and mesh for latter post-procesing 
 
         :Type: bool
         """,
@@ -1015,7 +1015,7 @@ class MagFEMM(Magnetics):
     is_save_meshsolution_as_file = property(
         fget=_get_is_save_meshsolution_as_file,
         fset=_set_is_save_meshsolution_as_file,
-        doc=u"""To save FEA and mesh as h5 files to save memory
+        doc="""To save FEA and mesh as h5 files to save memory
 
         :Type: bool
         """,
@@ -1033,7 +1033,7 @@ class MagFEMM(Magnetics):
     is_sliding_band = property(
         fget=_get_is_sliding_band,
         fset=_set_is_sliding_band,
-        doc=u"""0 to desactivate the sliding band
+        doc="""0 to desactivate the sliding band
 
         :Type: bool
         """,
@@ -1053,7 +1053,7 @@ class MagFEMM(Magnetics):
     transform_list = property(
         fget=_get_transform_list,
         fset=_set_transform_list,
-        doc=u"""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+        doc="""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
 
         :Type: list
         """,
@@ -1090,7 +1090,7 @@ class MagFEMM(Magnetics):
     rotor_dxf = property(
         fget=_get_rotor_dxf,
         fset=_set_rotor_dxf,
-        doc=u"""To use a dxf version of the rotor instead of build_geometry
+        doc="""To use a dxf version of the rotor instead of build_geometry
 
         :Type: DXFImport
         """,
@@ -1127,7 +1127,7 @@ class MagFEMM(Magnetics):
     stator_dxf = property(
         fget=_get_stator_dxf,
         fset=_set_stator_dxf,
-        doc=u"""To use a dxf version of the rotor instead of build_geometry
+        doc="""To use a dxf version of the rotor instead of build_geometry
 
         :Type: DXFImport
         """,
@@ -1145,7 +1145,7 @@ class MagFEMM(Magnetics):
     import_file = property(
         fget=_get_import_file,
         fset=_set_import_file,
-        doc=u"""To import an existing femm file
+        doc="""To import an existing femm file
 
         :Type: str
         """,
@@ -1163,7 +1163,7 @@ class MagFEMM(Magnetics):
     is_close_femm = property(
         fget=_get_is_close_femm,
         fset=_set_is_close_femm,
-        doc=u"""To close femm automatically after the simulation
+        doc="""To close femm automatically after the simulation
 
         :Type: bool
         """,
@@ -1181,7 +1181,7 @@ class MagFEMM(Magnetics):
     nb_worker = property(
         fget=_get_nb_worker,
         fset=_set_nb_worker,
-        doc=u"""To run FEMM in parallel (the parallelization is on the time loop)
+        doc="""To run FEMM in parallel (the parallelization is on the time loop)
 
         :Type: int
         """,
@@ -1199,7 +1199,7 @@ class MagFEMM(Magnetics):
     Rag_enforced = property(
         fget=_get_Rag_enforced,
         fset=_set_Rag_enforced,
-        doc=u"""To enforce a different radius value for air-gap outputs
+        doc="""To enforce a different radius value for air-gap outputs
 
         :Type: float
         """,
@@ -1217,7 +1217,7 @@ class MagFEMM(Magnetics):
     is_set_previous = property(
         fget=_get_is_set_previous,
         fset=_set_is_set_previous,
-        doc=u"""True set previous .ans result file in current .fem to use it as initialization and speed up calculation time
+        doc="""True set previous .ans result file in current .fem to use it as initialization and speed up calculation time
 
         :Type: bool
         """,
@@ -1235,7 +1235,7 @@ class MagFEMM(Magnetics):
     is_fast_draw = property(
         fget=_get_is_fast_draw,
         fset=_set_is_fast_draw,
-        doc=u"""True to use the symetry of the lamination to draw the machine faster
+        doc="""True to use the symetry of the lamination to draw the machine faster
 
         :Type: bool
         """,
@@ -1253,7 +1253,7 @@ class MagFEMM(Magnetics):
     is_calc_torque_energy = property(
         fget=_get_is_calc_torque_energy,
         fset=_set_is_calc_torque_energy,
-        doc=u"""True to calculate torque from integration of energy derivate over rotor elements
+        doc="""True to calculate torque from integration of energy derivate over rotor elements
 
         :Type: bool
         """,

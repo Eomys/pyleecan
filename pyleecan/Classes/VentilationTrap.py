@@ -402,7 +402,7 @@ class VentilationTrap(Hole):
     D0 = property(
         fget=_get_D0,
         fset=_set_D0,
-        doc=u"""Hole height
+        doc="""Hole height
 
         :Type: float
         :min: 0
@@ -421,7 +421,7 @@ class VentilationTrap(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Radius of the hole bottom
+        doc="""Radius of the hole bottom
 
         :Type: float
         :min: 0
@@ -440,7 +440,7 @@ class VentilationTrap(Hole):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Hole small basis
+        doc="""Hole small basis
 
         :Type: float
         :min: 0
@@ -459,7 +459,7 @@ class VentilationTrap(Hole):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Hole large basis
+        doc="""Hole large basis
 
         :Type: float
         :min: 0

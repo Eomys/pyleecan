@@ -498,7 +498,7 @@ class LamSlotMultiWind(LamSlotMulti):
     Ksfill = property(
         fget=_get_Ksfill,
         fset=_set_Ksfill,
-        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
+        doc="""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
 
         :Type: float
         :min: 0
@@ -537,7 +537,7 @@ class LamSlotMultiWind(LamSlotMulti):
     winding = property(
         fget=_get_winding,
         fset=_set_winding,
-        doc=u"""Lamination's Winding
+        doc="""Lamination's Winding
 
         :Type: Winding
         """,

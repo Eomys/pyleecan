@@ -348,7 +348,7 @@ class PolarArc(Surface):
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Polar angle
+        doc="""Polar angle
 
         :Type: float
         :min: 0
@@ -367,7 +367,7 @@ class PolarArc(Surface):
     height = property(
         fget=_get_height,
         fset=_set_height,
-        doc=u"""The Heigth of the PolarAngle
+        doc="""The Heigth of the PolarAngle
 
         :Type: float
         :min: 0

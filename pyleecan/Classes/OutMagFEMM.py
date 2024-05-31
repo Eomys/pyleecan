@@ -252,7 +252,7 @@ class OutMagFEMM(OutInternal):
     FEMM_dict = property(
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
-        doc=u"""dictionary containing the main FEMM parameters
+        doc="""dictionary containing the main FEMM parameters
 
         :Type: dict
         """,
@@ -294,7 +294,7 @@ class OutMagFEMM(OutInternal):
     handler_list = property(
         fget=_get_handler_list,
         fset=_set_handler_list,
-        doc=u"""List of FEMM Handler (more than 1 if nb_worker >1)
+        doc="""List of FEMM Handler (more than 1 if nb_worker >1)
 
         :Type: [_FEMMHandler]
         """,

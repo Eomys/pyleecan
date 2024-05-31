@@ -44,8 +44,8 @@ def comp_magnetostrictive_tensor(
     M_norm = np.linalg.norm(M, axis=(0, 1))  # M matrices are in the first two axes
     mu_times_Mnorm_squared = np.multiply(mu_0, M_norm) ** 2
 
-    alpha1 = a10 + a12 * mu_times_Mnorm_squared + a14 * mu_times_Mnorm_squared ** 2
-    alpha2 = a20 + a22 * mu_times_Mnorm_squared + a24 * mu_times_Mnorm_squared ** 2
+    alpha1 = a10 + a12 * mu_times_Mnorm_squared + a14 * mu_times_Mnorm_squared**2
+    alpha2 = a20 + a22 * mu_times_Mnorm_squared + a24 * mu_times_Mnorm_squared**2
 
     magnetostric_tensor = np.zeros((2, 2, Nt_tot))
 

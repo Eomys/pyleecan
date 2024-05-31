@@ -11,14 +11,14 @@ class Gen_WImportExcel(Ui_WImportExcel):
         Ui_WImportExcel.setupUi(self, WImportExcel)
         # Setup of in_range
         txt = self.tr(
-            u"""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")"""
+            """list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")"""
         )
         self.in_range.setWhatsThis(txt)
         self.in_range.setToolTip(txt)
 
         # Setup of le_range
         txt = self.tr(
-            u"""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")"""
+            """list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")"""
         )
         self.le_range.setWhatsThis(txt)
         self.le_range.setToolTip(txt)

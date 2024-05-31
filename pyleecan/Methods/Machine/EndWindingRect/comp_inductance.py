@@ -38,6 +38,6 @@ def comp_inductance(self):
     l_lambda = 2 * l_ew * self.lambda_length + w_ew * self.lambda_width
 
     # Calculate end-winding inductance from Eq (4.98) p.261
-    Lw = 2 / p * Ntcoil ** 2 * mu0 * l_lambda
+    Lw = 2 / p * Ntcoil**2 * mu0 * l_lambda
 
     return Lw

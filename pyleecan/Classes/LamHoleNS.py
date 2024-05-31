@@ -550,7 +550,7 @@ class LamHoleNS(LamH):
     hole_north = property(
         fget=_get_hole_north,
         fset=_set_hole_north,
-        doc=u"""lamination Holes for North pole
+        doc="""lamination Holes for North pole
 
         :Type: [Hole]
         """,
@@ -592,7 +592,7 @@ class LamHoleNS(LamH):
     hole_south = property(
         fget=_get_hole_south,
         fset=_set_hole_south,
-        doc=u"""lamination Holes for South pole
+        doc="""lamination Holes for South pole
 
         :Type: [Hole]
         """,

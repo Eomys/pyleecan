@@ -66,10 +66,10 @@ def comp_coeff(self, T_op=20, T_ref=20):
     if is_round_wire:
         # Use round wire approximation Eq(5.30) p.271
         # --> kr_skin = 1 + 0.59 * ((zt ** 2 - 0.2) / 9) * ksi ** 4
-        k = 0.59 * ((zt ** 2 - 0.2) / 9) * ksi ** 4
+        k = 0.59 * ((zt**2 - 0.2) / 9) * ksi**4
     else:
         # Use rectangular wire approximation Eq(5.29) p.271
         # --> kr_skin = 1 + (zt ** 2 - 0.2) / 9 * ksi ** 4
-        k = (zt ** 2 - 0.2) / 9 * ksi ** 4
+        k = (zt**2 - 0.2) / 9 * ksi**4
 
     return k

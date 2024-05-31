@@ -269,7 +269,7 @@ class ImportVectorField(FrozenClass):
     components = property(
         fget=_get_components,
         fset=_set_components,
-        doc=u"""Dict of components (e.g. {"radial": ImportData})
+        doc="""Dict of components (e.g. {"radial": ImportData})
 
         :Type: {ImportData}
         """,
@@ -287,7 +287,7 @@ class ImportVectorField(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the vector field
+        doc="""Name of the vector field
 
         :Type: str
         """,
@@ -305,7 +305,7 @@ class ImportVectorField(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc=u"""Symbol of the vector field
+        doc="""Symbol of the vector field
 
         :Type: str
         """,

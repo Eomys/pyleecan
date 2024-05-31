@@ -644,7 +644,7 @@ class ElecLUTdq(Electrical):
     n_interp = property(
         fget=_get_n_interp,
         fset=_set_n_interp,
-        doc=u"""Number of id values used for interpolation
+        doc="""Number of id values used for interpolation
 
         :Type: int
         :min: 1
@@ -663,7 +663,7 @@ class ElecLUTdq(Electrical):
     Id_min = property(
         fget=_get_Id_min,
         fset=_set_Id_min,
-        doc=u"""Minimum Id for LUT calculation
+        doc="""Minimum Id for LUT calculation
 
         :Type: float
         """,
@@ -681,7 +681,7 @@ class ElecLUTdq(Electrical):
     Id_max = property(
         fget=_get_Id_max,
         fset=_set_Id_max,
-        doc=u"""Maximum Id for LUT calculation
+        doc="""Maximum Id for LUT calculation
 
         :Type: float
         """,
@@ -699,7 +699,7 @@ class ElecLUTdq(Electrical):
     Iq_min = property(
         fget=_get_Iq_min,
         fset=_set_Iq_min,
-        doc=u"""Minimum Iq for LUT calculation
+        doc="""Minimum Iq for LUT calculation
 
         :Type: float
         """,
@@ -717,7 +717,7 @@ class ElecLUTdq(Electrical):
     Iq_max = property(
         fget=_get_Iq_max,
         fset=_set_Iq_max,
-        doc=u"""Maximum Iq for LUT calculation
+        doc="""Maximum Iq for LUT calculation
 
         :Type: float
         """,
@@ -735,7 +735,7 @@ class ElecLUTdq(Electrical):
     n_Id = property(
         fget=_get_n_Id,
         fset=_set_n_Id,
-        doc=u"""Number of Id for LUT calculation
+        doc="""Number of Id for LUT calculation
 
         :Type: int
         """,
@@ -753,7 +753,7 @@ class ElecLUTdq(Electrical):
     n_Iq = property(
         fget=_get_n_Iq,
         fset=_set_n_Iq,
-        doc=u"""Number of Iq for LUT calculation
+        doc="""Number of Iq for LUT calculation
 
         :Type: int
         """,
@@ -790,7 +790,7 @@ class ElecLUTdq(Electrical):
     LUT_simu = property(
         fget=_get_LUT_simu,
         fset=_set_LUT_simu,
-        doc=u"""Simulation object to run for LUT calculation
+        doc="""Simulation object to run for LUT calculation
 
         :Type: Simulation
         """,
@@ -808,7 +808,7 @@ class ElecLUTdq(Electrical):
     is_grid_dq = property(
         fget=_get_is_grid_dq,
         fset=_set_is_grid_dq,
-        doc=u"""True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane
+        doc="""True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane
 
         :Type: bool
         """,
@@ -826,7 +826,7 @@ class ElecLUTdq(Electrical):
     Urms_max = property(
         fget=_get_Urms_max,
         fset=_set_Urms_max,
-        doc=u"""Maximum rms phase voltage
+        doc="""Maximum rms phase voltage
 
         :Type: float
         :min: 0
@@ -845,7 +845,7 @@ class ElecLUTdq(Electrical):
     Jrms_max = property(
         fget=_get_Jrms_max,
         fset=_set_Jrms_max,
-        doc=u"""Maximum rms current density in slot
+        doc="""Maximum rms current density in slot
 
         :Type: float
         :min: 0
@@ -864,7 +864,7 @@ class ElecLUTdq(Electrical):
     Irms_max = property(
         fget=_get_Irms_max,
         fset=_set_Irms_max,
-        doc=u"""Maximum rms phase current
+        doc="""Maximum rms phase current
 
         :Type: float
         :min: 0
@@ -883,7 +883,7 @@ class ElecLUTdq(Electrical):
     load_rate = property(
         fget=_get_load_rate,
         fset=_set_load_rate,
-        doc=u"""Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation
+        doc="""Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation
 
         :Type: float
         :min: 0

@@ -605,7 +605,7 @@ class SlotW14(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width.
+        doc="""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -624,7 +624,7 @@ class SlotW14(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc="""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -643,7 +643,7 @@ class SlotW14(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""height or angle (See Schematics)
+        doc="""height or angle (See Schematics)
 
         :Type: float
         :min: 0
@@ -662,7 +662,7 @@ class SlotW14(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""Tooth height
+        doc="""Tooth height
 
         :Type: float
         :min: 0
@@ -681,7 +681,7 @@ class SlotW14(Slot):
     wedge_type = property(
         fget=_get_wedge_type,
         fset=_set_wedge_type,
-        doc=u"""selection type wedge
+        doc="""selection type wedge
 
         :Type: int
         :min: 0
@@ -700,7 +700,7 @@ class SlotW14(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth width
+        doc="""Tooth width
 
         :Type: float
         :min: 0
@@ -719,7 +719,7 @@ class SlotW14(Slot):
     H1_is_rad = property(
         fget=_get_H1_is_rad,
         fset=_set_H1_is_rad,
-        doc=u"""H1 unit, 0 for m, 1 for rad
+        doc="""H1 unit, 0 for m, 1 for rad
 
         :Type: bool
         """,

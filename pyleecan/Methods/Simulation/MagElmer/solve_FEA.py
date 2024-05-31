@@ -942,7 +942,10 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         "Calling ElmerSolver: " + " ".join(map(str, cmd_elmersolver))
     )
     elmersolver = subprocess.Popen(
-        cmd_elmersolver, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=project_name
+        cmd_elmersolver,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=project_name,
     )
     (stdout, stderr) = elmersolver.communicate()
     elmersolver.wait()

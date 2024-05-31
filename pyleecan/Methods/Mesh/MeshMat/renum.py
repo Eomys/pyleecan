@@ -28,9 +28,9 @@ def renum(self):
             connect_dict_new = copy.deepcopy(connect_dict)
             for inode in range(nb_node_new):
                 for key in connect_dict:
-                    connect_dict_new[key][
-                        connect_dict[key] == node_indice[inode]
-                    ] = node_indice_new[inode]
+                    connect_dict_new[key][connect_dict[key] == node_indice[inode]] = (
+                        node_indice_new[inode]
+                    )
 
             self.node.indice = node_indice_new
 

@@ -23,11 +23,11 @@ def comp_surface_opening(self):
 
     S1 = self.H0 * 2 * self.R2
     S2 = 4 * self.R1 * self.R2
-    S3 = pi * self.R1 ** 2
+    S3 = pi * self.R1**2
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     # Because Slamination = S - Zs * Sslot
     if self.is_outwards():

@@ -505,7 +505,7 @@ class LamSquirrelCageMag(LamSquirrelCage):
     hole = property(
         fget=_get_hole,
         fset=_set_hole,
-        doc=u"""lamination Hole
+        doc="""lamination Hole
 
         :Type: [Hole]
         """,

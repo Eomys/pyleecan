@@ -187,7 +187,7 @@ class ImportMatrix(Import):
     is_transpose = property(
         fget=_get_is_transpose,
         fset=_set_is_transpose,
-        doc=u"""1 to transpose the Imported/Generated matrix
+        doc="""1 to transpose the Imported/Generated matrix
 
         :Type: bool
         """,

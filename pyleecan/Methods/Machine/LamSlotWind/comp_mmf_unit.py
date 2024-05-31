@@ -92,7 +92,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
         Is_val = zeros((1, 6), dtype=complex)
         Id = 1
         Iq = 0
-        I0 = sqrt(Id ** 2 + Iq ** 2) * sqrt(2)
+        I0 = sqrt(Id**2 + Iq**2) * sqrt(2)
         phi0 = 0
         if not self.winding.is_wye:
             I0 = I0 / sqrt(3)

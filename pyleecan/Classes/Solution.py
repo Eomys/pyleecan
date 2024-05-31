@@ -219,7 +219,7 @@ class Solution(FrozenClass):
     type_element = property(
         fget=_get_type_element,
         fset=_set_type_element,
-        doc=u"""Type of element (Point, Segment2, Triangle3, etc.)
+        doc="""Type of element (Point, Segment2, Triangle3, etc.)
 
         :Type: str
         """,
@@ -237,7 +237,7 @@ class Solution(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label to identify the solution
+        doc="""Label to identify the solution
 
         :Type: str
         """,
@@ -255,7 +255,7 @@ class Solution(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem
+        doc="""Dimension of the physical problem
 
         :Type: int
         :min: 1
@@ -275,7 +275,7 @@ class Solution(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the solution
+        doc="""Unit of the solution
 
         :Type: str
         """,

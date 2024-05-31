@@ -457,7 +457,7 @@ class Electrical(FrozenClass):
     eec = property(
         fget=_get_eec,
         fset=_set_eec,
-        doc=u"""Electrical Equivalent Circuit
+        doc="""Electrical Equivalent Circuit
 
         :Type: EEC
         """,
@@ -475,7 +475,7 @@ class Electrical(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -493,7 +493,7 @@ class Electrical(FrozenClass):
     freq_max = property(
         fget=_get_freq_max,
         fset=_set_freq_max,
-        doc=u"""Maximum frequency to calculate voltage and current harmonics
+        doc="""Maximum frequency to calculate voltage and current harmonics
 
         :Type: float
         """,
@@ -530,7 +530,7 @@ class Electrical(FrozenClass):
     LUT_enforced = property(
         fget=_get_LUT_enforced,
         fset=_set_LUT_enforced,
-        doc=u"""Look-Up Tables to update equivalent circuit parameters
+        doc="""Look-Up Tables to update equivalent circuit parameters
 
         :Type: LUT
         """,
@@ -548,7 +548,7 @@ class Electrical(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation
+        doc="""Average stator temperature for Electrical calculation
 
         :Type: float
         """,
@@ -566,7 +566,7 @@ class Electrical(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation
+        doc="""Average rotor temperature for Electrical calculation
 
         :Type: float
         """,
@@ -584,7 +584,7 @@ class Electrical(FrozenClass):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
+        doc="""Skin effect for resistance and inductance
 
         :Type: int
         """,
@@ -602,7 +602,7 @@ class Electrical(FrozenClass):
     is_skin_effect_inductance = property(
         fget=_get_is_skin_effect_inductance,
         fset=_set_is_skin_effect_inductance,
-        doc=u"""True to include skin effect on inductance if type_skin_effect != 0
+        doc="""True to include skin effect on inductance if type_skin_effect != 0
 
         :Type: bool
         """,

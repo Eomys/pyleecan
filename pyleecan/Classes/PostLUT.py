@@ -209,7 +209,7 @@ class PostLUT(PostMethod):
     is_save_LUT = property(
         fget=_get_is_save_LUT,
         fset=_set_is_save_LUT,
-        doc=u"""True to save LUT in PostLUT
+        doc="""True to save LUT in PostLUT
 
         :Type: bool
         """,
@@ -227,7 +227,7 @@ class PostLUT(PostMethod):
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""File name of the file created if is_save_LUT is True
+        doc="""File name of the file created if is_save_LUT is True
 
         :Type: str
         """,

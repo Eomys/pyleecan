@@ -283,7 +283,7 @@ class RuleComplex(Rule):
     fct_name = property(
         fget=_get_fct_name,
         fset=_set_fct_name,
-        doc=u"""fonction name to convert
+        doc="""fonction name to convert
 
         :Type: str
         """,
@@ -301,7 +301,7 @@ class RuleComplex(Rule):
     folder = property(
         fget=_get_folder,
         fset=_set_folder,
-        doc=u"""name source
+        doc="""name source
 
         :Type: str
         """,
@@ -321,7 +321,7 @@ class RuleComplex(Rule):
     param_dict = property(
         fget=_get_param_dict,
         fset=_set_param_dict,
-        doc=u"""dict to pass param 
+        doc="""dict to pass param 
 
         :Type: dict
         """,

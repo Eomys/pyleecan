@@ -281,7 +281,7 @@ class Unit(FrozenClass):
     unit_m = property(
         fget=_get_unit_m,
         fset=_set_unit_m,
-        doc=u"""0: use m, 1: use mm
+        doc="""0: use m, 1: use mm
 
         :Type: int
         :min: 0
@@ -301,7 +301,7 @@ class Unit(FrozenClass):
     unit_rad = property(
         fget=_get_unit_rad,
         fset=_set_unit_rad,
-        doc=u"""0: use rad, 1: use deg
+        doc="""0: use rad, 1: use deg
 
         :Type: int
         :min: 0
@@ -321,7 +321,7 @@ class Unit(FrozenClass):
     unit_m2 = property(
         fget=_get_unit_m2,
         fset=_set_unit_m2,
-        doc=u"""0: use m^2, 1: use mm^2
+        doc="""0: use m^2, 1: use mm^2
 
         :Type: int
         :min: 0

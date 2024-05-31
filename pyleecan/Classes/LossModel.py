@@ -226,7 +226,7 @@ class LossModel(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the loss simulation (has to be unique)
+        doc="""Name of the loss simulation (has to be unique)
 
         :Type: str
         """,
@@ -244,7 +244,7 @@ class LossModel(FrozenClass):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Group in which the loss will be computed
+        doc="""Group in which the loss will be computed
 
         :Type: str
         """,
@@ -262,7 +262,7 @@ class LossModel(FrozenClass):
     is_show_fig = property(
         fget=_get_is_show_fig,
         fset=_set_is_show_fig,
-        doc=u"""True to show the plot of the curve fitting
+        doc="""True to show the plot of the curve fitting
 
         :Type: bool
         """,
@@ -282,7 +282,7 @@ class LossModel(FrozenClass):
     coeff_dict = property(
         fget=_get_coeff_dict,
         fset=_set_coeff_dict,
-        doc=u"""dict of coefficients to compute losses with respect to frequency
+        doc="""dict of coefficients to compute losses with respect to frequency
 
         :Type: dict
         """,

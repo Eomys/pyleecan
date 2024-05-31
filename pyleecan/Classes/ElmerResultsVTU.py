@@ -251,7 +251,7 @@ class ElmerResultsVTU(Elmer):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label of the resulting meshsolution
+        doc="""Label of the resulting meshsolution
 
         :Type: str
         """,
@@ -269,7 +269,7 @@ class ElmerResultsVTU(Elmer):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Filename of the results VTU data file
+        doc="""Filename of the results VTU data file
 
         :Type: str
         """,
@@ -289,7 +289,7 @@ class ElmerResultsVTU(Elmer):
     store_dict = property(
         fget=_get_store_dict,
         fset=_set_store_dict,
-        doc=u"""Dict containing the data names to store
+        doc="""Dict containing the data names to store
 
         :Type: dict
         """,

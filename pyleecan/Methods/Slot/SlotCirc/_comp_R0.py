@@ -26,4 +26,4 @@ def _comp_R0(self):
         # Pythagore in Triangle: Center, Z2, middle(Z1,Z2)
         # R0**2 = (W0/2)**2 + (H0-R0)**2
 
-        return ((self.W0 / 2) ** 2 + self.H0 ** 2) / (2 * self.H0)
+        return ((self.W0 / 2) ** 2 + self.H0**2) / (2 * self.H0)

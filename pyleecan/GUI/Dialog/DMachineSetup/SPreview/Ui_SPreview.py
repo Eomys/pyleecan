@@ -20,15 +20,15 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_SPreview(object):
     def setupUi(self, SPreview):
         if not SPreview.objectName():
-            SPreview.setObjectName(u"SPreview")
+            SPreview.setObjectName("SPreview")
         SPreview.resize(532, 450)
         SPreview.setMinimumSize(QSize(0, 0))
         self.verticalLayout = QVBoxLayout(SPreview)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.w_plot = MPLCanvas(SPreview)
-        self.w_plot.setObjectName(u"w_plot")
+        self.w_plot.setObjectName("w_plot")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -40,14 +40,14 @@ class Ui_SPreview(object):
         self.horizontalLayout_2.addWidget(self.w_plot)
 
         self.tab_machine = WMachineTable(SPreview)
-        self.tab_machine.setObjectName(u"tab_machine")
+        self.tab_machine.setObjectName("tab_machine")
 
         self.horizontalLayout_2.addWidget(self.tab_machine)
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.horizontalSpacer = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
@@ -55,12 +55,12 @@ class Ui_SPreview(object):
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
         self.b_previous = QPushButton(SPreview)
-        self.b_previous.setObjectName(u"b_previous")
+        self.b_previous.setObjectName("b_previous")
 
         self.horizontalLayout.addWidget(self.b_previous)
 
         self.b_next = QPushButton(SPreview)
-        self.b_next.setObjectName(u"b_next")
+        self.b_next.setObjectName("b_next")
 
         self.horizontalLayout.addWidget(self.b_next)
 
@@ -73,10 +73,10 @@ class Ui_SPreview(object):
     # setupUi
 
     def retranslateUi(self, SPreview):
-        SPreview.setWindowTitle(QCoreApplication.translate("SPreview", u"Form", None))
+        SPreview.setWindowTitle(QCoreApplication.translate("SPreview", "Form", None))
         self.b_previous.setText(
-            QCoreApplication.translate("SPreview", u"Previous", None)
+            QCoreApplication.translate("SPreview", "Previous", None)
         )
-        self.b_next.setText(QCoreApplication.translate("SPreview", u"Next", None))
+        self.b_next.setText(QCoreApplication.translate("SPreview", "Next", None))
 
     # retranslateUi

@@ -25,7 +25,7 @@ def comp_surface_active(self):
 
     # Top Arc
     alpha = 2 * float(arcsin(self.W1 / (2 * self.Rtopm)))
-    Sarc = (self.Rtopm ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (self.Rtopm**2.0) / 2.0 * (alpha - sin(alpha))
 
     # Bottom polar to remove
     alpha = 2 * float(arcsin(self.W1 / (2 * abs(ZM1))))
