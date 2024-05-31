@@ -410,7 +410,7 @@ class SliceModel(FrozenClass):
     type_distribution = property(
         fget=_get_type_distribution,
         fset=_set_type_distribution,
-        doc=u"""Type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
+        doc="""Type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
 
         :Type: str
         """,
@@ -428,7 +428,7 @@ class SliceModel(FrozenClass):
     Nslices = property(
         fget=_get_Nslices,
         fset=_set_Nslices,
-        doc=u"""Number of slices
+        doc="""Number of slices
 
         :Type: int
         """,
@@ -448,7 +448,7 @@ class SliceModel(FrozenClass):
     z_list = property(
         fget=_get_z_list,
         fset=_set_z_list,
-        doc=u"""List of slice positions
+        doc="""List of slice positions
 
         :Type: list
         """,
@@ -473,7 +473,7 @@ class SliceModel(FrozenClass):
     angle_rotor = property(
         fget=_get_angle_rotor,
         fset=_set_angle_rotor,
-        doc=u"""Array of rotor skew angles in case of skew
+        doc="""Array of rotor skew angles in case of skew
 
         :Type: ndarray
         """,
@@ -498,7 +498,7 @@ class SliceModel(FrozenClass):
     angle_stator = property(
         fget=_get_angle_stator,
         fset=_set_angle_stator,
-        doc=u"""Array of stator skew angles in case of skew
+        doc="""Array of stator skew angles in case of skew
 
         :Type: ndarray
         """,
@@ -516,7 +516,7 @@ class SliceModel(FrozenClass):
     L = property(
         fget=_get_L,
         fset=_set_L,
-        doc=u"""Machine length (mean of rotor/stator lengths)
+        doc="""Machine length (mean of rotor/stator lengths)
 
         :Type: float
         """,
@@ -534,7 +534,7 @@ class SliceModel(FrozenClass):
     is_step = property(
         fget=_get_is_step,
         fset=_set_is_step,
-        doc=u"""True to define slices as steps
+        doc="""True to define slices as steps
 
         :Type: bool
         """,
@@ -552,7 +552,7 @@ class SliceModel(FrozenClass):
     is_skew = property(
         fget=_get_is_skew,
         fset=_set_is_skew,
-        doc=u"""True if slices account for skew
+        doc="""True if slices account for skew
 
         :Type: bool
         """,

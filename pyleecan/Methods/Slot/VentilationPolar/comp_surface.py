@@ -20,4 +20,4 @@ def comp_surface(self):
 
     self.check()
 
-    return pi * ((self.H0 + self.D0) ** 2 - self.H0 ** 2) / (2 * pi / self.W1)
+    return pi * ((self.H0 + self.D0) ** 2 - self.H0**2) / (2 * pi / self.W1)

@@ -417,7 +417,7 @@ class OutGeoLam(FrozenClass):
     name_phase = property(
         fget=_get_name_phase,
         fset=_set_name_phase,
-        doc=u"""Name of the phases of the winding (if any)
+        doc="""Name of the phases of the winding (if any)
 
         :Type: list
         """,
@@ -442,7 +442,7 @@ class OutGeoLam(FrozenClass):
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""B(H) curve (two columns matrix, H and B(H))
+        doc="""B(H) curve (two columns matrix, H and B(H))
 
         :Type: ndarray
         """,
@@ -460,7 +460,7 @@ class OutGeoLam(FrozenClass):
     Ksfill = property(
         fget=_get_Ksfill,
         fset=_set_Ksfill,
-        doc=u"""Slot fill factor
+        doc="""Slot fill factor
 
         :Type: float
         """,
@@ -478,7 +478,7 @@ class OutGeoLam(FrozenClass):
     S_slot = property(
         fget=_get_S_slot,
         fset=_set_S_slot,
-        doc=u"""Slot surface
+        doc="""Slot surface
 
         :Type: float
         """,
@@ -496,7 +496,7 @@ class OutGeoLam(FrozenClass):
     S_slot_wind = property(
         fget=_get_S_slot_wind,
         fset=_set_S_slot_wind,
-        doc=u"""Slot winding surface
+        doc="""Slot winding surface
 
         :Type: float
         """,
@@ -514,7 +514,7 @@ class OutGeoLam(FrozenClass):
     S_wind_act = property(
         fget=_get_S_wind_act,
         fset=_set_S_wind_act,
-        doc=u"""Conductor active surface
+        doc="""Conductor active surface
 
         :Type: float
         """,
@@ -532,7 +532,7 @@ class OutGeoLam(FrozenClass):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc=u"""Number of spatial periodicities of the lamination
+        doc="""Number of spatial periodicities of the lamination
 
         :Type: int
         """,
@@ -550,7 +550,7 @@ class OutGeoLam(FrozenClass):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""True if an spatial anti-periodicity is possible after the periodicities
+        doc="""True if an spatial anti-periodicity is possible after the periodicities
 
         :Type: bool
         """,
@@ -568,7 +568,7 @@ class OutGeoLam(FrozenClass):
     per_t = property(
         fget=_get_per_t,
         fset=_set_per_t,
-        doc=u"""Number of time periodicities of the lamination
+        doc="""Number of time periodicities of the lamination
 
         :Type: int
         """,
@@ -586,7 +586,7 @@ class OutGeoLam(FrozenClass):
     is_antiper_t = property(
         fget=_get_is_antiper_t,
         fset=_set_is_antiper_t,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities
+        doc="""True if an time anti-periodicity is possible after the periodicities
 
         :Type: bool
         """,

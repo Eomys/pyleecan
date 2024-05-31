@@ -10,23 +10,23 @@ class Gen_WSlotCirc(Ui_WSlotCirc):
         """Abstract class to update the widget according to the csv doc"""
         Ui_WSlotCirc.setupUi(self, WSlotCirc)
         # Setup of in_W0
-        txt = self.tr(u"""Slot isthmus width.""")
+        txt = self.tr("""Slot isthmus width.""")
         self.in_W0.setWhatsThis(txt)
         self.in_W0.setToolTip(txt)
 
         # Setup of lf_W0
         self.lf_W0.validator().setBottom(0)
-        txt = self.tr(u"""Slot isthmus width.""")
+        txt = self.tr("""Slot isthmus width.""")
         self.lf_W0.setWhatsThis(txt)
         self.lf_W0.setToolTip(txt)
 
         # Setup of in_H0
-        txt = self.tr(u"""Slot height""")
+        txt = self.tr("""Slot height""")
         self.in_H0.setWhatsThis(txt)
         self.in_H0.setToolTip(txt)
 
         # Setup of lf_H0
         self.lf_H0.validator().setBottom(0)
-        txt = self.tr(u"""Slot height""")
+        txt = self.tr("""Slot height""")
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)

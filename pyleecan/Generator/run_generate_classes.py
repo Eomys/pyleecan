@@ -173,14 +173,14 @@ def run_generate_classes(
                         print("Reformatting python class file: " + class_path_py)
                     else:
                         print("Cannot reformat python class file: " + class_path_py)
-            if black.__version__.split(".")[0] != "20":
+            if black.__version__.split(".")[0] != "24":
                 print("\n############################################")
                 print(
-                    "WARNING: The official version of black for pyleecan is 20, please update your black version"
+                    "WARNING: The official version of black for pyleecan is 24, please update your black version"
                 )
                 print("############################################\n")
         except ImportError:
-            print("/!\\ Please install and run black (version 20) /!\\")
+            print("/!\\ Please install and run black (version 24) /!\\")
     now = datetime.now()
     print("End at: ", now.strftime("%H:%M:%S"))
 

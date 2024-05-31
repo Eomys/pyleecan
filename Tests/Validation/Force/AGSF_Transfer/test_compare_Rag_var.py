@@ -36,7 +36,7 @@ def test_compare_Rag_variation():
     simu.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
-        Na_tot=5 * 2 ** 8,
+        Na_tot=5 * 2**8,
         Nt_tot=2,
     )
 
@@ -145,7 +145,7 @@ def test_compare_Rag_variation_Nmax_sensitivity():
     simu.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
-        Na_tot=5 * 2 ** 8,
+        Na_tot=5 * 2**8,
         Nt_tot=2,
     )
 

@@ -405,7 +405,7 @@ class OutLossModel(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the loss
+        doc="""Name of the loss
 
         :Type: str
         """,
@@ -430,7 +430,7 @@ class OutLossModel(FrozenClass):
     loss_density = property(
         fget=_get_loss_density,
         fset=_set_loss_density,
-        doc=u"""Loss density 
+        doc="""Loss density 
 
         :Type: ndarray
         """,
@@ -450,7 +450,7 @@ class OutLossModel(FrozenClass):
     coeff_dict = property(
         fget=_get_coeff_dict,
         fset=_set_coeff_dict,
-        doc=u"""dict of coefficients to compute the scalar value with respcet to frequency
+        doc="""dict of coefficients to compute the scalar value with respcet to frequency
 
         :Type: dict
         """,
@@ -468,7 +468,7 @@ class OutLossModel(FrozenClass):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""group to which the loss applies
+        doc="""group to which the loss applies
 
         :Type: str
         """,
@@ -486,7 +486,7 @@ class OutLossModel(FrozenClass):
     loss_model = property(
         fget=_get_loss_model,
         fset=_set_loss_model,
-        doc=u"""The name of the loss model used to compute the loss stored in this output
+        doc="""The name of the loss model used to compute the loss stored in this output
 
         :Type: str
         """,
@@ -504,7 +504,7 @@ class OutLossModel(FrozenClass):
     scalar_value = property(
         fget=_get_scalar_value,
         fset=_set_scalar_value,
-        doc=u"""To store the value of get_loss_scalar (for scalar losses or with coeff_dict cleaned)
+        doc="""To store the value of get_loss_scalar (for scalar losses or with coeff_dict cleaned)
 
         :Type: float
         """,

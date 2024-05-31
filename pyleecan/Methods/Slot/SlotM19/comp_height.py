@@ -30,7 +30,7 @@ def comp_height(self):
     Rbo = self.get_Rbo()
 
     if self.is_outwards():
-        return np_abs(sqrt(Z2.real ** 2 + Z2.imag ** 2)) - np_abs(Rbo)
+        return np_abs(sqrt(Z2.real**2 + Z2.imag**2)) - np_abs(Rbo)
 
     else:
         return self.H0

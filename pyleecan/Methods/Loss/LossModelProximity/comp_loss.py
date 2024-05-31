@@ -89,7 +89,7 @@ def comp_loss(self):
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
     # Proximity loss density for each frequency and element
-    Pcore_density = k_p * freqs[:, None] ** 2 * Bfft_magnitude ** 2
+    Pcore_density = k_p * freqs[:, None] ** 2 * Bfft_magnitude**2
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -100,8 +100,8 @@ def comp_loss(self):
     n = freqs / felec
 
     # Integrate loss density over group volume to get polynomial coefficients
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
-    A = np_sum(k_p * coeff * n ** 2)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
+    A = np_sum(k_p * coeff * n**2)
     self.coeff_dict = {"2": A}
 
     return Pcore_density, freqs

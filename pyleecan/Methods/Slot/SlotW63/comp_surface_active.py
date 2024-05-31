@@ -32,7 +32,7 @@ def comp_surface_active(self):
     # top cercle
     D81 = abs(Z8 - Z1)
     alpha = 2 * arcsin(D81 / (2 * Rbo))
-    Sarc_top = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc_top = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     D72 = abs(Z7 - Z2)
 

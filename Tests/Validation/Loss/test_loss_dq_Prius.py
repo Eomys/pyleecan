@@ -121,9 +121,9 @@ def test_FEMM_Loss_Prius():
     for i, out in enumerate(out_list[:-1]):
         for j, other in enumerate(out_list[i + 1 :], start=i + 1):
             out.loss.loss_list.append(out.loss.loss_list[2] - other.loss.loss_list[2])
-            out.loss.loss_list[
-                -1
-            ].name = f"(Id={OP_MATRIX[i,1]}, Iq={OP_MATRIX[i,2]}) - (Id={OP_MATRIX[j,1]}, Iq={OP_MATRIX[j,2]})"
+            out.loss.loss_list[-1].name = (
+                f"(Id={OP_MATRIX[i,1]}, Iq={OP_MATRIX[i,2]}) - (Id={OP_MATRIX[j,1]}, Iq={OP_MATRIX[j,2]})"
+            )
             out.loss.loss_list[-1].get_mesh_solution().get_group(
                 group_names
             ).plot_contour(

@@ -568,7 +568,7 @@ class HoleM58(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot depth
+        doc="""Slot depth
 
         :Type: float
         :min: 0
@@ -587,7 +587,7 @@ class HoleM58(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot width
+        doc="""Slot width
 
         :Type: float
         :min: 0
@@ -606,7 +606,7 @@ class HoleM58(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Distance from the lamination Bore
+        doc="""Distance from the lamination Bore
 
         :Type: float
         :min: 0
@@ -625,7 +625,7 @@ class HoleM58(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Magnet width
+        doc="""Magnet width
 
         :Type: float
         :min: 0
@@ -644,7 +644,7 @@ class HoleM58(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Magnet Height
+        doc="""Magnet Height
 
         :Type: float
         :min: 0
@@ -663,7 +663,7 @@ class HoleM58(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Distance Magnet to side of the notch
+        doc="""Distance Magnet to side of the notch
 
         :Type: float
         :min: 0
@@ -682,7 +682,7 @@ class HoleM58(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth angular opening width
+        doc="""Tooth angular opening width
 
         :Type: float
         :min: 0
@@ -701,7 +701,7 @@ class HoleM58(HoleMag):
     R0 = property(
         fget=_get_R0,
         fset=_set_R0,
-        doc=u"""Notch radius
+        doc="""Notch radius
 
         :Type: float
         :min: 0
@@ -739,7 +739,7 @@ class HoleM58(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""Magnet
+        doc="""Magnet
 
         :Type: Magnet
         """,

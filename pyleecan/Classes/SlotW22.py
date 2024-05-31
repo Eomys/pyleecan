@@ -502,7 +502,7 @@ class SlotW22(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus orthoradial angular width.
+        doc="""Slot isthmus orthoradial angular width.
 
         :Type: float
         :min: 0
@@ -521,7 +521,7 @@ class SlotW22(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus radial height.
+        doc="""Slot isthmus radial height.
 
         :Type: float
         :min: 0
@@ -540,7 +540,7 @@ class SlotW22(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Slot radial height below wedge 
+        doc="""Slot radial height below wedge 
 
         :Type: float
         :min: 0
@@ -559,7 +559,7 @@ class SlotW22(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Angle between slot edges
+        doc="""Angle between slot edges
 
         :Type: float
         :min: 0

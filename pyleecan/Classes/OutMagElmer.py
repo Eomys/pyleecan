@@ -194,7 +194,7 @@ class OutMagElmer(OutInternal):
     FEA_dict = property(
         fget=_get_FEA_dict,
         fset=_set_FEA_dict,
-        doc=u"""dictionary containing the main FEA parameters
+        doc="""dictionary containing the main FEA parameters
 
         :Type: dict
         """,

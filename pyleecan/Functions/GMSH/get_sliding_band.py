@@ -62,25 +62,24 @@ def get_sliding_band(sym, machine):
     W_sb = Wgap_mec / 4  # Width sliding band
     tol = 0.1e-3  # Tolerance
 
-
     surf_list = list()
     if sym == 1:  # Complete machine
         # Internal AirGap
         int_airgap_cir = Circle(
-                center=0,
-                radius=Rgap_mec_int + W_sb,
-                label=lab_int + "_" + AIRGAP_LAB + BOT_LAB,
-                point_ref=(Rgap_mec_int + W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: AR_B_LAB},
+            center=0,
+            radius=Rgap_mec_int + W_sb,
+            label=lab_int + "_" + AIRGAP_LAB + BOT_LAB,
+            point_ref=(Rgap_mec_int + W_sb / 2) * exp(1j * pi / 2),
+            prop_dict={BOUNDARY_PROP_LAB: AR_B_LAB},
         )
         surf_list.append(int_airgap_cir)
         # Internal Sliding band
         int_sb_cir = Circle(
-                center=0,
-                radius=Rgap_mec_int + 2 * W_sb - tol / 10,
-                label=NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB,
-                point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
+            center=0,
+            radius=Rgap_mec_int + 2 * W_sb - tol / 10,
+            label=NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB,
+            point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
+            prop_dict={BOUNDARY_PROP_LAB: SBR_B_LAB},
         )
         surf_list.append(
             SurfRing(
@@ -88,21 +87,21 @@ def get_sliding_band(sym, machine):
                 in_surf=int_airgap_cir,
                 label=NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB,
                 point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-            )            
+            )
         )
         ext_sb_cir = Circle(
-                center=0,
-                radius=Rgap_mec_int + 2 * W_sb + tol / 10,
-                label=NO_LAM_LAB + "_" + SLID_LAB + TOP_LAB,
-                point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},
+            center=0,
+            radius=Rgap_mec_int + 2 * W_sb + tol / 10,
+            label=NO_LAM_LAB + "_" + SLID_LAB + TOP_LAB,
+            point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
+            prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},
         )
         ext_airgap_cir = Circle(
-                center=0,
-                radius=Rgap_mec_int + 3 * W_sb,
-                label=lab_ext + "_" + AIRGAP_LAB + TOP_LAB,
-                point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: AR_T_LAB},
+            center=0,
+            radius=Rgap_mec_int + 3 * W_sb,
+            label=lab_ext + "_" + AIRGAP_LAB + TOP_LAB,
+            point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
+            prop_dict={BOUNDARY_PROP_LAB: AR_T_LAB},
         )
         # External Sliding band
         surf_list.append(
@@ -111,14 +110,14 @@ def get_sliding_band(sym, machine):
                 in_surf=ext_sb_cir,
                 label=NO_LAM_LAB + "_" + SLID_LAB + TOP_LAB,
                 point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-            )            
+            )
         )
         lam_ext_cir = Circle(
-                center=0,
-                radius=1.1*Rgap_mec_ext, # Hopefully enough to reach the windings
-                label=lab_ext + "_" + AIRBOX_LAB + BOT_LAB,
-                point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
-                prop_dict={BOUNDARY_PROP_LAB: AIRBOX_R_LAB},
+            center=0,
+            radius=1.1 * Rgap_mec_ext,  # Hopefully enough to reach the windings
+            label=lab_ext + "_" + AIRBOX_LAB + BOT_LAB,
+            point_ref=(Rgap_mec_ext - W_sb / 2) * exp(1j * pi / 2),
+            prop_dict={BOUNDARY_PROP_LAB: AIRBOX_R_LAB},
         )
         # External AirGap
         surf_list.append(

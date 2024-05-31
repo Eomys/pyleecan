@@ -243,7 +243,7 @@ class OPdqf(OPdq):
     If_ref = property(
         fget=_get_If_ref,
         fset=_set_If_ref,
-        doc=u"""DC rotor current
+        doc="""DC rotor current
 
         :Type: float
         """,

@@ -601,7 +601,7 @@ class LamSquirrelCage(LamSlotWind):
     Hscr = property(
         fget=_get_Hscr,
         fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m]
+        doc="""short circuit ring section radial height [m]
 
         :Type: float
         :min: 0
@@ -620,7 +620,7 @@ class LamSquirrelCage(LamSlotWind):
     Lscr = property(
         fget=_get_Lscr,
         fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length
+        doc="""short circuit ring section axial length
 
         :Type: float
         :min: 0
@@ -658,7 +658,7 @@ class LamSquirrelCage(LamSlotWind):
     ring_mat = property(
         fget=_get_ring_mat,
         fset=_set_ring_mat,
-        doc=u"""Material of the Rotor short circuit ring
+        doc="""Material of the Rotor short circuit ring
 
         :Type: Material
         """,

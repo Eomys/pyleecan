@@ -50,7 +50,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotUD2(Slot):
-    """"User defined" Slot from a line list and a surface"""
+    """ "User defined" Slot from a line list and a surface"""
 
     VERSION = 1
 
@@ -434,7 +434,7 @@ class SlotUD2(Slot):
     line_list = property(
         fget=_get_line_list,
         fset=_set_line_list,
-        doc=u"""list of line to draw the edges of the slot
+        doc="""list of line to draw the edges of the slot
 
         :Type: [Line]
         """,
@@ -471,7 +471,7 @@ class SlotUD2(Slot):
     active_surf = property(
         fget=_get_active_surf,
         fset=_set_active_surf,
-        doc=u"""Active surface of the Slot
+        doc="""Active surface of the Slot
 
         :Type: Surface
         """,
@@ -484,7 +484,7 @@ class SlotUD2(Slot):
     split_active_surf_dict = property(
         fget=_get_split_active_surf_dict,
         fset=_set_split_active_surf_dict,
-        doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan)
+        doc="""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan)
 
         :Type: dict
         """,
@@ -502,7 +502,7 @@ class SlotUD2(Slot):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the slot (for save)
+        doc="""Name of the slot (for save)
 
         :Type: str
         """,

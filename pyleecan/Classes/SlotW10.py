@@ -590,7 +590,7 @@ class SlotW10(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width.
+        doc="""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -609,7 +609,7 @@ class SlotW10(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc="""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -628,7 +628,7 @@ class SlotW10(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot wedge radial height or wedge angle .
+        doc="""Slot wedge radial height or wedge angle .
 
         :Type: float
         :min: 0
@@ -647,7 +647,7 @@ class SlotW10(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot wedge width.
+        doc="""Slot wedge width.
 
         :Type: float
         :min: 0
@@ -666,7 +666,7 @@ class SlotW10(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Slot height below wedge 
+        doc="""Slot height below wedge 
 
         :Type: float
         :min: 0
@@ -685,7 +685,7 @@ class SlotW10(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Slot bottom width.
+        doc="""Slot bottom width.
 
         :Type: float
         :min: 0
@@ -704,7 +704,7 @@ class SlotW10(Slot):
     H1_is_rad = property(
         fget=_get_H1_is_rad,
         fset=_set_H1_is_rad,
-        doc=u"""H1 unit, 0 for m, 1 for rad
+        doc="""H1 unit, 0 for m, 1 for rad
 
         :Type: bool
         """,

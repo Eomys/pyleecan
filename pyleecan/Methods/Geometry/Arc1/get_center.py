@@ -30,9 +30,9 @@ def get_center(self):
     else:
         # In the coordinate system begin on center and end on X > 0 axis
         if R > 0:  # Center is above the segment
-            Zc = D12 / 2 + 1j * sqrt(R ** 2 - (D12 / 2) ** 2)
+            Zc = D12 / 2 + 1j * sqrt(R**2 - (D12 / 2) ** 2)
         else:
-            Zc = D12 / 2 - 1j * sqrt(R ** 2 - (D12 / 2) ** 2)
+            Zc = D12 / 2 - 1j * sqrt(R**2 - (D12 / 2) ** 2)
         # Go back to the original coordinate system
         Zc = Zc * exp(1j * np_angle(z2 - z1)) + z1
 

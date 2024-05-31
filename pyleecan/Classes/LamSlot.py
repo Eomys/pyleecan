@@ -523,7 +523,7 @@ class LamSlot(Lamination):
     slot = property(
         fget=_get_slot,
         fset=_set_slot,
-        doc=u"""lamination Slot
+        doc="""lamination Slot
 
         :Type: Slot
         """,

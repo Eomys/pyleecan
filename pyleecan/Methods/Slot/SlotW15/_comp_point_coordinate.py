@@ -32,8 +32,8 @@ def _comp_point_coordinate(self):
         # In tooth ref: Im(Zc3') = -W3/2 - R2
         A = Rbo + self.H0 + self.H1 + self.H2 - self.R2
         B = -self.W3 / 2 - self.R2
-        xc2 = B * sin(-hsp) + sqrt(-(B ** 2) + A ** 2) * cos(-hsp)
-        yc2 = B * cos(-hsp) - sqrt(-(B ** 2) + A ** 2) * sin(-hsp)
+        xc2 = B * sin(-hsp) + sqrt(-(B**2) + A**2) * cos(-hsp)
+        yc2 = B * cos(-hsp) - sqrt(-(B**2) + A**2) * sin(-hsp)
         Zc3 = xc2 + 1j * yc2
         Z9 = (Zc3 * exp(1j * -hsp) + self.R2 * 1j) * exp(1j * hsp)
 
@@ -53,7 +53,7 @@ def _comp_point_coordinate(self):
         R1 = self.R1
         y2 = (Z12 - Zc4).imag
         x2 = (Z12 - Zc4).real
-        theta = 2 * arctan((y2 - sqrt(-(R1 ** 2) + x2 ** 2 + y2 ** 2)) / (R1 + x2))
+        theta = 2 * arctan((y2 - sqrt(-(R1**2) + x2**2 + y2**2)) / (R1 + x2))
         Z11 = R1 * exp(1j * theta) + Zc4
     else:
         raise S15InnerError("Slot Type 15 can't be used on inner lamination")

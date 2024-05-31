@@ -72,7 +72,7 @@ def comp_skin_effect_resistance(self, freq, T_op=20, T_ref=20, b=None, zt=None):
     # average resistance factor
     if is_round_wire:
         # Use round wire approximation Eq(5.30) p.271
-        kr_skin = 1 + 0.59 * ((zt ** 2 - 0.2) / 9) * ksi ** 4
+        kr_skin = 1 + 0.59 * ((zt**2 - 0.2) / 9) * ksi**4
     else:
         # resistance factor function phi Eq(5.26) p.271
         phi = ksi * (sinh(2 * ksi) + sin(2 * ksi)) / (cosh(2 * ksi) - cos(2 * ksi))
@@ -80,7 +80,7 @@ def comp_skin_effect_resistance(self, freq, T_op=20, T_ref=20, b=None, zt=None):
         # resistance factor function psi Eq(5.27) p.271
         psi = 2 * ksi * (sinh(ksi) - sin(ksi)) / (cosh(ksi) + cos(ksi))
 
-        kr_skin = phi + ((zt ** 2 - 1) / 3) * psi  # Eq(5.28) p.271
+        kr_skin = phi + ((zt**2 - 1) / 3) * psi  # Eq(5.28) p.271
         # kr_approx = 1 + (zt ** 2 - 0.2) / 9 * ksi ** 4  # Eq(5.29) p.271
 
     return kr_skin

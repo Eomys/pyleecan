@@ -204,7 +204,7 @@ class SolverInputFile(Elmer):
     sections = property(
         fget=_get_sections,
         fset=_set_sections,
-        doc=u"""List of SIF sections
+        doc="""List of SIF sections
 
         :Type: list
         """,

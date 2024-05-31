@@ -20,6 +20,6 @@ def comp_surface(self):
 
     Smag = self.comp_surface_magnets()
     # one side rectangular air area
-    Srect = self.W1 * (self.H1 - self.H2) - (4 - pi) * self.R0 ** 2 / 4
+    Srect = self.W1 * (self.H1 - self.H2) - (4 - pi) * self.R0**2 / 4
 
     return Smag + 2 * Srect

@@ -464,7 +464,7 @@ class StructElmer(Structural):
     Kmesh_fineness = property(
         fget=_get_Kmesh_fineness,
         fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+        doc="""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
 
         :Type: float
         """,
@@ -482,7 +482,7 @@ class StructElmer(Structural):
     path_name = property(
         fget=_get_path_name,
         fset=_set_path_name,
-        doc=u"""Name of the path to save the FEA model
+        doc="""Name of the path to save the FEA model
 
         :Type: str
         """,
@@ -502,7 +502,7 @@ class StructElmer(Structural):
     FEA_dict_enforced = property(
         fget=_get_FEA_dict_enforced,
         fset=_set_FEA_dict_enforced,
-        doc=u"""To enforce user-defined values for FEA main parameters 
+        doc="""To enforce user-defined values for FEA main parameters 
 
         :Type: dict
         """,
@@ -520,7 +520,7 @@ class StructElmer(Structural):
     is_get_mesh = property(
         fget=_get_is_get_mesh,
         fset=_set_is_get_mesh,
-        doc=u"""To save FEA mesh for latter post-procesing (only possible with is_save_FEA set to True)
+        doc="""To save FEA mesh for latter post-procesing (only possible with is_save_FEA set to True)
 
         :Type: bool
         """,
@@ -538,7 +538,7 @@ class StructElmer(Structural):
     is_save_FEA = property(
         fget=_get_is_save_FEA,
         fset=_set_is_save_FEA,
-        doc=u"""To save FEA mesh and solution in .vtu file
+        doc="""To save FEA mesh and solution in .vtu file
 
         :Type: bool
         """,
@@ -558,7 +558,7 @@ class StructElmer(Structural):
     transform_list = property(
         fget=_get_transform_list,
         fset=_set_transform_list,
-        doc=u"""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+        doc="""List of dictionary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
 
         :Type: list
         """,
@@ -576,7 +576,7 @@ class StructElmer(Structural):
     include_magnets = property(
         fget=_get_include_magnets,
         fset=_set_include_magnets,
-        doc=u"""Switch to include magents in the structural simulation
+        doc="""Switch to include magents in the structural simulation
 
         :Type: bool
         """,

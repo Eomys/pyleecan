@@ -52,7 +52,7 @@ def comp_loss(self):
     # #TODO if the model is applied to the rotor of an SCIM, use the rotor current computed from the EEC.
     Id_Iq = OP.get_Id_Iq()
     coeff = qs * Rs * (Id_Iq["Id"] ** 2 + Id_Iq["Iq"] ** 2)
-    Pjoule = coeff * (1 + k * felec ** 2)
+    Pjoule = coeff * (1 + k * felec**2)
 
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:

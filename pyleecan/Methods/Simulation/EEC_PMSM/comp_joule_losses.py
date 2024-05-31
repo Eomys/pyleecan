@@ -21,7 +21,7 @@ def comp_joule_losses(self, out_dict, machine):
     R1 = self.R1
 
     # Id and Iq are in RMS
-    Pj_losses = qs * R1 * (Id ** 2 + Iq ** 2)
+    Pj_losses = qs * R1 * (Id**2 + Iq**2)
 
     out_dict["Pj_losses"] = Pj_losses
 

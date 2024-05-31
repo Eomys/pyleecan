@@ -369,7 +369,7 @@ class Trapeze(Surface):
     height = property(
         fget=_get_height,
         fset=_set_height,
-        doc=u"""the height of the Trapeze
+        doc="""the height of the Trapeze
 
         :Type: float
         :min: 0
@@ -388,7 +388,7 @@ class Trapeze(Surface):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""the big base of Trapeze
+        doc="""the big base of Trapeze
 
         :Type: float
         :min: 0
@@ -407,7 +407,7 @@ class Trapeze(Surface):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""the small base of the Trapeze
+        doc="""the small base of the Trapeze
 
         :Type: float
         :min: 0

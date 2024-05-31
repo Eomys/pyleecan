@@ -121,7 +121,7 @@ def comp_loss(self):
 
     # Compute the loss density for each element and each frequency
     Pcore_density = k_ed * (freqs[:, None] * Bfft_magnitude) ** 2
-    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** 2
+    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude**2
     Pcore_density += k_ex * (freqs[:, None] * Bfft_magnitude) ** 1.5
 
     if is_change_Time:
@@ -133,15 +133,15 @@ def comp_loss(self):
     n = freqs / felec
 
     # Integrate loss density over group volume to get polynomial coefficients
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
     # Get polynomial coefficient
-    B = np_sum(k_ed * coeff * n ** 2)
+    B = np_sum(k_ed * coeff * n**2)
 
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 1.5, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**1.5, Se)
     # Get polynomial coefficient
-    C = np_sum(k_ex * coeff * n ** 1.5)
+    C = np_sum(k_ex * coeff * n**1.5)
 
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
     # Get polynomial coefficient
     A = np_sum(k_hy * coeff * n)
 

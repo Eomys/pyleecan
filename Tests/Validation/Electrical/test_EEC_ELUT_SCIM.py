@@ -224,7 +224,7 @@ def test_EEC_ELUT_SCIM_Audi_eTron(param_dict, is_run=True, is_linear=False):
 
     ELUT_Audi_eTron = LUTslip()
     ELUT_Audi_eTron.simu = Simu1(machine=Audi_eTron)
-    R1_135 = 1 / (3 * 333 ** 2 / 6304)  # from Joule losses
+    R1_135 = 1 / (3 * 333**2 / 6304)  # from Joule losses
     ELUT_Audi_eTron.simu.elec = Electrical(
         eec=EEC_SCIM(
             R1=R1_135,

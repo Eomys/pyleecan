@@ -459,7 +459,7 @@ class InputVoltage(Input):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
+        doc="""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -479,7 +479,7 @@ class InputVoltage(Input):
     angle_rotor_initial = property(
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
-        doc=u"""Initial angular position of the rotor at t=0
+        doc="""Initial angular position of the rotor at t=0
 
         :Type: float
         """,
@@ -514,7 +514,7 @@ class InputVoltage(Input):
     PWM = property(
         fget=_get_PWM,
         fset=_set_PWM,
-        doc=u"""Object to generate PWM signal
+        doc="""Object to generate PWM signal
 
         :Type: ImportGenPWM
         """,
@@ -532,7 +532,7 @@ class InputVoltage(Input):
     phase_dir = property(
         fget=_get_phase_dir,
         fset=_set_phase_dir,
-        doc=u"""Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
+        doc="""Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
         :min: -1
@@ -552,7 +552,7 @@ class InputVoltage(Input):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc="""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -572,7 +572,7 @@ class InputVoltage(Input):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])
+        doc="""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])
 
         :Type: bool
         """,
@@ -590,7 +590,7 @@ class InputVoltage(Input):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])
+        doc="""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,
@@ -608,7 +608,7 @@ class InputVoltage(Input):
     is_generator = property(
         fget=_get_is_generator,
         fset=_set_is_generator,
-        doc=u"""True if machine is used as a generator
+        doc="""True if machine is used as a generator
 
         :Type: bool
         """,

@@ -36,8 +36,8 @@ def test_IPMSM():
     simu.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
-        Na_tot=2 ** 11,
-        Nt_tot=2 ** 6,
+        Na_tot=2**11,
+        Nt_tot=2**6,
     )
 
     # Configure simulation
@@ -61,8 +61,8 @@ def test_IPMSM():
     simu2.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
-        Na_tot=2 ** 11,
-        Nt_tot=2 ** 6,
+        Na_tot=2**11,
+        Nt_tot=2**6,
     )
 
     simu2.mag = MagFEMM(
@@ -130,7 +130,7 @@ def test_Benchmark():
     simu.input = InputCurrent(
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
-        Na_tot=5 * 2 ** 9,
+        Na_tot=5 * 2**9,
         Nt_tot=2,
     )
 

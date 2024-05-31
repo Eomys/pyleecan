@@ -377,7 +377,7 @@ class VentilationPolar(Hole):
     D0 = property(
         fget=_get_D0,
         fset=_set_D0,
-        doc=u"""Height of the hole
+        doc="""Height of the hole
 
         :Type: float
         :min: 0
@@ -396,7 +396,7 @@ class VentilationPolar(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Radius of the bottom of Hole
+        doc="""Radius of the bottom of Hole
 
         :Type: float
         :min: 0
@@ -415,7 +415,7 @@ class VentilationPolar(Hole):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Hole angular width
+        doc="""Hole angular width
 
         :Type: float
         :min: 0

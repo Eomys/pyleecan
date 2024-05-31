@@ -72,7 +72,7 @@ def solve_MTPA(self, LUT, Rs):
         Id, Iq = Id.ravel(), Iq.ravel()
 
         # Calculate maximum current
-        Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
+        Imax_interp = np.sqrt(Id**2 + Iq**2)
 
         # Interpolate Phid/Phiq on the refined mesh
         (Phid, Phiq, Phih) = LUT.interp_Phi_dqh(Id, Iq)
@@ -80,7 +80,7 @@ def solve_MTPA(self, LUT, Rs):
         # Calculate voltage (Ud/Uq) for the refined mesh
         Ud = Rs * Id - Phiq * ws
         Uq = Rs * Iq + Phid * ws
-        Umax_interp = np.sqrt(Ud ** 2 + Uq ** 2)
+        Umax_interp = np.sqrt(Ud**2 + Uq**2)
 
         # Calculate electromagnetic torque
         Tem_interp = qs * p * (Phid * Iq - Phiq * Id)
@@ -99,7 +99,7 @@ def solve_MTPA(self, LUT, Rs):
             P_in = qs * (Ud * Id + Uq * Iq) + np.sum(Ploss_dqh_wo_Joule, axis=1)
         else:
             # Only consider stator Joule losses
-            Ploss_ovl = qs * Rs * (Id ** 2 + Iq ** 2)
+            Ploss_ovl = qs * Rs * (Id**2 + Iq**2)
             # The input power must cover electrical power + Joule losses
             P_in = qs * (Ud * Id + Uq * Iq)
 

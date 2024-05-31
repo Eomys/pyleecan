@@ -25,7 +25,7 @@ def comp_surface(self):
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     S1 = abs(Z1.real - Z2.real) * (self.W1 + self.W0) / 2
 

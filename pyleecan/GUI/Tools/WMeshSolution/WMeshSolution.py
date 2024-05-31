@@ -133,7 +133,7 @@ class WMeshSolution(QWidget):
 
             if "component" in axes:
                 ii = axes.index("component")
-                self._field = sqrt((self._field ** 2).sum(axis=ii))
+                self._field = sqrt((self._field**2).sum(axis=ii))
 
             if is_update_range:
                 self.resetRange()

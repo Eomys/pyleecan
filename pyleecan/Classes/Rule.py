@@ -222,7 +222,7 @@ class Rule(FrozenClass):
     unit_type = property(
         fget=_get_unit_type,
         fset=_set_unit_type,
-        doc=u"""unit
+        doc="""unit
 
         :Type: str
         """,

@@ -280,7 +280,7 @@ class OptiSolver(FrozenClass):
     problem = property(
         fget=_get_problem,
         fset=_set_problem,
-        doc=u"""Problem to solve
+        doc="""Problem to solve
 
         :Type: OptiProblem
         """,
@@ -317,7 +317,7 @@ class OptiSolver(FrozenClass):
     xoutput = property(
         fget=_get_xoutput,
         fset=_set_xoutput,
-        doc=u"""Optimization results containing every output
+        doc="""Optimization results containing every output
 
         :Type: XOutput
         """,
@@ -335,7 +335,7 @@ class OptiSolver(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -353,7 +353,7 @@ class OptiSolver(FrozenClass):
     is_keep_all_output = property(
         fget=_get_is_keep_all_output,
         fset=_set_is_keep_all_output,
-        doc=u"""Boolean to keep every output
+        doc="""Boolean to keep every output
 
         :Type: bool
         """,

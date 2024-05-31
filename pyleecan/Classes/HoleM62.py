@@ -500,7 +500,7 @@ class HoleM62(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Length or Angle Opening
+        doc="""Length or Angle Opening
 
         :Type: float
         :min: 0
@@ -519,7 +519,7 @@ class HoleM62(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Distance from the lamination bore
+        doc="""Distance from the lamination bore
 
         :Type: float
         :min: 0
@@ -538,7 +538,7 @@ class HoleM62(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Magnet height
+        doc="""Magnet height
 
         :Type: float
         :min: 0
@@ -557,7 +557,7 @@ class HoleM62(HoleMag):
     W0_is_rad = property(
         fget=_get_W0_is_rad,
         fset=_set_W0_is_rad,
-        doc=u"""W0  unit, 0 for m, 1 for rad
+        doc="""W0  unit, 0 for m, 1 for rad
 
         :Type: bool
         """,
@@ -594,7 +594,7 @@ class HoleM62(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""First Magnet
+        doc="""First Magnet
 
         :Type: Magnet
         """,

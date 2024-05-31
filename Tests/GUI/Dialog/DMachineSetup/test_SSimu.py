@@ -142,11 +142,11 @@ class TestSSimu(object):
         assert self.widget.simu.mag.nb_worker == cpu_count()
 
         self.widget.si_nb_worker.clear()  # Clear the field before writing
-        QTest.keyClicks(self.widget.si_nb_worker, str(cpu_count()//2))
+        QTest.keyClicks(self.widget.si_nb_worker, str(cpu_count() // 2))
         self.widget.si_nb_worker.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.si_nb_worker.value() == cpu_count()//2
-        assert self.widget.simu.mag.nb_worker == cpu_count()//2
+        assert self.widget.si_nb_worker.value() == cpu_count() // 2
+        assert self.widget.simu.mag.nb_worker == cpu_count() // 2
 
     def test_set_Tsta(self):
         """Check that the Widget allow to update lf_Tsta"""

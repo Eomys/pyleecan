@@ -32,7 +32,7 @@ def comp_surface(self):
     W1 = 2 * R1 * sin(alpha1 / 2)
 
     Str = 1 / 2 * (W0 + W1) * self.H0
-    S0 = Rbo ** 2 / 2 * (alpha0 - sin(alpha0))
-    S1 = R1 ** 2 / 2 * (alpha1 - sin(alpha1))
+    S0 = Rbo**2 / 2 * (alpha0 - sin(alpha0))
+    S1 = R1**2 / 2 * (alpha1 - sin(alpha1))
 
     return Str + S1 - S0

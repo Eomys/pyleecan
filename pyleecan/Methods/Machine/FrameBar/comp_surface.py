@@ -19,8 +19,8 @@ def comp_surface(self):
     """
 
     # Outer Frame Surface
-    S_ext = (self.Rext ** 2) * pi
-    S_int = (self.Rint ** 2) * pi
+    S_ext = (self.Rext**2) * pi
+    S_int = (self.Rint**2) * pi
     S_outer = S_ext - S_int
 
     # Bar Surface

@@ -61,7 +61,7 @@ test_obj.hole.append(
 HoleM52R_test_radius.append(
     {
         "test_obj": test_obj,
-        "S_exp": 572e-6 - 2 * (1 - pi * 0.5 ** 2) * 1e-6 / 4,
+        "S_exp": 572e-6 - 2 * (1 - pi * 0.5**2) * 1e-6 / 4,
         "SM_exp": 540e-6,
         "Rmin": 68.53323061e-3,
         "Rmax": 88e-3,

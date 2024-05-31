@@ -636,7 +636,7 @@ class OPMatrix(FrozenClass):
     N0 = property(
         fget=_get_N0,
         fset=_set_N0,
-        doc=u"""Rotor speed
+        doc="""Rotor speed
 
         :Type: ndarray
         """,
@@ -661,7 +661,7 @@ class OPMatrix(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current rms value
+        doc="""d-axis current rms value
 
         :Type: ndarray
         """,
@@ -686,7 +686,7 @@ class OPMatrix(FrozenClass):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current rms value
+        doc="""q-axis current rms value
 
         :Type: ndarray
         """,
@@ -711,7 +711,7 @@ class OPMatrix(FrozenClass):
     Ud_ref = property(
         fget=_get_Ud_ref,
         fset=_set_Ud_ref,
-        doc=u"""d-axis voltage rms value
+        doc="""d-axis voltage rms value
 
         :Type: ndarray
         """,
@@ -736,7 +736,7 @@ class OPMatrix(FrozenClass):
     Uq_ref = property(
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
-        doc=u"""q-axis voltage rms value
+        doc="""q-axis voltage rms value
 
         :Type: ndarray
         """,
@@ -761,7 +761,7 @@ class OPMatrix(FrozenClass):
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Output average electromagnetic torque
+        doc="""Output average electromagnetic torque
 
         :Type: ndarray
         """,
@@ -786,7 +786,7 @@ class OPMatrix(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Output/Input average Electromagnetic Power
+        doc="""Output/Input average Electromagnetic Power
 
         :Type: ndarray
         """,
@@ -811,7 +811,7 @@ class OPMatrix(FrozenClass):
     slip_ref = property(
         fget=_get_slip_ref,
         fset=_set_slip_ref,
-        doc=u"""Rotor mechanical slip
+        doc="""Rotor mechanical slip
 
         :Type: ndarray
         """,
@@ -829,7 +829,7 @@ class OPMatrix(FrozenClass):
     is_output_power = property(
         fget=_get_is_output_power,
         fset=_set_is_output_power,
-        doc=u"""True if power given in OP_matrix is the output power, False if it is the input power
+        doc="""True if power given in OP_matrix is the output power, False if it is the input power
 
         :Type: bool
         """,
@@ -854,7 +854,7 @@ class OPMatrix(FrozenClass):
     If_ref = property(
         fget=_get_If_ref,
         fset=_set_If_ref,
-        doc=u"""DC rotor current
+        doc="""DC rotor current
 
         :Type: ndarray
         """,
@@ -874,7 +874,7 @@ class OPMatrix(FrozenClass):
     col_names = property(
         fget=_get_col_names,
         fset=_set_col_names,
-        doc=u"""Name of the columns from set_OP_matrix
+        doc="""Name of the columns from set_OP_matrix
 
         :Type: list
         """,

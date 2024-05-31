@@ -37,7 +37,7 @@ def comp_surface_active(self):
     ] = self._comp_point_coordinate()
 
     # Half circle R3
-    S1 = self.R3 ** 2 * pi / 2
+    S1 = self.R3**2 * pi / 2
     # Tapeze H3
     S2 = self.H3 * (self.R3 * 2 + self.D2) / 2
     # Half circle D2

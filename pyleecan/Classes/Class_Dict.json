@@ -2062,7 +2062,7 @@
                 "name": "Jrms_max",
                 "size": "",
                 "type": "float",
-                "unit": "A/m\u00c2\u00b2",
+                "unit": "A/m\u00b2",
                 "value": null
             },
             {
@@ -11269,7 +11269,7 @@
                 "name": "Jrms",
                 "size": "",
                 "type": "float",
-                "unit": "A/m\u00c2\u00b2",
+                "unit": "A/m\u00b2",
                 "value": null
             },
             {

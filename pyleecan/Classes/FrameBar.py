@@ -326,7 +326,7 @@ class FrameBar(Frame):
     Nbar = property(
         fget=_get_Nbar,
         fset=_set_Nbar,
-        doc=u"""Number of bars
+        doc="""Number of bars
 
         :Type: int
         :min: 1
@@ -345,7 +345,7 @@ class FrameBar(Frame):
     wbar = property(
         fget=_get_wbar,
         fset=_set_wbar,
-        doc=u"""Width of bars
+        doc="""Width of bars
 
         :Type: float
         :min: 0

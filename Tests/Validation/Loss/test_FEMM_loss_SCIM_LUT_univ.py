@@ -252,7 +252,7 @@ def test_FEMM_loss_SCIM_with_param():
 
     ELUT_Audi_eTron = LUTslip()
     ELUT_Audi_eTron.simu = Simu1(machine=machine)
-    R1_135 = 1 / (3 * 6.6 ** 2 / 50)  # from Joule losses
+    R1_135 = 1 / (3 * 6.6**2 / 50)  # from Joule losses
     ELUT_Audi_eTron.simu.elec = Electrical(
         eec=EEC_SCIM(
             R1=0.582,

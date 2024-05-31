@@ -33,7 +33,7 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     other_path_list = ["[Dimensions]", "PoleNotchArc_Inner"]
     W0 = self.get_other(other_dict, other_path_list, other_unit_dict)
 
-    machine.rotor.notch[0].notch_shape.W1 = sqrt(2 * Rbo ** 2 * (1 - cos(W1)))
+    machine.rotor.notch[0].notch_shape.W1 = sqrt(2 * Rbo**2 * (1 - cos(W1)))
     machine.rotor.notch[0].notch_shape.W0 = sqrt(2 * (Rbo - H0) ** 2 * (1 - cos(W0)))
 
     return machine

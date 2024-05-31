@@ -310,7 +310,7 @@ class RuleSimple(Rule):
     other_key_list = property(
         fget=_get_other_key_list,
         fset=_set_other_key_list,
-        doc=u"""parameter 
+        doc="""parameter 
 
         :Type: list
         """,
@@ -328,7 +328,7 @@ class RuleSimple(Rule):
     P_obj_path = property(
         fget=_get_P_obj_path,
         fset=_set_P_obj_path,
-        doc=u"""path pyleecan parameter in object machine 
+        doc="""path pyleecan parameter in object machine 
 
         :Type: str
         """,
@@ -346,7 +346,7 @@ class RuleSimple(Rule):
     scaling_to_P = property(
         fget=_get_scaling_to_P,
         fset=_set_scaling_to_P,
-        doc=u"""conversion paramter to pyleecan
+        doc="""conversion paramter to pyleecan
 
         :Type: float
         """,
@@ -364,7 +364,7 @@ class RuleSimple(Rule):
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""use just to debug, give name of file
+        doc="""use just to debug, give name of file
 
         :Type: str
         """,

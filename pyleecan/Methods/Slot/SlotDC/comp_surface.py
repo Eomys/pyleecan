@@ -42,7 +42,7 @@ def comp_surface(self):
     S6 = self.W1 * abs(Z12.real - Z11.real)
     # Top arc of the slot (on bore radius)
     alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     if self.is_outwards():
         return Swind + S6 - Sarc

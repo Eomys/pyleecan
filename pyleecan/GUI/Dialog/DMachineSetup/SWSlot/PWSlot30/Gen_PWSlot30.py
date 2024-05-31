@@ -10,67 +10,67 @@ class Gen_PWSlot30(Ui_PWSlot30):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PWSlot30.setupUi(self, PWSlot30)
         # Setup of in_W0
-        txt = self.tr(u"""Slot isthmus width.""")
+        txt = self.tr("""Slot isthmus width.""")
         self.in_W0.setWhatsThis(txt)
         self.in_W0.setToolTip(txt)
 
         # Setup of lf_W0
         self.lf_W0.validator().setBottom(0)
-        txt = self.tr(u"""Slot isthmus width.""")
+        txt = self.tr("""Slot isthmus width.""")
         self.lf_W0.setWhatsThis(txt)
         self.lf_W0.setToolTip(txt)
 
         # Setup of in_W3
-        txt = self.tr(u"""Tooth width""")
+        txt = self.tr("""Tooth width""")
         self.in_W3.setWhatsThis(txt)
         self.in_W3.setToolTip(txt)
 
         # Setup of lf_W3
         self.lf_W3.validator().setBottom(0)
-        txt = self.tr(u"""Tooth width""")
+        txt = self.tr("""Tooth width""")
         self.lf_W3.setWhatsThis(txt)
         self.lf_W3.setToolTip(txt)
 
         # Setup of in_H0
-        txt = self.tr(u"""Slot isthmus height.""")
+        txt = self.tr("""Slot isthmus height.""")
         self.in_H0.setWhatsThis(txt)
         self.in_H0.setToolTip(txt)
 
         # Setup of lf_H0
         self.lf_H0.validator().setBottom(0)
-        txt = self.tr(u"""Slot isthmus height.""")
+        txt = self.tr("""Slot isthmus height.""")
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)
 
         # Setup of in_H1
-        txt = self.tr(u"""Slot active height.""")
+        txt = self.tr("""Slot active height.""")
         self.in_H1.setWhatsThis(txt)
         self.in_H1.setToolTip(txt)
 
         # Setup of lf_H1
         self.lf_H1.validator().setBottom(0)
-        txt = self.tr(u"""Slot active height.""")
+        txt = self.tr("""Slot active height.""")
         self.lf_H1.setWhatsThis(txt)
         self.lf_H1.setToolTip(txt)
 
         # Setup of in_R1
-        txt = self.tr(u"""Top radius""")
+        txt = self.tr("""Top radius""")
         self.in_R1.setWhatsThis(txt)
         self.in_R1.setToolTip(txt)
 
         # Setup of lf_R1
         self.lf_R1.validator().setBottom(0)
-        txt = self.tr(u"""Top radius""")
+        txt = self.tr("""Top radius""")
         self.lf_R1.setWhatsThis(txt)
         self.lf_R1.setToolTip(txt)
 
         # Setup of in_R2
-        txt = self.tr(u"""Bottom radius""")
+        txt = self.tr("""Bottom radius""")
         self.in_R2.setWhatsThis(txt)
         self.in_R2.setToolTip(txt)
 
         # Setup of lf_R2
         self.lf_R2.validator().setBottom(0)
-        txt = self.tr(u"""Bottom radius""")
+        txt = self.tr("""Bottom radius""")
         self.lf_R2.setWhatsThis(txt)
         self.lf_R2.setToolTip(txt)

@@ -567,7 +567,7 @@ class HoleM52R(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot depth
+        doc="""Slot depth
 
         :Type: float
         :min: 0
@@ -586,7 +586,7 @@ class HoleM52R(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Magnet width
+        doc="""Magnet width
 
         :Type: float
         :min: 0
@@ -605,7 +605,7 @@ class HoleM52R(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Magnet height
+        doc="""Magnet height
 
         :Type: float
         :min: 0
@@ -624,7 +624,7 @@ class HoleM52R(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Void width
+        doc="""Void width
 
         :Type: float
         :min: 0
@@ -643,7 +643,7 @@ class HoleM52R(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Additional depth for the magnet
+        doc="""Additional depth for the magnet
 
         :Type: float
         :min: 0
@@ -681,7 +681,7 @@ class HoleM52R(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""Magnet of the hole
+        doc="""Magnet of the hole
 
         :Type: Magnet
         """,
@@ -699,7 +699,7 @@ class HoleM52R(HoleMag):
     R0 = property(
         fget=_get_R0,
         fset=_set_R0,
-        doc=u"""Void corner radius
+        doc="""Void corner radius
 
         :Type: float
         :min: 0

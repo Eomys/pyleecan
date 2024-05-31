@@ -17,6 +17,6 @@ def comp_K21(self):
     # winding transformation ratios
     K21 = (xi[0] * Ntspc) / (1 * 0.5)  # (xi1[0] * Ntspc1) / (xi2[0] * Ntspc2)  for DFIM
     # transformation ratio from secondary (2, rotor) to primary (1, stator) for impedance in SCIM case
-    self.K21Z = (qs / Zr) * K21 ** 2
+    self.K21Z = (qs / Zr) * K21**2
     # transformation ratio from secondary (2, rotor) to primary (1, stator) for current  in SCIM case
     self.K21I = (qs / Zr) * K21

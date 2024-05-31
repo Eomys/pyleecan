@@ -308,7 +308,7 @@ class CondType22(Conductor):
     Sbar = property(
         fget=_get_Sbar,
         fset=_set_Sbar,
-        doc=u"""Surface of the Slot
+        doc="""Surface of the Slot
 
         :Type: float
         :min: 0

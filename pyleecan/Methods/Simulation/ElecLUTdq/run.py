@@ -143,7 +143,7 @@ def run(self):
     output.elec.get_Jrms()
 
     # Calculate linear current density along airgap
-    Irms = np.sqrt(output.elec.OP.Id_ref ** 2 + output.elec.OP.Iq_ref ** 2)
+    Irms = np.sqrt(output.elec.OP.Id_ref**2 + output.elec.OP.Iq_ref**2)
     Irms_slot = Irms * machine.stator.winding.Ntcoil / machine.stator.winding.Npcp
     slot_pitch = 2 * np.pi / machine.stator.get_Zs() * machine.stator.Rint
     output.elec.Arms = Irms_slot / slot_pitch

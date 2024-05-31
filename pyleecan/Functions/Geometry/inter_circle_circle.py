@@ -66,8 +66,8 @@ def inter_circle_circle(Zc1, R1, Zc2, R2):
     else:  # D < R1 and D < R2:
         # Intersection between the two circles
         # cf https://mathworld.wolfram.com/Circle-CircleIntersection.html
-        x = (D ** 2 - R2 ** 2 + R1 ** 2) / (2 * D)
-        y = sqrt(R1 ** 2 - x ** 2)
+        x = (D**2 - R2**2 + R1**2) / (2 * D)
+        y = sqrt(R1**2 - x**2)
         Z1 = (x + 1j * y) * exp(1j * angle(Zc2 - Zc1)) + Zc1
         Z2 = (x - 1j * y) * exp(1j * angle(Zc2 - Zc1)) + Zc1
         return [Z1, Z2]

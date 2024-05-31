@@ -412,7 +412,7 @@ class SurfRing(Surface):
     out_surf = property(
         fget=_get_out_surf,
         fset=_set_out_surf,
-        doc=u"""Outter surface
+        doc="""Outter surface
 
         :Type: Surface
         """,
@@ -449,7 +449,7 @@ class SurfRing(Surface):
     in_surf = property(
         fget=_get_in_surf,
         fset=_set_in_surf,
-        doc=u"""Inner surface
+        doc="""Inner surface
 
         :Type: Surface
         """,

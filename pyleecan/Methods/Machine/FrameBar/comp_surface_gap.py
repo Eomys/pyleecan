@@ -17,9 +17,9 @@ def comp_surface_gap(self):
     """
 
     # Surface of the external disk
-    S_ext = (self.Rext ** 2) * pi
+    S_ext = (self.Rext**2) * pi
     # Surface of the internal disk
-    S_int = (self.Rint ** 2) * pi
+    S_int = (self.Rint**2) * pi
     # Surface of the bars
     S_bar = self.comp_surface_bar()
 

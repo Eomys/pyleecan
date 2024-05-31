@@ -335,7 +335,7 @@ class Loss(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -375,7 +375,7 @@ class Loss(FrozenClass):
     model_dict = property(
         fget=_get_model_dict,
         fset=_set_model_dict,
-        doc=u"""Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list)
+        doc="""Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list)
 
         :Type: {LossModel}
         """,
@@ -393,7 +393,7 @@ class Loss(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation
+        doc="""Average stator temperature for Electrical calculation
 
         :Type: float
         """,
@@ -411,7 +411,7 @@ class Loss(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation
+        doc="""Average rotor temperature for Electrical calculation
 
         :Type: float
         """,
@@ -429,7 +429,7 @@ class Loss(FrozenClass):
     is_get_meshsolution = property(
         fget=_get_is_get_meshsolution,
         fset=_set_is_get_meshsolution,
-        doc=u"""True to save loss density map as meshsolution
+        doc="""True to save loss density map as meshsolution
 
         :Type: bool
         """,

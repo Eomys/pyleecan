@@ -386,7 +386,7 @@ class Circle(Surface):
     radius = property(
         fget=_get_radius,
         fset=_set_radius,
-        doc=u"""Radius of the circle
+        doc="""Radius of the circle
 
         :Type: float
         :min: 0
@@ -407,7 +407,7 @@ class Circle(Surface):
     center = property(
         fget=_get_center,
         fset=_set_center,
-        doc=u"""center of the Circle
+        doc="""center of the Circle
 
         :Type: complex
         """,
@@ -427,7 +427,7 @@ class Circle(Surface):
     prop_dict = property(
         fget=_get_prop_dict,
         fset=_set_prop_dict,
-        doc=u"""Property dict to apply on the lines
+        doc="""Property dict to apply on the lines
 
         :Type: dict
         """,

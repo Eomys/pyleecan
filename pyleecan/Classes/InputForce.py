@@ -31,7 +31,7 @@ from ._check import InitUnKnowClassError
 
 
 class InputForce(Input):
-    """Input to start with the structural one """
+    """Input to start with the structural one"""
 
     VERSION = 1
 
@@ -282,7 +282,7 @@ class InputForce(Input):
     P = property(
         fget=_get_P,
         fset=_set_P,
-        doc=u"""Magnetic air-gap surface force
+        doc="""Magnetic air-gap surface force
 
         :Type: ImportVectorField
         """,

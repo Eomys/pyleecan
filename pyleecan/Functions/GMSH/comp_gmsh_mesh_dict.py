@@ -1,7 +1,7 @@
 from math import ceil, sqrt
 from ...Functions.labels import BOUNDARY_PROP_LAB
 from ...Functions.labels import short_label
- 
+
 
 def comp_gmsh_mesh_dict(surface, element_size, user_mesh_dict={}):
     """Returns the number of mesh elements on each line of the surface
@@ -14,7 +14,7 @@ def comp_gmsh_mesh_dict(surface, element_size, user_mesh_dict={}):
 
     element_size : float
         The default size of each element on the mesh [m]
-    
+
     user_mesh_dict: dictionary
         User specified mesh properties
 
@@ -38,7 +38,7 @@ def comp_gmsh_mesh_dict(surface, element_size, user_mesh_dict={}):
         side_size = sqrt(element_size * 4.0 / 1.73)
     else:
         side_size = element_size
-    
+
     for ii, line in enumerate(lines):
         label = str(ii)
         # Overwrite number of elements given by boundary name in user_mesh_dict

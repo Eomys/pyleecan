@@ -296,7 +296,7 @@ class Conductor(FrozenClass):
     cond_mat = property(
         fget=_get_cond_mat,
         fset=_set_cond_mat,
-        doc=u"""Material of the conductor
+        doc="""Material of the conductor
 
         :Type: Material
         """,
@@ -333,7 +333,7 @@ class Conductor(FrozenClass):
     ins_mat = property(
         fget=_get_ins_mat,
         fset=_set_ins_mat,
-        doc=u"""Material of the insulation
+        doc="""Material of the insulation
 
         :Type: Material
         """,

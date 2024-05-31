@@ -333,7 +333,7 @@ class MachineUD(Machine):
     lam_list = property(
         fget=_get_lam_list,
         fset=_set_lam_list,
-        doc=u"""List of Lamination
+        doc="""List of Lamination
 
         :Type: [Lamination]
         """,
@@ -351,7 +351,7 @@ class MachineUD(Machine):
     is_sync = property(
         fget=_get_is_sync,
         fset=_set_is_sync,
-        doc=u"""True if the machine should be handled as a Synchronous machine
+        doc="""True if the machine should be handled as a Synchronous machine
 
         :Type: bool
         """,

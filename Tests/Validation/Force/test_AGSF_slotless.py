@@ -33,7 +33,7 @@ def test_AGSF_slotless():
     simu = Simu1(name="test_AGSF_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0), Ir=None, Na_tot=2 ** 6, Nt_tot=2
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0), Ir=None, Na_tot=2**6, Nt_tot=2
     )
 
     simu.mag = MagFEMM(

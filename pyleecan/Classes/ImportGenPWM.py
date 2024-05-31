@@ -674,7 +674,7 @@ class ImportGenPWM(ImportMatrix):
     fs = property(
         fget=_get_fs,
         fset=_set_fs,
-        doc=u"""sample frequency
+        doc="""sample frequency
 
         :Type: float
         :min: 0
@@ -693,7 +693,7 @@ class ImportGenPWM(ImportMatrix):
     duration = property(
         fget=_get_duration,
         fset=_set_duration,
-        doc=u"""duration
+        doc="""duration
 
         :Type: float
         :min: 0
@@ -712,7 +712,7 @@ class ImportGenPWM(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""fundamental frequency
+        doc="""fundamental frequency
 
         :Type: float
         :min: 0
@@ -731,7 +731,7 @@ class ImportGenPWM(ImportMatrix):
     fmax = property(
         fget=_get_fmax,
         fset=_set_fmax,
-        doc=u"""maximal fundamental frequency
+        doc="""maximal fundamental frequency
 
         :Type: float
         :min: 0
@@ -750,7 +750,7 @@ class ImportGenPWM(ImportMatrix):
     fmode = property(
         fget=_get_fmode,
         fset=_set_fmode,
-        doc=u"""speed mode: 0: Fixed speed, 1: Variable speed
+        doc="""speed mode: 0: Fixed speed, 1: Variable speed
 
         :Type: int
         :min: 0
@@ -769,7 +769,7 @@ class ImportGenPWM(ImportMatrix):
     fswimode = property(
         fget=_get_fswimode,
         fset=_set_fswimode,
-        doc=u"""switch mode: 0:Fixed fswi, 1:Variable fswi
+        doc="""switch mode: 0:Fixed fswi, 1:Variable fswi
 
         :Type: int
         """,
@@ -787,7 +787,7 @@ class ImportGenPWM(ImportMatrix):
     fswi = property(
         fget=_get_fswi,
         fset=_set_fswi,
-        doc=u"""switching frequency
+        doc="""switching frequency
 
         :Type: float
         """,
@@ -805,7 +805,7 @@ class ImportGenPWM(ImportMatrix):
     fswi_max = property(
         fget=_get_fswi_max,
         fset=_set_fswi_max,
-        doc=u"""maximal switching frequency
+        doc="""maximal switching frequency
 
         :Type: float
         """,
@@ -823,7 +823,7 @@ class ImportGenPWM(ImportMatrix):
     typePWM = property(
         fget=_get_typePWM,
         fset=_set_typePWM,
-        doc=u"""0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM
+        doc="""0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM
 
         :Type: int
         """,
@@ -841,7 +841,7 @@ class ImportGenPWM(ImportMatrix):
     Vdc1 = property(
         fget=_get_Vdc1,
         fset=_set_Vdc1,
-        doc=u"""DC BUS voltage
+        doc="""DC BUS voltage
 
         :Type: float
         """,
@@ -859,7 +859,7 @@ class ImportGenPWM(ImportMatrix):
     U0 = property(
         fget=_get_U0,
         fset=_set_U0,
-        doc=u"""reference voltage amplitude (rms)
+        doc="""reference voltage amplitude (rms)
 
         :Type: float
         """,
@@ -877,7 +877,7 @@ class ImportGenPWM(ImportMatrix):
     type_carrier = property(
         fget=_get_type_carrier,
         fset=_set_type_carrier,
-        doc=u"""1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier
+        doc="""1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier
 
         :Type: int
         """,
@@ -895,7 +895,7 @@ class ImportGenPWM(ImportMatrix):
     var_amp = property(
         fget=_get_var_amp,
         fset=_set_var_amp,
-        doc=u"""percentage of variation of carrier amplitude
+        doc="""percentage of variation of carrier amplitude
 
         :Type: int
         """,
@@ -913,7 +913,7 @@ class ImportGenPWM(ImportMatrix):
     qs = property(
         fget=_get_qs,
         fset=_set_qs,
-        doc=u"""number of phase
+        doc="""number of phase
 
         :Type: int
         """,
@@ -931,7 +931,7 @@ class ImportGenPWM(ImportMatrix):
     is_star = property(
         fget=_get_is_star,
         fset=_set_is_star,
-        doc=u"""True if star coupling, False if triangle coupling
+        doc="""True if star coupling, False if triangle coupling
 
         :Type: bool
         """,
@@ -949,7 +949,7 @@ class ImportGenPWM(ImportMatrix):
     phase_dir = property(
         fget=_get_phase_dir,
         fset=_set_phase_dir,
-        doc=u"""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
+        doc="""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
         :min: -1
@@ -969,7 +969,7 @@ class ImportGenPWM(ImportMatrix):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc="""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -989,7 +989,7 @@ class ImportGenPWM(ImportMatrix):
     Phi0 = property(
         fget=_get_Phi0,
         fset=_set_Phi0,
-        doc=u"""reference voltage phase (rad)
+        doc="""reference voltage phase (rad)
 
         :Type: float
         """,

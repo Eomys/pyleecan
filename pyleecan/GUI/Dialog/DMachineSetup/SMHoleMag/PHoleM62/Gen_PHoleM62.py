@@ -10,34 +10,34 @@ class Gen_PHoleM62(Ui_PHoleM62):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PHoleM62.setupUi(self, PHoleM62)
         # Setup of in_W0
-        txt = self.tr(u"""Length or Angle Opening""")
+        txt = self.tr("""Length or Angle Opening""")
         self.in_W0.setWhatsThis(txt)
         self.in_W0.setToolTip(txt)
 
         # Setup of lf_W0
         self.lf_W0.validator().setBottom(0)
-        txt = self.tr(u"""Length or Angle Opening""")
+        txt = self.tr("""Length or Angle Opening""")
         self.lf_W0.setWhatsThis(txt)
         self.lf_W0.setToolTip(txt)
 
         # Setup of in_H0
-        txt = self.tr(u"""Distance from the lamination bore""")
+        txt = self.tr("""Distance from the lamination bore""")
         self.in_H0.setWhatsThis(txt)
         self.in_H0.setToolTip(txt)
 
         # Setup of lf_H0
         self.lf_H0.validator().setBottom(0)
-        txt = self.tr(u"""Distance from the lamination bore""")
+        txt = self.tr("""Distance from the lamination bore""")
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)
 
         # Setup of in_H1
-        txt = self.tr(u"""Magnet height""")
+        txt = self.tr("""Magnet height""")
         self.in_H1.setWhatsThis(txt)
         self.in_H1.setToolTip(txt)
 
         # Setup of lf_H1
         self.lf_H1.validator().setBottom(0)
-        txt = self.tr(u"""Magnet height""")
+        txt = self.tr("""Magnet height""")
         self.lf_H1.setWhatsThis(txt)
         self.lf_H1.setToolTip(txt)

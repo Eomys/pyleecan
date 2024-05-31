@@ -484,7 +484,7 @@ class SlotW12(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc="""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -503,7 +503,7 @@ class SlotW12(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot middle height
+        doc="""Slot middle height
 
         :Type: float
         :min: 0
@@ -522,7 +522,7 @@ class SlotW12(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Wedges radius
+        doc="""Wedges radius
 
         :Type: float
         :min: 0
@@ -541,7 +541,7 @@ class SlotW12(Slot):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc=u"""Slot bottom radius
+        doc="""Slot bottom radius
 
         :Type: float
         :min: 0

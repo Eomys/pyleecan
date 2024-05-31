@@ -17,16 +17,16 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_PWSlot63(object):
     def setupUi(self, PWSlot63):
         if not PWSlot63.objectName():
-            PWSlot63.setObjectName(u"PWSlot63")
+            PWSlot63.setObjectName("PWSlot63")
         PWSlot63.resize(1084, 543)
         PWSlot63.setMinimumSize(QSize(630, 470))
         PWSlot63.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot63)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_slot = QLabel(PWSlot63)
-        self.img_slot.setObjectName(u"img_slot")
+        self.img_slot.setObjectName("img_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -34,7 +34,7 @@ class Ui_PWSlot63(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW63_wind_int_rotor.png")
+            QPixmap(":/images/images/MachineSetup/WSlot/SlotW63_wind_int_rotor.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -42,7 +42,7 @@ class Ui_PWSlot63(object):
         self.verticalLayout_2.addWidget(self.img_slot)
 
         self.txt_constraint = QTextEdit(PWSlot63)
-        self.txt_constraint.setObjectName(u"txt_constraint")
+        self.txt_constraint.setObjectName("txt_constraint")
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -61,106 +61,106 @@ class Ui_PWSlot63(object):
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
         self.scrollArea = QScrollArea(PWSlot63)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setObjectName("scrollArea")
         self.scrollArea.setMinimumSize(QSize(270, 0))
         self.scrollArea.setMaximumSize(QSize(270, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 523))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setObjectName("verticalLayout")
         self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setObjectName("gridLayout")
         self.unit_W2 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_W2.setObjectName(u"unit_W2")
+        self.unit_W2.setObjectName("unit_W2")
 
         self.gridLayout.addWidget(self.unit_W2, 2, 2, 1, 1)
 
         self.lf_W1 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_W1.setObjectName(u"lf_W1")
+        self.lf_W1.setObjectName("lf_W1")
 
         self.gridLayout.addWidget(self.lf_W1, 1, 1, 1, 1)
 
         self.unit_W1 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_W1.setObjectName(u"unit_W1")
+        self.unit_W1.setObjectName("unit_W1")
 
         self.gridLayout.addWidget(self.unit_W1, 1, 2, 1, 1)
 
         self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_H0.setObjectName(u"lf_H0")
+        self.lf_H0.setObjectName("lf_H0")
 
         self.gridLayout.addWidget(self.lf_H0, 3, 1, 1, 1)
 
         self.in_W2 = QLabel(self.scrollAreaWidgetContents)
-        self.in_W2.setObjectName(u"in_W2")
+        self.in_W2.setObjectName("in_W2")
 
         self.gridLayout.addWidget(self.in_W2, 2, 0, 1, 1)
 
         self.lf_H1 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_H1.setObjectName(u"lf_H1")
+        self.lf_H1.setObjectName("lf_H1")
 
         self.gridLayout.addWidget(self.lf_H1, 4, 1, 1, 1)
 
         self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_H0.setObjectName(u"unit_H0")
+        self.unit_H0.setObjectName("unit_H0")
 
         self.gridLayout.addWidget(self.unit_H0, 3, 2, 1, 1)
 
         self.lf_W2 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_W2.setObjectName(u"lf_W2")
+        self.lf_W2.setObjectName("lf_W2")
 
         self.gridLayout.addWidget(self.lf_W2, 2, 1, 1, 1)
 
         self.in_H2 = QLabel(self.scrollAreaWidgetContents)
-        self.in_H2.setObjectName(u"in_H2")
+        self.in_H2.setObjectName("in_H2")
 
         self.gridLayout.addWidget(self.in_H2, 5, 0, 1, 1)
 
         self.in_W1 = QLabel(self.scrollAreaWidgetContents)
-        self.in_W1.setObjectName(u"in_W1")
+        self.in_W1.setObjectName("in_W1")
 
         self.gridLayout.addWidget(self.in_W1, 1, 0, 1, 1)
 
         self.unit_W0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_W0.setObjectName(u"unit_W0")
+        self.unit_W0.setObjectName("unit_W0")
 
         self.gridLayout.addWidget(self.unit_W0, 0, 2, 1, 1)
 
         self.lf_H2 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_H2.setObjectName(u"lf_H2")
+        self.lf_H2.setObjectName("lf_H2")
 
         self.gridLayout.addWidget(self.lf_H2, 5, 1, 1, 1)
 
         self.lf_W0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_W0.setObjectName(u"lf_W0")
+        self.lf_W0.setObjectName("lf_W0")
 
         self.gridLayout.addWidget(self.lf_W0, 0, 1, 1, 1)
 
         self.in_H0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_H0.setObjectName(u"in_H0")
+        self.in_H0.setObjectName("in_H0")
 
         self.gridLayout.addWidget(self.in_H0, 3, 0, 1, 1)
 
         self.in_W0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_W0.setObjectName(u"in_W0")
+        self.in_W0.setObjectName("in_W0")
 
         self.gridLayout.addWidget(self.in_W0, 0, 0, 1, 1)
 
         self.unit_H2 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_H2.setObjectName(u"unit_H2")
+        self.unit_H2.setObjectName("unit_H2")
 
         self.gridLayout.addWidget(self.unit_H2, 5, 2, 1, 1)
 
         self.in_H1 = QLabel(self.scrollAreaWidgetContents)
-        self.in_H1.setObjectName(u"in_H1")
+        self.in_H1.setObjectName("in_H1")
 
         self.gridLayout.addWidget(self.in_H1, 4, 0, 1, 1)
 
         self.c_H1_unit = QComboBox(self.scrollAreaWidgetContents)
         self.c_H1_unit.addItem("")
         self.c_H1_unit.addItem("")
-        self.c_H1_unit.setObjectName(u"c_H1_unit")
+        self.c_H1_unit.setObjectName("c_H1_unit")
 
         self.gridLayout.addWidget(self.c_H1_unit, 4, 2, 1, 1)
 
@@ -173,42 +173,42 @@ class Ui_PWSlot63(object):
         self.verticalLayout.addItem(self.verticalSpacer)
 
         self.g_output = QGroupBox(self.scrollAreaWidgetContents)
-        self.g_output.setObjectName(u"g_output")
+        self.g_output.setObjectName("g_output")
         self.g_output.setMinimumSize(QSize(200, 0))
         self.verticalLayout_3 = QVBoxLayout(self.g_output)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.out_Wlam = QLabel(self.g_output)
-        self.out_Wlam.setObjectName(u"out_Wlam")
+        self.out_Wlam.setObjectName("out_Wlam")
 
         self.verticalLayout_3.addWidget(self.out_Wlam)
 
         self.out_slot_height = QLabel(self.g_output)
-        self.out_slot_height.setObjectName(u"out_slot_height")
+        self.out_slot_height.setObjectName("out_slot_height")
 
         self.verticalLayout_3.addWidget(self.out_slot_height)
 
         self.out_yoke_height = QLabel(self.g_output)
-        self.out_yoke_height.setObjectName(u"out_yoke_height")
+        self.out_yoke_height.setObjectName("out_yoke_height")
 
         self.verticalLayout_3.addWidget(self.out_yoke_height)
 
         self.out_wind_surface = QLabel(self.g_output)
-        self.out_wind_surface.setObjectName(u"out_wind_surface")
+        self.out_wind_surface.setObjectName("out_wind_surface")
 
         self.verticalLayout_3.addWidget(self.out_wind_surface)
 
         self.out_tot_surface = QLabel(self.g_output)
-        self.out_tot_surface.setObjectName(u"out_tot_surface")
+        self.out_tot_surface.setObjectName("out_tot_surface")
 
         self.verticalLayout_3.addWidget(self.out_tot_surface)
 
         self.out_op_angle = QLabel(self.g_output)
-        self.out_op_angle.setObjectName(u"out_op_angle")
+        self.out_op_angle.setObjectName("out_op_angle")
 
         self.verticalLayout_3.addWidget(self.out_op_angle)
 
         self.out_tooth_width = QLabel(self.g_output)
-        self.out_tooth_width.setObjectName(u"out_tooth_width")
+        self.out_tooth_width.setObjectName("out_tooth_width")
 
         self.verticalLayout_3.addWidget(self.out_tooth_width)
 
@@ -233,12 +233,12 @@ class Ui_PWSlot63(object):
     # setupUi
 
     def retranslateUi(self, PWSlot63):
-        PWSlot63.setWindowTitle(QCoreApplication.translate("PWSlot63", u"Form", None))
+        PWSlot63.setWindowTitle(QCoreApplication.translate("PWSlot63", "Form", None))
         self.img_slot.setText("")
         self.txt_constraint.setHtml(
             QCoreApplication.translate(
                 "PWSlot63",
-                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8.15094pt; font-weight:400; font-style:normal;\">\n"
@@ -247,45 +247,45 @@ class Ui_PWSlot63(object):
                 None,
             )
         )
-        self.unit_W2.setText(QCoreApplication.translate("PWSlot63", u"m", None))
-        self.unit_W1.setText(QCoreApplication.translate("PWSlot63", u"m", None))
-        self.in_W2.setText(QCoreApplication.translate("PWSlot63", u"W2 :", None))
-        self.unit_H0.setText(QCoreApplication.translate("PWSlot63", u"m", None))
-        self.in_H2.setText(QCoreApplication.translate("PWSlot63", u"H2 :", None))
-        self.in_W1.setText(QCoreApplication.translate("PWSlot63", u"W1 :", None))
-        self.unit_W0.setText(QCoreApplication.translate("PWSlot63", u"m", None))
-        self.in_H0.setText(QCoreApplication.translate("PWSlot63", u"H0 :", None))
-        self.in_W0.setText(QCoreApplication.translate("PWSlot63", u"W0 :", None))
-        self.unit_H2.setText(QCoreApplication.translate("PWSlot63", u"m", None))
-        self.in_H1.setText(QCoreApplication.translate("PWSlot63", u"H1 :", None))
+        self.unit_W2.setText(QCoreApplication.translate("PWSlot63", "m", None))
+        self.unit_W1.setText(QCoreApplication.translate("PWSlot63", "m", None))
+        self.in_W2.setText(QCoreApplication.translate("PWSlot63", "W2 :", None))
+        self.unit_H0.setText(QCoreApplication.translate("PWSlot63", "m", None))
+        self.in_H2.setText(QCoreApplication.translate("PWSlot63", "H2 :", None))
+        self.in_W1.setText(QCoreApplication.translate("PWSlot63", "W1 :", None))
+        self.unit_W0.setText(QCoreApplication.translate("PWSlot63", "m", None))
+        self.in_H0.setText(QCoreApplication.translate("PWSlot63", "H0 :", None))
+        self.in_W0.setText(QCoreApplication.translate("PWSlot63", "W0 :", None))
+        self.unit_H2.setText(QCoreApplication.translate("PWSlot63", "m", None))
+        self.in_H1.setText(QCoreApplication.translate("PWSlot63", "H1 :", None))
         self.c_H1_unit.setItemText(
-            0, QCoreApplication.translate("PWSlot63", u"[rad]", None)
+            0, QCoreApplication.translate("PWSlot63", "[rad]", None)
         )
         self.c_H1_unit.setItemText(
-            1, QCoreApplication.translate("PWSlot63", u"[\u00b0]", None)
+            1, QCoreApplication.translate("PWSlot63", "[\u00b0]", None)
         )
 
-        self.g_output.setTitle(QCoreApplication.translate("PWSlot63", u"Output", None))
+        self.g_output.setTitle(QCoreApplication.translate("PWSlot63", "Output", None))
         self.out_Wlam.setText(
-            QCoreApplication.translate("PWSlot63", u"Lamination width : ?", None)
+            QCoreApplication.translate("PWSlot63", "Lamination width : ?", None)
         )
         self.out_slot_height.setText(
-            QCoreApplication.translate("PWSlot63", u"Slot height : ?", None)
+            QCoreApplication.translate("PWSlot63", "Slot height : ?", None)
         )
         self.out_yoke_height.setText(
-            QCoreApplication.translate("PWSlot63", u"Yoke height : ?", None)
+            QCoreApplication.translate("PWSlot63", "Yoke height : ?", None)
         )
         self.out_wind_surface.setText(
-            QCoreApplication.translate("PWSlot63", u"Winding surface : ?", None)
+            QCoreApplication.translate("PWSlot63", "Winding surface : ?", None)
         )
         self.out_tot_surface.setText(
-            QCoreApplication.translate("PWSlot63", u"Total surface : ?", None)
+            QCoreApplication.translate("PWSlot63", "Total surface : ?", None)
         )
         self.out_op_angle.setText(
-            QCoreApplication.translate("PWSlot63", u"Opening angle : ?", None)
+            QCoreApplication.translate("PWSlot63", "Opening angle : ?", None)
         )
         self.out_tooth_width.setText(
-            QCoreApplication.translate("PWSlot63", u"Tooth average width : ?", None)
+            QCoreApplication.translate("PWSlot63", "Tooth average width : ?", None)
         )
 
     # retranslateUi

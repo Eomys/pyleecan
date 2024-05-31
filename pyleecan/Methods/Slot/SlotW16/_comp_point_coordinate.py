@@ -50,7 +50,7 @@ def _comp_point_coordinate(self):
 
     # xct = sqrt(R3**2-yct**2) and yct = y5t + R1
 
-    xct = sqrt(R3 ** 2 - yct ** 2)
+    xct = sqrt(R3**2 - yct**2)
     x4t = xct
     Z4t = x4t + 1j * y4t
     Zct = xct + 1j * yct

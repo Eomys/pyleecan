@@ -21,7 +21,7 @@ def comp_radius(self):
 
     self.check()
 
-    Rmin = sqrt(self.W1 ** 2 + self.H0 ** 2)
-    Rmax = sqrt(self.W2 ** 2 + (self.H0 + self.D0) ** 2)
+    Rmin = sqrt(self.W1**2 + self.H0**2)
+    Rmax = sqrt(self.W2**2 + (self.H0 + self.D0) ** 2)
 
     return (Rmin, Rmax)

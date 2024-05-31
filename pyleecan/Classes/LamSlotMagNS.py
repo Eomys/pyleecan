@@ -619,7 +619,7 @@ class LamSlotMagNS(LamSlotM):
     magnet_north = property(
         fget=_get_magnet_north,
         fset=_set_magnet_north,
-        doc=u"""North Magnet of the lamination
+        doc="""North Magnet of the lamination
 
         :Type: Magnet
         """,
@@ -656,7 +656,7 @@ class LamSlotMagNS(LamSlotM):
     magnet_south = property(
         fget=_get_magnet_south,
         fset=_set_magnet_south,
-        doc=u"""South Magnet of the lamination
+        doc="""South Magnet of the lamination
 
         :Type: Magnet
         """,
@@ -693,7 +693,7 @@ class LamSlotMagNS(LamSlotM):
     slot_south = property(
         fget=_get_slot_south,
         fset=_set_slot_south,
-        doc=u"""South slot of the lamination
+        doc="""South slot of the lamination
 
         :Type: Slot
         """,

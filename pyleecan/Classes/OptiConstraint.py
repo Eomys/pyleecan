@@ -269,7 +269,7 @@ class OptiConstraint(DataKeeper):
     type_const = property(
         fget=_get_type_const,
         fset=_set_type_const,
-        doc=u"""Type of comparison ( "==", "<=", ">=", "<",">")
+        doc="""Type of comparison ( "==", "<=", ">=", "<",">")
 
         :Type: str
         """,
@@ -287,7 +287,7 @@ class OptiConstraint(DataKeeper):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""Value to compare
+        doc="""Value to compare
 
         :Type: float
         """,

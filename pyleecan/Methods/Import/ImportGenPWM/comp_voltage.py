@@ -70,8 +70,7 @@ def comp_voltage(self, Tpwmu, PF_angle=0, is_sin=True, is_norm=True):
 
     elif fswimode == 1:  # Variable fswi (ramp):
         wswiT = current_dir * (
-            np.pi * (fswi_max - fswi) / Tpwmu[-1] * Tpwmu ** 2
-            + 2 * np.pi * fswi * Tpwmu
+            np.pi * (fswi_max - fswi) / Tpwmu[-1] * Tpwmu**2 + 2 * np.pi * fswi * Tpwmu
         )
         carrier = Vdc1 / 2 * signal.sawtooth(wswiT, 0.5)
 

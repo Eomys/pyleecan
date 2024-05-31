@@ -349,7 +349,7 @@ class Frame(FrozenClass):
     Lfra = property(
         fget=_get_Lfra,
         fset=_set_Lfra,
-        doc=u"""frame length [m]
+        doc="""frame length [m]
 
         :Type: float
         :min: 0
@@ -368,7 +368,7 @@ class Frame(FrozenClass):
     Rint = property(
         fget=_get_Rint,
         fset=_set_Rint,
-        doc=u"""frame internal radius
+        doc="""frame internal radius
 
         :Type: float
         :min: 0
@@ -387,7 +387,7 @@ class Frame(FrozenClass):
     Rext = property(
         fget=_get_Rext,
         fset=_set_Rext,
-        doc=u"""Frame external radius
+        doc="""Frame external radius
 
         :Type: float
         :min: 0
@@ -425,7 +425,7 @@ class Frame(FrozenClass):
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
-        doc=u"""Frame material
+        doc="""Frame material
 
         :Type: Material
         """,

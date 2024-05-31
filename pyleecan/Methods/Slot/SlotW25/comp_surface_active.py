@@ -30,15 +30,15 @@ def comp_surface_active(self):
         Rext = abs(Z2)
 
     # Surface of a slot pitch
-    Sring = (pi * Rext ** 2 - pi * Rint ** 2) * 1 / self.Zs
+    Sring = (pi * Rext**2 - pi * Rint**2) * 1 / self.Zs
 
     # Tooth surface
     St = self.H2 * self.W3
 
     alpha_bore = 2 * arcsin(self.W3 / (2 * Rint))
-    Sarc_bore = (Rint ** 2.0) / 2.0 * (alpha_bore - sin(alpha_bore))
+    Sarc_bore = (Rint**2.0) / 2.0 * (alpha_bore - sin(alpha_bore))
 
     alpha_yoke = 2 * arcsin(self.W3 / (2 * Rext))
-    Sarc_yoke = (Rext ** 2.0) / 2.0 * (alpha_yoke - sin(alpha_yoke))
+    Sarc_yoke = (Rext**2.0) / 2.0 * (alpha_yoke - sin(alpha_yoke))
 
     return Sring - (St + Sarc_yoke - Sarc_bore)

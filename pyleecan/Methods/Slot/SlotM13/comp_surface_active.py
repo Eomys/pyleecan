@@ -21,7 +21,7 @@ def comp_surface_active(self):
     ZM1 = point_dict["ZM1"]
     ZM2 = point_dict["ZM2"]
     alpha = 2 * float(arcsin(self.W1 / (2 * self.Rtopm)))
-    Sarc = (self.Rtopm ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (self.Rtopm**2.0) / 2.0 * (alpha - sin(alpha))
 
     S1 = abs(ZM1 - ZM2) * self.W1
     return S1 + Sarc

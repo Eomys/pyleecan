@@ -675,7 +675,7 @@ class Convert(FrozenClass):
     other_unit_dict = property(
         fget=_get_other_unit_dict,
         fset=_set_other_unit_dict,
-        doc=u"""convertion unit file .mot into unit_dict
+        doc="""convertion unit file .mot into unit_dict
 
         :Type: dict
         """,
@@ -695,7 +695,7 @@ class Convert(FrozenClass):
     other_dict = property(
         fget=_get_other_dict,
         fset=_set_other_dict,
-        doc=u"""convertion file .mot in dict
+        doc="""convertion file .mot in dict
 
         :Type: dict
         """,
@@ -732,7 +732,7 @@ class Convert(FrozenClass):
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
-        doc=u"""machine pyleecan
+        doc="""machine pyleecan
 
         :Type: Machine
         """,
@@ -752,7 +752,7 @@ class Convert(FrozenClass):
     rules_list = property(
         fget=_get_rules_list,
         fset=_set_rules_list,
-        doc=u"""list differents rules
+        doc="""list differents rules
 
         :Type: list
         """,
@@ -770,7 +770,7 @@ class Convert(FrozenClass):
     is_P_to_other = property(
         fget=_get_is_P_to_other,
         fset=_set_is_P_to_other,
-        doc=u"""booleen to select the direction of conversion
+        doc="""booleen to select the direction of conversion
 
         :Type: bool
         """,

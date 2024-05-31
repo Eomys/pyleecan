@@ -413,7 +413,7 @@ class LamSlotM(LamSlot):
     mur_lin_matrix = property(
         fget=_get_mur_lin_matrix,
         fset=_set_mur_lin_matrix,
-        doc=u"""Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])
+        doc="""Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])
 
         :Type: ndarray
         """,
@@ -438,7 +438,7 @@ class LamSlotM(LamSlot):
     Brm20_matrix = property(
         fget=_get_Brm20_matrix,
         fset=_set_Brm20_matrix,
-        doc=u"""Matrix to enforce a different magnet remanence induction at 20degC for each magnet layer (shape: [Nrad, Ntan, Zs])
+        doc="""Matrix to enforce a different magnet remanence induction at 20degC for each magnet layer (shape: [Nrad, Ntan, Zs])
 
         :Type: ndarray
         """,

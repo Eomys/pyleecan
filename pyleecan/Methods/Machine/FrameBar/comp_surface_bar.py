@@ -26,6 +26,6 @@ def comp_surface_bar(self):
     h_gap = self.comp_height_gap()
     r_in = r_out - h_gap
     rot_angle = 2 * arcsin(self.wbar / 2.0 / r_in)
-    Sbar = self.Nbar * pi * (r_out ** 2 - r_in ** 2) * rot_angle / (2 * pi)
+    Sbar = self.Nbar * pi * (r_out**2 - r_in**2) * rot_angle / (2 * pi)
 
     return Sbar

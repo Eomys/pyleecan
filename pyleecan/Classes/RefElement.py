@@ -192,7 +192,7 @@ class RefElement(FrozenClass):
     epsilon = property(
         fget=_get_epsilon,
         fset=_set_epsilon,
-        doc=u"""Precision criterion
+        doc="""Precision criterion
 
         :Type: float
         :min: 0.00E+00

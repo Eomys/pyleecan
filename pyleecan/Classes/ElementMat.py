@@ -49,7 +49,7 @@ from ._check import InitUnKnowClassError
 
 
 class ElementMat(FrozenClass):
-    """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). """
+    """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes)."""
 
     VERSION = 1
 
@@ -471,7 +471,7 @@ class ElementMat(FrozenClass):
     connectivity = property(
         fget=_get_connectivity,
         fset=_set_connectivity,
-        doc=u"""Matrix of connectivity for one element type
+        doc="""Matrix of connectivity for one element type
 
         :Type: ndarray
         """,
@@ -489,7 +489,7 @@ class ElementMat(FrozenClass):
     nb_element = property(
         fget=_get_nb_element,
         fset=_set_nb_element,
-        doc=u"""Total number of elements
+        doc="""Total number of elements
 
         :Type: int
         """,
@@ -507,7 +507,7 @@ class ElementMat(FrozenClass):
     nb_node_per_element = property(
         fget=_get_nb_node_per_element,
         fset=_set_nb_node_per_element,
-        doc=u"""Define the number of node per element
+        doc="""Define the number of node per element
 
         :Type: int
         """,
@@ -532,7 +532,7 @@ class ElementMat(FrozenClass):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Element indices
+        doc="""Element indices
 
         :Type: ndarray
         """,
@@ -569,7 +569,7 @@ class ElementMat(FrozenClass):
     ref_element = property(
         fget=_get_ref_element,
         fset=_set_ref_element,
-        doc=u"""
+        doc="""
 
         :Type: RefElement
         """,
@@ -606,7 +606,7 @@ class ElementMat(FrozenClass):
     gauss_point = property(
         fget=_get_gauss_point,
         fset=_set_gauss_point,
-        doc=u"""
+        doc="""
 
         :Type: GaussPoint
         """,
@@ -645,7 +645,7 @@ class ElementMat(FrozenClass):
     scalar_product = property(
         fget=_get_scalar_product,
         fset=_set_scalar_product,
-        doc=u"""
+        doc="""
 
         :Type: ScalarProductL2
         """,

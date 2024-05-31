@@ -397,7 +397,7 @@ class MatStructural(FrozenClass):
     rho = property(
         fget=_get_rho,
         fset=_set_rho,
-        doc=u"""mass per unit volume [kg/m3]
+        doc="""mass per unit volume [kg/m3]
 
         :Type: float
         :min: 0
@@ -416,7 +416,7 @@ class MatStructural(FrozenClass):
     Ex = property(
         fget=_get_Ex,
         fset=_set_Ex,
-        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
+        doc="""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -435,7 +435,7 @@ class MatStructural(FrozenClass):
     Ey = property(
         fget=_get_Ey,
         fset=_set_Ey,
-        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
+        doc="""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -454,7 +454,7 @@ class MatStructural(FrozenClass):
     Ez = property(
         fget=_get_Ez,
         fset=_set_Ez,
-        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
+        doc="""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -473,7 +473,7 @@ class MatStructural(FrozenClass):
     nu_xy = property(
         fget=_get_nu_xy,
         fset=_set_nu_xy,
-        doc=u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)
+        doc="""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -492,7 +492,7 @@ class MatStructural(FrozenClass):
     nu_xz = property(
         fget=_get_nu_xz,
         fset=_set_nu_xz,
-        doc=u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)
+        doc="""equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -511,7 +511,7 @@ class MatStructural(FrozenClass):
     nu_yz = property(
         fget=_get_nu_yz,
         fset=_set_nu_yz,
-        doc=u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)
+        doc="""equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -530,7 +530,7 @@ class MatStructural(FrozenClass):
     Gxz = property(
         fget=_get_Gxz,
         fset=_set_Gxz,
-        doc=u"""shear modulus in XY plane (XY is lamination plane, Z is rotation axis)
+        doc="""shear modulus in XY plane (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -549,7 +549,7 @@ class MatStructural(FrozenClass):
     Gxy = property(
         fget=_get_Gxy,
         fset=_set_Gxy,
-        doc=u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)
+        doc="""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -568,7 +568,7 @@ class MatStructural(FrozenClass):
     Gyz = property(
         fget=_get_Gyz,
         fset=_set_Gyz,
-        doc=u"""shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)
+        doc="""shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0

@@ -256,7 +256,7 @@ class Notch(FrozenClass):
     key_mat = property(
         fget=_get_key_mat,
         fset=_set_key_mat,
-        doc=u"""The material of the key (if None, no key to add)
+        doc="""The material of the key (if None, no key to add)
 
         :Type: Material
         """,

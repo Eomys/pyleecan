@@ -451,7 +451,7 @@ class SlotM18_2(Slot):
     H0_bore = property(
         fget=_get_H0_bore,
         fset=_set_H0_bore,
-        doc=u"""Height of the magnet near the bore
+        doc="""Height of the magnet near the bore
 
         :Type: float
         :min: 0
@@ -470,7 +470,7 @@ class SlotM18_2(Slot):
     H0_gap = property(
         fget=_get_H0_gap,
         fset=_set_H0_gap,
-        doc=u"""Height of the magnet near the airgap
+        doc="""Height of the magnet near the airgap
 
         :Type: float
         :min: 0

@@ -1125,7 +1125,7 @@ class Lamination(FrozenClass):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
+        doc="""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
 
         :Type: float
         :min: 0
@@ -1163,7 +1163,7 @@ class Lamination(FrozenClass):
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
-        doc=u"""Lamination's material
+        doc="""Lamination's material
 
         :Type: Material
         """,
@@ -1181,7 +1181,7 @@ class Lamination(FrozenClass):
     Nrvd = property(
         fget=_get_Nrvd,
         fset=_set_Nrvd,
-        doc=u"""number of radial air ventilation ducts in lamination
+        doc="""number of radial air ventilation ducts in lamination
 
         :Type: int
         :min: 0
@@ -1200,7 +1200,7 @@ class Lamination(FrozenClass):
     Wrvd = property(
         fget=_get_Wrvd,
         fset=_set_Wrvd,
-        doc=u"""axial width of ventilation ducts in lamination
+        doc="""axial width of ventilation ducts in lamination
 
         :Type: float
         :min: 0
@@ -1219,7 +1219,7 @@ class Lamination(FrozenClass):
     Kf1 = property(
         fget=_get_Kf1,
         fset=_set_Kf1,
-        doc=u"""lamination stacking / packing factor
+        doc="""lamination stacking / packing factor
 
         :Type: float
         :min: 0
@@ -1239,7 +1239,7 @@ class Lamination(FrozenClass):
     is_internal = property(
         fget=_get_is_internal,
         fset=_set_is_internal,
-        doc=u"""1 for internal lamination topology, 0 for external lamination
+        doc="""1 for internal lamination topology, 0 for external lamination
 
         :Type: bool
         """,
@@ -1257,7 +1257,7 @@ class Lamination(FrozenClass):
     Rint = property(
         fget=_get_Rint,
         fset=_set_Rint,
-        doc=u"""To fill
+        doc="""To fill
 
         :Type: float
         :min: 0
@@ -1276,7 +1276,7 @@ class Lamination(FrozenClass):
     Rext = property(
         fget=_get_Rext,
         fset=_set_Rext,
-        doc=u"""To fill
+        doc="""To fill
 
         :Type: float
         :min: 0
@@ -1295,7 +1295,7 @@ class Lamination(FrozenClass):
     is_stator = property(
         fget=_get_is_stator,
         fset=_set_is_stator,
-        doc=u"""To fill
+        doc="""To fill
 
         :Type: bool
         """,
@@ -1337,7 +1337,7 @@ class Lamination(FrozenClass):
     axial_vent = property(
         fget=_get_axial_vent,
         fset=_set_axial_vent,
-        doc=u"""Axial ventilation ducts
+        doc="""Axial ventilation ducts
 
         :Type: [Hole]
         """,
@@ -1379,7 +1379,7 @@ class Lamination(FrozenClass):
     notch = property(
         fget=_get_notch,
         fset=_set_notch,
-        doc=u"""Lamination bore notches
+        doc="""Lamination bore notches
 
         :Type: [Notch]
         """,
@@ -1414,7 +1414,7 @@ class Lamination(FrozenClass):
     skew = property(
         fget=_get_skew,
         fset=_set_skew,
-        doc=u"""Skew object
+        doc="""Skew object
 
         :Type: Skew
         """,
@@ -1449,7 +1449,7 @@ class Lamination(FrozenClass):
     bore = property(
         fget=_get_bore,
         fset=_set_bore,
-        doc=u"""Bore Shape
+        doc="""Bore Shape
 
         :Type: Bore
         """,
@@ -1484,7 +1484,7 @@ class Lamination(FrozenClass):
     yoke = property(
         fget=_get_yoke,
         fset=_set_yoke,
-        doc=u"""Yoke Shape
+        doc="""Yoke Shape
 
         :Type: Bore
         """,

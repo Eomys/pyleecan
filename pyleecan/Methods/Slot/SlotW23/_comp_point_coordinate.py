@@ -32,13 +32,13 @@ def _comp_point_coordinate(self):
         Z2 = (Rbo + self.H0) * exp(-1j * alpha)
         Z3 = Z2.real + self.get_H1() - 1j * self.W1 / 2
 
-        H2 = sqrt(self.H2 ** 2 - ((self.W2 - self.W1) / 2.0) ** 2)
+        H2 = sqrt(self.H2**2 - ((self.W2 - self.W1) / 2.0) ** 2)
         Z4 = Z3.real + H2 - 1j * self.W2 / 2
     else:  # inward slot
         Z2 = (Rbo - self.H0) * exp(-1j * alpha)
         Z3 = Z2.real - self.get_H1() - 1j * self.W1 / 2
 
-        H2 = sqrt(self.H2 ** 2 - ((self.W2 - self.W1) / 2.0) ** 2)
+        H2 = sqrt(self.H2**2 - ((self.W2 - self.W1) / 2.0) ** 2)
         Z4 = Z3.real - H2 - 1j * self.W2 / 2
 
     point_dict = dict()

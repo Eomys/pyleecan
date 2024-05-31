@@ -185,7 +185,7 @@ class ImportMeshMat(Import):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path of the file to load
+        doc="""Path of the file to load
 
         :Type: str
         """,

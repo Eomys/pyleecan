@@ -25,4 +25,4 @@ def comp_angle_active_eq(self):
     Rext = Rmw + Hwind / 2
     Rint = Rmw - Hwind / 2
 
-    return Swind * 2 * pi / (pi * Rext ** 2 - pi * Rint ** 2)
+    return Swind * 2 * pi / (pi * Rext**2 - pi * Rint**2)

@@ -735,7 +735,7 @@ class VarSimu(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the multi-simulation
+        doc="""Name of the multi-simulation
 
         :Type: str
         """,
@@ -753,7 +753,7 @@ class VarSimu(FrozenClass):
     desc = property(
         fget=_get_desc,
         fset=_set_desc,
-        doc=u"""Multi-simulation description
+        doc="""Multi-simulation description
 
         :Type: str
         """,
@@ -795,7 +795,7 @@ class VarSimu(FrozenClass):
     datakeeper_list = property(
         fget=_get_datakeeper_list,
         fset=_set_datakeeper_list,
-        doc=u"""List containing DataKeepers to extract VarSimu results 
+        doc="""List containing DataKeepers to extract VarSimu results 
 
         :Type: [DataKeeper]
         """,
@@ -813,7 +813,7 @@ class VarSimu(FrozenClass):
     is_keep_all_output = property(
         fget=_get_is_keep_all_output,
         fset=_set_is_keep_all_output,
-        doc=u"""True to store every output in a list
+        doc="""True to store every output in a list
 
         :Type: bool
         """,
@@ -831,7 +831,7 @@ class VarSimu(FrozenClass):
     stop_if_error = property(
         fget=_get_stop_if_error,
         fset=_set_stop_if_error,
-        doc=u"""Stop the multi-simulation if a simulation fails 
+        doc="""Stop the multi-simulation if a simulation fails 
 
         :Type: bool
         """,
@@ -868,7 +868,7 @@ class VarSimu(FrozenClass):
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
-        doc=u"""Multi-simulation of a Multi-simulation definition
+        doc="""Multi-simulation of a Multi-simulation definition
 
         :Type: VarSimu
         """,
@@ -886,7 +886,7 @@ class VarSimu(FrozenClass):
     nb_simu = property(
         fget=_get_nb_simu,
         fset=_set_nb_simu,
-        doc=u"""Number of simulations
+        doc="""Number of simulations
 
         :Type: int
         """,
@@ -904,7 +904,7 @@ class VarSimu(FrozenClass):
     is_reuse_femm_file = property(
         fget=_get_is_reuse_femm_file,
         fset=_set_is_reuse_femm_file,
-        doc=u"""True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)
+        doc="""True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)
 
         :Type: bool
         """,
@@ -946,7 +946,7 @@ class VarSimu(FrozenClass):
     postproc_list = property(
         fget=_get_postproc_list,
         fset=_set_postproc_list,
-        doc=u"""List of post-processing to run on XOutput after the multisimulation
+        doc="""List of post-processing to run on XOutput after the multisimulation
 
         :Type: [Post]
         """,
@@ -990,7 +990,7 @@ class VarSimu(FrozenClass):
     pre_keeper_postproc_list = property(
         fget=_get_pre_keeper_postproc_list,
         fset=_set_pre_keeper_postproc_list,
-        doc=u"""If not None, replace the reference simulation postproc_list in each generated simulation (run before datakeeper)
+        doc="""If not None, replace the reference simulation postproc_list in each generated simulation (run before datakeeper)
 
         :Type: [Post]
         """,
@@ -1034,7 +1034,7 @@ class VarSimu(FrozenClass):
     post_keeper_postproc_list = property(
         fget=_get_post_keeper_postproc_list,
         fset=_set_post_keeper_postproc_list,
-        doc=u"""List of post-processing to run on output after each simulation (except reference one) after the datakeeper.
+        doc="""List of post-processing to run on output after each simulation (except reference one) after the datakeeper.
 
         :Type: [Post]
         """,
@@ -1052,7 +1052,7 @@ class VarSimu(FrozenClass):
     is_reuse_LUT = property(
         fget=_get_is_reuse_LUT,
         fset=_set_is_reuse_LUT,
-        doc=u"""True to reuse the look up table
+        doc="""True to reuse the look up table
 
         :Type: bool
         """,

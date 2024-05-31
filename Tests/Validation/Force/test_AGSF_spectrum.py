@@ -45,8 +45,8 @@ def test_IPMSM_AGSF_spectrum_no_sym():
     simu.input = InputCurrent(
         OP=OPdq(Id_ref=0, Iq_ref=0, N0=1200),
         Ir=None,
-        Na_tot=2 ** 6,
-        Nt_tot=4 * 2 ** 4,
+        Na_tot=2**6,
+        Nt_tot=4 * 2**4,
     )
 
     simu.elec = None
@@ -139,8 +139,8 @@ def test_IPMSM_AGSF_spectrum_sym():
     simu2.input = InputCurrent(
         OP=OPdq(Id_ref=0, Iq_ref=0, N0=1200),
         Ir=None,
-        Na_tot=2 ** 6,
-        Nt_tot=4 * 2 ** 4,
+        Na_tot=2**6,
+        Nt_tot=4 * 2**4,
     )
 
     simu2.elec = None

@@ -26,10 +26,10 @@ def comp_surface_opening(self):
         Sext = ((self.H0 + Rbo) ** 2) * pi
 
         # Surface of the internal disk
-        Sint = (Rbo ** 2) * pi
+        Sint = (Rbo**2) * pi
     else:
         # Surface of the external disk
-        Sext = (Rbo ** 2) * pi
+        Sext = (Rbo**2) * pi
 
         # Surface of the internal disk
         Sint = ((Rbo - self.H0) ** 2) * pi

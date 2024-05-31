@@ -320,7 +320,7 @@ class NodeMat(FrozenClass):
     coordinate = property(
         fget=_get_coordinate,
         fset=_set_coordinate,
-        doc=u"""Nodes coordinates
+        doc="""Nodes coordinates
 
         :Type: ndarray
         """,
@@ -338,7 +338,7 @@ class NodeMat(FrozenClass):
     nb_node = property(
         fget=_get_nb_node,
         fset=_set_nb_node,
-        doc=u"""Total number of nodes
+        doc="""Total number of nodes
 
         :Type: int
         """,
@@ -356,7 +356,7 @@ class NodeMat(FrozenClass):
     delta = property(
         fget=_get_delta,
         fset=_set_delta,
-        doc=u"""Sensibility for node searching
+        doc="""Sensibility for node searching
 
         :Type: float
         """,
@@ -381,7 +381,7 @@ class NodeMat(FrozenClass):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Nodes unique indices
+        doc="""Nodes unique indices
 
         :Type: ndarray
         """,

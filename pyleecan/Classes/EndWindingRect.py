@@ -286,7 +286,7 @@ class EndWindingRect(EndWinding):
     coil_pitch = property(
         fget=_get_coil_pitch,
         fset=_set_coil_pitch,
-        doc=u"""effective coil pitch (override) for length calculation
+        doc="""effective coil pitch (override) for length calculation
 
         :Type: float
         """,
@@ -304,7 +304,7 @@ class EndWindingRect(EndWinding):
     lambda_length = property(
         fget=_get_lambda_length,
         fset=_set_lambda_length,
-        doc=u"""permeance factor related to end winding length
+        doc="""permeance factor related to end winding length
 
         :Type: float
         :min: 0
@@ -323,7 +323,7 @@ class EndWindingRect(EndWinding):
     lambda_width = property(
         fget=_get_lambda_width,
         fset=_set_lambda_width,
-        doc=u"""permeance factor related to end winding width
+        doc="""permeance factor related to end winding width
 
         :Type: float
         :min: 0

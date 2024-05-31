@@ -663,7 +663,7 @@ class HoleM61(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Distance beetween two Hole
+        doc="""Distance beetween two Hole
 
         :Type: float
         :min: 0
@@ -682,7 +682,7 @@ class HoleM61(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Magnet width
+        doc="""Magnet width
 
         :Type: float
         :min: 0
@@ -701,7 +701,7 @@ class HoleM61(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Magnet width
+        doc="""Magnet width
 
         :Type: float
         :min: 0
@@ -720,7 +720,7 @@ class HoleM61(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth width
+        doc="""Tooth width
 
         :Type: float
         :min: 0
@@ -739,7 +739,7 @@ class HoleM61(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Distance from the lamination bore
+        doc="""Distance from the lamination bore
 
         :Type: float
         :min: 0
@@ -758,7 +758,7 @@ class HoleM61(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Magnet height
+        doc="""Magnet height
 
         :Type: float
         :min: 0
@@ -777,7 +777,7 @@ class HoleM61(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Distance beetween the lamination bore and top of the slot
+        doc="""Distance beetween the lamination bore and top of the slot
 
         :Type: float
         :min: 0
@@ -815,7 +815,7 @@ class HoleM61(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""First Magnet
+        doc="""First Magnet
 
         :Type: Magnet
         """,
@@ -852,7 +852,7 @@ class HoleM61(HoleMag):
     magnet_1 = property(
         fget=_get_magnet_1,
         fset=_set_magnet_1,
-        doc=u"""Second Magnet
+        doc="""Second Magnet
 
         :Type: Magnet
         """,
@@ -889,7 +889,7 @@ class HoleM61(HoleMag):
     magnet_2 = property(
         fget=_get_magnet_2,
         fset=_set_magnet_2,
-        doc=u"""Third Magnet
+        doc="""Third Magnet
 
         :Type: Magnet
         """,
@@ -926,7 +926,7 @@ class HoleM61(HoleMag):
     magnet_3 = property(
         fget=_get_magnet_3,
         fset=_set_magnet_3,
-        doc=u"""Fourth Magnet
+        doc="""Fourth Magnet
 
         :Type: Magnet
         """,

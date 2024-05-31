@@ -188,7 +188,7 @@ class FPGNTri(GaussPoint):
     nb_gauss_point = property(
         fget=_get_nb_gauss_point,
         fset=_set_nb_gauss_point,
-        doc=u"""Nb of gauss point to be used
+        doc="""Nb of gauss point to be used
 
         :Type: int
         """,

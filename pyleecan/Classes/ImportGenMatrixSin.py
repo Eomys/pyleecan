@@ -265,7 +265,7 @@ class ImportGenMatrixSin(ImportMatrix):
     sin_list = property(
         fget=_get_sin_list,
         fset=_set_sin_list,
-        doc=u"""List of sinus vector to generate the matrix lines
+        doc="""List of sinus vector to generate the matrix lines
 
         :Type: [ImportGenVectSin]
         """,

@@ -85,9 +85,9 @@ StructElmer_BP_dict[SBR_B_LAB] = "SB_ROTOR_BOUNDARY"
 StructElmer_BP_dict[R_LAB + LAM_LAB + BORE_LAB] = "ROTOR_BORE_CURVE"
 StructElmer_BP_dict[R_LAB + YSR_LAB] = "MASTER_ROTOR_BOUNDARY"  # Rotor Yoke Side Right
 StructElmer_BP_dict[R_LAB + YSL_LAB] = "SLAVE_ROTOR_BOUNDARY"  # Rotor Yoke Side Left
-StructElmer_BP_dict[
-    S_LAB + YSR_LAB
-] = "MASTER_STATOR_BOUNDARY"  # Stator Yoke Side Right
+StructElmer_BP_dict[S_LAB + YSR_LAB] = (
+    "MASTER_STATOR_BOUNDARY"  # Stator Yoke Side Right
+)
 StructElmer_BP_dict[S_LAB + YSL_LAB] = "SLAVE_STATOR_BOUNDARY"  # Stator Yoke Side Left
 StructElmer_BP_dict[SHAFTSR_LAB] = "MASTER_ROTOR_BOUNDARY"  # Shaft Side Right
 StructElmer_BP_dict[SHAFTSL_LAB] = "SLAVE_ROTOR_BOUNDARY"  # Shaft Side Left

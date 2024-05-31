@@ -395,7 +395,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
     toolbox = property(
         fget=_get_toolbox,
         fset=_set_toolbox,
-        doc=u"""DEAP toolbox
+        doc="""DEAP toolbox
 
         :Type: deap.base.Toolbox
         """,
