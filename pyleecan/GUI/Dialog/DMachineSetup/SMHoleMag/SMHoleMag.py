@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget, QSizePolicy
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QWidget, QSizePolicy
 from logging import getLogger
 from .....loggers import GUI_LOG_NAME
 from .....Classes.HoleM50 import HoleM50

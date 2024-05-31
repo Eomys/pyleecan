@@ -3,8 +3,8 @@
 from ....Classes._ClassInfo import ClassInfo
 from .TreeEditModelItems import ObjectItem, UnknownItem
 
-from PySide2.QtCore import Qt, QAbstractItemModel, QModelIndex, Signal
-from PySide2.QtGui import QColor, QBrush, QFont
+from qtpy.QtCore import Qt, QAbstractItemModel, QModelIndex, Signal
+from qtpy.QtGui import QColor, QBrush, QFont
 
 """ from QAbstractItemModel doc: 
 When subclassing QAbstractItemModel, at the very least you must implement index(), 

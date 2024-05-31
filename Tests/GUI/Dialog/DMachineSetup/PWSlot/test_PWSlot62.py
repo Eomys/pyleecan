@@ -2,8 +2,8 @@
 
 import sys
 import pytest
-from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
+from qtpy import QtWidgets
+from qtpy.QtTest import QTest
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW62 import SlotW62

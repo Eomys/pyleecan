@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from qtpy.QtCore import Signal
+from qtpy.QtWidgets import QMessageBox, QWidget
 
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.PHoleM51 import PHoleM51

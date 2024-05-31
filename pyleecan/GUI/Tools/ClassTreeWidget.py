@@ -2,11 +2,11 @@
 
 from os.path import join
 
-from PySide2 import QtGui
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QDialog, QLabel, QSplitter, QTreeView
-from PySide2.QtWidgets import QDialogButtonBox, QVBoxLayout, QHBoxLayout
+from qtpy import QtGui
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtGui import QIcon
+from qtpy.QtWidgets import QDialog, QLabel, QSplitter, QTreeView
+from qtpy.QtWidgets import QDialogButtonBox, QVBoxLayout, QHBoxLayout
 
 from ...definitions import ROOT_DIR
 from ...Classes._ClassInfo import ClassInfo

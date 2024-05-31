@@ -1,6 +1,6 @@
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QDialog, QMessageBox, QShortcut
-from PySide2.QtGui import QKeySequence
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QDialog, QMessageBox, QShortcut
+from qtpy.QtGui import QKeySequence
 
 from .....Classes.Lamination import Lamination
 from .....Classes.VentilationCirc import VentilationCirc

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog, QListView
+from qtpy.QtCore import Qt, Signal
+from qtpy.QtWidgets import QMessageBox, QWidget, QFileDialog, QListView
 from os.path import join, isdir
 
 from .....Functions.init_fig import init_fig

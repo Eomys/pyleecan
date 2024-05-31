@@ -8,9 +8,9 @@ from random import uniform
 from shutil import rmtree, copyfile
 from numpy import array, transpose
 import pytest
-from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
-from PySide2.QtWidgets import QMessageBox
+from qtpy import QtWidgets
+from qtpy.QtTest import QTest
+from qtpy.QtWidgets import QMessageBox
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -214,7 +214,7 @@ class TestDMatSetup(object):
         """Check that you can change the name and the path"""
         self.widget.w_setup.le_name.setText("Magnet2")
         with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.question",
+            "qtpy.QtWidgets.QMessageBox.question",
             return_value=QMessageBox.Yes,
         ):
             self.widget.w_setup.le_name.editingFinished.emit()
@@ -508,7 +508,7 @@ class TestDMatSetup(object):
         assert isfile(csv_path)
         # Load csv
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(csv_path, "CSV (*.csv)"),
         ):
             w_imp.b_import.clicked.emit()
@@ -533,7 +533,7 @@ class TestDMatSetup(object):
 
         # Load Excel
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
         ):
             w_imp.b_import.clicked.emit()
@@ -564,7 +564,7 @@ class TestDMatSetup(object):
 
         # Load Excel with other column
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
         ):
             w_imp.b_import.clicked.emit()
@@ -597,7 +597,7 @@ class TestDMatSetup(object):
         # Export Csv
         save_csv_path = join(save_path, "DMatSetup_csv_export.csv").replace("\\", "/")
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getSaveFileName",
+            "qtpy.QtWidgets.QFileDialog.getSaveFileName",
             return_value=(save_csv_path, "CSV (*.csv)"),
         ):
             w_imp.b_export.clicked.emit()
@@ -605,7 +605,7 @@ class TestDMatSetup(object):
 
         # Load csv
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(save_csv_path, "CSV (*.csv)"),
         ):
             w_imp.b_import.clicked.emit()
@@ -655,7 +655,7 @@ class TestDMatSetup(object):
         assert isfile(csv_path_Loss)
         # Load csv
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_import.clicked.emit()
@@ -689,7 +689,7 @@ class TestDMatSetup(object):
 
         # Load Excel
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(excel_path_Loss, "Excel file (*.xls .*xlsx)"),
         ):
             mat.b_import.clicked.emit()
@@ -731,7 +731,7 @@ class TestDMatSetup(object):
             "\\", "/"
         )
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getSaveFileName",
+            "qtpy.QtWidgets.QFileDialog.getSaveFileName",
             return_value=(save_csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_export.clicked.emit()
@@ -739,7 +739,7 @@ class TestDMatSetup(object):
 
         # Load csv
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName",
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(save_csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_import.clicked.emit()

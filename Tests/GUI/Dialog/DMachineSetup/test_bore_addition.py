@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets
+from qtpy import QtWidgets
 from os.path import join, isfile
 from os import remove
 import mock
@@ -55,7 +55,7 @@ class TestBoreAddition(object):
             "Json (*.json)",
         )
         with mock.patch(
-            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit()

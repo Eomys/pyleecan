@@ -3,7 +3,7 @@
 import sys
 
 import pytest
-from PySide2 import QtWidgets
+from qtpy import QtWidgets
 import matplotlib.pyplot as plt
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineWRSM import MachineWRSM

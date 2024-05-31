@@ -27,3 +27,4 @@ nbconvert
 nbformat
 pytest>=5.4.1
 pytest-qt>=3.3.0
+qtpy>=2.4.1

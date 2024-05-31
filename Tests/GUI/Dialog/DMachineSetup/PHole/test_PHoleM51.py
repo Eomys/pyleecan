@@ -3,8 +3,8 @@
 import sys
 
 import pytest
-from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
+from qtpy import QtWidgets
+from qtpy.QtTest import QTest
 from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.HoleM51 import HoleM51
@@ -12,7 +12,7 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.PHoleM51 import PHoleM51
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
-from PySide2.QtCore import Qt
+from qtpy.QtCore import Qt
 
 
 class TestPHoleM51(object):
