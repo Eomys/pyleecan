@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Python: Current File (Integrated Terminal)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
@@ -17,14 +17,14 @@
         },
         {
             "name": "Python: Code gen (GUI Ui only)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Generator/run_generate_GUI.py",
             "console": "integratedTerminal"
         },
         {
             "name": "Python: Code gen (GUI resources only)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Generator/run_generate_GUI_resources.py",
             "console": "integratedTerminal",
@@ -34,7 +34,7 @@
         },
         {
             "name": "Python: Code gen (Classes from csv)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Generator/run_generate_classes.py",
             "console": "integratedTerminal",
@@ -45,7 +45,7 @@
         },
         {
             "name": "Python: Run GUI",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/run_GUI.py",
             "console": "integratedTerminal",
@@ -56,7 +56,7 @@
         },
         {
             "name": "Python: Run class gen GUI",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/pyleecan/Generator/run_class_generator_GUI.py",
             "console": "integratedTerminal",
@@ -67,7 +67,7 @@
         },
         {
             "name": "Python: Run script",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/script.py",
             "console": "integratedTerminal",
@@ -78,7 +78,7 @@
         },
         {
             "name": "Python: Current File (External Terminal)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "externalTerminal"
