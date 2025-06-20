@@ -23,9 +23,16 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
     line_list : list
         List of lines needed to draw the radius
     """
-
     # Get all Radius lines (0 to 2*pi)
     radius_lines = self.get_bore_line()
+
+    # fig, ax = None, None
+    # for desc in radius_desc_list:
+    #     fig, ax = _plot_lines(desc['lines'], fig=fig, ax=ax, color="b")
+    # fig, ax = _plot_lines(radius_lines, fig=fig, ax=ax, color="gray")
+    # ax.axis('equal')
+    # fig.show()
+
 
     # Update begin and end angle if Radius (next step already cut lines)
     if sym != 1 and radius_desc_list[0]["label"] == "Radius":
@@ -39,21 +46,6 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
             desc_dict["lines"] = cut_lines_between_angles(
                 radius_lines, desc_dict["begin_angle"], desc_dict["end_angle"]
             )
-
-    # # Check that the Radius lines are correct
-    # for ii, desc_dict in enumerate(radius_desc_list):
-    #     if desc_dict["label"] == "Radius":
-    #         print(ii)
-    #         print(
-    #             str(desc_dict["begin_angle"])
-    #             + " and "
-    #             + str(angle(desc_dict["lines"][0].get_begin()) % (2 * pi))
-    #         )
-    #         print(
-    #             str(desc_dict["end_angle"])
-    #             + " and "
-    #             + str(angle(desc_dict["lines"][-1].get_end()) % (2 * pi))
-    #         )
 
     # If slot/notch are coliding with sym lines => Cut
     if sym != 1:
@@ -86,6 +78,7 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                     line.prop_dict.update(prop_dict)
             line_list.extend(desc_dict["lines"])
         else:  # Intersect and add slot/notch lines
+            # fig, ax = _plot_lines(desc_dict['lines'], is_show=True)
             # Define First cutting line
             # rad_line = radius_desc_list[ii - 1]["lines"][-1]
             op = desc_dict["end_angle"] - desc_dict["begin_angle"]
@@ -95,19 +88,25 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                     desc_dict["begin_angle"] - op / 4,
                     desc_dict["begin_angle"] + op / 4,
                 )
-                # Find first line to intersect with cutting line
-                for jj in range(len(desc_dict["lines"])):
-                    inter_list = desc_dict["lines"][jj].intersect_obj(
-                        rad_line_list[-1], is_on_line=True
-                    )
-                    if len(inter_list) > 0:
+                # Find first intersection between any line in rad_line_list 
+                # and any line in desc_dict["lines"]
+                for cutting_line in rad_line_list[::-1]:
+                    for jj, line in enumerate(desc_dict["lines"]):
+                        inter_list = line.intersect_obj(cutting_line, is_on_line=True)
+                        if inter_list:
+                            break  
+                    if inter_list:
                         break
-                if jj < len(desc_dict["lines"]) - 1:
-                    # Slot/notch was cut => Replace lines by cut ones
-                    desc_dict["lines"] = desc_dict["lines"][
-                        jj:
-                    ]  # Keep all lines after cut
-                    # Update lines to start/end at cutting point
+
+                # fig, ax = _plot_lines(desc_dict['lines'], is_show=False)
+                # fig, ax = _plot_lines([rad_line_list[-1]], color="r", fig=fig, ax=ax, is_show=True)
+                # fig, ax = _plot_lines([cutting_line], color="b", fig=fig, ax=ax, is_show=False)
+                # fig, ax = _plot_lines(line_list, color="g", linestyle="-.", fig=fig, ax=ax, is_show=True)
+
+                if inter_list:
+                    # slot/notch was cut => replace slot/notch lines by cut ones, i.e.
+                    # keep all lines after the cut and update to start at cutting point
+                    desc_dict["lines"] = desc_dict["lines"][jj:]  
                     desc_dict["lines"][0].split_point(inter_list[0], is_begin=False)
                     if len(line_list) == 0:  # Slot/notch on Ox
                         radius_desc_list[-1]["lines"][-1].split_point(
@@ -115,7 +114,7 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                         )
                     else:
                         line_list[-1].split_point(inter_list[0], is_begin=True)
-                else:  # The slot is above the shape => Use shape lines
+                else:  # the slot is above the bore shape => use bore shape lines
                     desc_dict["lines"] = cut_lines_between_angles(
                         radius_lines, desc_dict["begin_angle"], desc_dict["end_angle"]
                     )
@@ -126,7 +125,13 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                                 line.prop_dict = dict()
                             line.prop_dict.update(prop_dict)
                     line_list.extend(desc_dict["lines"])
+                    # fig, ax = _plot_lines(radius_lines)
+                    # fig, ax = _plot_lines(desc_dict["lines"], fig=fig, ax=ax, color="b")
+                    # fig, ax = _plot_lines([rad_line_list[-1]], fig=fig, ax=ax, color="r")
+                    # fig, ax = _plot_point(rad_line_list[-1].get_begin(), fig=fig, ax=ax, color="r", marker=".")
+                    # fig, ax = _plot_point(rad_line_list[-1].get_end(), fig=fig, ax=ax, color="r", marker=".", is_show=True)
                     continue  # No need to cut the other side
+
             # Second cut
             if not (ii == len(radius_desc_list) - 1 and sym != 1):
                 # No second cut for notch on sym line
@@ -135,19 +140,21 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                     desc_dict["end_angle"] - op / 4,
                     desc_dict["end_angle"] + op / 4,
                 )
-                for jj in range(len(desc_dict["lines"])):
-                    inter_list = desc_dict["lines"][-(jj + 1)].intersect_obj(
-                        rad_line_list[0], is_on_line=True
-                    )
-                    if len(inter_list) > 0:
+
+                for cutting_line in rad_line_list:
+                    for jj, line in enumerate(desc_dict["lines"][::-1]):
+                        inter_list = line.intersect_obj(cutting_line, is_on_line=True)
+                        if inter_list:
+                            break  
+                    if inter_list:
                         break
-                if jj < len(desc_dict["lines"]):
+
+                if inter_list:
                     # Slot/notch was cut => Replace lines by cut ones
-                    if jj != 0:  # Keep all the lines if last line is cut
-                        desc_dict["lines"] = desc_dict["lines"][
-                            :-jj
-                        ]  # Keep all lines before cut
-                    # Update lines to start/end at cutting point
+                    if jj != 0: # Keep all the lines if last line is cut
+                        # keep all lines before cut
+                        desc_dict["lines"] = desc_dict["lines"][:-jj]  
+                    # update lines to end at cutting point
                     desc_dict["lines"][-1].split_point(inter_list[0], is_begin=True)
                     radius_desc_list[ii + 1]["lines"][0].split_point(
                         inter_list[0], is_begin=False
@@ -155,3 +162,32 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
             # Add slot/notch lines to final list
             line_list.extend(desc_dict["lines"])
     return line_list
+
+
+def _plot_lines(
+        lines, color="k", linestyle="-", linewidth=1, fig=None, ax=None, is_show=False
+        ):
+    
+    # fig, ax = None, None
+    for line in lines:
+        fig, ax = line.plot(
+            fig=fig, ax=ax, color=color, linewidth=linewidth, linestyle=linestyle
+            )
+
+    if is_show:
+        ax.axis('equal')
+        fig.show()
+
+    return fig, ax
+
+def _plot_point(
+        point, color="k", marker="o", markersize=10, fig=None, ax=None, is_show=False
+        ):
+    
+    ax.plot(point.real, point.imag, marker=marker, markersize=markersize, color=color)
+
+    if is_show:
+        ax.axis('equal')
+        fig.show()
+
+    return fig, ax
