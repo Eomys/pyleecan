@@ -20,7 +20,7 @@ def test_bore_and_notch(is_show_fig=False):
 
     # Load machines
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    Audi_eTron = load(join(DATA_DIR, "Machine", "Audi_eTron.json"))
+    Audi_eTron = load(join(DATA_DIR, "Machine", "AUDI_eTron.json"))
 
     # Add notches to Toyota_Prius
     p = Toyota_Prius.get_pole_pair_number()
@@ -43,7 +43,7 @@ def test_bore_and_notch(is_show_fig=False):
     delta_d =  Toyota_Prius.stator.Rint - Toyota_Prius.rotor.Rext
     Toyota_Prius.rotor.bore = BoreSinePole(N=8, delta_d=delta_d, delta_q=5*mm, W0=50*mm)
 
-    Toyota_Prius.plot(sym=8, is_show_fig=is_show_fig)
+    # Toyota_Prius.plot(sym=8, is_show_fig=is_show_fig)
     Toyota_Prius.plot(is_show_fig=is_show_fig)
 
     # Add notches to Audi_eTron

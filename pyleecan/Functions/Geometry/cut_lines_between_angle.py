@@ -20,6 +20,16 @@ def cut_lines_between_angles(line_list, begin_angle, end_angle):
     cut_lines : [Line]
         Cut lines between the two angles
     """
+    # normalize angles according to numpy.angle range
+    begin_angle = angle(exp(1j * begin_angle))
+    end_angle = angle(exp(1j * end_angle))
+    mean_angle = angle(exp(1j * begin_angle) + exp(1j * end_angle))
+
+    # rotate list in case first/last line is in between begin and end angle
+    # first copy list
+    sorted_list = [line for line in line_list]
+    # rotate until first line is before begin angle
+    
 
     first_cut = list()
     cut_lines = list()
@@ -37,3 +47,55 @@ def cut_lines_between_angles(line_list, begin_angle, end_angle):
         cut_lines = cut_lines[::-1]
 
     return cut_lines
+
+
+def plot_cut_line(line_list, begin_angle, end_angle, first_cut, cut_lines):
+    """Plot the original lines and the cut lines
+    Parameters
+    ----------
+    line_list : [Line]
+        list of line to cut
+    begin_angle : float
+        Begin angle of the cut [rad]
+    end_angle : float
+        End angle of the cut [rad]
+
+    """
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    r = 0
+    for line in line_list:
+        z1 = line.get_begin()
+        z2 = line.get_end()
+        ax.plot([z1.real, z2.real], [z1.imag, z2.imag], color='gray',label=f'split line')
+        r = max(r, abs(z1), abs(z2))
+    
+    # plot cut lines
+    z1 = r * exp(1j * begin_angle)
+    z2 = r * exp(1j * end_angle)
+
+    ax.plot([z1.real, -z1.real], [z1.imag, -z1.imag], color='r',label=f'cut')
+    ax.plot([z2.real, -z2.real], [z2.imag, -z2.imag], color='b',label=f'cut')
+
+    for line in first_cut:
+        z1 = line.get_begin()
+        z2 = line.get_end()
+        ax.plot([z1.real, z2.real], [z1.imag, z2.imag], color='k',label=f'split line')
+        r = max(r, abs(z1), abs(z2))
+
+    for line in cut_lines:
+        z1 = line.get_begin()
+        z2 = line.get_end()
+        ax.plot([z1.real, z2.real], [z1.imag, z2.imag], color='k',label=f'split line', marker='.')
+        r = max(r, abs(z1), abs(z2))
+
+
+    # plt.legend()
+    #axis to equal size
+    ax.axis('equal')
+
+    plt.show()
+
