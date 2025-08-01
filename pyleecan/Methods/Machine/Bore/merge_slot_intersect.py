@@ -3,6 +3,8 @@ from numpy import pi, exp, angle
 from ....Functions.Geometry.cut_lines_between_angle import cut_lines_between_angles
 from ....Classes.Segment import Segment
 
+DEBUG = False
+
 
 def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
     """Merge the Bore shape with notches/slot on the bore/yoke
@@ -12,7 +14,7 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
     Parameters
     ----------
     radius_desc_list : list
-        List of dict to describe the bore/yoke radius
+        List of dict to describe the bore/yoke radius (without bore shape, with notches)
     prop_dict : dict
         Property dictionary to apply on the radius lines (not on slot/notch)
     sym : int
@@ -23,171 +25,143 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
     line_list : list
         List of lines needed to draw the radius
     """
-    # Get all Radius lines (0 to 2*pi)
-    radius_lines = self.get_bore_line()
+    # Get all Radius lines (0 to 2*pi), i.e. the bore shape without notches
+    bore_shape = self.get_bore_line()
 
-    # fig, ax = None, None
-    # for desc in radius_desc_list:
-    #     fig, ax = _plot_lines(desc['lines'], fig=fig, ax=ax, color="b")
-    # fig, ax = _plot_lines(radius_lines, fig=fig, ax=ax, color="gray")
-    # ax.axis('equal')
-    # fig.show()
+    if DEBUG:
+        _debug_plot(radius_desc_list, bore_shape, title="Original lines")
 
+    # limit begin and end angles
+    if sym != 1:
+        if radius_desc_list[0]["label"] == "Radius":
+            radius_desc_list[0]["begin_angle"] = 0
+        if radius_desc_list[-1]["label"] == "Radius":
+            radius_desc_list[-1]["end_angle"] = 2 * pi / sym
 
-    # Update begin and end angle if Radius (next step already cut lines)
-    if sym != 1 and radius_desc_list[0]["label"] == "Radius":
-        radius_desc_list[0]["begin_angle"] = 0
-    if sym != 1 and radius_desc_list[-1]["label"] == "Radius":
-        radius_desc_list[-1]["end_angle"] = 2 * pi / sym
+    # search intersection of each notch with bore shape -> cut notch
+    for ii, desc_dict in enumerate(radius_desc_list):
+        if desc_dict["label"] != "Radius":
+            lines = [line for line in desc_dict["lines"]]
+            # forward search for 1. cut
+            found = False
+            while lines and not found:
+                for bore in bore_shape:
+                    intersect = lines[0].intersect_obj(bore)
+                    if intersect:
+                        lines[0].split_point(intersect[0], is_begin=False)
+                        found = True
+                        break
+                if not found:
+                    lines.pop(0)
 
-    # Replace Arc radius from desc by lines from shape
+            # backward search for 2nd cut
+            found = False
+            while lines and not found:
+                for bore in bore_shape:
+                    intersect = lines[-1].intersect_obj(bore)
+                    if intersect:
+                        lines[-1].split_point(intersect[0], is_begin=True)
+                        found = True
+                        break
+                if not found:
+                    lines.pop(-1)
+
+            desc_dict["lines"] = lines
+
+    if DEBUG:
+        _debug_plot(radius_desc_list, bore_shape, title="... after cutting notches")
+
+    # fix radius_desc_list in case notches are cut out by bore shape completely
+    # TODO print warning
+    idx = [ii for ii, desc in enumerate(radius_desc_list) if not desc["lines"]]
+
+    # correct previous and next segments begin and end angles first ...
+    siz = len(radius_desc_list)
+    for ii in idx:
+        if sym != 1 and ii == 0:
+            radius_desc_list[1]["begin_angle"] = 0
+        elif sym != 1 and ii == (siz - 1):
+            radius_desc_list[-2]["end_angle"] = 2 * pi / sym
+        else:
+            previous_segment = radius_desc_list[ii - 1]
+            next_segment = radius_desc_list[(ii + 1) % siz]
+            # begin and end of cut out notch on round bore shape
+            begin = previous_segment["end_angle"] % (2 * pi)
+            end = next_segment["begin_angle"] % (2 * pi)
+            if begin <= end:
+                ang = (begin + end) / 2
+            else:  # zero crossing of angle
+                ang = ((begin + end + 2 * pi) / 2) % (2 * pi)
+            next_segment["begin_angle"] = ang
+            previous_segment["end_angle"] = ang
+
+    # ... then remove cut out notches
+    for ii in idx[::-1]:
+        radius_desc_list.pop(ii)
+
+    # replace round bore segments by actual bore shape
+    siz = len(radius_desc_list)
     for ii, desc_dict in enumerate(radius_desc_list):
         if desc_dict["label"] == "Radius":
-            desc_dict["lines"] = cut_lines_between_angles(
-                radius_lines, desc_dict["begin_angle"], desc_dict["end_angle"]
-            )
+            previous_segment = radius_desc_list[ii - 1]
+            if previous_segment["label"] == "Radius":
+                begin = desc_dict["begin_angle"]
+            else:
+                begin = angle(previous_segment["lines"][-1].get_end())
 
-    # If slot/notch are coliding with sym lines => Cut
+            next_segment = radius_desc_list[(ii + 1) % siz]
+            if next_segment["label"] == "Radius":
+                end = desc_dict["end_angle"]
+            else:
+                end = angle(next_segment["lines"][0].get_begin())
+
+            desc_dict["lines"] = cut_lines_between_angles(bore_shape, begin, end)
+
+    if DEBUG:
+        _debug_plot(radius_desc_list, bore_shape, title="Merged (before sym. cutting)")
+
+    # If notches are crossing sym lines => Cut
     if sym != 1:
+        begin = 0
+        end = 2 * pi / sym
         # Cut first desc (if needed)
         if radius_desc_list[0]["begin_angle"] < 0:
-            lines = list()
-            for line in radius_desc_list[0]["lines"]:
-                top_split_list, _ = line.split_line(0, 1)
-                lines.extend(top_split_list)
-            radius_desc_list[0]["begin_angle"] = 0
+            lines = cut_lines_between_angles(radius_desc_list[0]["lines"], begin, end)
+            radius_desc_list[0]["begin_angle"] = begin
             radius_desc_list[0]["lines"] = lines
         # Cut last desc (if needed)
         if radius_desc_list[-1]["end_angle"] > 2 * pi / sym:
-            lines = list()
-            for line in radius_desc_list[-1]["lines"]:
-                _, bot_split_list = line.split_line(0, exp(1j * 2 * pi / sym))
-                lines.extend(bot_split_list)
-            radius_desc_list[-1]["end_angle"] = 2 * pi / sym
+            lines = cut_lines_between_angles(radius_desc_list[-1]["lines"], begin, end)
+            radius_desc_list[-1]["end_angle"] = end
             radius_desc_list[-1]["lines"] = lines
 
-    # Apply merge strategy on slot/notch
-    line_list = list()
-    for ii, desc_dict in enumerate(radius_desc_list):
-        if desc_dict["label"] == "Radius":
-            # Add prop_dict on all the Radius Lines
-            if prop_dict is not None:
-                for line in desc_dict["lines"]:
-                    if line.prop_dict is None:
-                        line.prop_dict = dict()
-                    line.prop_dict.update(prop_dict)
-            line_list.extend(desc_dict["lines"])
-        else:  # Intersect and add slot/notch lines
-            # fig, ax = _plot_lines(desc_dict['lines'], is_show=True)
-            # Define First cutting line
-            # rad_line = radius_desc_list[ii - 1]["lines"][-1]
-            op = desc_dict["end_angle"] - desc_dict["begin_angle"]
-            if not (ii == 0 and sym != 1):  # No first cut for first notch on Ox
-                rad_line_list = cut_lines_between_angles(
-                    radius_lines,
-                    desc_dict["begin_angle"] - op / 4,
-                    desc_dict["begin_angle"] + op / 4,
-                )
-                # Find first intersection between any line in rad_line_list 
-                # and any line in desc_dict["lines"]
-                for cutting_line in rad_line_list[::-1]:
-                    for jj, line in enumerate(desc_dict["lines"]):
-                        inter_list = line.intersect_obj(cutting_line, is_on_line=True)
-                        if inter_list:
-                            break  
-                    if inter_list:
-                        break
+    if DEBUG:
+        _debug_plot(radius_desc_list, bore_shape, title="Merged completely")
 
-                # fig, ax = _plot_lines(desc_dict['lines'], is_show=False)
-                # fig, ax = _plot_lines([rad_line_list[-1]], color="r", fig=fig, ax=ax, is_show=True)
-                # fig, ax = _plot_lines([cutting_line], color="b", fig=fig, ax=ax, is_show=False)
-                # fig, ax = _plot_lines(line_list, color="g", linestyle="-.", fig=fig, ax=ax, is_show=True)
+    line_list = [line for desc_list in radius_desc_list for line in desc_list["lines"]]
 
-                if inter_list:
-                    # slot/notch was cut => replace slot/notch lines by cut ones, i.e.
-                    # keep all lines after the cut and update to start at cutting point
-                    desc_dict["lines"] = desc_dict["lines"][jj:]  
-                    desc_dict["lines"][0].split_point(inter_list[0], is_begin=False)
-                    if len(line_list) == 0:  # Slot/notch on Ox
-                        radius_desc_list[-1]["lines"][-1].split_point(
-                            inter_list[0], is_begin=True
-                        )
-                    else:
-                        line_list[-1].split_point(inter_list[0], is_begin=True)
-                else:  # the slot is above the bore shape => use bore shape lines
-                    desc_dict["lines"] = cut_lines_between_angles(
-                        radius_lines, desc_dict["begin_angle"], desc_dict["end_angle"]
-                    )
-                    # Add prop_dict on all the Radius Lines
-                    if prop_dict is not None:
-                        for line in desc_dict["lines"]:
-                            if line.prop_dict is None:
-                                line.prop_dict = dict()
-                            line.prop_dict.update(prop_dict)
-                    line_list.extend(desc_dict["lines"])
-                    # fig, ax = _plot_lines(radius_lines)
-                    # fig, ax = _plot_lines(desc_dict["lines"], fig=fig, ax=ax, color="b")
-                    # fig, ax = _plot_lines([rad_line_list[-1]], fig=fig, ax=ax, color="r")
-                    # fig, ax = _plot_point(rad_line_list[-1].get_begin(), fig=fig, ax=ax, color="r", marker=".")
-                    # fig, ax = _plot_point(rad_line_list[-1].get_end(), fig=fig, ax=ax, color="r", marker=".", is_show=True)
-                    continue  # No need to cut the other side
+    # Apply properties
+    if prop_dict is not None:
+        for line in line_list:
+            if line.prop_dict is None:
+                line.prop_dict = dict()
+            line.prop_dict.update(prop_dict)
 
-            # Second cut
-            if not (ii == len(radius_desc_list) - 1 and sym != 1):
-                # No second cut for notch on sym line
-                rad_line_list = cut_lines_between_angles(
-                    radius_lines,
-                    desc_dict["end_angle"] - op / 4,
-                    desc_dict["end_angle"] + op / 4,
-                )
-
-                for cutting_line in rad_line_list:
-                    for jj, line in enumerate(desc_dict["lines"][::-1]):
-                        inter_list = line.intersect_obj(cutting_line, is_on_line=True)
-                        if inter_list:
-                            break  
-                    if inter_list:
-                        break
-
-                if inter_list:
-                    # Slot/notch was cut => Replace lines by cut ones
-                    if jj != 0: # Keep all the lines if last line is cut
-                        # keep all lines before cut
-                        desc_dict["lines"] = desc_dict["lines"][:-jj]  
-                    # update lines to end at cutting point
-                    desc_dict["lines"][-1].split_point(inter_list[0], is_begin=True)
-                    radius_desc_list[ii + 1]["lines"][0].split_point(
-                        inter_list[0], is_begin=False
-                    )
-            # Add slot/notch lines to final list
-            line_list.extend(desc_dict["lines"])
     return line_list
 
 
-def _plot_lines(
-        lines, color="k", linestyle="-", linewidth=1, fig=None, ax=None, is_show=False
-        ):
-    
-    # fig, ax = None, None
-    for line in lines:
-        fig, ax = line.plot(
-            fig=fig, ax=ax, color=color, linewidth=linewidth, linestyle=linestyle
-            )
+def _debug_plot(radius_desc_list, bore_shape=list(), title=""):
+    """Helper function for debugging"""
+    kwargs = dict(color="b", linewidth="1", linestyle="-")
+    fig, ax = None, None
+    for desc in radius_desc_list:
+        for line in desc["lines"]:
+            fig, ax = line.plot(fig=fig, ax=ax, **kwargs)
 
-    if is_show:
-        ax.axis('equal')
-        fig.show()
+    kwargs = dict(color="gray", linewidth="1", linestyle="-.")
+    for line in bore_shape:
+        fig, ax = line.plot(fig=fig, ax=ax, **kwargs)
 
-    return fig, ax
-
-def _plot_point(
-        point, color="k", marker="o", markersize=10, fig=None, ax=None, is_show=False
-        ):
-    
-    ax.plot(point.real, point.imag, marker=marker, markersize=markersize, color=color)
-
-    if is_show:
-        ax.axis('equal')
-        fig.show()
-
-    return fig, ax
+    ax.axis("equal")
+    ax.set(title=title)
+    fig.show()

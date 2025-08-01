@@ -13,6 +13,7 @@ from pyleecan.Functions.load import load
 
 mm = 1e-3
 
+
 @pytest.mark.IPMSM
 @pytest.mark.SCIM
 def test_bore_and_notch(is_show_fig=False):
@@ -25,25 +26,29 @@ def test_bore_and_notch(is_show_fig=False):
     # Add notches to Toyota_Prius
     p = Toyota_Prius.get_pole_pair_number()
 
-    NBs = SlotCirc(Zs=24, W0=4 * mm, H0=1 * mm)
-    NBq = SlotCirc(Zs=2 * p, W0=4 * mm, H0=1 * mm)
-    NBdq = SlotCirc(Zs=2 * p, W0=6 * mm, H0=1 * mm)
+    Nq = SlotW26(Zs=2 * p, W0=1 * mm, H0=4 * mm, H1=0, R1=3 * mm, R2=3 * mm)
     NCirc1 = SlotCirc(Zs=2 * p, W0=8 * mm, H0=2 * mm)
-    NSlowW26 = SlotW26(Zs=2 * p, W0=1*mm, H0=2*mm, H1=0, R1=3*mm, R2=3*mm)
-    NSlowW26w = SlotW26(Zs=2 * p, W0=9*mm, H0=2*mm, H1=0, R1=5*mm, R2=5*mm) # wide slot
-    a0 = 0.25
+    NCirc2 = SlotCirc(Zs=2 * p, W0=3 * mm, H0=1 * mm)
+    NSlotW26 = SlotW26(Zs=2 * p, W0=1 * mm, H0=2 * mm, H1=0, R1=3 * mm, R2=3 * mm)
+
+    a0 = 0.2
+    a1 = 0.33
 
     Toyota_Prius.rotor.notch = [
-        # NotchEvenDist(alpha=0, notch_shape=NBq),
-        # NotchEvenDist(alpha=0.5 * pi / p + a0, notch_shape=NBdq),
-        # NotchEvenDist(alpha=0.5 * pi / p - a0, notch_shape=NBdq),
-        # NotchEvenDist(alpha=0.5 * pi / p, notch_shape=NCirc1),
-        NotchEvenDist(alpha=0.5 * pi / p, notch_shape=NSlowW26w),
+        NotchEvenDist(alpha=0, notch_shape=Nq),  # q-axis notch -> test sym. cut
+        NotchEvenDist(alpha=0.5 * pi / p + a0, notch_shape=NCirc1),  # wide notch
+        NotchEvenDist(alpha=0.5 * pi / p - a0, notch_shape=NCirc1),  # wide notch
+        NotchEvenDist(
+            alpha=0.5 * pi / p + a1, notch_shape=NCirc2
+        ),  # cut out completely
+        NotchEvenDist(alpha=0.5 * pi / p, notch_shape=NSlotW26),  # small notch
     ]
-    delta_d =  Toyota_Prius.stator.Rint - Toyota_Prius.rotor.Rext
-    Toyota_Prius.rotor.bore = BoreSinePole(N=8, delta_d=delta_d, delta_q=5*mm, W0=50*mm)
+    delta_d = Toyota_Prius.stator.Rint - Toyota_Prius.rotor.Rext
+    Toyota_Prius.rotor.bore = BoreSinePole(
+        N=8, delta_d=delta_d, delta_q=5 * mm, W0=50 * mm
+    )
 
-    # Toyota_Prius.plot(sym=8, is_show_fig=is_show_fig)
+    Toyota_Prius.plot(sym=8, is_show_fig=is_show_fig)
     Toyota_Prius.plot(is_show_fig=is_show_fig)
 
     # Add notches to Audi_eTron
@@ -52,14 +57,15 @@ def test_bore_and_notch(is_show_fig=False):
 
     Audi_eTron.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBs)]
     Audi_eTron.rotor.notch = [NotchEvenDist(alpha=0, notch_shape=NBr)]
+    Audi_eTron.stator.slot.H0 = 4 * mm
+    Audi_eTron.stator.bore = BoreFlower(N=4, Rarc=Audi_eTron.stator.Rint + 10 * mm)
 
-    # Audi_eTron.plot(sym=2, is_show_fig=is_show_fig)
-    # Audi_eTron.plot(is_show_fig=is_show_fig)
+    Audi_eTron.plot(sym=2, is_show_fig=is_show_fig)
+    Audi_eTron.plot(is_show_fig=is_show_fig)
 
     return Toyota_Prius, Audi_eTron
 
 
 if __name__ == "__main__":
     Toyota_Prius, Audi_eTron = test_bore_and_notch(is_show_fig=True)
-    plt.show()
     print("Done")
