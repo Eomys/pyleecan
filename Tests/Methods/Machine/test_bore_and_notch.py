@@ -16,7 +16,40 @@ mm = 1e-3
 
 @pytest.mark.IPMSM
 @pytest.mark.SCIM
-def test_bore_and_notch(is_show_fig=False):
+def test_bore_and_notch_merge_type_0(is_show_fig=False):
+    """Validation of bore shape and notches"""
+
+    # Load machines
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+
+    # Add notches to Toyota_Prius
+    p = Toyota_Prius.get_pole_pair_number()
+
+    Nq = SlotCirc(Zs=2 * p, W0=5 * mm, H0=2 * mm)
+    NCirc1 = SlotCirc(Zs=2 * p, W0=8 * mm, H0=2 * mm)
+
+    a0 = 0.2
+
+    Toyota_Prius.rotor.notch = [
+        NotchEvenDist(alpha=0, notch_shape=Nq),  # q-axis notch -> test sym. cut
+        NotchEvenDist(alpha=0.5 * pi / p + a0, notch_shape=NCirc1),  # wide notch
+        NotchEvenDist(alpha=0.5 * pi / p - a0, notch_shape=NCirc1),  # wide notch
+    ]
+    delta_d = Toyota_Prius.stator.Rint - Toyota_Prius.rotor.Rext
+    Toyota_Prius.rotor.bore = BoreSinePole(
+        N=8, delta_d=delta_d, delta_q=3 * mm, W0=50 * mm
+    )
+    Toyota_Prius.rotor.bore.type_merge_slot = 0
+
+    Toyota_Prius.plot(sym=8, is_show_fig=is_show_fig)
+    Toyota_Prius.plot(is_show_fig=is_show_fig)
+
+    return Toyota_Prius
+
+
+@pytest.mark.IPMSM
+@pytest.mark.SCIM
+def test_bore_and_notch_merge_type_1(is_show_fig=False):
     """Validation of rotor and stator notches"""
 
     # Load machines
@@ -67,5 +100,6 @@ def test_bore_and_notch(is_show_fig=False):
 
 
 if __name__ == "__main__":
-    Toyota_Prius, Audi_eTron = test_bore_and_notch(is_show_fig=True)
+    Toyota_Prius = test_bore_and_notch_merge_type_0(is_show_fig=True)
+    # Toyota_Prius, Audi_eTron = test_bore_and_notch_merge_type_1(is_show_fig=True)
     print("Done")
