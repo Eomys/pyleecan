@@ -7,7 +7,7 @@ from ....Classes.Segment import Segment
 def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
     """Merge the Bore shape with notches/slot on the bore/yoke
     Connect method: Add lines between radius and notch/slot
-    (To use when the radius shape have circular part matchine the radius
+    (To use when the radius shape have circular part matching the radius
     or when radius lines are bellow normal radius)
 
     Parameters
@@ -61,6 +61,7 @@ def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
             radius_desc_list[-1]["lines"] = lines
 
     # Apply merge strategy on slot/notch
+    siz = len(radius_desc_list)
     line_list = list()
     for ii, desc_dict in enumerate(radius_desc_list):
         if desc_dict["label"] == "Radius":
@@ -72,30 +73,18 @@ def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
                     line.prop_dict.update(prop_dict)
             line_list.extend(desc_dict["lines"])
         else:  # Connect and add notch lines
+            lines = desc_dict["lines"]
             if len(line_list) > 0:
                 # Connect Radius to slot/notch by Segment (if needed)
-                if (
-                    abs(line_list[-1].get_end() - desc_dict["lines"][0].get_begin())
-                    > 1e-6
-                ):
-                    line_list.append(
-                        Segment(
-                            line_list[-1].get_end(), desc_dict["lines"][0].get_begin()
-                        )
-                    )
-            line_list.extend(desc_dict["lines"])
+                if abs(line_list[-1].get_end() - lines[0].get_begin()) > 1e-6:
+                    connection = Segment(line_list[-1].get_end(), lines[0].get_begin())
+                    line_list.append(connection)
+            line_list.extend(lines)
+
             # Connect slot/notch to next radius
-            if (
-                abs(
-                    radius_desc_list[ii + 1]["lines"][0].get_begin()
-                    - desc_dict["lines"][-1].get_end()
-                )
-                > 1e-6
-            ):
-                line_list.append(
-                    Segment(
-                        desc_dict["lines"][-1].get_end(),
-                        radius_desc_list[ii + 1]["lines"][0].get_begin(),
-                    )
-                )
+            next_lines = radius_desc_list[(ii + 1) % siz]["lines"]
+            if abs(next_lines[0].get_begin() - lines[-1].get_end()) > 1e-6:
+                connection = Segment(lines[-1].get_end(), next_lines[0].get_begin())
+                if not (sym != 1 and ii == (siz - 1)):
+                    line_list.append(connection)
     return line_list
