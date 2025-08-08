@@ -64,9 +64,9 @@ def pyleecan_dict_to_hdf5(file, obj, obj_dict=None):
             file[key] = val
         elif val == None:
             # None is not available in H5 => we use a string
-            file[key] = np.string_("NoneValue".encode("ISO-8859-2"))
+            file[key] = np.str_("NoneValue".encode("ISO-8859-2"))
         elif isinstance(val, str):
-            file[key] = np.string_(val.encode("ISO-8859-2"))
+            file[key] = np.str_(val.encode("ISO-8859-2"))
         else:
             file[key] = val
 
@@ -155,7 +155,7 @@ def variable_to_hdf5(file, prefix, variable, name):
             # Create a fixed-width ASCII string according
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
             try:
-                grp[name] = np.string_(variable.encode("ISO-8859-2"))
+                grp[name] = np.str_(variable.encode("ISO-8859-2"))
             except Exception as e:
                 raise Exception(
                     "Error while h5 saving variable " + name + ":\n" + str(e)
