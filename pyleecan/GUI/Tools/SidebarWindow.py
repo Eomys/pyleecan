@@ -65,8 +65,8 @@ class SidebarWindow(QtWidgets.QMainWindow):
         resolution = QtWidgets.QDesktopWidget().screenGeometry()
         frame = self.frameSize()
         self.move(
-            (resolution.width() / 2) - (frame.width() / 2),
-            (resolution.height() / 2) - (frame.height() / 2),
+            int(resolution.width() / 2) - int(frame.width() / 2),
+            int(resolution.height() / 2) - int(frame.height() / 2),
         )
 
     def addSubWindow(self, name, widget, btn_fct=None):
