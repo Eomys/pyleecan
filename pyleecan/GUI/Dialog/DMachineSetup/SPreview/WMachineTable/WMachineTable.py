@@ -180,7 +180,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 type_calc_leakage=0,
                 path_save=None,
                 is_sliding_band=True,
-                is_fast_draw=True,
+                is_fast_draw=False,
             )
             # Set the current
             update_FEMM_simulation(
