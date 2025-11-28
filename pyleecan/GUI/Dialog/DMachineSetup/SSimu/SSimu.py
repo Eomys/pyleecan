@@ -118,6 +118,7 @@ class SSimu(Gen_SSimu, QWidget):
             is_periodicity_t=True,
             T_mag=20,
             nb_worker=cpu_count(),
+            is_fast_draw=False,
         )
         self.simu.force = None
 
