@@ -4,59 +4,90 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
-## Presentation
-PYLEECAN project provides a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives**.
+## పరిచయం (Presentation)
 
-The main objective of PYLEECAN is to boost **reproducible research** and **open-science** in electrical engineering. Thus, it is intended for researchers, R&D engineers and teachers in electrical engineering, both on standard and novel topologies of electrical machines. 
+**PYLEECAN** ప్రాజెక్ట్ అనేది విద్యుత్ యంత్రాలు మరియు డ్రైవ్‌ల యొక్క బహుళ భౌతిక రూపకల్పన మరియు ఆప్టిమైజేషన్ కోసం **సులభమైన, ఏకీకృత మరియు అనుకూలమైన సిమ్యులేషన్ ఫ్రేమ్‌వర్క్** ను అందిస్తుంది.
 
-For example, PhD students should start with PYLEECAN:
+**PYLEECAN** యొక్క ప్రధాన లక్ష్యం విద్యుత్ ఇంజనీరింగ్‌లో **పునరుత్పత్తి చేయగల పరిశోధన** మరియు **ఓపెన్-సైన్స్** ను ప్రోత్సహించడం. ఇది విద్యుత్ ఇంజనీరింగ్‌లోని పరిశోధకులు, R&D ఇంజనీర్లు మరియు ఉపాధ్యాయుల కోసం రూపొందించబడింది.
 
-- You can save a lot of time by using existing algorithms dedicated to electrical engineering (e.g. coupling Scilab or Matlab with Femm),
-- You can benefit from the community expertise for your research.
-- You can contribute to the project to make sure your code is maintained and to enable other researchers to easily reproduce your results.
+ఉదాహరణకు, పీహెచ్‌డీ విద్యార్థులు **PYLEECAN** తో ప్రారంభించాలి:
 
-To achieve all of that, Pyleecan is **open source** with a very permissive license (Apache V2 license).
+- విద్యుత్ ఇంజనీరింగ్ కోసం ఇప్పటికే ఉన్న ఆల్గోరిథమ్‌లను ఉపయోగించడం ద్వారా మీరు చాలా సమయాన్ని ఆదా చేయవచ్చు (ఉదా: Scilab లేదా Matlab ను Femm తో కలపడం).
+- మీ పరిశోధన కోసం కమ్యూనిటీ నిపుణుల అనుభవాన్ని పొందవచ్చు.
+- మీ కోడ్‌ను నిర్వహించడానికి మరియు ఇతరులు మీ ఫలితాలను సులభంగా పునరుత్పత్తి చేయడానికి ప్రాజెక్ట్‌లో మీరు కూడా సహకరించవచ్చు.
 
-## Getting Started
-The procedure to install and use Pyleecan is detailed on [pyleecan website](https://www.pyleecan.org/get.pyleecan.html)
-Warning: Pyleecan is not yet compatible with Python 3.11 due to PySide2. We plan to update pyleecan to 3.11 when we will have the time to do so. 
+ఈ అన్ని లక్ష్యాలను సాధించడానికి, **PYLEECAN ఓపెన్ సోర్స్** (Apache V2 లైసెన్స్) కింద విడుదల చేయబడింది.
 
-## Origin and Current Status of the Project
-[EOMYS ENGINEERING](https://eomys.com/?lang=en) initiated this open-source project in 2018 for the study of electric motors. The project is now backed by [Green Forge Coop](https://www.linkedin.com/company/greenforgecoop/) non profit organization, who also supports the development of [Mosqito](https://github.com/Eomys/MoSQITo) for sound quality and [SciDataTool](https://github.com/Eomys/SciDataTool) for efficient scientific data exploitation. 
+---
 
-**Main Models and Couplings:**
+## ప్రారంభం (Getting Started)
 
-- PYLEECAN is fully coupled to [FEMM](http://www.femm.info) to carry **non-linear magnetostatic** analysis including sliding band and symmetries. For now this coupling is available only on Windows OS. 
-- PYLEECAN includes several losses model (based on FEMM coupling output).
-- PYLEECAN includes an electrical model to solve the equivalent circuit of PMSM and SCIM machines.
-- PYLEECAN is coupled to [GMSH](http://gmsh.info/) **2D/3D finite element mesh generator** to run third-party multiphysic solvers. 
-- PYLEECAN is coupled to two different **multiobjective optimization** libraries to carry design optimization of electrical machines.
-- PYLEECAN enables to define **Parameter Sweep** of variable speed simulations.
+PYLEECANని ఇన్‌స్టాల్ చేయడం మరియు ఉపయోగించడం కోసం పూర్తి వివరాలు [Pyleecan వెబ్‌సైట్](https://www.pyleecan.org/get.pyleecan.html) లో లభ్యమవుతాయి.
 
-**Main Topologies Features:**
+⚠️ గమనిక: PySide2 కారణంగా PYLEECAN ప్రస్తుతం Python 3.11 తో అనుకూలంగా లేదు. భవిష్యత్తులో 3.11 కి నవీకరించాలనే ప్రణాళిక ఉంది.
 
-- PYLEECAN includes a **Graphical User Interface** to define main 2D radial flux topologies parametrized geometries (**SPMSM, IPMSM, SCIM, DFIM, WRSM, SRM, SynRM**) including material library and automatic single speed current driven Magnetic FEMM simulations.
-- Possibility to import Slot or Hole from DXF files
-- Star of Slot Winding (with [swat-em](https://swat-em.readthedocs.io/en/latest/)) and User Defined Winding
-- Generic Geometry modeler to draw complex machines in the software coupled with PYLEECAN
-- Notches (Yoke and Bore) / Uneven Bore or Yoke shape (compatible with slot/notches) / Machine with more than 2 laminations
-Examples can be found in the [gallery](https://pyleecan.org/gallery.html).
+---
 
-If you are interested by a topology or a specific model, you can [open an issue](https://github.com/Eomys/pyleecan/issues) or a [discussion](https://github.com/Eomys/pyleecan/discussions) on this Github repository to talk about it. We will gladly explain how to develop it yourself or we will add it to the development list. We are always looking for experimental data and model validation based on the last scientific research work. 
-Even if you don't have time to work on pyleecan, sharing your expertise will be valued by the community. 
+## ప్రాజెక్ట్ మూలం మరియు ప్రస్తుత స్థితి (Origin and Current Status)
 
-## RoadMap
-The mid/long term roadmap of the project is detailed [here](https://github.com/Eomys/pyleecan/issues/214)
+**[EOMYS ENGINEERING](https://eomys.com/?lang=en)** ఈ ఓపెన్-సోర్స్ ప్రాజెక్ట్‌ను 2018లో విద్యుత్ మోటార్ల అధ్యయనాల కోసం ప్రారంభించింది. ప్రస్తుతం ఈ ప్రాజెక్ట్ **[Green Forge Coop](https://www.linkedin.com/company/greenforgecoop/)** అనే లాభాపేక్షలేని సంస్థ మద్దతుతో కొనసాగుతోంది. ఇది **[Mosqito](https://github.com/Eomys/MoSQITo)** (ధ్వని నాణ్యత కోసం) మరియు **[SciDataTool](https://github.com/Eomys/SciDataTool)** (శాస్త్రీయ డేటా విశ్లేషణ కోసం) అభివృద్ధికి కూడా మద్దతు ఇస్తుంది.
 
-## Documentation / Website
-All the information on the project are available at [www.pyleecan.org](http://www.pyleecan.org). In particular, the [media page](https://pyleecan.org/media.html) gathers the publications, video and screenshots of the project.
+---
 
-## Contact
-You can contact us:
-* By opening an [issue](https://github.com/Eomys/pyleecan/issues) on Github (to request a feature, ask a question or report a bug) or starting a [discussion](https://github.com/Eomys/pyleecan/discussions)
-* By sending an email at pyleecan(at)framalistes.org that redirect to all the maintainers.
+## ప్రధాన నమూనాలు మరియు కలయికలు (Main Models and Couplings)
 
-You can follow us:
-* On our [newsletter](https://pyleecan.org/)
-* On [GFC youtube channel](https://www.youtube.com/channel/UCfp83IQbz9znqsU28keMjZw) (with webinars and tutorials video)
-* On [GFC Linkedin page](https://www.linkedin.com/company/greenforgecoop/)
+- **PYLEECAN** ను **[FEMM](http://www.femm.info)** తో పూర్తిగా అనుసంధానించబడింది, nonlinear magnetostatic విశ్లేషణ కోసం (Windows లో మాత్రమే అందుబాటులో ఉంది).
+- అనేక నష్టం నమూనాలు (FEMM అవుట్‌పుట్ ఆధారంగా) ఉన్నాయి.
+- PMSM మరియు SCIM యంత్రాల equivalent circuit పరిష్కరించడానికి విద్యుత్ నమూనా కలదు.
+- **[GMSH](http://gmsh.info/)** తో అనుసంధానించబడి 2D/3D ఫైనైట్ ఎలిమెంట్ మెష్ జనరేషన్‌కి మద్దతు ఇస్తుంది.
+- బహుళ లక్ష్య ఆప్టిమైజేషన్ లైబ్రరీలతో అనుసంధానం.
+- **Parameter Sweep** ను వేరువేరు వేగాల సిమ్యులేషన్లకు ఉపయోగించవచ్చు.
+
+---
+
+## ప్రధాన టోపాలజీ లక్షణాలు (Main Topologies Features)
+
+- **GUI** ద్వారా ప్రధాన 2D రేడియల్ ఫ్లక్స్ టోపాలజీలు (**SPMSM, IPMSM, SCIM, DFIM, WRSM, SRM, SynRM**) నిర్వచించవచ్చు.
+- DXF ఫైళ్ల నుండి స్లాట్ లేదా హోల్ దిగుమతి చేసుకోవచ్చు.
+- **Star of Slot Winding** ([swat-em](https://swat-em.readthedocs.io/en/latest/)) లేదా యూజర్ నిర్వచించిన winding మద్దతు.
+- సంక్లిష్ట యంత్రాల generic geometry మోడలర్.
+- Notches, Uneven Bore లేదా Yoke ఆకారం, రెండు కంటే ఎక్కువ laminations ఉన్న యంత్రాలకు మద్దతు.
+
+ఉదాహరణలను [గ్యాలరీ](https://pyleecan.org/gallery.html) లో చూడవచ్చు.
+
+---
+
+## సహకారం (Contributing)
+
+మీకు ఏదైనా టోపాలజీ లేదా నిర్దిష్ట మోడల్‌లో ఆసక్తి ఉంటే, దానిపై చర్చించడానికి **[issue](https://github.com/Eomys/pyleecan/issues)** లేదా **[discussion](https://github.com/Eomys/pyleecan/discussions)** ప్రారంభించండి.  
+మేము దానిని ఎలా అభివృద్ధి చేయాలో వివరించవచ్చు లేదా అభివృద్ధి జాబితాలో చేర్చవచ్చు.  
+ప్రయోగాత్మక డేటా మరియు తాజా శాస్త్రీయ పరిశోధన ఆధారిత మోడల్ ధృవీకరణకు మేము ఎల్లప్పుడూ ఎదురుచూస్తున్నాము.
+
+---
+
+## రోడ్‌మ్యాప్ (Roadmap)
+
+ప్రాజెక్ట్ యొక్క మధ్య/దీర్ఘకాల ప్రణాళిక [ఇక్కడ](https://github.com/Eomys/pyleecan/issues/214) అందుబాటులో ఉంది.
+
+---
+
+## డాక్యుమెంటేషన్ / వెబ్‌సైట్ (Documentation / Website)
+
+ప్రాజెక్ట్‌కు సంబంధించిన అన్ని సమాచారం [www.pyleecan.org](http://www.pyleecan.org) లో అందుబాటులో ఉంది.  
+**[మీడియా పేజీ](https://pyleecan.org/media.html)** లో ప్రచురణలు, వీడియోలు మరియు స్క్రీన్‌షాట్లు లభిస్తాయి.
+
+---
+
+## సంప్రదించండి (Contact)
+
+మమ్మల్ని సంప్రదించండి:
+* **[GitHub Issues](https://github.com/Eomys/pyleecan/issues)** ద్వారా (కొత్త ఫీచర్, ప్రశ్న, లేదా బగ్ నివేదన)
+* **ఇమెయిల్**: pyleecan(at)framalistes.org
+
+మమ్మల్ని అనుసరించండి:
+* **[న్యూస్‌లెటర్](https://pyleecan.org/)**
+* **[GFC YouTube ఛానల్](https://www.youtube.com/channel/UCfp83IQbz9znqsU28keMjZw)** (వెబినార్‌లు, ట్యుటోరియల్ వీడియోలతో)
+* **[GFC LinkedIn పేజీ](https://www.linkedin.com/company/greenforgecoop/)**
+
+---
+
