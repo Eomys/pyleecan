@@ -30,16 +30,16 @@ PYLEECAN_VERSION = "1.5.2"
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-python_requires = ">= 3.6, <3.11"
+python_requires = ">= 3.6"
 
 # Pyleecan main dependancies
 install_requires = [
     "cloudpickle>=1.3.0",
     "ezdxf==0.14.2",
     "h5py>=3.2.1",
-    "matplotlib>=3.3.2,<=3.3.4",
-    "meshio>=4.0.15,<=4.4.6",
-    "numpy>1.19.5,<=1.23.1",
+    "matplotlib>=3.3.2",
+    "meshio>=4.0.15",
+    "numpy>1.19.5",
     "pandas>=1.0.3",
     "pyfemm>=0.1.3",
     "PySide6;python_version>='3.11'",
