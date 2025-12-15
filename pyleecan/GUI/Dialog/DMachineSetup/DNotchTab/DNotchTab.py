@@ -99,7 +99,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             if None create a new Notch
         """
         # Create a new notch if needed
-        if notch is None:
+        if not notch:
             self.obj.notch.append(
                 NotchEvenDist(
                     alpha=0,
