@@ -77,7 +77,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # self.b_help.hide()
 
         # Connect the slot
-        self.b_add.clicked.connect(self.s_add)
+        self.b_add.clicked.connect(lambda: self.s_add(notch=None, idx_notch=None))
         self.tab_notch.tabCloseRequested.connect(self.s_remove)
         self.b_ok.clicked.connect(self.update_and_close)
         self.b_cancel.clicked.connect(self.reject)
