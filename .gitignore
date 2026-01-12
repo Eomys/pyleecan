@@ -26,3 +26,4 @@ run_GUI_internal.py
 /dist
 node_modules
 /.venv*
+/.vscode
