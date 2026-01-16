@@ -53,28 +53,28 @@ def init_user_dir():
     if not isdir(USER_DIR):
         makedirs(USER_DIR)
         # Copy initial DATA
-        logger.debug("Initialization of USER_DIR in " + USER_DIR)
+        logger.debug("Initialization of USER_DIR in %s", USER_DIR)
 
     # Data initialization
     mach_path = join(USER_DIR, "Machine")
     if not isdir(mach_path):
         shutil.copytree(join(MAIN_DIR, "Data", "Machine"), mach_path)
-        logger.debug("Initialization USER_DIR Machines in " + mach_path)
+        logger.debug("Initialization USER_DIR Machines in %s", mach_path)
 
     mat_path = join(USER_DIR, "Material")
     if not isdir(mat_path):
         shutil.copytree(join(MAIN_DIR, "Data", "Material"), mat_path)
-        logger.debug("Initialization USER_DIR Materials in " + mat_path)
+        logger.debug("Initialization USER_DIR Materials in %s", mat_path)
 
     plot_path = join(USER_DIR, "Plot")
     if not isdir(plot_path):
         shutil.copytree(join(MAIN_DIR, "Data", "Plot"), plot_path)
-        logger.debug("Initialization USER_DIR Plot in " + plot_path)
+        logger.debug("Initialization USER_DIR Plot in %s", plot_path)
 
     gui_path = join(USER_DIR, "GUI")
     if not isdir(gui_path):
         shutil.copytree(join(MAIN_DIR, "Data", "GUI"), gui_path)
-        logger.debug("Initialization USER_DIR GUI in " + gui_path)
+        logger.debug("Initialization USER_DIR GUI in %s", gui_path)
     # Create default config dict
     init_config_dict()
 
@@ -99,25 +99,25 @@ def update_user_dir():
     if isdir(mach_path):
         shutil.rmtree(mach_path)
     shutil.copytree(join(MAIN_DIR, "Data", "Machine"), mach_path)
-    logger.debug("Updating USER_DIR Machines in " + mach_path)
+    logger.debug("Updating USER_DIR Machines in %s", mach_path)
 
     mat_path = join(USER_DIR, "Material")
     if isdir(mat_path):
         shutil.rmtree(mat_path)
     shutil.copytree(join(MAIN_DIR, "Data", "Material"), mat_path)
-    logger.debug("Updating USER_DIR Materials in " + mat_path)
+    logger.debug("Updating USER_DIR Materials in %s", mat_path)
 
     plot_path = join(USER_DIR, "Plot")
     if isdir(plot_path):
         shutil.rmtree(plot_path)
     shutil.copytree(join(MAIN_DIR, "Data", "Plot"), plot_path)
-    logger.debug("Updating USER_DIR Plot in " + plot_path)
+    logger.debug("Updating USER_DIR Plot in %s", plot_path)
 
     gui_path = join(USER_DIR, "GUI")
     if isdir(gui_path):
         shutil.rmtree(gui_path)
     shutil.copytree(join(MAIN_DIR, "Data", "GUI"), gui_path)
-    logger.debug("Updating USER_DIR GUI in " + gui_path)
+    logger.debug("Updating USER_DIR GUI in %s", gui_path)
 
 
 def init_config_dict():
@@ -151,7 +151,7 @@ def init_config_dict():
     if config_dict["PLOT"]["FONT_NAME"] == "":
         config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT
     save_config_dict(config_dict)
-    logger.debug("Init config_dict at :" + CONF_PATH + "(version=" + version + ")")
+    logger.debug("Init config_dict at : %s (version=%s)", CONF_PATH, version)
 
 
 def get_config_dict():
@@ -245,9 +245,8 @@ def get_config_dict():
     font_name = config_dict["PLOT"]["FONT_NAME"]
     if font_name not in [f.name for f in font_manager.fontManager.ttflist]:
         logger.warning(
-            "WARNING: "
-            + font_name
-            + " font not available. Try: matplotlib.font_manager._rebuild()"
+            "WARNING: %s font not available. Try: matplotlib.font_manager._rebuild()",
+            font_name,
         )
         config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT  # Default font
 
