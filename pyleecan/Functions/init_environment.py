@@ -227,15 +227,19 @@ def get_config_dict():
     cmap_name = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
     if "." not in cmap_name:
         cmap_path = join(USER_DIR, "Plot", cmap_name) + ".npy"
+    else:
+        cmap_path = ""
     try:
-        colormaps.get_cmap(name=cmap_name)
-    except:
+        colormaps.get_cmap(cmap_name)
+    except:  # pylint: disable=bare-except
         if not isfile(cmap_path):  # Default colormap
             config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"] = DEFAULT_COLOR_MAP
         else:
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
-            colormaps.register(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
+            colormaps.register(
+                name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp
+            )
 
     # Check if font is available
     font_name = config_dict["PLOT"]["FONT_NAME"]
