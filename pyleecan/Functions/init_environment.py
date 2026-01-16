@@ -6,12 +6,12 @@ from logging import getLogger
 from os import makedirs
 from os.path import abspath, dirname, isdir, isfile, join, normpath, realpath
 
-from matplotlib import colormaps
+from matplotlib import colormaps, font_manager
 from matplotlib.colors import ListedColormap
-from matplotlib import font_manager
 from numpy import load as np_load
-from ..loggers import GUI_LOG_NAME
+
 from ..default_config_dict import default_config_dict
+from ..loggers import GUI_LOG_NAME
 
 
 def save_config_dict(config_dict):
