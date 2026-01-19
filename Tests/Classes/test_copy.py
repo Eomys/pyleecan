@@ -32,7 +32,7 @@ def test_copy_out():
     varload = VarLoadCurrent()
     simu.var_simu = varload
     varload.set_OP_array(
-        array([[10, 0, 0], [100, 0, 0], [1000, 0, 0]]), "N0", "I0", "Phi0"
+        array([[10, 0, 0], [100, 0, 0], [1000, 0, 0]], dtype=float), "N0", "I0", "Phi0"
     )
 
     # Definition of the magnetic simulation (no symmetry)
