@@ -27,3 +27,4 @@ run_GUI_internal.py
 node_modules
 /.venv*
 /.vscode
+/pyleecan.egg-info/
