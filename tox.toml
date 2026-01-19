@@ -1,0 +1,22 @@
+requires = ["tox>=4.19"]
+env_list = ["py312", "py311", "py310", "py39", "type"]
+
+[env_run_base]
+description = "Run test under {base_python}"
+deps = ["pytest", "sympy", "gmsh", "pyuff", "deap", "smoot"]
+commands = [
+    [
+        "pip uninstall scidatatool -y",
+        "pip install C:\\Users\\ganser\\AppData\\Local\\Programs\\SciDataTool",
+        "pytest",
+    ],
+]
+
+# [env.type]
+# description = "run type check on code base"
+# deps = [
+#     "mypy==1.18.2",
+#     "types-cachetools>=5.5.0.20240820",
+#     "types-chardet>=5.0.4.6",
+# ]
+# commands = [["mypy", "src{/}tox"], ["mypy", "tests"]]
