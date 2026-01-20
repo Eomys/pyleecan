@@ -6,7 +6,7 @@ from logging import getLogger
 from os import makedirs
 from os.path import abspath, dirname, isdir, isfile, join, normpath, realpath
 
-from matplotlib.cm import get_cmap, register_cmap
+from matplotlib import colormaps
 from matplotlib.colors import ListedColormap
 from matplotlib import font_manager
 from numpy import load as np_load
@@ -228,14 +228,14 @@ def get_config_dict():
     if "." not in cmap_name:
         cmap_path = join(USER_DIR, "Plot", cmap_name) + ".npy"
     try:
-        get_cmap(name=cmap_name)
+        colormaps[cmap_name]
     except:
         if not isfile(cmap_path):  # Default colormap
             config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"] = DEFAULT_COLOR_MAP
         else:
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
-            register_cmap(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
+            colormaps.register(cmap=cmp, name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"])
 
     # Check if font is available
     font_name = config_dict["PLOT"]["FONT_NAME"]
