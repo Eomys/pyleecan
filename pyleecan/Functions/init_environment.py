@@ -6,7 +6,17 @@ from logging import getLogger
 from os import makedirs
 from os.path import abspath, dirname, isdir, isfile, join, normpath, realpath
 
-from matplotlib import colormaps, font_manager
+from matplotlib import font_manager
+
+try:
+    from matplotlib import colormaps
+    get_cmap = colormaps.get_cmap
+    register_cmap = colormaps.register
+except ImportError:
+    # probably matplotlib 3.6 or older
+    from matplotlib.cm import get_cmap, register_cmap
+except Exception as e:
+    raise e
 from matplotlib.colors import ListedColormap
 from numpy import load as np_load
 
@@ -230,16 +240,14 @@ def get_config_dict():
     else:
         cmap_path = ""
     try:
-        colormaps.get_cmap(cmap_name)
+        get_cmap(cmap_name)
     except:  # pylint: disable=bare-except
         if not isfile(cmap_path):  # Default colormap
             config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"] = DEFAULT_COLOR_MAP
         else:
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
-            colormaps.register(
-                name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp
-            )
+            register_cmap(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
 
     # Check if font is available
     font_name = config_dict["PLOT"]["FONT_NAME"]
