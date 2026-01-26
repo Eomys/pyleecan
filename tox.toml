@@ -11,12 +11,21 @@ commands = [
         "pytest",
     ],
 ]
+[env.black]
+description = "run black linter on code base"
+skip_install = true
+deps = ["black>=24.0.0,<25.0.0"]
+commands = [["black", "pyleecan"]]
 
 # [env.type]
-# description = "run type check on code base"
-# deps = [
-#     "mypy==1.18.2",
-#     "types-cachetools>=5.5.0.20240820",
-#     "types-chardet>=5.0.4.6",
+# description = "run type checks"
+# deps = ["mypy"]
+# commands = [
+#     [
+#         "mypy",
+#         { replace = "posargs", default = [
+#             "src",
+#             "tests",
+#         ], extend = true },
+#     ],
 # ]
-# commands = [["mypy", "src{/}tox"], ["mypy", "tests"]]
