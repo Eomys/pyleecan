@@ -91,6 +91,7 @@ def list_to_hdf5(file, group_name, name, list_to_save):
 
     # Convert into array
     array_list = np.array(list_to_save)
+    # TODO eg np.array([[1, 2], [3, 4, 5]], dtype=object) to avoid warning
 
     # Check the type to split or save as an array
     if array_list.dtype.kind in ["O", "U"]:
