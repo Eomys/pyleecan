@@ -1,5 +1,5 @@
 cloudpickle>=1.3.0  
-ezdxf==0.14.2  # 0.14.3 requires Python 3.10
+ezdxf>=0.14.3  # 0.14.3 requires Python 3.10
 gmsh-sdk>=4.6.0
 h5py>=3.2.1
 matplotlib>=3.10.7  # removed <=3.3.4
@@ -9,13 +9,14 @@ pandas>=1.0.3
 pyfemm>=0.1.3
 # PySide2>=5.15.2.1  # requires Python <3.10
 PyQt5>=5.15.11
-pyuff>=1.25   # for ImportMeshUnv
-# pyvista>=0.42.3
+qtpy>=2.4.1
+pyuff>=2.4  # for ImportMeshUnv; Block for licence reason --> TODO check
+pyvista>=0.42.3
 SciDataTool>=2.5.0
 scipy>=1.4.1
 setuptools
 git+https://gitlab.com/CedMrnl/swat-em.git  # TODO use regular swat-em -> remove Winding.plot_radial 
-# vtk>=9.2.6  # requires Python <=3.13
+vtk>=9.2.6  # requires Python <=3.13
 xlrd>=1.2.0
 xlwt>=1.3.0
-qtpy>=2.4.1
+
