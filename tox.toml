@@ -1,5 +1,5 @@
 requires = ["tox>=4.19"]
-env_list = ["py312", "py311", "py310", "py39", "type"]
+env_list = ["py314", "py313", "py312", "py311", "py310", "py39", "type"]
 
 [env_run_base]
 description = "Run test under {base_python}"
