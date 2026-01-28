@@ -1,0 +1,91 @@
+pytest .\Tests\ -m "not GMSH and not MagFEMM and not FEMM" -v
+
+---
+node: Win10VM
+Branch: HoleMxx 
+commit: ca0f070aee5c22075002761689f2499e1836faf3
+
+================================================================================================= short test summary info =================================================================================================
+FAILED Tests/Classes/test_classes.py::test_class_methods[class_dict132] - ImportError: Can't use OptiBayesAlgSmoot method solve: No module named 'smoot'
+FAILED Tests/Methods/Mesh/test_perm_coord.py::test_perm_coord - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_glyph - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_deflection - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/Mesh/test_convert_MeshVTK.py::test_convert_MeshMat - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_ipm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_spm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+================================================================== 7 failed, 6254 passed, 24 skipped, 106 deselected, 143 warnings in 352.25s (0:05:52) ===================================================================
+
+
+---
+node: Win10VM
+Branch: TestBoreAndNotch
+commit: 844aed3ddd2bca94c5a847866874e8de05881ab0
+
+================================================================================= short test summary info ==================================================================================
+FAILED Tests/Classes/test_classes.py::test_class_methods[class_dict132] - ImportError: Can't use OptiBayesAlgSmoot method solve: No module named 'smoot'
+FAILED Tests/GUI/Dialog/DMachineSetup/test_notche_addition.py::TestNotcheAddition::test_notch_addition
+FAILED Tests/GUI/Dialog/DMachineSetup/PHole/test_PHoleMUD.py::TestPHoleMUD::test_load_dxf_11_magnets - AttributeError: 'QWidgetItem' object has no attribute 'wid'
+FAILED Tests/Methods/Mesh/test_perm_coord.py::test_perm_coord - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_glyph - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_deflection - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/Mesh/test_convert_MeshVTK.py::test_convert_MeshMat - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_ipm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_spm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+=================================================== 9 failed, 6239 passed, 24 skipped, 106 deselected, 143 warnings in 368.42s (0:06:08) ===================================================
+
+
+---
+node: Win10VM
+Branch: master (inkl. GUI_fixes und pytest_marks)
+commit: 69e678b0f69c7e03c60398c24dda4020bcb7c55d
+
+================================================================================= short test summary info ==================================================================================
+FAILED Tests/Classes/test_classes.py::test_class_methods[class_dict132] - ImportError: Can't use OptiBayesAlgSmoot method solve: No module named 'smoot'
+FAILED Tests/Methods/Mesh/test_perm_coord.py::test_perm_coord - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_glyph - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_deflection - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/Mesh/test_convert_MeshVTK.py::test_convert_MeshMat - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_ipm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_spm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+=================================================== 7 failed, 6238 passed, 24 skipped, 106 deselected, 110 warnings in 272.27s (0:04:32) ===================================================
+
+
+---
+node: Win10VM
+Branch: pytest_marks
+commit: 8c28b57c212c6cbfa626d9483816616e97307535
+
+
+================================================================================= short test summary info ==================================================================================
+FAILED Tests/Classes/test_classes.py::test_class_methods[class_dict132] - ImportError: Can't use OptiBayesAlgSmoot method solve: No module named 'smoot'
+FAILED Tests/GUI/Dialog/DMachineSetup/test_notche_addition.py::TestNotcheAddition::test_notch_addition
+FAILED Tests/GUI/Dialog/DMachineSetup/PHole/test_PHoleMUD.py::TestPHoleMUD::test_load_dxf_11_magnets - AttributeError: 'QWidgetItem' object has no attribute 'wid'
+FAILED Tests/Methods/Mesh/test_perm_coord.py::test_perm_coord - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_glyph - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_deflection - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/Mesh/test_convert_MeshVTK.py::test_convert_MeshMat - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_ipm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_spm_Elmer - TypeError: expected str, bytes or os.PathLike object, not NoneType
+=================================================== 9 failed, 6236 passed, 24 skipped, 106 deselected, 110 warnings in 266.49s (0:04:26) ===================================================
+
+Win10VM
+feature-python3.13 
+commit: 196673b
+============================================================================================================ short test summary info ============================================================================================================
+FAILED Tests/Classes/test_classes.py::test_class_methods[class_dict132] - ImportError: Can't use OptiBayesAlgSmoot method solve: No module named 'pymoo.factory'
+FAILED Tests/GUI/Dialog/DMachineSetup/PHole/test_PHoleMUD.py::TestPHoleMUD::test_load_dxf_11_magnets - AttributeError: 'QWidgetItem' object has no attribute 'wid'
+FAILED Tests/GUI/Dialog/DMachineSetup/test_notche_addition.py::TestNotcheAddition::test_notch_addition - assert 1 == 2
+FAILED Tests/GUI/Dialog/DMatLib/test_DMatSetup.py::TestDMatSetup::test_BH_setup - AttributeError: 'NoneType' object has no attribute 'b_ok'
+FAILED Tests/GUI/Dialog/DMatLib/test_DMatSetup.py::TestDMatSetup::test_losse_curve - AttributeError: 'NoneType' object has no attribute 'b_ok'
+FAILED Tests/Methods/Import/test_ImportGenPWM.py::testSPWM - AttributeError: module 'scipy.integrate' has no attribute 'cumtrapz'
+FAILED Tests/Methods/Mesh/Mesh/test_convert_MeshVTK.py::test_convert_MeshMat - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/Mesh/test_get_element.py::Test_get_element_MeshMat::test_get_connectivity_None - ValueError: The truth value of an empty array is ambiguous. Use `array.size > 0` to check that an array is not empty.
+FAILED Tests/Methods/Mesh/test_perm_coord.py::test_perm_coord - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_glyph - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Mesh/test_plot_meshsol.py::test_plot_deflection - pyleecan.Classes._check.CheckTypeError: For mesh : vtkPointSet expected, UnstructuredGrid given
+FAILED Tests/Methods/Simulation/test_OP_matrix_meth.py::Test_OP_matrix_meth::test_simu_get_OP_array - pyleecan.Classes._check.CheckTypeError: For N0 : Double expected, int64 given
+FAILED Tests/Methods/Simulation/test_VarParamSweep_fct_save_load.py::test_VarParamSweep_fct_save_load - ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_ipm_Elmer - ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (1, 2) + inhomogeneous part.
+FAILED Tests/Methods/Simulation/test_magelmer.py::test_spm_Elmer - ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (1, 2) + inhomogeneous part.
+FAILED Tests/Methods/Slot/test_SlotW23_meth.py::Test_SlotW23_meth::test_comp_W - assert np.float64(0.022533218866714808) == 0.022533218866714805
+============================================================================= 16 failed, 6229 passed, 24 skipped, 106 deselected, 158 warnings in 342.26s (0:05:42) =============================================================================

@@ -1,4 +1,4 @@
-import h5py
+import warnings
 import numpy as np
 from h5py import File as FileH5
 from ...definitions import PACKAGE_NAME
@@ -64,9 +64,9 @@ def pyleecan_dict_to_hdf5(file, obj, obj_dict=None):
             file[key] = val
         elif val == None:
             # None is not available in H5 => we use a string
-            file[key] = np.str_("NoneValue".encode("ISO-8859-2"))
+            file[key] = np.bytes_("NoneValue".encode("ISO-8859-2"))
         elif isinstance(val, str):
-            file[key] = np.str_(val.encode("ISO-8859-2"))
+            file[key] = np.bytes_(val.encode("ISO-8859-2"))
         else:
             file[key] = val
 
@@ -87,11 +87,11 @@ def list_to_hdf5(file, group_name, name, list_to_save):
         list to save
 
     """
-
-    np.warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
+    # warnings.filterwarnings("ignore", category=np.exceptions.VisibleDeprecationWarning)
 
     # Convert into array
     array_list = np.array(list_to_save)
+    # TODO eg np.array([[1, 2], [3, 4, 5]], dtype=object) to avoid warning
 
     # Check the type to split or save as an array
     if array_list.dtype.kind in ["O", "U"]:
@@ -155,7 +155,7 @@ def variable_to_hdf5(file, prefix, variable, name):
             # Create a fixed-width ASCII string according
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
             try:
-                grp[name] = np.str_(variable.encode("ISO-8859-2"))
+                grp[name] = np.bytes_(variable.encode("ISO-8859-2"))
             except Exception as e:
                 raise Exception(
                     "Error while h5 saving variable " + name + ":\n" + str(e)

@@ -21,4 +21,4 @@ def comp_radius(self):
 
     z1 = self.begin
     zc = self.center
-    return np_abs(z1 - zc)  # Radius of the arc
+    return float(np_abs(z1 - zc))  # Radius of the arc
