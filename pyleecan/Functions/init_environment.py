@@ -10,6 +10,7 @@ from matplotlib import font_manager
 
 try:
     from matplotlib import colormaps
+
     get_cmap = colormaps.get_cmap
     register_cmap = colormaps.register
 except ImportError:
