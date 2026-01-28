@@ -1,16 +1,35 @@
 requires = ["tox>=4.19"]
-env_list = ["py314", "py313", "py312", "py311", "py310", "py39", "type"]
+env_list = ["py314", "py313", "py312", "py311", "py310", "py39", "black"]
 
-[env_run_base]
-description = "Run test under {base_python}"
-deps = ["pytest", "sympy", "gmsh", "pyuff", "deap", "smoot"]
-commands = [
-    [
-        "pip uninstall scidatatool -y",
-        "pip install C:\\Users\\ganser\\AppData\\Local\\Programs\\SciDataTool",
-        "pytest",
-    ],
+
+[pytest_collect]
+description = "Only try to collect changes under python {base_python} to make sure test collection is ok."
+deps = [
+    "pytest",
+    "sympy",
+    "gmsh",
+    "pyuff",
+    "deap",
+    "smoot",
+    "git+https://github.com/mxgnsr/SciDataTool/tree/update-reqs.git",
 ]
+# commands_pre = [""]
+commands = [["pytest", "--co"]]
+
+[pytest_run]
+description = "Run test under {base_python}"
+deps = [
+    "pytest",
+    "sympy",
+    "gmsh",
+    "pyuff",
+    "deap",
+    "smoot",
+    "git+https://github.com/mxgnsr/SciDataTool/tree/update-reqs.git",
+]
+# commands_pre = [""]
+commands = [["pytest", "Tests"]]
+
 [env.black]
 description = "run black linter on code base"
 skip_install = true
