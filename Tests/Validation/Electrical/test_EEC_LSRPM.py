@@ -1,20 +1,20 @@
-from os.path import join
-from numpy.testing import assert_almost_equal
-
-from Tests import save_validation_path as save_path
-from numpy import sqrt, pi
 from multiprocessing import cpu_count
+from os.path import join
 
 import pytest
+from numpy import pi, sqrt
+from numpy.testing import assert_almost_equal
 
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_LSRPM import EEC_LSRPM
+from pyleecan.Classes.Electrical import Electrical
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
+from Tests import save_validation_path as save_path
 
 
 @pytest.mark.long_5s
@@ -27,7 +27,7 @@ from pyleecan.Functions.Plot import dict_2D
 def test_EEC_LSRPM(nb_worker=int(0.5 * cpu_count())):
     """Validation of LSRPM EEC from Sijie's PhD thesis"""
 
-    LSRPM = load("LSRPM_001.json")
+    LSRPM = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))
     simu = Simu1(name="test_EEC_LSRPM", machine=LSRPM)
 
     # Definition of the input
