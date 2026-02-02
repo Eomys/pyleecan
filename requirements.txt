@@ -16,7 +16,7 @@ pyvista>=0.42.3
 SciDataTool>=2.5.0
 scipy>=1.4.1
 setuptools
-git+https://gitlab.com/CedMrnl/swat-em.git  # TODO use regular swat-em -> remove Winding.plot_radial 
+git+https://gitlab.com/CedMrnl/swat-em.git  # TODO use regular swat-em -> remove Winding.plot_radial. This fork uses PySide instead of PyQt.
 vtk>=9.2.6  # requires Python <=3.13
 xlrd>=1.2.0
 xlwt>=1.3.0
