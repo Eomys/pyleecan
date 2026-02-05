@@ -13,7 +13,7 @@ PySide6;python_version>='3.10'
 qtpy>=2.4.1
 pyuff>=2.4  # for ImportMeshUnv; Block for licence reason --> TODO check
 pyvista>=0.42.3
-git+https://github.com/Eomys/SciDataTool.git
+SciDataTool @ git+https://github.com/Eomys/SciDataTool.git
 # SciDataTool>=2.5.1
 scipy>=1.4.1
 setuptools
