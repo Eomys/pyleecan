@@ -248,7 +248,9 @@ def get_config_dict():
         else:
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
-            colormaps.register(cmap=cmp, name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"])
+            colormaps.register(
+                cmap=cmp, name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+            )
 
     # Check if font is available
     font_name = config_dict["PLOT"]["FONT_NAME"]

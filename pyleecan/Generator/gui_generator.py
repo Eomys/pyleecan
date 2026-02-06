@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from codecs import open as open_co
+
 # from imp import load_source
 from os import walk, system
 from os.path import abspath, join, isfile
