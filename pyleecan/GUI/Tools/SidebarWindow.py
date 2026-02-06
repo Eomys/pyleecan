@@ -62,12 +62,11 @@ class SidebarWindow(QtWidgets.QMainWindow):
 
     def centerOnScreen(self):
         """centerOnScreen() - Centers the window on the screen."""
-        resolution = QtWidgets.QDesktopWidget().screenGeometry()
-        frame = self.frameSize()
-        self.move(
-            int(resolution.width() / 2) - int(frame.width() / 2),
-            int(resolution.height() / 2) - int(frame.height() / 2),
-        )
+        screen = self.screen()
+        geometry = screen.availableGeometry()
+        x = (geometry.width() - self.width()) // 2 + geometry.x()
+        y = (geometry.height() - self.height()) // 2 + geometry.y()
+        self.move(x, y)
 
     def addSubWindow(self, name, widget, btn_fct=None):
         """add a new sub window to the stack including the coresponding button"""
