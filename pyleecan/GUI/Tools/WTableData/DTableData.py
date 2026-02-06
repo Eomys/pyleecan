@@ -279,7 +279,7 @@ class DTableData(Ui_DTableData, QDialog):
                         self.tr("Error"),
                         self.tr("Error while loading csv file:\n" + str(e)),
                     )
-            elif load_path.endswith(".xlsx"):
+            elif load_path.endswith(".xlsx") or load_path.endswith(".xls"):
                 self.wimport_excel = WImportExcel(
                     load_path=load_path,
                     nb_cols=self.shape_max[1],
@@ -287,6 +287,8 @@ class DTableData(Ui_DTableData, QDialog):
                 )
                 self.wimport_excel.accepted.connect(self.validate_wimport_excel)
                 self.wimport_excel.show()
+            else:
+                pass  # TODO unsupported file type
 
     def validate_wimport_excel(self):
         """UPDATE THE DATA IN THE TAB"""
