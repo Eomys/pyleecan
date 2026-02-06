@@ -89,6 +89,7 @@ def run_GUI(argv):
 
         option = WGuiOption(machine_setup=c, matlib=mat_widget)
         window.addSubWindow("Option", option)
+        window.centerOnScreen()
         window.show()
 
     else:
