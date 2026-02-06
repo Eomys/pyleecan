@@ -288,7 +288,17 @@ class DTableData(Ui_DTableData, QDialog):
                 self.wimport_excel.accepted.connect(self.validate_wimport_excel)
                 self.wimport_excel.show()
             else:
-                pass  # TODO unsupported file type
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr("Unsupported file format:\n" + load_path),
+                )
+        else:
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr("File not found:\n" + load_path),
+            )
 
     def validate_wimport_excel(self):
         """UPDATE THE DATA IN THE TAB"""
