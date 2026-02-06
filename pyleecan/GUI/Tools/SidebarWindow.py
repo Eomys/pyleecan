@@ -25,7 +25,7 @@ class SidebarWindow(QtWidgets.QMainWindow):
 
         self.nav_btn_grp = QtWidgets.QButtonGroup()
         self.nav_btn_grp.setExclusive(True)
-        self.nav_btn_grp.buttonClicked[int].connect(self.switch_stack)
+        self.nav_btn_grp.idClicked.connect(self.switch_stack)
         self.btn_grp_fct = []
 
         self.nav_layout = QtWidgets.QVBoxLayout(self.nav_panel)
