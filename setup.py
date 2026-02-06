@@ -40,6 +40,7 @@ install_requires = [
     "matplotlib>=3.3.2",
     "meshio>=4.0.15",
     "numpy>1.19.5",
+    "openpyxl",  # needed for pandas xlsx import
     "pandas>=1.0.3",
     "pyfemm>=0.1.3",
     "PySide6;python_version>='3.11'",
@@ -50,8 +51,8 @@ install_requires = [
     "scipy>=1.4.1",
     "setuptools",
     "vtk>=9.2.6",
-    "xlrd>=1.2.0",
-    "xlwt>=1.3.0",
+    "xlrd>=1.2.0", # needed for pandas xls import
+    # "xlwt>=1.3.0", # seems unused -> remove later
     "qtpy>=2.4.1",
 ]
 # Pyleecan optional dependancies
