@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from qtpy.QtCore import Signal, Qt
-from qtpy.QtWidgets import QMessageBox, QDialog
+from PySide6.QtCore import Signal, Qt
+from PySide6.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
 
 

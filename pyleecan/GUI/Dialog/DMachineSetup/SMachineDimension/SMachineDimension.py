@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QMessageBox, QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Shaft import Shaft
 from .....Classes.Frame import Frame

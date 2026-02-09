@@ -4,8 +4,8 @@ from os import remove, rename
 from os.path import join, dirname
 from re import match
 from logging import getLogger
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QDialog, QMessageBox
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QDialog, QMessageBox
 
 from ....Classes.Material import Material
 

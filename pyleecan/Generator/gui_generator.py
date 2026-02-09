@@ -208,8 +208,8 @@ def gen_gui_class_file(path, class_name, gen_dict, gen_list):
     # from ["GUI", "Dialog", ...] to GUI.Dialog...
     import_path = ".".join(split_path)
 
-    gen_str += "from qtpy.QtGui import QDialog\n"
-    gen_str += "from qtpy.QtCore import SIGNAL, Qt\n\n"
+    gen_str += "from PySide6.QtGui import QDialog\n"
+    gen_str += "from PySide6.QtCore import SIGNAL, Qt\n\n"
     gen_str += (
         "from "
         + import_path
@@ -517,10 +517,7 @@ def qrc_to_py(path, file_name):
     path_in = join(path, file_name)  # Input file
     path_out = join(path, file_name[:-4] + "_rc.py")  # Output file
 
-    # Run the windows command "pyrcc5" for converting files
-    # p = Popen(
-    #     'qtpy-rcc "' + path_in + '" -o "' + path_out + '"', stdout=PIPE, shell=True
-    # )
+    # Run the windows command "pyside6-rcc" for converting files
     p = Popen(
         'pyside6-rcc "' + path_in + '" -o "' + path_out + '"', stdout=PIPE, shell=True
     )
@@ -544,16 +541,13 @@ def ui_to_py(path, file_name):
     path_out = join(path, "Ui_" + file_name[:-3] + ".py")  # Output file
 
     print(
-        # "qtpy-uic "
         "pyside6-uic "
         + short_filepath(path_in, length=40)
         + '" -o "'
         + short_filepath(path_out, length=40)
         + '"'
     )
-    # system("qtpy-uic " + path_in + '" -o "' + path_out + '"')
     subprocess.call(["pyside6-uic", path_in, "-o", path_out])
-    # subprocess.call(["qtpy-uic", path_in, "-o", path_out])
     # Remove header part of the generated file (to avoid "commit noise")
     with open(path_out, "r") as py_file:
         data = py_file.read().splitlines(True)

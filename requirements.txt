@@ -8,10 +8,7 @@ numpy>=2  # >1.19.5  # removed <=1.23.1
 openpyxl  # needed for pandas xlsx import
 pandas>=1.0.3
 pyfemm>=0.1.3
-PySide6;python_version>='3.10' 
-PySide2>=5.15.2;python_version<'3.10'# requires Python <3.10
-# PyQt5>=5.15.11 # Works for Pyhton >3.10 but is GPL 
-qtpy>=2.4.1
+PySide6
 pyuff>=2.4  # for ImportMeshUnv; Block for licence reason --> TODO check
 pyvista>=0.42.3
 SciDataTool @ git+https://github.com/Eomys/SciDataTool.git

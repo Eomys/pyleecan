@@ -1,6 +1,6 @@
-from qtpy.QtCore import QUrl, Qt
-from qtpy.QtGui import QCursor, QDesktopServices, QPixmap
-from qtpy.QtWidgets import QLabel
+from PySide6.QtCore import QUrl, Qt
+from PySide6.QtGui import QCursor, QDesktopServices, QPixmap
+from PySide6.QtWidgets import QLabel
 
 
 class HelpButton(QLabel):

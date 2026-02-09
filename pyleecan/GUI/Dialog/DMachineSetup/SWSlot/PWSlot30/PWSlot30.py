@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import qtpy.QtCore
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QWidget
-from qtpy.QtGui import QPixmap
+import PySide6.QtCore
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QWidget
+from PySide6.QtGui import QPixmap
 from ......Classes.SlotW30 import SlotW30
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot30.Gen_PWSlot30 import Gen_PWSlot30
@@ -11,7 +11,7 @@ from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
 
 
-translate = qtpy.QtCore.QCoreApplication.translate
+translate = PySide6.QtCore.QCoreApplication.translate
 
 
 class PWSlot30(Gen_PWSlot30, QWidget):

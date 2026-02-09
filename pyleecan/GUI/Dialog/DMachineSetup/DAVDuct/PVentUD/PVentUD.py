@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QWidget, QDialog
-from qtpy.QtWidgets import QMessageBox
-from qtpy.QtCore import Qt
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget, QDialog
+from PySide6.QtWidgets import QMessageBox
+from PySide6.QtCore import Qt
 from ......Functions.load import load
 from ......Functions.GUI.log_error import log_error
 from ......Classes.HoleUD import HoleUD

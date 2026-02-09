@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
 
 from ......Classes.HoleM53 import HoleM53
 from ......GUI import gui_option

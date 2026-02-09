@@ -4,8 +4,8 @@ import sys
 import mock
 import matplotlib.pyplot as plt
 
-from qtpy import QtWidgets
-from qtpy.QtWidgets import QTabBar
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QTabBar
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlotWind import LamSlotWind
@@ -600,7 +600,7 @@ class TestSMHoleMag(object):
             self.widget.tab_hole.count() - 1, QTabBar.RightSide
         )
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.warning",
+            "PySide6.QtWidgets.QMessageBox.warning",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             b_remove.clicked.emit()
@@ -632,7 +632,7 @@ class TestSMHoleMag(object):
             self.widget.tab_hole.count() - 1, QTabBar.RightSide
         )
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.warning",
+            "PySide6.QtWidgets.QMessageBox.warning",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             b_remove.clicked.emit()
@@ -661,7 +661,7 @@ class TestSMHoleMag(object):
 
         self.widget.machine.rotor.hole[0].W1 = 0.300
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.critical",
+            "PySide6.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.b_plot.clicked.emit()

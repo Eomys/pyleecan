@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
 
 from ......Classes.MachineIPMSM import MachineIPMSM
 from ......Classes.HoleM51 import HoleM51

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Signal, Qt
-from qtpy.QtWidgets import QMessageBox, QWidget, QApplication
+from PySide6.QtCore import Signal, Qt
+from PySide6.QtWidgets import QMessageBox, QWidget, QApplication
 from numpy import pi, floor
 import matplotlib.pyplot as plt
 from logging import getLogger

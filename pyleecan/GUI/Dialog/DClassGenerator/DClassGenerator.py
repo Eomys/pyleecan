@@ -6,9 +6,9 @@ from shutil import copyfile, rmtree, copytree
 from functools import partial
 from types import MethodType
 
-from qtpy.QtCore import Qt, QDir
-from qtpy.QtGui import QIcon
-from qtpy.QtWidgets import (
+from PySide6.QtCore import Qt, QDir
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (
     QMessageBox,
     QWidget,
     QFileSystemModel,

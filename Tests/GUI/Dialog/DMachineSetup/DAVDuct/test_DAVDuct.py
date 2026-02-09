@@ -3,7 +3,7 @@
 import sys
 import matplotlib.pyplot as plt
 import pytest
-from qtpy import QtWidgets
+from PySide6 import QtWidgets
 
 from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.VentilationCirc import VentilationCirc

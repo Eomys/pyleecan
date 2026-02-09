@@ -1,7 +1,7 @@
 from logging import getLogger
 from os.path import join
 
-from qtpy.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBox
+from PySide6.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBox
 
 from ......Classes._FEMMHandler import _FEMMHandler
 from ......Classes.Output import Output

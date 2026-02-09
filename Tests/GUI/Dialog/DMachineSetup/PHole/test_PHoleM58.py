@@ -3,8 +3,8 @@
 import sys
 
 import pytest
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.HoleM58 import HoleM58
 from pyleecan.Classes.LamHole import LamHole
