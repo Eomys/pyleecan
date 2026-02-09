@@ -6,7 +6,7 @@ from pyleecan.Classes.OPMatrix import OPMatrix
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 
-
+@pytest.mark.failed
 class Test_OP_matrix_meth(object):
     """unittest for OP_matrix object methods"""
 

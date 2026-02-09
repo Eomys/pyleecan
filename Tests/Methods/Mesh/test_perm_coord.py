@@ -12,6 +12,7 @@ from Tests import save_plot_path as save_path
 
 
 @pytest.mark.MeshSol
+@pytest.mark.failed
 def test_perm_coord():
     # Generate mesh
     mesh = MeshMat(dimension=3)

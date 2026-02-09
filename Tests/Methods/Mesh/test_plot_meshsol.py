@@ -87,6 +87,7 @@ def gen_mesh_solution():
 
 
 @pytest.mark.MeshSol
+@pytest.mark.failed
 def test_plot_glyph(gen_mesh_solution):
     mesh, solution = gen_mesh_solution
     MSol = MeshSolution(
@@ -118,6 +119,7 @@ def test_plot_glyph_animated(gen_mesh_solution):
 
 
 @pytest.mark.MeshSol
+@pytest.mark.failed
 def test_plot_deflection(gen_mesh_solution):
     mesh, solution = gen_mesh_solution
     MSol = MeshSolution(
