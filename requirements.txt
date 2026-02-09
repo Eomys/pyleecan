@@ -16,7 +16,7 @@ pyuff>=2.4  # for ImportMeshUnv; Block for licence reason --> TODO check
 pyvista>=0.42.3
 SciDataTool @ git+https://github.com/Eomys/SciDataTool.git
 # SciDataTool>=2.5.1
-scipy>=1.4.1
+scipy>=1.6.0  # integrate.cumulative_trapezoid is introduced in scipy 1.6.0
 setuptools
 git+https://gitlab.com/CedMrnl/swat-em.git  # TODO use regular swat-em -> remove Winding.plot_radial. This fork uses PySide instead of PyQt.
 vtk>=9.2.6  # requires Python <=3.13

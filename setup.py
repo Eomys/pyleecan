@@ -48,10 +48,10 @@ install_requires = [
     "pyuff>=1.25",
     "pyvista>=0.42.3",
     "SciDataTool>=2.5.0",
-    "scipy>=1.4.1",
+    "scipy>=1.6.0",  # integrate.cumulative_trapezoid is introduced in scipy 1.6.0
     "setuptools",
     "vtk>=9.2.6",
-    "xlrd>=1.2.0", # needed for pandas xls import
+    "xlrd>=1.2.0",  # needed for pandas xls import
     # "xlwt>=1.3.0", # seems unused -> remove later
     "qtpy>=2.4.1",
 ]

@@ -110,7 +110,7 @@ def comp_voltage(self, Tpwmu, PF_angle=0, is_sin=True, is_norm=True):
 
         Tpwmu_10 = np.linspace(0, (t1 - 1) / 5000000, t1, endpoint=True)
         np.linspace(0, (t1 - 1) / 5000000, t1, endpoint=True)
-        carrier = integrate.cumtrapz(fswi, Tpwmu_10, initial=0)
+        carrier = integrate.cumulative_trapezoid(fswi, Tpwmu_10, initial=0)
         Aml_tri = max(carrier)
         carrier = carrier / Aml_tri * Vdc1 - Vdc1 / 2 * np.ones(np.size(Tpwmu_10))
         carrier = signal.resample(carrier, len(Tpwmu))
