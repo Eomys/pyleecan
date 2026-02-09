@@ -6,19 +6,18 @@ from PySide6.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
+from .....Classes.SlotW29 import SlotW29
 from .....Classes.SlotW60 import SlotW60
 from .....Classes.SlotW61 import SlotW61
 from .....Classes.SlotW62 import SlotW62
 from .....Classes.SlotW63 import SlotW63
-from .....Classes.SlotW29 import SlotW29
-from .....Classes.Slot import Slot
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot62.PWSlot62 import PWSlot62
 from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot63.PWSlot63 import PWSlot63
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
 from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
 
 # List to convert index of combobox to slot type
 INIT_INDEX = [SlotW60, SlotW61, SlotW62, SlotW63, SlotW29]

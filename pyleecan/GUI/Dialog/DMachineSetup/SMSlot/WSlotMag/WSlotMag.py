@@ -2,8 +2,7 @@
 
 
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QMessageBox, QWidget, QListView
-
+from PySide6.QtWidgets import QListView, QMessageBox, QWidget
 
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11

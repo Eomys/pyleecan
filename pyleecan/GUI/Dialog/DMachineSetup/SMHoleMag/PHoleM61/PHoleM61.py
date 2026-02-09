@@ -3,13 +3,15 @@
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget
+
 from pyleecan.Classes.HoleM61 import HoleM61
 from pyleecan.GUI import gui_option
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM61.Gen_PHoleM61 import (
     Gen_PHoleM61,
 )
 from pyleecan.Methods.Slot.Slot import SlotCheckError
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+
 from ......GUI.Resources import pixmap_dict
 
 

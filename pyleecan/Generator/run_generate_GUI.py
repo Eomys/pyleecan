@@ -34,7 +34,7 @@ if __name__ == "__main__":
         is_log = False
 
     # ui_folder_path = join(MAIN_DIR, "GUI", "Dialog", "DMachineSetup", "SSimu")
-    ui_folder_path = join(MAIN_DIR, "GUI", "Dialog")
+    ui_folder_path = join(MAIN_DIR, "GUI")
     gen_dict = read_all(DOC_DIR, soft_name=soft_name)
     print("#############################\nGenerating gui....")
     generate_gui(ui_folder_path, gen_dict=gen_dict, IS_SDT=IS_SDT)
@@ -53,10 +53,10 @@ if __name__ == "__main__":
     except ImportError:
         print("/!\\ Please install and run black (version 24) /!\\")
 
-    # Run isort to sort imports
-    try:
-        from isort import main
-        main.main(["--profile", "black", ui_folder_path])
-        # system('"{}" -m isort {}'.format(sys.executable, ui_folder_path))
-    except ImportError:
-        pass
+    # # Run isort to sort imports
+    # try:
+    #     from isort import main
+    #     main.main(["--profile", "black", ui_folder_path])
+    #     # system('"{}" -m isort {}'.format(sys.executable, ui_folder_path))
+    # except ImportError:
+    #     pass

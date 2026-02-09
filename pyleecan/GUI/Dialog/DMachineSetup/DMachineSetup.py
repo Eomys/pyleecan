@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from os.path import basename, join, dirname, isfile
 from logging import getLogger
-from ....Functions.GUI.log_error import log_error
-from ....loggers import GUI_LOG_NAME
+from os.path import basename, dirname, isfile, join
+
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QWidget
 
+from ....Classes.ConvertMC import ConvertMC
+from ....Classes.Machine import Machine
+from ....definitions import config_dict
+from ....Functions.GUI.log_error import log_error
 from ....Functions.load import load, load_machine_materials
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
-from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from ....GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
-from ....definitions import config_dict
-from ....Classes.Machine import Machine
-from ....Classes.ConvertMC import ConvertMC
+from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
+from ....loggers import GUI_LOG_NAME
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags

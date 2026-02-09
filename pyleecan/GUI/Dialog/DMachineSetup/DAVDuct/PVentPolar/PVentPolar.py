@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from numpy import pi
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget
 
+from ......Classes.VentilationPolar import VentilationPolar
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.Gen_PVentPolar import (
     Gen_PVentPolar,
 )
-from ......Classes.VentilationPolar import VentilationPolar
-from numpy import pi
 
 
 class PVentPolar(Gen_PVentPolar, QWidget):

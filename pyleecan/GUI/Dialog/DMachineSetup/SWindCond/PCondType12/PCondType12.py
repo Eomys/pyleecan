@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
 
 from ......Classes.CondType12 import CondType12
 from ......GUI import gui_option

@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QWidget
 from logging import getLogger
 
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QWidget
 
-from .....loggers import GUI_LOG_NAME
-from .....GUI import gui_option
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.MachineIPMSM import MachineIPMSM
 from .....Classes.MachineWRSM import MachineWRSM
+from .....Functions.GUI.log_error import log_error
+from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.DBore.DBore import DBore
 from .....GUI.Dialog.DMachineSetup.DNotchTab.DNotchTab import DNotchTab
-from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
-from .....Functions.GUI.log_error import log_error
+from .....loggers import GUI_LOG_NAME
 
 
 class SLamShape(Gen_SLamShape, QWidget):

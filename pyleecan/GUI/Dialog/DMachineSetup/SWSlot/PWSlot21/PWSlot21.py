@@ -3,14 +3,14 @@
 import PySide6.QtCore
 from numpy import pi
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
+
 from ......Classes.SlotW21 import SlotW21
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot21.Gen_PWSlot21 import Gen_PWSlot21
-from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
-
+from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide6.QtCore.QCoreApplication.translate
 

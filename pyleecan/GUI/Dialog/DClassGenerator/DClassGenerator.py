@@ -1,37 +1,34 @@
 import os
 import subprocess
-
-from os.path import join, isfile, isdir, realpath, basename
-from shutil import copyfile, rmtree, copytree
 from functools import partial
+from os.path import basename, isdir, isfile, join, realpath
+from shutil import copyfile, copytree, rmtree
 from types import MethodType
 
-from PySide6.QtCore import Qt, QDir
+from PySide6.QtCore import QDir, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
-    QMessageBox,
-    QWidget,
     QFileSystemModel,
+    QHeaderView,
     QLabel,
     QLineEdit,
-    QHeaderView,
-    QPushButton,
     QMenu,
+    QMessageBox,
+    QPushButton,
+    QWidget,
 )
-
-from ...Resources import pixmap_dict
-from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 from ....definitions import DOC_DIR, MAIN_DIR
-
-from ....Generator.read_fct import read_file, read_all
+from ....Generator.read_fct import read_all, read_file
 from ....Generator.run_generate_classes import run_generate_classes
 from ....Generator.write_fct import (
-    write_file,
+    MATCH_CONST_DICT,
     MATCH_META_DICT,
     MATCH_PROP_DICT,
-    MATCH_CONST_DICT,
+    write_file,
 )
+from ...Resources import pixmap_dict
+from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 
 class DClassGenerator(Ui_DClassGenerator, QWidget):

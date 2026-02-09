@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide6.QtCore import Signal, Qt
-from PySide6.QtWidgets import QWidget, QApplication
+from numpy import pi
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QApplication, QWidget
 
+from ......Functions.GUI.log_error import log_error
 from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,
 )
@@ -17,8 +19,6 @@ from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentUD.PVentUD import (
     PVentUD,
 )
 from ......GUI.Dialog.DMachineSetup.DAVDuct.WVent.Gen_WVent import Gen_WVent
-from ......Functions.GUI.log_error import log_error
-from numpy import pi
 
 # List to convert index of combobox to slot type
 PAGE_INDEX = [PVentCirc, PVentTrap, PVentPolar, PVentUD]

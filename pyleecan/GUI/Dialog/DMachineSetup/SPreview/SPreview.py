@@ -3,8 +3,9 @@
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QMessageBox, QWidget
-from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
+
 from .....Functions.GUI.log_error import log_error
+from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
 
 
 class SPreview(Ui_SPreview, QWidget):

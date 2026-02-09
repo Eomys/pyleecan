@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QMessageBox, QWidget, QFileDialog, QListView
-from os.path import join, isdir
+from os.path import isdir, join
 
-from .....Functions.init_fig import init_fig
-from .....Functions.GUI.log_error import log_error
-from .....Classes.Winding import Winding
-from .....Classes.WindingUD import WindingUD
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QFileDialog, QListView, QMessageBox, QWidget
+
 from .....Classes.MachineSRM import MachineSRM
 from .....Classes.MachineWRSM import MachineWRSM
-from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
+from .....Classes.Winding import Winding
+from .....Classes.WindingUD import WindingUD
+from .....Functions.GUI.log_error import log_error
+from .....Functions.init_fig import init_fig
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 
 IDX_SINGLE_LAYER = 0
 IDX_DOUBLE_LAYER_RAD = 1

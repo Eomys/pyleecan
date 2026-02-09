@@ -26,11 +26,11 @@ from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
 from ....GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
 from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from ....GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
+from ....GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from ....GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
 from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
 from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
-from ....GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind

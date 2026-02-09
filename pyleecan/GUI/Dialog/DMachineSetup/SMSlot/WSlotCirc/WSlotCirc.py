@@ -3,8 +3,9 @@
 import PySide6.QtCore
 from numpy import pi
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
+
 from ......Classes.SlotCirc import SlotCirc
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.Gen_WSlotCirc import Gen_WSlotCirc

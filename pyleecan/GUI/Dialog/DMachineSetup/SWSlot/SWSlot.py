@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from PySide6.QtCore import Signal, Qt
-from PySide6.QtWidgets import QMessageBox, QWidget, QApplication
-from numpy import pi, floor
-import matplotlib.pyplot as plt
 from logging import getLogger
 
-from .....Functions.Load.import_class import import_class
-from .....loggers import GUI_LOG_NAME
+import matplotlib.pyplot as plt
+from numpy import floor, pi
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
+
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....Classes.Slot import Slot
@@ -15,10 +14,9 @@ from .....Classes.SlotUD import SlotUD
 from .....Classes.SlotUD2 import SlotUD2
 from .....Classes.SlotW11 import SlotW11
 from .....Classes.SlotW11_2 import SlotW11_2
-from .....Classes.Slot import Slot
-from .....Classes.LamSquirrelCage import LamSquirrelCage
+from .....Functions.Load.import_class import import_class
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
-from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.PWSlot12 import PWSlot12
@@ -36,7 +34,8 @@ from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot27.PWSlot27 import PWSlot27
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.PWSlot28 import PWSlot28
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.PWSlot29 import PWSlot29
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot30.PWSlot30 import PWSlot30
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
+from .....loggers import GUI_LOG_NAME
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [

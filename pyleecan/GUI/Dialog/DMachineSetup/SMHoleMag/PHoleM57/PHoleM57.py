@@ -4,12 +4,13 @@ from numpy import pi
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget
+
 from ......Classes.HoleM57 import HoleM57
 from ......GUI import gui_option
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
-from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
 from ......GUI.Resources import pixmap_dict
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM57(Gen_PHoleM57, QWidget):

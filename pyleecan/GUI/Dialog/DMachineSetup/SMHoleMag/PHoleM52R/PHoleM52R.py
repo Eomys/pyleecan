@@ -7,12 +7,12 @@ from PySide6.QtWidgets import QWidget
 
 from ......Classes.HoleM52R import HoleM52R
 from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52R.Gen_PHoleM52R import (
     Gen_PHoleM52R,
 )
-from ......Methods.Slot.Slot import SlotCheckError
-from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 from ......GUI.Resources import pixmap_dict
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM52R(Gen_PHoleM52R, QWidget):

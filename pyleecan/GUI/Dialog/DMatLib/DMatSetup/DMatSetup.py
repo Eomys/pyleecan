@@ -1,23 +1,22 @@
-from os.path import join, dirname, isfile
-from PySide6.QtWidgets import QDialog, QMessageBox, QLayout
-from PySide6.QtCore import Qt, Signal
 from logging import getLogger
-from numpy import pi, array, array_equal, transpose
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QDialog, QMessageBox
-from .....GUI import gui_option
-from pyleecan.Functions.GUI.log_error import log_error
-
-from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
-from .....Classes.Material import Material
-from .....Classes.ImportMatrixVal import ImportMatrixVal
-from .....Classes.ImportMatrix import ImportMatrix
-from .....Classes.ImportMatrixXls import ImportMatrixXls
-from .....Functions.path_tools import rel_file_path
-from .....loggers import GUI_LOG_NAME
+from os.path import dirname, isfile, join
 
 import matplotlib.pyplot as plt
+from numpy import array, array_equal, pi, transpose
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QDialog, QLayout, QMessageBox
+
+from pyleecan.Functions.GUI.log_error import log_error
+
+from .....Classes.ImportMatrix import ImportMatrix
+from .....Classes.ImportMatrixVal import ImportMatrixVal
+from .....Classes.ImportMatrixXls import ImportMatrixXls
+from .....Classes.Material import Material
+from .....Functions.path_tools import rel_file_path
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....GUI import gui_option
+from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
+from .....loggers import GUI_LOG_NAME
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):

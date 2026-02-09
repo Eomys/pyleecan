@@ -1,18 +1,16 @@
 from numpy import pi
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QWidget, QDialog
-from PySide6.QtWidgets import QMessageBox
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QDialog, QMessageBox, QWidget
 
-from ......Functions.GUI.log_error import log_error
-from ......Functions.load import load
 from ......Classes.SlotUD import SlotUD
 from ......Classes.SlotUD2 import SlotUD2
+from ......Functions.GUI.log_error import log_error
+from ......Functions.load import load
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.Ui_PWSlotUD import Ui_PWSlotUD
-from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Slot import DXF_Slot
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PWSlotUD(Ui_PWSlotUD, QWidget):

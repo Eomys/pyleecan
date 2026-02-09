@@ -5,10 +5,50 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
+)
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -17,7 +57,9 @@ class Ui_WImportExcel(object):
         if not WImportExcel.objectName():
             WImportExcel.setObjectName("WImportExcel")
         WImportExcel.resize(509, 486)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(WImportExcel.sizePolicy().hasHeightForWidth())
@@ -25,7 +67,10 @@ class Ui_WImportExcel(object):
         WImportExcel.setMinimumSize(QSize(0, 0))
         icon = QIcon()
         icon.addFile(
-            ":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+            ":/images/images/icon/pyleecan_64.png",
+            QSize(),
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         WImportExcel.setWindowIcon(icon)
         self.verticalLayout_3 = QVBoxLayout(WImportExcel)
@@ -58,7 +103,9 @@ class Ui_WImportExcel(object):
 
         self.le_range = QLineEdit(WImportExcel)
         self.le_range.setObjectName("le_range")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed
+        )
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.le_range.sizePolicy().hasHeightForWidth())
@@ -88,7 +135,7 @@ class Ui_WImportExcel(object):
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)

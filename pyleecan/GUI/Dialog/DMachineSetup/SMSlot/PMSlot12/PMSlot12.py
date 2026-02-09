@@ -10,7 +10,6 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.Gen_PMSlot12 import Gen_PMSlot12
 from ......Methods.Slot.Slot import SlotCheckError
 
-
 translate = PySide6.QtCore.QCoreApplication.translate
 
 

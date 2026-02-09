@@ -1,12 +1,12 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QDialog, QMessageBox, QShortcut
 from PySide6.QtGui import QKeySequence
+from PySide6.QtWidgets import QDialog, QMessageBox
 
 from .....Classes.Lamination import Lamination
 from .....Classes.VentilationCirc import VentilationCirc
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI.Dialog.DMachineSetup.DAVDuct.Ui_DAVDuct import Ui_DAVDuct
 from .....GUI.Dialog.DMachineSetup.DAVDuct.WVent.WVent import WVent
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class DAVDuct(Ui_DAVDuct, QDialog):
