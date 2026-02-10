@@ -675,7 +675,9 @@ def draw_GMSH(
                 # with MASTER/SLAVE BC when line angles match symmetry angles
                 # MASTER is x-axis and SLAVE is 2Pi/sym
                 rotor_ag_after = model.getEntitiesForPhysicalGroup(2, pg)
-                rotor_ag_new_lines = model.getBoundary([(2, rotor_ag_after)])
+                rotor_ag_new_lines = model.getBoundary(
+                    [(2, tag) for tag in rotor_ag_after]
+                )
                 nline = 0
                 for type_entity_l, rotor_ag_line in rotor_ag_new_lines:
                     rotor_ag_new_points = model.getBoundary(
@@ -734,7 +736,9 @@ def draw_GMSH(
                 # with MASTER/SLAVE BC when line angles match symmetry angles
                 # MASTER is x-axis and SLAVE is 2Pi/sym
                 stator_ag_after = model.getEntitiesForPhysicalGroup(2, pg)
-                stator_ag_new_lines = model.getBoundary([(2, stator_ag_after)])
+                stator_ag_new_lines = model.getBoundary(
+                    [(2, tag) for tag in stator_ag_after]
+                )
                 nline = 0
                 for type_entity_l, stator_ag_line in stator_ag_new_lines:
                     stator_ag_new_points = model.getBoundary(
