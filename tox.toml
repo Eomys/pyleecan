@@ -6,6 +6,7 @@ env_list = ["py314", "py313", "py312", "py311", "py310", "py39", "black"]
 description = "Only try to collect changes under python {base_python} to make sure test collection is ok."
 deps = [
     "pytest",
+    "mock",
     "pytest-mock",
     "sympy",
     "gmsh",
@@ -21,26 +22,29 @@ commands = [["pytest", "--co"]]
 description = "Run test under {base_python}"
 deps = [
     "pytest",
+    "mock",
     "pytest-mock",
     "sympy",
     "gmsh",
     "pyuff",
     "deap",
     "smoot",
-    # "git+https://github.com/mxgnsr/SciDataTool/tree/update-reqs.git",
+    "swat-em",
+    "ddt",
+    "nbformat",
+    "nbconvert",
 ]
 commands_pre = [
     [
         "pip",
         "uninstall",
         "scidatatool",
-        "-y"
+        "-y",
     ],
     [
         "pip",
         "install",
         "git+https://github.com/mxgnsr/SciDataTool.git@update-reqs",
-        "--force-reinstall",
     ],
 ]
 commands = [["pytest", "Tests"]]

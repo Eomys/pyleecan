@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import qtpy.QtCore
+import PySide6.QtCore
 from numpy import pi
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QWidget
-from qtpy.QtGui import QPixmap
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
 
 from ......Classes.SlotM19 import SlotM19
+from ......GUI.Resources import pixmap_dict
+from ......Methods.Slot.Slot import SlotCheckError
 from ..... import gui_option
 from ..PMSlot19.Gen_PMSlot19 import Gen_PMSlot19
-from ......Methods.Slot.Slot import SlotCheckError
-from ......GUI.Resources import pixmap_dict
 
-translate = qtpy.QtCore.QCoreApplication.translate
+translate = PySide6.QtCore.QCoreApplication.translate
 
 
 class PMSlot19(Gen_PMSlot19, QWidget):

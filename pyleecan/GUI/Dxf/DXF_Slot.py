@@ -9,9 +9,9 @@ from matplotlib.backends.backend_qt5agg import (
 from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import argmin, array, exp, angle
-from qtpy.QtCore import QSize, Qt, QUrl
-from qtpy.QtGui import QIcon, QPixmap, QFont, QDesktopServices
-from qtpy.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
+from PySide6.QtCore import QSize, Qt, QUrl
+from PySide6.QtGui import QIcon, QPixmap, QFont, QDesktopServices
+from PySide6.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
 
 
 from ...Classes.LamSlot import LamSlot

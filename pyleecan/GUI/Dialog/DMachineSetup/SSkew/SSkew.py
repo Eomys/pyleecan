@@ -1,12 +1,10 @@
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QMessageBox, QWidget, QListView
-
 from numpy import pi
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QListView, QMessageBox, QWidget
 
+from .....Classes.Skew import Skew
 from .....GUI.Dialog.DMachineSetup.SSkew.Ui_SSkew import Ui_SSkew
 from .....GUI.Tools.FloatEdit import FloatEdit
-from .....Classes.Skew import Skew
-
 from .....Methods.Machine.Skew import TYPE_SKEW_LIST
 
 

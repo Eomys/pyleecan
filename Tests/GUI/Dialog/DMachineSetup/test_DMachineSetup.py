@@ -6,7 +6,7 @@ from os import remove
 import sys
 
 import mock  # for unittest of raw_input
-from qtpy import QtWidgets
+from PySide6 import QtWidgets
 
 from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
@@ -41,7 +41,7 @@ load_test.append(
     {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": None, "count": 11}
 )
 load_test.append({"type": "LSPM", "index": 7, "name": "LSPM_001", "p": 2, "count": 13})
-from qtpy.QtCore import Qt
+from PySide6.QtCore import Qt
 
 ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 
@@ -86,7 +86,7 @@ class TestDMachineSetup(object):
             "Json (*.json)",
         )
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit()
@@ -161,7 +161,7 @@ def save_function(widget, file_name):
 
     return_value = (file_path, "Json (*.json)")
     with mock.patch(
-        "qtpy.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        "PySide6.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
     ):
         # To trigger the slot
         widget.b_save.clicked.emit()

@@ -1,5 +1,5 @@
-from qtpy.QtCore import QSize, Qt, QAbstractTableModel, Signal
-from qtpy.QtGui import QBrush, QColor, QFont
+from PySide6.QtCore import QSize, Qt, QAbstractTableModel, Signal
+from PySide6.QtGui import QBrush, QColor, QFont
 
 from ....Classes._ClassInfo import ClassInfo
 

@@ -1,24 +1,23 @@
 from logging import getLogger
 from os.path import join
 
-from qtpy.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBox
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QTableWidgetItem, QWidget
 
 from ......Classes._FEMMHandler import _FEMMHandler
-from ......Classes.Output import Output
 from ......Classes.InputCurrent import InputCurrent
-from ......Classes.Simu1 import Simu1
 from ......Classes.OPdq import OPdq
 from ......Classes.OPslip import OPslip
-from ......Classes.InputCurrent import InputCurrent
+from ......Classes.Output import Output
+from ......Classes.Simu1 import Simu1
 from ......definitions import config_dict
-from ......loggers import GUI_LOG_NAME
-from ......Functions.GUI.log_error import log_error
-from ......Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ......Functions.FEMM.draw_FEMM import draw_FEMM
+from ......Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
+from ......Functions.GUI.log_error import log_error
 from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )
+from ......loggers import GUI_LOG_NAME
 from ......Methods.Simulation.MagElmer import MagElmer_BP_dict
 
 try:

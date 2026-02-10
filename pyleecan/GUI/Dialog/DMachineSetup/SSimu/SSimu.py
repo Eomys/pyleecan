@@ -3,25 +3,25 @@ from logging import getLogger
 from multiprocessing import cpu_count
 from os.path import join
 
-from qtpy.QtCore import Qt, Signal
-from qtpy.QtWidgets import QMessageBox, QWidget
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QMessageBox, QWidget
 
 from .....Classes._FEMMHandler import _FEMMHandler
 from .....Classes.InputCurrent import InputCurrent
-from .....Classes.MachineWRSM import MachineWRSM
+from .....Classes.LossFEA import LossFEA
 from .....Classes.MachineIPMSM import MachineIPMSM
 from .....Classes.MachineSIPMSM import MachineSIPMSM
+from .....Classes.MachineWRSM import MachineWRSM
 from .....Classes.MagFEMM import MagFEMM
 from .....Classes.OPdq import OPdq
 from .....Classes.OPdqf import OPdqf
 from .....Classes.Simu1 import Simu1
+from .....definitions import config_dict
+from .....Functions.GUI.log_error import log_error
+from .....Functions.init_environment import save_config_dict
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SSimu.Gen_SSimu import Gen_SSimu
 from .....loggers import GUI_LOG_NAME
-from .....definitions import config_dict
-from .....Functions.init_environment import save_config_dict
-from .....Functions.GUI.log_error import log_error
-from .....Classes.LossFEA import LossFEA
 
 
 class SSimu(Gen_SSimu, QWidget):

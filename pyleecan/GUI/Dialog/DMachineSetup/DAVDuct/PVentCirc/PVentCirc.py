@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QWidget
 
+from ......Classes.VentilationCirc import VentilationCirc
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentCirc.Gen_PVentCirc import (
     Gen_PVentCirc,
 )
-from ......Classes.VentilationCirc import VentilationCirc
 
 
 class PVentCirc(Gen_PVentCirc, QWidget):

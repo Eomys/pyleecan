@@ -3,8 +3,8 @@
 import sys
 
 import pytest
-from qtpy import QtWidgets
-from qtpy.QtWidgets import QTabBar
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QTabBar
 
 from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.VentilationPolar import VentilationPolar

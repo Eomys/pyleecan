@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import qtpy.QtCore
+import PySide6.QtCore
 from numpy import pi
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QWidget
-from qtpy.QtGui import QPixmap
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
+
 from ......Classes.SlotM11 import SlotM11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.Gen_PMSlot11 import Gen_PMSlot11
-from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
+from ......Methods.Slot.Slot import SlotCheckError
 
-
-translate = qtpy.QtCore.QCoreApplication.translate
+translate = PySide6.QtCore.QCoreApplication.translate
 
 # Unit combobox
 RAD_ID = 0

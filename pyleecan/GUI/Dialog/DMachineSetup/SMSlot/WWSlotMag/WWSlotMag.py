@@ -1,17 +1,16 @@
-from qtpy.QtCore import QSize, Signal
-from qtpy.QtWidgets import (
+from PySide6.QtCore import QSize, Signal
+from PySide6.QtWidgets import (
+    QComboBox,
     QGroupBox,
     QLabel,
+    QListView,
+    QPushButton,
     QVBoxLayout,
     QWidget,
-    QComboBox,
-    QPushButton,
-    QListView,
 )
 
-from .....Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
-
 from ..... import gui_option
+from .....Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
 
 
 class WWSlotMag(QGroupBox):

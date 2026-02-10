@@ -1,6 +1,6 @@
 from numpy import pi
-from qtpy.QtCore import QSize
-from qtpy.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
+from PySide6.QtCore import QSize
+from PySide6.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
 from ......Classes.Lamination import Lamination
 from ......GUI import gui_option

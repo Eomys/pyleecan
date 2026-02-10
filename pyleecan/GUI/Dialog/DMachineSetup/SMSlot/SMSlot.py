@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
-from qtpy.QtCore import Signal, Qt
-from qtpy.QtWidgets import QMessageBox, QWidget, QListView
 from logging import getLogger
-from .....loggers import GUI_LOG_NAME
+
+from numpy import pi
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QListView, QMessageBox, QWidget
+
+from .....Classes.LamSlotMag import LamSlotMag
+from .....Classes.LamSlotMagNS import LamSlotMagNS
 from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
-from .....Classes.LamSlotMagNS import LamSlotMagNS
-from .....Classes.LamSlotMag import LamSlotMag
-from .....Methods.Slot.Slot import SlotCheckError
-from .....GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
-from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
+from .....Functions.GUI.log_error import log_error
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
@@ -22,8 +22,10 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.PMSlot19 import PMSlot19
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from .....Functions.GUI.log_error import log_error
+from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
+from .....GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
+from .....loggers import GUI_LOG_NAME
+from .....Methods.Slot.Slot import SlotCheckError
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [

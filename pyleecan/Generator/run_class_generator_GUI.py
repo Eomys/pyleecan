@@ -1,7 +1,7 @@
 from os.path import isfile
 from sys import argv, exit
 
-from qtpy.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 
 try:  # Import if pyleecan is installed with pip
     from ..GUI.Dialog.DClassGenerator.DClassGenerator import DClassGenerator

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Qt, Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QMessageBox, QWidget
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QMessageBox, QWidget
 
-from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
-from .....Classes.Winding import Winding
 from .....Classes.MachineSRM import MachineSRM
 from .....Classes.MachineWRSM import MachineWRSM
+from .....Classes.Winding import Winding
 from .....definitions import PACKAGE_NAME
+from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 
 
 class SMachineType(Gen_SMachineType, QWidget):

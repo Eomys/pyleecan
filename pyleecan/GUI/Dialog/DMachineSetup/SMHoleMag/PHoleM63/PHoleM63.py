@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QWidget
+from numpy import pi
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
+
 from pyleecan.Classes.HoleM63 import HoleM63
 from pyleecan.GUI import gui_option
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM63.Gen_PHoleM63 import (
     Gen_PHoleM63,
 )
 from pyleecan.Methods.Slot.Slot import SlotCheckError
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+
 from .....Resources import pixmap_dict
-from numpy import pi
 
 
 class PHoleM63(Gen_PHoleM63, QWidget):

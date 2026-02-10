@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import qtpy.QtCore
+import PySide6.QtCore
 from numpy import pi
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QWidget
 
 from ......Classes.SlotM16 import SlotM16
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.Gen_PMSlot16 import Gen_PMSlot16
 from ......Methods.Slot.Slot import SlotCheckError
 
-translate = qtpy.QtCore.QCoreApplication.translate
+translate = PySide6.QtCore.QCoreApplication.translate
 
 
 class PMSlot16(Gen_PMSlot16, QWidget):

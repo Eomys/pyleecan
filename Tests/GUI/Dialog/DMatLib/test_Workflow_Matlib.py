@@ -3,7 +3,7 @@ from os.path import isdir, isfile, join
 from shutil import copytree, rmtree
 import pytest
 import mock
-from qtpy import QtWidgets
+from PySide6 import QtWidgets
 from pyleecan.Functions.load import LIB_KEY, MACH_KEY, load, load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
@@ -398,7 +398,7 @@ class TestDMatlibWF(object):
         dialog.w_setup.lf_rho_elec.editingFinished.emit()
         assert dialog.w_setup.b_save.isEnabled()
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.question",
+            "PySide6.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.Yes,
         ):
             dialog.w_setup.le_name.setText("M400-50A_V2")
@@ -454,7 +454,7 @@ class TestDMatlibWF(object):
         dialog.w_setup.lf_rho_meca.editingFinished.emit()
         assert dialog.w_setup.b_save.isEnabled()
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.question",
+            "PySide6.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.Yes,
         ):
             dialog.w_setup.le_name.setText("Air-V2")
@@ -499,7 +499,7 @@ class TestDMatlibWF(object):
         assert dialog.w_setup.le_name.text() == "M400-50A"
         # Delete M400-50A material
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.question",
+            "PySide6.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.Yes,
         ):
             dialog.w_setup.b_delete.clicked.emit()

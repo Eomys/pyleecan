@@ -1,5 +1,5 @@
 import sys
-from qtpy import QtWidgets, QtGui, QtCore
+from PySide6 import QtWidgets, QtGui, QtCore
 
 """
 def _setColor(widget):
