@@ -29,7 +29,10 @@ deps = [
     "pyuff",
     "deap",
     "smoot",
-    # "git+https://github.com/mxgnsr/SciDataTool/tree/update-reqs.git",
+    "swat-em",
+    "ddt",
+    "nbformat",
+    "nbconvert",
 ]
 commands_pre = [
     [
