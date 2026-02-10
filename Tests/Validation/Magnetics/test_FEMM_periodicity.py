@@ -175,8 +175,6 @@ def test_FEMM_periodicity_time_no_periodicity_a():
     assert_array_almost_equal((Prad - Prad2) / Prad2, 0, decimal=2)
     assert_array_almost_equal(time3, time4, decimal=6)
 
-    return out, out2
-
 
 @pytest.mark.long_5s
 @pytest.mark.MagFEMM
@@ -339,8 +337,6 @@ def test_FEMM_periodicity_time():
     time = result_AGSF2["time"]
 
     assert_array_almost_equal(Prad / 100000, Prad2 / 100000, decimal=2)
-
-    return out, out2
 
 
 @pytest.mark.long_5s
@@ -521,8 +517,6 @@ def test_FEMM_periodicity_angle():
     Brad2 = result2["radial"]
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
-
-    return out, out2
 
 
 def test_Bore_sym():
@@ -779,8 +773,6 @@ def test_Ring_Magnet():
     assert_array_almost_equal((Brad - Brad2) / Brad2, 0, decimal=2)
     assert_array_almost_equal(time, time2, decimal=6)
 
-    return out, out2
-
 
 def test_Ring_Magnet_2():
     """Check that a machine with 2 Ring magnet can be simulated with sym"""
@@ -903,8 +895,6 @@ def test_Ring_Magnet_2():
     # Compare both simu
     assert_array_almost_equal((Brad - Brad2) / Brad2, 0, decimal=2)
     assert_array_almost_equal(time, time2, decimal=6)
-
-    return out, out2
 
 
 # To run it without pytest

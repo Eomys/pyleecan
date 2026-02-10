@@ -104,8 +104,6 @@ def test_EEC_SCIM():
             legend_list=["LUT", "FEA"],
         )
 
-    return Phi_m_list, Phi_wind_list
-
 
 if __name__ == "__main__":
-    Phi_m_list, Phi_wind_list = test_EEC_SCIM()
+    test_EEC_SCIM()

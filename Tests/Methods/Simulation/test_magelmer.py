@@ -110,7 +110,6 @@ def test_ipm_Elmer():
     # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
-    return outp
 
 
 @pytest.mark.MagElmer
@@ -175,10 +174,8 @@ def test_spm_Elmer():
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
 
-    return outp
-
 
 if __name__ == "__main__":
-    out = test_ipm_Elmer()
-    out = test_spm_Elmer()
+    test_ipm_Elmer()
+    test_spm_Elmer()
     print("Done")

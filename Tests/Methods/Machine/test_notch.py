@@ -47,10 +47,8 @@ def test_notch(is_show_fig=False):
     Audi_eTron.plot(sym=2, is_show_fig=is_show_fig)
     Audi_eTron.plot(is_show_fig=is_show_fig)
 
-    return Toyota_Prius, Audi_eTron
-
 
 if __name__ == "__main__":
-    Toyota_Prius, Audi_eTron = test_notch(is_show_fig=True)
+    test_notch(is_show_fig=True)
     plt.show()
     print("Done")

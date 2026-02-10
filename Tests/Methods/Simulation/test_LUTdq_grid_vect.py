@@ -141,9 +141,7 @@ def test_LUTdq_grid_vect(is_load=True):
         **dict_map,
     )
 
-    return out
-
 
 # To run it without pytest
 if __name__ == "__main__":
-    out = test_LUTdq_grid_vect(is_load=True)
+    test_LUTdq_grid_vect(is_load=True)
