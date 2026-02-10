@@ -120,4 +120,8 @@ class Test_get_element_MeshMat(object):
 
     def test_get_connectivity_None(self):
         """Check if get_connectivity works correctly"""
-        assert not self.mesh.element_dict["triangle3"].get_connectivity(5)
+        assert self.mesh.element_dict["triangle3"].get_connectivity(5).size == 0
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
