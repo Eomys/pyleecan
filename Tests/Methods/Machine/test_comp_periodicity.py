@@ -173,8 +173,6 @@ def test_comp_periodicity(test_dict):
     )
     assert (per_t, aper_t) == (test_dict["exp"][2], test_dict["exp"][3]), msg_t
 
-    return (per_a, aper_a, per_t, aper_t)
-
 
 # To run it without pytest
 if __name__ == "__main__":
@@ -187,7 +185,7 @@ if __name__ == "__main__":
         else:
             machine_name = test_dict["machine"].name
         print(str(ii) + " :" + machine_name)
-        per_tuple = test_comp_periodicity(test_dict)
+        test_comp_periodicity(test_dict)
     print("Done")
 
     # per_tuple = test_comp_periodicity(test_per_list[22])

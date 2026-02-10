@@ -47,7 +47,7 @@ class TestPWSlot16(object):
         self.material_dict[MACH_KEY] = [
             self.mat4,
         ]
-        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2, mat_type=self.mat3)
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.5, mat_type=self.mat3)
         self.test_obj.slot = SlotW16(H0=0.10, H2=0.12, W0=0.13, W3=0.14, R1=0.15)
         self.widget = PWSlot16(self.test_obj, self.material_dict)
 
@@ -110,7 +110,7 @@ class TestPWSlot16(object):
         """Check that the Output text is computed and correct"""
         self.test_obj = LamSlotWind(
             Rint=92.5e-3,
-            Rext=0.2,
+            Rext=0.5,
             is_internal=True,
             is_stator=True,
             L1=0.95,
@@ -126,7 +126,7 @@ class TestPWSlot16(object):
     def test_check(self):
         """Check that the check is working correctly"""
 
-        self.test_obj = LamSlotWind(Rint=92.5e-3, Rext=0.2, is_internal=False)
+        self.test_obj = LamSlotWind(Rint=92.5e-3, Rext=0.5, is_internal=False)
         self.test_obj.slot = SlotW16(H0=None, H2=0.12, W0=0.13, W3=0.14, R1=0.16)
         self.widget = PWSlot16(self.test_obj)
         assert self.widget.check(self.test_obj) == "You must set H0 !"

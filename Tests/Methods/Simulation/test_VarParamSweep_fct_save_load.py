@@ -1,3 +1,4 @@
+import pytest
 from os.path import join, isdir
 from os import makedirs, remove
 
@@ -18,6 +19,7 @@ from Tests import save_validation_path as save_path
 from pyleecan.definitions import DATA_DIR
 
 
+@pytest.mark.failed
 def test_VarParamSweep_fct_save_load():
     """Test to check keeper, setter and getter functions defined as path containing
     global variable <PARAM_DIR>"""

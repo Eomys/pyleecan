@@ -43,12 +43,11 @@ def other_to_P(self, machine, other_dict, other_unit_dict):
     machine.rotor.slot.W1 = slot_W1
 
     # set W0
+    machine.rotor.slot.Rtopm = Rbo + H1  # set before _comp_p. to avoid invalid value
     point_dict = machine.rotor.slot._comp_point_coordinate()
     ZM4 = point_dict["ZM4"]
 
     machine.rotor.slot.W0 = 2 * arcsin((machine.rotor.slot.W1 / 2) / abs(ZM4))
-
-    machine.rotor.slot.Rtopm = Rbo + H1
 
     point_dict = machine.rotor.slot._comp_point_coordinate()
 

@@ -51,7 +51,7 @@ install_requires = [
     "scipy>=1.4.1",
     "setuptools",
     "vtk>=9.2.6",
-    "xlrd>=1.2.0", # needed for pandas xls import
+    "xlrd>=1.2.0",  # needed for pandas xls import
     # "xlwt>=1.3.0", # seems unused -> remove later
     "qtpy>=2.4.1",
 ]

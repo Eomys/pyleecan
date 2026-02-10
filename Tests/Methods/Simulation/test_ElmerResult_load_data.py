@@ -31,11 +31,9 @@ class Test_ElmerResults(object):
 
         res.load_data()
 
-        return res
-
 
 # To run it without pytest
 if __name__ == "__main__":
     # create test object and test to load result file
     obj = Test_ElmerResults()
-    res = obj.test_ElmerResults()
+    obj.test_ElmerResults()

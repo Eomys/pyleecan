@@ -154,8 +154,6 @@ def test_EEC_ELUT_Railway_Traction(is_run=True, is_linear=False):
             decimal=0,
         )
 
-    return Railway_Traction, param_dict, ELUT_Railway_Traction
-
 
 @pytest.mark.SCIM
 @pytest.mark.Electrical
@@ -267,8 +265,6 @@ def test_EEC_ELUT_SCIM_Audi_eTron(param_dict, is_run=True, is_linear=False):
         assert_almost_equal(I1_abs / 10, param_dict["I1_abs"] / 10, decimal=0)
         assert_almost_equal(Pjoule_s / 1000, param_dict["Pjoule_s"] / 1000, decimal=0)
         assert_almost_equal(Pjoule_r / 100, param_dict["Pjoule_r"] / 100, decimal=0)
-
-    return Audi_eTron, param_dict, ELUT_Audi_eTron
 
 
 if __name__ == "__main__":

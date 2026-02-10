@@ -265,8 +265,6 @@ class Test_InCurrent_meth(object):
         )
         plt.close("all")
 
-        return out
-
 
 # To run it without pytest
 if __name__ == "__main__":

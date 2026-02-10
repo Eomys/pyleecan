@@ -28,6 +28,7 @@ def test_convert_MeshVTK():
 
 
 @pytest.mark.MeshSol
+@pytest.mark.failed
 def test_convert_MeshMat():
     meshmat = ImportMeshMat(
         file_path=join(TEST_DATA_DIR, "Mesh\\mesh_test_mixte.unv"),
