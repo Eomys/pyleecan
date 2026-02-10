@@ -57,7 +57,7 @@ install_requires = [
 full_require = [
     "deap>=1.3.1",
     "smoot>=0.1.0",
-    "gmsh-sdk>=4.6.0",
+    "gmsh",  # gmsh-sdk is depreciated in favor of gmsh according to https://pypi.org/project/gmsh-sdk/
 ]
 
 # Pyleecan Test dependancies
