@@ -45,7 +45,6 @@ commands_pre = [
         "pip",
         "install",
         "git+https://github.com/mxgnsr/SciDataTool.git@update-reqs",
-        "--force-reinstall",
     ],
 ]
 commands = [["pytest", "Tests"]]
