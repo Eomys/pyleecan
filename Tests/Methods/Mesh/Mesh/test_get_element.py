@@ -9,7 +9,6 @@ from pyleecan.Classes.NodeMat import NodeMat
 
 
 @pytest.mark.MeshSol
-@pytest.mark.failed
 class Test_get_element_MeshMat(object):
     """unittest for Mesh get_element methods. Indirect test add_element"""
 
