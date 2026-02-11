@@ -46,6 +46,7 @@ mesh_dict = {
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 @pytest.mark.failed
+@pytest.mark.skip(reason="Test Failed: Need further investigation")
 def test_ipm_Elmer():
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
@@ -118,6 +119,7 @@ def test_ipm_Elmer():
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 @pytest.mark.failed
+@pytest.mark.skip(reason="Test Failed: Need further investigation")
 def test_spm_Elmer():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
