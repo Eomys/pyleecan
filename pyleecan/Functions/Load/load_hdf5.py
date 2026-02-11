@@ -1,5 +1,5 @@
 from h5py import File, Group
-from numpy import bool_, int32, int64, bytes_, array
+from numpy import bool_, int32, int64, bytes_, ndarray
 from cloudpickle import loads
 
 
@@ -85,6 +85,8 @@ def construct_dict_from_group(group):
                 value = val[()]
                 if "array_list" in val.attrs.keys():  # List saved as an array
                     value = value.tolist()
+                elif isinstance(value, ndarray):
+                    pass  # value allready in correct format
                 elif value == "NoneValue":  # Handle None values
                     value = None
                 elif isinstance(value, bool_):  # bool
