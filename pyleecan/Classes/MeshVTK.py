@@ -548,6 +548,10 @@ class MeshVTK(Mesh):
         """setter of mesh"""
         if value == -1:
             value = vtkPointSet()
+        # this throws an error for now because pyvista.read dows not return vtkPointSet
+        # for a .vtk file but a p..UnstructuredGrid, which can be initialized by a vtkPointSet
+        # FIXME: Need to update type of mesh attribute according to pyvista and vtk
+        # versions in the future.
         check_var("mesh", value, "vtkPointSet")
         self._mesh = value
 
