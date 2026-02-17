@@ -21,7 +21,7 @@ def plot_BH(self, fig=None, grid=True, color="r", is_show_fig=True):
 
     if BH is not None:
         axes.plot(BH[:, 0], BH[:, 1], color=color)
-        axes.grid(b=True)
+        axes.grid(visible=True)  # param "b" of grid was removed in MPL 3.7
         axes.set_xlabel("H [A/m]")
         axes.set_ylabel("B [T]")
         axes.set_title("B(H) curve")
