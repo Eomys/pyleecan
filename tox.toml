@@ -1,5 +1,5 @@
 requires = ["tox>=4.19"]
-env_list = ["py314", "py313", "py312", "py311", "py310", "py39", "black"]
+env_list = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "black"]
 
 
 [pytest_collect]
@@ -47,7 +47,48 @@ commands_pre = [
         "git+https://github.com/mxgnsr/SciDataTool.git@update-reqs",
     ],
 ]
-commands = [["pytest", "Tests"]]
+commands = [["pytest",{ replace = "posargs", default = ["Tests"], extend = true }]]
+
+[env.3.14]
+description = "Run test under python 3.14 without smoot because smt can not build without MS compilers for 3.14"
+deps = [
+    "pytest",
+    "mock",
+    "pytest-mock",
+    "sympy",
+    "gmsh",
+    "pyuff",
+    "deap",
+    # "smoot", -> fix for smt
+    "swat-em",
+    "ddt",
+    "nbformat",
+    "nbconvert",
+]
+commands_pre = [
+    [
+        "pip",
+        "uninstall",
+        "scidatatool",
+        "-y",
+    ],
+    [
+        "pip",
+        "install",
+        "git+https://github.com/mxgnsr/SciDataTool.git@update-reqs",
+    ],
+]
+commands = [
+    [
+        "pytest",
+        { replace = "posargs", default = ["Tests"], extend = true },
+        "--ignore",
+        "Tests/Validation/Optimization/test_Binh_and_Korn_Bayes.py",
+        "--ignore",
+        "Tests/Validation/Optimization/test_zdt3_Bayes.py",
+        "--deselect=Tests/Classes/test_classes.py::test_class_methods[class_dict132]",
+    ],
+]
 
 [env.black]
 description = "run black linter on code base"
