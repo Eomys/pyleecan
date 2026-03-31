@@ -110,8 +110,7 @@ class WTableParameterModel(QAbstractTableModel):
                 return propDict[DESC_KEY] if DESC_KEY in propDict else None
             elif item == VALUE_KEY:
                 return propDict[TYPE_KEY] if TYPE_KEY in propDict else None
-
-        elif role == Qt.BackgroundColorRole:
+        elif role == Qt.BackgroundRole:
             if item != VALUE_KEY:
                 return QBrush(COL_WHITE_SMOKE)
 
