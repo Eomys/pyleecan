@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
 
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QWidget, QListView
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QListView, QWidget
 
+from .....Functions.GUI.log_error import log_error
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from .....Functions.GUI.log_error import log_error
 
 # Information to fill the conductor type combobox
 WIDGET_LIST = [PCondType21, PCondType22]

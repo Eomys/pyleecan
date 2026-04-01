@@ -2,13 +2,16 @@
 
 import sys
 from logging import ERROR, INFO, basicConfig, getLogger
-from matplotlib import use
-from ..Classes.GUIOption import GUIOption
-from ..definitions import config_dict
 from os.path import abspath, dirname, join, normpath
 
-# Set Matplotlib backend
-use("Qt5Agg")  # Use qtpy backend
+from matplotlib import use
+
+from ..Classes.GUIOption import GUIOption
+from ..definitions import config_dict
+
+# Set Matplotlib backend ONLY if pyplot was not loaded since it cannot be changed savely
+if "matplotlib.pyplot" not in sys.modules:
+    use("qtagg")  # Use PySide6 backend
 
 gui_option = GUIOption()
 gui_option.unit.unit_m = config_dict["GUI"]["UNIT_M"]  # Use mm

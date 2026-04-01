@@ -5,13 +5,54 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
+)
 
-from .....GUI.Tools.FloatEdit import FloatEdit
 from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
-
+from .....GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -69,7 +110,7 @@ class Ui_SMachineDimension(object):
 
         self.unit_SRext = QLabel(self.g_stator)
         self.unit_SRext.setObjectName("unit_SRext")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.unit_SRext.sizePolicy().hasHeightForWidth())
@@ -239,7 +280,7 @@ class Ui_SMachineDimension(object):
         self.verticalLayout_4.addWidget(self.g_frame)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_4.addItem(self.verticalSpacer)
@@ -253,7 +294,7 @@ class Ui_SMachineDimension(object):
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer)

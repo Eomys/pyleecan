@@ -1,7 +1,6 @@
 from typing import Any, Dict, Optional, Tuple
 
-from pyvista import themes
-from pyvista.plotting import BasePlotter, Plotter
+from pyvista.plotting import BasePlotter, Plotter, themes
 
 from ....definitions import config_dict
 

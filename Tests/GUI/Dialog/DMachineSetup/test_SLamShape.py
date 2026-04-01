@@ -4,10 +4,11 @@ import sys
 from random import uniform
 
 import pytest
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.SlotW14 import SlotW14
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.VentilationCirc import VentilationCirc
@@ -30,11 +31,21 @@ class TestSLamShape(object):
 
         test_obj = MachineSCIM()
         test_obj.stator = LamSlotWind(
-            is_stator=True, L1=0.11, Kf1=0.12, Nrvd=12, Wrvd=0.13
+            is_stator=True,
+            L1=0.11,
+            Kf1=0.12,
+            Nrvd=12,
+            Wrvd=0.13,
+            slot=SlotW14(),
         )
         test_obj.stator.mat_type.name = "test3"
         test_obj.rotor = LamSlotWind(
-            is_stator=False, L1=0.21, Kf1=0.22, Nrvd=22, Wrvd=0.23
+            is_stator=False,
+            L1=0.21,
+            Kf1=0.22,
+            Nrvd=22,
+            Wrvd=0.23,
+            slot=SlotW14(),
         )
         test_obj.rotor.mat_type.name = "test2"
 
@@ -203,3 +214,8 @@ class TestSLamShape(object):
             is_stator=True,
         )
         assert setup["widget"].out_axial_duct.text() == "Axial: 1 set (20 ducts)"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
+    print("Done")

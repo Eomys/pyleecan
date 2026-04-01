@@ -4,7 +4,6 @@ from smoot.smoot import MOO
 from copy import deepcopy
 from datetime import datetime
 import numpy as np
-from pymoo.visualization.scatter import Scatter
 
 from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput

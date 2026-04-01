@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QWidget
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
 
 from ......Classes.HoleM53 import HoleM53
 from ......GUI import gui_option
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Gen_PHoleM53 import Gen_PHoleM53
-from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Gen_PHoleM53 import Gen_PHoleM53
 from ......GUI.Resources import pixmap_dict
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PHoleM53(Gen_PHoleM53, QWidget):

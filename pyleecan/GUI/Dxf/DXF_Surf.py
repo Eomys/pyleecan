@@ -9,9 +9,9 @@ from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import array, pi, argmax, argmin
 from numpy import max as np_max, min as np_min
-from qtpy.QtCore import QUrl, Qt
-from qtpy.QtGui import QIcon, QPixmap, QDesktopServices
-from qtpy.QtWidgets import (
+from PySide6.QtCore import QUrl, Qt
+from PySide6.QtGui import QIcon, QPixmap, QDesktopServices
+from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QFileDialog,

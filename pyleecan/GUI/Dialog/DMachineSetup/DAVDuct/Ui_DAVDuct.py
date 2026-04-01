@@ -5,12 +5,50 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from .....GUI.Tools.HelpButton import HelpButton
-
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -21,7 +59,10 @@ class Ui_DAVDuct(object):
         DAVDuct.resize(771, 639)
         icon = QIcon()
         icon.addFile(
-            ":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+            ":/images/images/icon/pyleecan_64.png",
+            QSize(),
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         DAVDuct.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(DAVDuct)
@@ -39,7 +80,7 @@ class Ui_DAVDuct(object):
         self.horizontalLayout_2.addWidget(self.b_help)
 
         self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
@@ -61,7 +102,7 @@ class Ui_DAVDuct(object):
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.horizontalSpacer_5 = QSpacerItem(
-            218, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            218, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer_5)

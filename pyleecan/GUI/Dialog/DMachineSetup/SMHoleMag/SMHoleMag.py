@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QMessageBox, QWidget, QSizePolicy
 from logging import getLogger
-from .....loggers import GUI_LOG_NAME
+
+from numpy import pi
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QMessageBox, QSizePolicy, QWidget
+
 from .....Classes.HoleM50 import HoleM50
 from .....Classes.Material import Material
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
+from .....loggers import GUI_LOG_NAME
 from .....Methods.Slot.Slot import SlotCheckError
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from numpy import pi
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):

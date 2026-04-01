@@ -8,9 +8,9 @@ from random import uniform
 from shutil import rmtree, copyfile
 from numpy import array, transpose
 import pytest
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
-from qtpy.QtWidgets import QMessageBox
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
+from PySide6.QtWidgets import QMessageBox
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -20,10 +20,11 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from Tests import save_load_path as save_path, TEST_DATA_DIR
 
 work_path = join(save_path, "Material")
-csv_path = join(TEST_DATA_DIR, "test_BH_Import_csv.csv")
-excel_path = join(TEST_DATA_DIR, "test_BH_Import.xlsx")
+csv_path = join(TEST_DATA_DIR, "test_BH_Import.csv")
+xlsx_path = join(TEST_DATA_DIR, "test_BH_Import.xlsx")
+xls_path = join(TEST_DATA_DIR, "test_BH_Import.xls")
 
-csv_path_Loss = join(TEST_DATA_DIR, "test_Loss_Import_csv.csv")
+csv_path_Loss = join(TEST_DATA_DIR, "test_Loss_Import.csv")
 excel_path_Loss = join(TEST_DATA_DIR, "test_Loss_Import.xlsx")
 
 
@@ -214,7 +215,7 @@ class TestDMatSetup(object):
         """Check that you can change the name and the path"""
         self.widget.w_setup.le_name.setText("Magnet2")
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.question",
+            "PySide6.QtWidgets.QMessageBox.question",
             return_value=QMessageBox.Yes,
         ):
             self.widget.w_setup.le_name.editingFinished.emit()
@@ -508,7 +509,7 @@ class TestDMatSetup(object):
         assert isfile(csv_path)
         # Load csv
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(csv_path, "CSV (*.csv)"),
         ):
             w_imp.b_import.clicked.emit()
@@ -531,10 +532,41 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.mat.mag.BH_curve.value[3, 0] == 4
         assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 0.4
 
-        # Load Excel
+        # Load xlsx
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
-            return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
+            return_value=(xlsx_path, "Excel file (*.xls .*xlsx)"),
+        ):
+            w_imp.b_import.clicked.emit()
+        wimport = w_imp.wimport_excel
+        assert wimport.b_ok.isEnabled() == False
+        assert wimport.c_sheet.currentText() == "Feuil1"
+        wimport.c_sheet.setCurrentIndex(1)
+        assert wimport.c_sheet.currentText() == "Feuil2"
+        wimport.le_range.setText("F8:G57")
+        assert wimport.b_ok.isEnabled() == True
+        wimport.b_ok.clicked.emit()
+
+        assert w_imp.si_row.value() == 50
+        assert w_imp.si_col.value() == 2
+        assert w_imp.w_tab.cellWidget(0, 0).value() == 0
+        assert w_imp.w_tab.cellWidget(0, 1).value() == 0
+        assert w_imp.w_tab.cellWidget(1, 0).value() == 0.01
+        assert w_imp.w_tab.cellWidget(1, 1).value() == 1.7854
+        assert w_imp.w_tab.cellWidget(2, 0).value() == 0.02
+        assert w_imp.w_tab.cellWidget(2, 1).value() == 3.5731
+        assert w_imp.w_tab.cellWidget(3, 0).value() == 0.03
+        assert w_imp.w_tab.cellWidget(3, 1).value() == 5.36544
+        assert w_imp.w_tab.cellWidget(49, 0).value() == 0.49
+        assert w_imp.w_tab.cellWidget(49, 1).value() == 87.843516
+
+        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 0] == 0.03
+        assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 5.36544
+
+        # Load xls
+        with mock.patch(
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
+            return_value=(xls_path, "Excel file (*.xls .*xlsx)"),
         ):
             w_imp.b_import.clicked.emit()
         wimport = w_imp.wimport_excel
@@ -564,8 +596,8 @@ class TestDMatSetup(object):
 
         # Load Excel with other column
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
-            return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
+            return_value=(xlsx_path, "Excel file (*.xls .*xlsx)"),
         ):
             w_imp.b_import.clicked.emit()
         wimport = w_imp.wimport_excel
@@ -597,7 +629,7 @@ class TestDMatSetup(object):
         # Export Csv
         save_csv_path = join(save_path, "DMatSetup_csv_export.csv").replace("\\", "/")
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getSaveFileName",
+            "PySide6.QtWidgets.QFileDialog.getSaveFileName",
             return_value=(save_csv_path, "CSV (*.csv)"),
         ):
             w_imp.b_export.clicked.emit()
@@ -605,7 +637,7 @@ class TestDMatSetup(object):
 
         # Load csv
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(save_csv_path, "CSV (*.csv)"),
         ):
             w_imp.b_import.clicked.emit()
@@ -655,7 +687,7 @@ class TestDMatSetup(object):
         assert isfile(csv_path_Loss)
         # Load csv
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_import.clicked.emit()
@@ -689,7 +721,7 @@ class TestDMatSetup(object):
 
         # Load Excel
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(excel_path_Loss, "Excel file (*.xls .*xlsx)"),
         ):
             mat.b_import.clicked.emit()
@@ -731,7 +763,7 @@ class TestDMatSetup(object):
             "\\", "/"
         )
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getSaveFileName",
+            "PySide6.QtWidgets.QFileDialog.getSaveFileName",
             return_value=(save_csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_export.clicked.emit()
@@ -739,7 +771,7 @@ class TestDMatSetup(object):
 
         # Load csv
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName",
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName",
             return_value=(save_csv_path_Loss, "CSV (*.csv)"),
         ):
             mat.b_import.clicked.emit()

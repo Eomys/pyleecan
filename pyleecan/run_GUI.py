@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from qtpy import QtWidgets, QtGui, QtCore
+from PySide6 import QtWidgets, QtGui, QtCore
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvas,
 )  # needed for proper exe gen.
@@ -8,9 +8,9 @@ import sys
 from os.path import dirname, join, isfile
 from sys import argv, exit
 
-from qtpy.QtCore import QTranslator
-from qtpy.QtWidgets import QApplication
-from qtpy.QtGui import QIcon
+from PySide6.QtCore import QTranslator
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon
 
 try:  # Import if pyleecan is installed with pip
     from .definitions import ROOT_DIR, PACKAGE_NAME, config_dict
@@ -89,6 +89,7 @@ def run_GUI(argv):
 
         option = WGuiOption(machine_setup=c, matlib=mat_widget)
         window.addSubWindow("Option", option)
+        window.centerOnScreen()
         window.show()
 
     else:

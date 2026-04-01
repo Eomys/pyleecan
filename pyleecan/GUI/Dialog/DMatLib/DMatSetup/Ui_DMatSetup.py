@@ -5,13 +5,59 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QDialog,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLayout,
+    QLineEdit,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QStackedWidget,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from .....GUI.Tools.FloatEdit import FloatEdit
 from .....GUI.Tools.WTableData.DTableData import DTableData
-
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -23,7 +69,10 @@ class Ui_DMatSetup(object):
         DMatSetup.setMinimumSize(QSize(600, 0))
         icon = QIcon()
         icon.addFile(
-            ":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+            ":/images/images/icon/pyleecan_64.png",
+            QSize(),
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         DMatSetup.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(DMatSetup)
@@ -41,19 +90,19 @@ class Ui_DMatSetup(object):
         self.horizontalLayout.addWidget(self.le_name)
 
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
         self.horizontalSpacer_4 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer_4)
 
         self.horizontalSpacer_3 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer_3)
@@ -74,7 +123,6 @@ class Ui_DMatSetup(object):
         font = QFont()
         font.setPointSize(8)
         font.setBold(False)
-        font.setWeight(50)
         self.in_rho_elec.setFont(font)
 
         self.gridLayout_2.addWidget(self.in_rho_elec, 0, 0, 1, 1)
@@ -125,7 +173,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout_5.addLayout(self.gridLayout_2)
 
         self.verticalSpacer_2 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_5.addItem(self.verticalSpacer_2)
@@ -147,7 +195,7 @@ class Ui_DMatSetup(object):
         self.horizontalLayout_8.addWidget(self.c_type_material)
 
         self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_8.addItem(self.horizontalSpacer_2)
@@ -191,19 +239,19 @@ class Ui_DMatSetup(object):
         self.gridLayout.addWidget(self.in_mur_lin, 0, 0, 1, 1)
 
         self.horizontalSpacer_6 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout.addItem(self.horizontalSpacer_6, 0, 3, 1, 1)
 
         self.horizontalSpacer_7 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout.addItem(self.horizontalSpacer_7, 1, 3, 1, 1)
 
         self.horizontalSpacer_8 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout.addItem(self.horizontalSpacer_8, 2, 3, 1, 1)
@@ -235,7 +283,7 @@ class Ui_DMatSetup(object):
         self.horizontalLayout_11 = QHBoxLayout()
         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
         self.horizontalSpacer_11 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_11.addItem(self.horizontalSpacer_11)
@@ -248,7 +296,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout_9.addLayout(self.horizontalLayout_11)
 
         self.verticalSpacer_7 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_9.addItem(self.verticalSpacer_7)
@@ -289,7 +337,7 @@ class Ui_DMatSetup(object):
         self.gridLayout_5.addWidget(self.unit_Wlam, 0, 2, 1, 1)
 
         self.horizontalSpacer_10 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout_5.addItem(self.horizontalSpacer_10, 0, 3, 1, 1)
@@ -301,7 +349,7 @@ class Ui_DMatSetup(object):
         self.mag_layout.addWidget(self.nav_mag)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.mag_layout.addItem(self.verticalSpacer)
@@ -320,7 +368,7 @@ class Ui_DMatSetup(object):
         self.gridLayout_6 = QGridLayout(self.g_losses_import)
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.verticalSpacer_8 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.gridLayout_6.addItem(self.verticalSpacer_8, 2, 1, 1, 1)
@@ -331,7 +379,7 @@ class Ui_DMatSetup(object):
         self.gridLayout_6.addWidget(self.b_plot_losses, 1, 1, 1, 1)
 
         self.horizontalSpacer_12 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout_6.addItem(self.horizontalSpacer_12, 1, 0, 1, 1)
@@ -364,7 +412,7 @@ class Ui_DMatSetup(object):
         self.horizontalLayout_10.addWidget(self.cb_material_type)
 
         self.horizontalSpacer_9 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_10.addItem(self.horizontalSpacer_9)
@@ -516,7 +564,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout_4.addWidget(self.g_shear)
 
         self.verticalSpacer_5 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_4.addItem(self.verticalSpacer_5)
@@ -579,7 +627,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout_7.addLayout(self.gridLayout_4)
 
         self.verticalSpacer_6 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_7.addItem(self.verticalSpacer_6)
@@ -704,7 +752,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout_2.addLayout(self.gridLayout_3)
 
         self.verticalSpacer_3 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_2.addItem(self.verticalSpacer_3)
@@ -735,7 +783,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout_6.addLayout(self.horizontalLayout_6)
 
         self.verticalSpacer_4 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_6.addItem(self.verticalSpacer_4)
@@ -747,7 +795,7 @@ class Ui_DMatSetup(object):
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
         self.horizontalSpacer_5 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_5)

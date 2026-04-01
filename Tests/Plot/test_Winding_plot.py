@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from qtpy import QtWidgets, QtGui, QtCore
-
 from os.path import join
 
 import matplotlib.pyplot as plt
-from numpy import pi, linspace
+from numpy import pi
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW10 import SlotW10

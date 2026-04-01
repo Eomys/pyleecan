@@ -5,13 +5,50 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QGridLayout,
+    QLabel,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
-from ......GUI.Tools.FloatEdit import FloatEdit
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
 from ......GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
+from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
+from ......GUI.Tools.FloatEdit import FloatEdit
 
 
 class Ui_PCondType21(object):
@@ -25,7 +62,9 @@ class Ui_PCondType21(object):
         self.gridLayout.setObjectName("gridLayout")
         self.lf_Hbar = FloatEdit(PCondType21)
         self.lf_Hbar.setObjectName("lf_Hbar")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lf_Hbar.sizePolicy().hasHeightForWidth())

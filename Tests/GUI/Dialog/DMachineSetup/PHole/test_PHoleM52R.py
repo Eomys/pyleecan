@@ -2,8 +2,8 @@
 
 import sys
 
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM52R import HoleM52R

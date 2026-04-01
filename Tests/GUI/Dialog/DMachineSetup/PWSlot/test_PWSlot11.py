@@ -3,9 +3,9 @@
 import sys
 
 import pytest
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
-from qtpy.QtCore import Qt
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
+from PySide6.QtCore import Qt
 from numpy import pi
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY

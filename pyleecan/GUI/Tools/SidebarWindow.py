@@ -1,5 +1,5 @@
 import sys
-from qtpy import QtWidgets, QtGui, QtCore
+from PySide6 import QtWidgets, QtGui, QtCore
 
 """
 def _setColor(widget):
@@ -25,7 +25,7 @@ class SidebarWindow(QtWidgets.QMainWindow):
 
         self.nav_btn_grp = QtWidgets.QButtonGroup()
         self.nav_btn_grp.setExclusive(True)
-        self.nav_btn_grp.buttonClicked[int].connect(self.switch_stack)
+        self.nav_btn_grp.idClicked.connect(self.switch_stack)
         self.btn_grp_fct = []
 
         self.nav_layout = QtWidgets.QVBoxLayout(self.nav_panel)
@@ -62,12 +62,11 @@ class SidebarWindow(QtWidgets.QMainWindow):
 
     def centerOnScreen(self):
         """centerOnScreen() - Centers the window on the screen."""
-        resolution = QtWidgets.QDesktopWidget().screenGeometry()
-        frame = self.frameSize()
-        self.move(
-            (resolution.width() / 2) - (frame.width() / 2),
-            (resolution.height() / 2) - (frame.height() / 2),
-        )
+        screen = self.screen()
+        geometry = screen.availableGeometry()
+        x = (geometry.width() - self.width()) // 2 + geometry.x()
+        y = (geometry.height() - self.height()) // 2 + geometry.y()
+        self.move(x, y)
 
     def addSubWindow(self, name, widget, btn_fct=None):
         """add a new sub window to the stack including the coresponding button"""

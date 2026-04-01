@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPixmap
-from qtpy.QtWidgets import QWidget, QDialog
-from qtpy.QtWidgets import QMessageBox
-from qtpy.QtCore import Qt
-from ......Functions.load import load
-from ......Functions.GUI.log_error import log_error
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QDialog, QMessageBox, QWidget
+
 from ......Classes.HoleUD import HoleUD
+from ......Functions.GUI.log_error import log_error
+from ......Functions.load import load
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentUD.Gen_PVentUD import (
     Gen_PVentUD,
 )
-from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dxf.DXF_Surf import DXF_Surf
+from ......Methods.Slot.Slot import SlotCheckError
 
 
 class PVentUD(Gen_PVentUD, QWidget):

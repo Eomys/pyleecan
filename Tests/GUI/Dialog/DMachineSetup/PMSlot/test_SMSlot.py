@@ -2,8 +2,8 @@
 
 import sys
 import matplotlib.pyplot as plt
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 from numpy import pi
 import mock
 
@@ -137,7 +137,7 @@ class TestSMSlot(object):
         self.widget.tab_slot.widget(0).w_slot.lf_W0.setValue(None)
         self.widget.tab_slot.widget(0).w_slot.lf_W0.editingFinished.emit()
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.critical",
+            "PySide6.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.b_plot.clicked.emit()
@@ -152,7 +152,7 @@ class TestSMSlot(object):
         self.widget.tab_slot.widget(1).w_slot.lf_W0.setValue(None)
         self.widget.tab_slot.widget(1).w_slot.lf_W0.editingFinished.emit()
         with mock.patch(
-            "qtpy.QtWidgets.QMessageBox.critical",
+            "PySide6.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.b_plot.clicked.emit()

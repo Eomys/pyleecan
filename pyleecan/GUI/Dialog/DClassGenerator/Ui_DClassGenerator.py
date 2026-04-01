@@ -5,10 +5,55 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QGridLayout,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QTableWidget,
+    QTableWidgetItem,
+    QTreeView,
+    QVBoxLayout,
+    QWidget,
+)
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -20,7 +65,7 @@ class Ui_DClassGenerator(object):
         self.treeView = QTreeView(DClassGenerator)
         self.treeView.setObjectName("treeView")
         self.treeView.setGeometry(QRect(12, 34, 256, 711))
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeView.sizePolicy().hasHeightForWidth())
@@ -33,7 +78,7 @@ class Ui_DClassGenerator(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
@@ -61,7 +106,7 @@ class Ui_DClassGenerator(object):
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.horizontalSpacer_4 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout_4.addItem(self.horizontalSpacer_4, 1, 3, 1, 1)
@@ -77,7 +122,7 @@ class Ui_DClassGenerator(object):
         self.gridLayout_4.addWidget(self.lab_param, 2, 0, 1, 2)
 
         self.horizontalSpacer_3 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout_4.addItem(self.horizontalSpacer_3, 2, 3, 1, 1)
@@ -94,7 +139,7 @@ class Ui_DClassGenerator(object):
 
         self.le_classname = QLineEdit(self.layoutWidget1)
         self.le_classname.setObjectName("le_classname")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(
@@ -128,7 +173,7 @@ class Ui_DClassGenerator(object):
         self.gridLayout_3.addWidget(self.b_addmeth, 0, 2, 1, 1)
 
         self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout_3.addItem(self.horizontalSpacer_2, 0, 4, 1, 1)
@@ -144,7 +189,9 @@ class Ui_DClassGenerator(object):
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.table_meta = QTableWidget(self.layoutWidget1)
         self.table_meta.setObjectName("table_meta")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        sizePolicy2 = QSizePolicy(
+            QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
+        )
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.table_meta.sizePolicy().hasHeightForWidth())
@@ -170,7 +217,7 @@ class Ui_DClassGenerator(object):
         self.gridLayout_2.addWidget(self.lab_const, 2, 1, 1, 1)
 
         self.horizontalSpacer_5 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 3, 1, 1)

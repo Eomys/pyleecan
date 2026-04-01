@@ -18,7 +18,7 @@ from numpy.testing import assert_array_almost_equal
 @pytest.mark.periodicity
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
-def test_FEMM_airgap_winding():
+def test_FEMM_airgap_winding(show_fig=False):
     """Test to compute the Flux in FEMM with winding in the airgap and make sure that the simulation is running."""
 
     # Loading the Toyota Prius then closing its slots
@@ -53,7 +53,7 @@ def test_FEMM_airgap_winding():
         data_list=[out_sym.mag.B],
         legend_list=["Full", "Periodic"],
         save_path=join(save_path, simu.name + "_B_time.png"),
-        is_show_fig=False,
+        is_show_fig=show_fig,
         # **dict_2D
     )
 
@@ -73,11 +73,12 @@ def test_FEMM_airgap_winding():
     assert_array_almost_equal((Brad - Brad2) / Brad2, 0, decimal=2)
     assert_array_almost_equal(time, time2, decimal=6)
 
-    plt.show()
+    if show_fig:
+        plt.show()
     return out, out_sym
 
 
 # To run it without pytest
 if __name__ == "__main__":
-    out = test_FEMM_airgap_winding()
+    out = test_FEMM_airgap_winding(True)
     print("Done")

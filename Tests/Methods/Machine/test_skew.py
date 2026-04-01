@@ -248,11 +248,9 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    return Toyota_Prius, Audi_eTron
-
 
 if __name__ == "__main__":
-    Toyota_Prius, Audi_eTron = test_skew_pattern()
+    test_skew_pattern()
     print("Done")
     # Toyota_Prius.rotor.skew.plot(is_show_fig=True)
     # Audi_eTron.rotor.skew.plot(is_show_fig=True)

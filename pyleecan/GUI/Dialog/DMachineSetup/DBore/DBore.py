@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
-from qtpy.QtCore import Qt
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
-from .....loggers import GUI_LOG_NAME
+
+from numpy import pi
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QDialog, QMessageBox
+
 from .....Classes.BoreFlower import BoreFlower
-from .....GUI.Dialog.DMachineSetup.DBore.Ui_DBore import Ui_DBore
+from .....Functions.GUI.log_error import log_error
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....GUI.Dialog.DMachineSetup.DBore.PBoreFlower.PBoreFlower import PBoreFlower
 from .....GUI.Dialog.DMachineSetup.DBore.PBoreSinePole.PBoreSinePole import (
     PBoreSinePole,
 )
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from .....Functions.GUI.log_error import log_error
+from .....GUI.Dialog.DMachineSetup.DBore.Ui_DBore import Ui_DBore
+from .....loggers import GUI_LOG_NAME
 
 # List to convert index of combobox to bore type
 WIDGET_LIST = [

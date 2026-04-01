@@ -19,8 +19,8 @@ def _comp_point_coordinate(self):
 
     Z1 = Rbo * exp(-1j * self.W0 / 2)
 
-    alpha_lim = 2 * arcsin(self.W1 * 0.5 / self.Rtopm)  # Angle of the top arc
-    H_top_arc = self.Rtopm * (1 - cos(alpha_lim / 2))  # Heiht of the top arc
+    # alpha_lim = 2 * arcsin(self.W1 * 0.5 / self.Rtopm)  # Angle of the top arc
+    # H_top_arc = self.Rtopm * (1 - cos(alpha_lim / 2))  # Height of the top arc
     if self.is_outwards():
         Z2 = (Rbo + self.H0) * exp(-1j * self.W0 / 2)
     else:  # inward slot

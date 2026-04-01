@@ -1,6 +1,6 @@
 from numpy import zeros
-from qtpy.QtWidgets import QTableView, QDialog, QVBoxLayout
-from qtpy.QtCore import Qt, QAbstractTableModel, Signal
+from PySide6.QtWidgets import QTableView, QDialog, QVBoxLayout
+from PySide6.QtCore import Qt, QAbstractTableModel, Signal
 
 
 class DTableData(QDialog):

@@ -42,8 +42,6 @@ def test_FEMM_clean():
     # Clean out.mag and out.mag.internal
     out.mag.clean(3)
 
-    return out
-
 
 if __name__ == "__main__":
-    out = test_FEMM_clean()
+    test_FEMM_clean()

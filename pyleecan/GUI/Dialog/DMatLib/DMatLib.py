@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from os import remove, rename
-from os.path import join, dirname
-from re import match
 from logging import getLogger
-from qtpy.QtCore import Signal
-from qtpy.QtWidgets import QDialog, QMessageBox
+from os import remove, rename
+from os.path import dirname, join
+from re import match
+
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QDialog, QMessageBox
 
 from ....Classes.Material import Material
-
-from ....Functions.load import load_machine_materials, LIB_KEY, MACH_KEY, PATH_KEY
+from ....Functions.load import LIB_KEY, MACH_KEY, PATH_KEY, load_machine_materials
 from ....GUI.Dialog.DMatLib.Ui_DMatLib import Ui_DMatLib
 from ....loggers import GUI_LOG_NAME
 

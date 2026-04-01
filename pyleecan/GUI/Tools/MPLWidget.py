@@ -1,5 +1,5 @@
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QHBoxLayout, QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QHBoxLayout, QSizePolicy, QVBoxLayout, QWidget
 
 from .MPLCanvas import MPLCanvas
 

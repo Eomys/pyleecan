@@ -5,8 +5,8 @@ from random import uniform
 
 import pytest
 import matplotlib.pyplot as plt
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSCIM import MachineSCIM

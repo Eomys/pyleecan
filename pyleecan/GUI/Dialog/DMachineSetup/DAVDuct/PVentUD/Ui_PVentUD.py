@@ -5,15 +5,55 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QScrollArea,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut import WVentOut
+from ......GUI.Tools.MPLCanvas import MPLCanvas
 from ......GUI.Tools.SpinBox import SpinBox
 from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
-from ......GUI.Tools.MPLCanvas import MPLCanvas
-
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -48,7 +88,9 @@ class Ui_PVentUD(object):
 
         self.w_path_json = WPathSelectorV(self.scrollAreaWidgetContents)
         self.w_path_json.setObjectName("w_path_json")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.w_path_json.sizePolicy().hasHeightForWidth())
@@ -72,7 +114,7 @@ class Ui_PVentUD(object):
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout.addItem(self.verticalSpacer)

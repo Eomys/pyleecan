@@ -63,8 +63,6 @@ def test_element_loop_1element():
 
     # print("test_element_loop succeeded")
 
-    return True
-
 
 @pytest.mark.ForceTensor
 def test_comp_magnetostrictive_tensor_1element():
@@ -100,8 +98,6 @@ def test_comp_magnetostrictive_tensor_1element():
     assert tensor_comp[1, 1, 0] == -mu_0 * alpha2
 
     # print("test_comp_magnetostrictive_tensor succeeded")
-
-    return True
 
 
 def test_comp_normal_to_edge():

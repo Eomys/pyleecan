@@ -2,8 +2,8 @@
 
 import sys
 import matplotlib.pyplot as plt
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 from numpy import pi
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag

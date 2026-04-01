@@ -5,7 +5,7 @@ from math import cos, sin, pi
 from logging import getLogger
 from ...loggers import GUI_LOG_NAME
 from ...Classes._FEMMHandler import _FEMMHandler
-from qtpy.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox
 
 
 def dxf_to_pyleecan_list(entities):

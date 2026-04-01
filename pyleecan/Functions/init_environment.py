@@ -6,12 +6,23 @@ from logging import getLogger
 from os import makedirs
 from os.path import abspath, dirname, isdir, isfile, join, normpath, realpath
 
-from matplotlib.cm import get_cmap, register_cmap
-from matplotlib.colors import ListedColormap
 from matplotlib import font_manager
+
+try:
+    from matplotlib import colormaps
+
+    get_cmap = colormaps.get_cmap
+    register_cmap = colormaps.register
+except ImportError:
+    # probably matplotlib 3.6 or older
+    from matplotlib.cm import get_cmap, register_cmap
+except Exception as e:
+    raise e
+from matplotlib.colors import ListedColormap
 from numpy import load as np_load
-from ..loggers import GUI_LOG_NAME
+
 from ..default_config_dict import default_config_dict
+from ..loggers import GUI_LOG_NAME
 
 
 def save_config_dict(config_dict):
@@ -53,28 +64,28 @@ def init_user_dir():
     if not isdir(USER_DIR):
         makedirs(USER_DIR)
         # Copy initial DATA
-        logger.debug("Initialization of USER_DIR in " + USER_DIR)
+        logger.debug("Initialization of USER_DIR in %s", USER_DIR)
 
     # Data initialization
     mach_path = join(USER_DIR, "Machine")
     if not isdir(mach_path):
         shutil.copytree(join(MAIN_DIR, "Data", "Machine"), mach_path)
-        logger.debug("Initialization USER_DIR Machines in " + mach_path)
+        logger.debug("Initialization USER_DIR Machines in %s", mach_path)
 
     mat_path = join(USER_DIR, "Material")
     if not isdir(mat_path):
         shutil.copytree(join(MAIN_DIR, "Data", "Material"), mat_path)
-        logger.debug("Initialization USER_DIR Materials in " + mat_path)
+        logger.debug("Initialization USER_DIR Materials in %s", mat_path)
 
     plot_path = join(USER_DIR, "Plot")
     if not isdir(plot_path):
         shutil.copytree(join(MAIN_DIR, "Data", "Plot"), plot_path)
-        logger.debug("Initialization USER_DIR Plot in " + plot_path)
+        logger.debug("Initialization USER_DIR Plot in %s", plot_path)
 
     gui_path = join(USER_DIR, "GUI")
     if not isdir(gui_path):
         shutil.copytree(join(MAIN_DIR, "Data", "GUI"), gui_path)
-        logger.debug("Initialization USER_DIR GUI in " + gui_path)
+        logger.debug("Initialization USER_DIR GUI in %s", gui_path)
     # Create default config dict
     init_config_dict()
 
@@ -99,25 +110,25 @@ def update_user_dir():
     if isdir(mach_path):
         shutil.rmtree(mach_path)
     shutil.copytree(join(MAIN_DIR, "Data", "Machine"), mach_path)
-    logger.debug("Updating USER_DIR Machines in " + mach_path)
+    logger.debug("Updating USER_DIR Machines in %s", mach_path)
 
     mat_path = join(USER_DIR, "Material")
     if isdir(mat_path):
         shutil.rmtree(mat_path)
     shutil.copytree(join(MAIN_DIR, "Data", "Material"), mat_path)
-    logger.debug("Updating USER_DIR Materials in " + mat_path)
+    logger.debug("Updating USER_DIR Materials in %s", mat_path)
 
     plot_path = join(USER_DIR, "Plot")
     if isdir(plot_path):
         shutil.rmtree(plot_path)
     shutil.copytree(join(MAIN_DIR, "Data", "Plot"), plot_path)
-    logger.debug("Updating USER_DIR Plot in " + plot_path)
+    logger.debug("Updating USER_DIR Plot in %s", plot_path)
 
     gui_path = join(USER_DIR, "GUI")
     if isdir(gui_path):
         shutil.rmtree(gui_path)
     shutil.copytree(join(MAIN_DIR, "Data", "GUI"), gui_path)
-    logger.debug("Updating USER_DIR GUI in " + gui_path)
+    logger.debug("Updating USER_DIR GUI in %s", gui_path)
 
 
 def init_config_dict():
@@ -151,7 +162,7 @@ def init_config_dict():
     if config_dict["PLOT"]["FONT_NAME"] == "":
         config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT
     save_config_dict(config_dict)
-    logger.debug("Init config_dict at :" + CONF_PATH + "(version=" + version + ")")
+    logger.debug("Init config_dict at : %s (version=%s)", CONF_PATH, version)
 
 
 def get_config_dict():
@@ -227,23 +238,26 @@ def get_config_dict():
     cmap_name = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
     if "." not in cmap_name:
         cmap_path = join(USER_DIR, "Plot", cmap_name) + ".npy"
+    else:
+        cmap_path = ""
     try:
-        get_cmap(name=cmap_name)
-    except:
+        get_cmap(cmap_name)
+    except:  # pylint: disable=bare-except
         if not isfile(cmap_path):  # Default colormap
             config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"] = DEFAULT_COLOR_MAP
         else:
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
-            register_cmap(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
+            colormaps.register(
+                cmap=cmp, name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+            )
 
     # Check if font is available
     font_name = config_dict["PLOT"]["FONT_NAME"]
     if font_name not in [f.name for f in font_manager.fontManager.ttflist]:
         logger.warning(
-            "WARNING: "
-            + font_name
-            + " font not available. Try: matplotlib.font_manager._rebuild()"
+            "WARNING: %s font not available. Try: matplotlib.font_manager._rebuild()",
+            font_name,
         )
         config_dict["PLOT"]["FONT_NAME"] = DEFAULT_FONT  # Default font
 

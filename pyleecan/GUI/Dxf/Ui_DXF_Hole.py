@@ -5,13 +5,61 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QDialog,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QLayout,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QSpinBox,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextBrowser,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
-
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -22,7 +70,10 @@ class Ui_DXF_Hole(object):
         DXF_Hole.resize(864, 653)
         icon = QIcon()
         icon.addFile(
-            ":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+            ":/images/images/icon/pyleecan_64.png",
+            QSize(),
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         DXF_Hole.setWindowIcon(icon)
         self.horizontalLayout_5 = QHBoxLayout(DXF_Hole)
@@ -48,7 +99,7 @@ class Ui_DXF_Hole(object):
         self.horizontalLayout.addWidget(self.b_tuto)
 
         self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
@@ -75,7 +126,7 @@ class Ui_DXF_Hole(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.w_path_selector = WPathSelector(self.g_import)
         self.w_path_selector.setObjectName("w_path_selector")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -100,7 +151,7 @@ class Ui_DXF_Hole(object):
 
         self.lf_tol = FloatEdit(self.g_import)
         self.lf_tol.setObjectName("lf_tol")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.lf_tol.sizePolicy().hasHeightForWidth())
@@ -121,7 +172,9 @@ class Ui_DXF_Hole(object):
 
         self.si_Zh = QSpinBox(self.w_side)
         self.si_Zh.setObjectName("si_Zh")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy2 = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.si_Zh.sizePolicy().hasHeightForWidth())
@@ -140,7 +193,7 @@ class Ui_DXF_Hole(object):
 
         self.lf_mag_len = FloatEdit(self.w_side)
         self.lf_mag_len.setObjectName("lf_mag_len")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.lf_mag_len.sizePolicy().hasHeightForWidth())
@@ -221,7 +274,9 @@ class Ui_DXF_Hole(object):
         __qtablewidgetitem4 = QTableWidgetItem()
         self.w_surface_list.setHorizontalHeaderItem(4, __qtablewidgetitem4)
         self.w_surface_list.setObjectName("w_surface_list")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        sizePolicy4 = QSizePolicy(
+            QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
+        )
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(
@@ -252,7 +307,7 @@ class Ui_DXF_Hole(object):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.horizontalLayout_2.setSizeConstraint(QLayout.SetMinimumSize)
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)

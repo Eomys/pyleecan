@@ -30,34 +30,34 @@ PYLEECAN_VERSION = "1.5.2"
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-python_requires = ">= 3.6, <3.11"
+python_requires = ">= 3.9"
 
 # Pyleecan main dependancies
 install_requires = [
     "cloudpickle>=1.3.0",
     "ezdxf==0.14.2",
     "h5py>=3.2.1",
-    "matplotlib>=3.3.2,<=3.3.4",
-    "meshio>=4.0.15,<=4.4.6",
-    "numpy>1.19.5,<=1.23.1",
+    "matplotlib>=3.3.2",
+    "meshio>=4.0.15",
+    "numpy>1.19.5",
+    "openpyxl",  # needed for pandas xlsx import
     "pandas>=1.0.3",
     "pyfemm>=0.1.3",
-    "PySide2>=5.15.2",
+    "PySide6",
     "pyuff>=1.25",
     "pyvista>=0.42.3",
     "SciDataTool>=2.5.0",
-    "scipy>=1.4.1",
+    "scipy>=1.6.0",  # integrate.cumulative_trapezoid is introduced in scipy 1.6.0
     "setuptools",
     "vtk>=9.2.6",
-    "xlrd>=1.2.0",
-    "xlwt>=1.3.0",
-    "qtpy>=2.4.1",
+    "xlrd>=1.2.0",  # needed for pandas xls import
+    # "xlwt>=1.3.0", # seems unused -> remove later
 ]
 # Pyleecan optional dependancies
 full_require = [
     "deap>=1.3.1",
     "smoot>=0.1.0",
-    "gmsh-sdk>=4.6.0",
+    "gmsh",  # gmsh-sdk is depreciated in favor of gmsh according to https://pypi.org/project/gmsh-sdk/
 ]
 
 # Pyleecan Test dependancies

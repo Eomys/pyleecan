@@ -133,11 +133,9 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
             out.elec.get_Is().plot_2D_Data("time", "phase[]")
 
-    return out
-
 
 if __name__ == "__main__":
     for param_dict in param_list:
-        out = test_mmf_dir(param_dict)
+        test_mmf_dir(param_dict)
 
     # out = test_mmf_dir(param_list[1])

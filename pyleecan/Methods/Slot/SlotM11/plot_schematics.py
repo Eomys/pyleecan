@@ -1,4 +1,4 @@
-from msilib import type_binary
+# from msilib import type_binary
 import matplotlib.pyplot as plt
 from numpy import pi, exp
 

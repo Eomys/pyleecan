@@ -5,13 +5,59 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    QTime,
+    QUrl,
+    Qt,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QComboBox,
+    QDialog,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLayout,
+    QPushButton,
+    QSizePolicy,
+    QSpacerItem,
+    QSpinBox,
+    QTextBrowser,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ...GUI.Tools.FloatEdit import FloatEdit
 from ...GUI.Tools.WPathSelector.WPathSelector import WPathSelector
-
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -22,7 +68,10 @@ class Ui_DXF_Slot(object):
         DXF_Slot.resize(968, 674)
         icon = QIcon()
         icon.addFile(
-            ":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+            ":/images/images/icon/pyleecan_64.png",
+            QSize(),
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         DXF_Slot.setWindowIcon(icon)
         self.horizontalLayout_5 = QHBoxLayout(DXF_Slot)
@@ -48,7 +97,7 @@ class Ui_DXF_Slot(object):
         self.horizontalLayout.addWidget(self.b_tuto)
 
         self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
@@ -74,7 +123,7 @@ class Ui_DXF_Slot(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.w_path_selector = WPathSelector(self.g_import)
         self.w_path_selector.setObjectName("w_path_selector")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -99,7 +148,7 @@ class Ui_DXF_Slot(object):
 
         self.lf_tol = FloatEdit(self.g_import)
         self.lf_tol.setObjectName("lf_tol")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.lf_tol.sizePolicy().hasHeightForWidth())
@@ -120,7 +169,9 @@ class Ui_DXF_Slot(object):
 
         self.si_Zs = QSpinBox(self.widget)
         self.si_Zs.setObjectName("si_Zs")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy2 = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.si_Zs.sizePolicy().hasHeightForWidth())
@@ -201,7 +252,7 @@ class Ui_DXF_Slot(object):
 
         self.lf_center_x = FloatEdit(self.g_center)
         self.lf_center_x.setObjectName("lf_center_x")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.lf_center_x.sizePolicy().hasHeightForWidth())
@@ -226,7 +277,7 @@ class Ui_DXF_Slot(object):
         self.verticalLayout_2.addWidget(self.g_center)
 
         self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
 
         self.verticalLayout_2.addItem(self.verticalSpacer)
@@ -251,7 +302,7 @@ class Ui_DXF_Slot(object):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.horizontalLayout_2.setSizeConstraint(QLayout.SetFixedSize)
         self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum
         )
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)

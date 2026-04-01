@@ -1,18 +1,19 @@
-from .....Functions.GUI.log_error import log_error
-from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
-from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
-from qtpy.QtWidgets import (
-    QGroupBox,
-    QMessageBox,
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QPalette
+from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
-    QVBoxLayout,
-    QPushButton,
+    QGroupBox,
     QListView,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
 )
+
 from .....Classes.Machine import Machine
-from qtpy.QtCore import Signal
-from qtpy.QtGui import QPalette
+from .....Functions.GUI.log_error import log_error
+from .....GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY, DMatLib
+from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
 
 
 class WMatSelectV(QGroupBox):

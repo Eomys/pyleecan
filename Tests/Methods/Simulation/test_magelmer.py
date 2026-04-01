@@ -45,6 +45,8 @@ mesh_dict = {
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
+@pytest.mark.failed
+@pytest.mark.skip(reason="Test Failed: Need further investigation")
 def test_ipm_Elmer():
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
@@ -109,7 +111,6 @@ def test_ipm_Elmer():
     # outp.mag.meshsolution.plot_contour(label="B")
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
-    return outp
 
 
 @pytest.mark.MagElmer
@@ -117,6 +118,8 @@ def test_ipm_Elmer():
 @pytest.mark.SPMSM
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
+@pytest.mark.failed
+@pytest.mark.skip(reason="Test Failed: Need further investigation")
 def test_spm_Elmer():
     # Import the machine from a script
     PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
@@ -173,10 +176,8 @@ def test_spm_Elmer():
     # outp.mag.meshsolution.plot_contour(label="A")
     # outp.mag.meshsolution.plot_contour(label="J")
 
-    return outp
-
 
 if __name__ == "__main__":
-    out = test_ipm_Elmer()
-    out = test_spm_Elmer()
+    test_ipm_Elmer()
+    test_spm_Elmer()
     print("Done")

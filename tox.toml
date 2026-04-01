@@ -1,0 +1,110 @@
+requires = ["tox>=4.19"]
+env_list = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "black"]
+
+
+[pytest_collect]
+description = "Only try to collect changes under python {base_python} to make sure test collection is ok."
+deps = [
+    "pytest",
+    "mock",
+    "pytest-mock",
+    "sympy",
+    "gmsh",
+    "pyuff",
+    "deap",
+    "smoot",
+    "git+https://github.com/mxgnsr/SciDataTool/tree/update-reqs.git",
+]
+# commands_pre = [""]
+commands = [["pytest", "--co"]]
+
+[env_run_base]
+description = "Run test under {base_python}"
+deps = [
+    "pytest",
+    "mock",
+    "pytest-mock",
+    "sympy",
+    "gmsh",
+    "pyuff",
+    "deap",
+    "smoot",
+    "swat-em",
+    "ddt",
+    "nbformat",
+    "nbconvert",
+]
+commands_pre = [
+    [
+        "pip",
+        "uninstall",
+        "scidatatool",
+        "-y",
+    ],
+    [
+        "pip",
+        "install",
+        "git+https://github.com/mxgnsr/SciDataTool.git@update-reqs",
+    ],
+]
+commands = [["pytest",{ replace = "posargs", default = ["Tests"], extend = true }]]
+
+[env.3.14]
+description = "Run test under python 3.14 without smoot because smt can not build without MS compilers for 3.14"
+deps = [
+    "pytest",
+    "mock",
+    "pytest-mock",
+    "sympy",
+    "gmsh",
+    "pyuff",
+    "deap",
+    # "smoot", -> fix for smt
+    "swat-em",
+    "ddt",
+    "nbformat",
+    "nbconvert",
+]
+commands_pre = [
+    [
+        "pip",
+        "uninstall",
+        "scidatatool",
+        "-y",
+    ],
+    [
+        "pip",
+        "install",
+        "git+https://github.com/mxgnsr/SciDataTool.git@update-reqs",
+    ],
+]
+commands = [
+    [
+        "pytest",
+        { replace = "posargs", default = ["Tests"], extend = true },
+        "--ignore",
+        "Tests/Validation/Optimization/test_Binh_and_Korn_Bayes.py",
+        "--ignore",
+        "Tests/Validation/Optimization/test_zdt3_Bayes.py",
+        "--deselect=Tests/Classes/test_classes.py::test_class_methods[class_dict132]",
+    ],
+]
+
+[env.black]
+description = "run black linter on code base"
+skip_install = true
+deps = ["black>=24.0.0,<25.0.0"]
+commands = [["black", "pyleecan"]]
+
+# [env.type]
+# description = "run type checks"
+# deps = ["mypy"]
+# commands = [
+#     [
+#         "mypy",
+#         { replace = "posargs", default = [
+#             "src",
+#             "tests",
+#         ], extend = true },
+#     ],
+# ]

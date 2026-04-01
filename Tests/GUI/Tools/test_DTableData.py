@@ -3,8 +3,8 @@
 import sys
 from numpy import array
 import mock
-from qtpy import QtWidgets
-from qtpy.QtTest import QTest
+from PySide6 import QtWidgets
+from PySide6.QtTest import QTest
 from os import remove
 from os.path import isfile, join
 from pyleecan.GUI.Tools.WTableData.DTableData import DTableData
@@ -58,7 +58,7 @@ class TestDTableData(object):
         assert not isfile(file_path)
         return_value = (file_path, "CSV (*.csv)")
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+            "PySide6.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
         ):
             # To trigger the slot
             setup["widget"].b_export.clicked.emit()
@@ -71,7 +71,7 @@ class TestDTableData(object):
 
         # Check import
         with mock.patch(
-            "qtpy.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "PySide6.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             setup["widget"].b_import.clicked.emit()

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from qtpy.QtCore import Signal, Qt
-from qtpy.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
 
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QDialog, QMessageBox
 
-from .....loggers import GUI_LOG_NAME
-from .....Methods.Slot.Slot import SlotCheckError
-from .....GUI.Dialog.DMachineSetup.DNotchTab.WNotch.WNotch import WNotch
-from .....GUI.Dialog.DMachineSetup.DNotchTab.Ui_DNotchTab import Ui_DNotchTab
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Classes.NotchEvenDist import NotchEvenDist
 from .....Classes.SlotM10 import SlotM10
 from .....Functions.Geometry.merge_notch_list import NotchError
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....GUI.Dialog.DMachineSetup.DNotchTab.Ui_DNotchTab import Ui_DNotchTab
+from .....GUI.Dialog.DMachineSetup.DNotchTab.WNotch.WNotch import WNotch
+from .....loggers import GUI_LOG_NAME
+from .....Methods.Slot.Slot import SlotCheckError
 
 
 class DNotchTab(Ui_DNotchTab, QDialog):
@@ -99,7 +99,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             if None create a new Notch
         """
         # Create a new notch if needed
-        if notch is None:
+        if not notch:
             self.obj.notch.append(
                 NotchEvenDist(
                     alpha=0,

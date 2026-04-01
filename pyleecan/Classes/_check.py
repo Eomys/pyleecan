@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import array, empty, int32
+from numpy import array, empty, int32, int64
 from importlib import import_module
 
 
@@ -97,8 +97,7 @@ def check_type(var_name, value, expect_type, type_value):
         pass
     elif expect_type == "float":  # float variable can take int value
         if not (
-            (isinstance(value, int32) and not isinstance(value, bool))
-            or (isinstance(value, int) and not isinstance(value, bool))
+            (isinstance(value, (int, int32, int64)) and not isinstance(value, bool))
             or isinstance(value, float)
         ):
             raise CheckTypeError(

@@ -1,11 +1,11 @@
-from qtpy.QtWidgets import (
+from PySide6.QtWidgets import (
     QTableView,
     QLabel,
     QWidget,
     QVBoxLayout,
     QAbstractItemView,
 )
-from qtpy.QtCore import Signal, Qt
+from PySide6.QtCore import Signal, Qt
 
 from .WTableParameterModel import WTableParameterModel
 
