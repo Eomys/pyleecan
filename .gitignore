@@ -1,5 +1,8 @@
 __pycache__/
 *.pyc
+.pytest_cache/
+/.pytest_tmp/
+/pytest-cache-files-*/
 /pyleecan/Results
 /Tests/Results
 .idea/
@@ -24,6 +27,14 @@ run_GUI_internal.py
 /.spyproject/config/workspace.ini
 /build
 /dist
+/Exenv/
+/Output/
+/pyleecan.spec
+/pyleecan.iss
+/.local/
+/Machine/
+/Material/
+/Plot/
 node_modules
 /.venv*
 /.vscode
