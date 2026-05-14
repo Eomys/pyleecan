@@ -1,9 +1,17 @@
 import os
 from os.path import abspath, dirname, join, isdir, isfile
-from shutil import rmtree, copy
+from shutil import rmtree, copy, copytree
 import re
+import subprocess
 from datetime import datetime
+import sys
 import click
+
+from local_build_paths import (
+    ensure_local_build_dirs,
+    get_local_build_paths,
+    migrate_legacy_local_artifacts,
+)
 
 TAB = "    "
 TAB7 = TAB + TAB + TAB + TAB + TAB + TAB + TAB
@@ -53,14 +61,25 @@ def generate_executable(
         if project_path
         else join(os.getenv("APPDATA"), "PYLEECAN_EXE_GENERATION").replace("\\", "/")
     )
+    local_paths = get_local_build_paths(PRJ_PATH)
+    env_path_native = local_paths.env_path
+    env_python = join(env_path_native, "Scripts", "python.exe")
+    requirements_path = join(PRJ_PATH, "requirements.txt")
+    dist_root_native = local_paths.dist_root
+    build_root_native = local_paths.build_root
+    spec_path_native = local_paths.spec_path
     # Path to script containing the software version
     version_path = join(PRJ_PATH, "pyleecan", "__init__.py").replace("\\", "/")
     # Path to the class folder (for hidden import in exe)
     class_path = join(PRJ_PATH, "pyleecan", "Classes")
     # Path to define the environment
-    ENV_PATH = join(PRJ_PATH, "Exenv").replace("\\", "/")
+    ENV_PATH = env_path_native.replace("\\", "/")
     # Path to result forder of pyinstaller
-    dist_path = join(PRJ_PATH, "dist", "Pyleecan").replace("\\", "/")
+    dist_path = local_paths.dist_path.replace("\\", "/")
+    # Path to pyinstaller build directory
+    build_path = local_paths.build_path.replace("\\", "/")
+    # Path to staged portable release directory
+    portable_path = local_paths.portable_path.replace("\\", "/")
     # Path of the license file
     license_path = join(PRJ_PATH, "LICENSE").replace("\\", "/")
     # Repository link
@@ -70,10 +89,10 @@ def generate_executable(
     iscc_path = "C:/Program Files (x86)/Inno Setup 6/iscc.exe"
     # Path to installer generation script
     install_path = join(PRJ_PATH, "Exe_gen", "pyleecan.iss").replace("\\", "/")
-    install_path_2 = join(PRJ_PATH, "pyleecan.iss").replace("\\", "/")
+    install_path_2 = local_paths.installer_script_path.replace("\\", "/")
     spec_path = join(PRJ_PATH, "Exe_gen", "pyleecan.spec")  # Original path
-    spec_path_2 = join(PRJ_PATH, "pyleecan.spec")  # To move the spec file
-    out_path = join(PRJ_PATH, "Output", "Pyleecan Setup.exe").replace("\\", "/")
+    spec_path_2 = spec_path_native.replace("\\", "/")
+    out_path = local_paths.installer_output_path.replace("\\", "/")
 
     print("Starting Pyleecan exe generation...")
 
@@ -91,6 +110,9 @@ def generate_executable(
         os.system("git clone -b " + branch + " " + REPO_LINK + " " + PRJ_PATH)
     else:
         print("Skipping step 1: Folder Setup")
+
+    ensure_local_build_dirs(local_paths)
+    migrate_legacy_local_artifacts(local_paths)
 
     ####################
     # 2 : Folder cleanup
@@ -160,17 +182,25 @@ def generate_executable(
     if start <= 4 and stop >= 4:
         print("Step 4: Setting Virtual env for release...")
 
+        if sys.version_info >= (3, 12):
+            pyinstaller_requirement = "pyinstaller>=6.11,<7"
+        elif sys.version_info >= (3, 11):
+            pyinstaller_requirement = "pyinstaller>=5.13,<7"
+        else:
+            pyinstaller_requirement = "pyinstaller==5.1"
+
         # Creating Python env in which to install needed package
-        os.system("python -m venv " + ENV_PATH)
+        subprocess.run([sys.executable, "-m", "venv", env_path_native], check=True)
         # Updating packages
-        os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pip")
-        os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pyinstaller==5.1")
-        os.system(join(ENV_PATH, "Scripts", "pip") + " install gmsh-sdk")
+        subprocess.run([env_python, "-m", "pip", "install", "-U", "pip"], check=True)
+        subprocess.run(
+            [env_python, "-m", "pip", "install", "-U", pyinstaller_requirement],
+            check=True,
+        )
         # Installing required packages
-        os.system(
-            join(ENV_PATH, "Scripts", "pip")
-            + " install -r "
-            + join(PRJ_PATH, "requirements-full.txt")
+        subprocess.run(
+            [env_python, "-m", "pip", "install", "-r", requirements_path],
+            check=True,
         )
     else:
         print("Skipping step 4: environment setup")
@@ -207,13 +237,28 @@ def generate_executable(
             "^ *hiddenimports=",
             import_txt[:-1],
         )
+        os.environ["PYLEECAN_PROJECT_ROOT"] = PRJ_PATH
+        os.environ["PYLEECAN_PACKAGING_ENV"] = ENV_PATH
         # Generating the executable
-        os.system(
-            join(ENV_PATH, "Scripts", "pyinstaller")
-            + " "
-            + spec_path_2
-            + " --noconfirm"
-        )
+        cmd = [
+            env_python,
+            "-m",
+            "PyInstaller",
+            spec_path_native,
+            "--noconfirm",
+            "--distpath",
+            dist_root_native,
+            "--workpath",
+            build_root_native,
+        ]
+        if subprocess.run(cmd).returncode != 0:
+            raise RuntimeError("PyInstaller build failed")
+
+        stage_portable_release(dist_path, portable_path)
+        clean_intermediate_build_exe(build_path, dist_path, portable_path)
+
+        print("Portable release staged to: " + portable_path)
+        print("Run this file: " + join(portable_path, "Pyleecan.exe"))
     else:
         print("Skipping step 5: Pyinstaller")
 
@@ -240,7 +285,9 @@ def generate_executable(
             "^LicenseFile=",
             "LicenseFile=" + license_path,
         )
-        files_str = 'Source: "{#MainPath}\*"; DestDir: "{app}"; Flags: ignoreversion\n'
+        files_str = (
+            r'Source: "{#MainPath}\*"; DestDir: "{app}"; Flags: ignoreversion' "\n"
+        )
         for name in os.listdir(dist_path):
             if isdir(join(dist_path, name)):
                 files_str += (
@@ -252,7 +299,7 @@ def generate_executable(
                 )
         edit_line_in_file(
             install_path_2,
-            "^\[Files\]",
+            r"^\[Files\]",
             "[Files]\n" + files_str,
         )
 
@@ -327,6 +374,49 @@ def edit_line_in_file(file_path, pattern, substring):
         # There was no change so we remove the new version
         os.remove(out_file_path)
         print("############\nWarning: No change in " + file_path + "\n######")
+
+
+def stage_portable_release(dist_path, portable_path):
+    """Copy the final runnable onedir bundle to a clear output directory."""
+
+    if not isdir(dist_path):
+        raise FileNotFoundError("PyInstaller output directory not found: " + dist_path)
+
+    if isdir(portable_path):
+        rmtree(portable_path)
+
+    copytree(dist_path, portable_path)
+
+    launcher_path = join(portable_path, "Run_Pyleecan.bat")
+    with open(launcher_path, "w", encoding="ascii") as launcher_file:
+        launcher_file.write("@echo off\n")
+        launcher_file.write('start "" "%~dp0Pyleecan.exe"\n')
+
+    readme_path = join(portable_path, "README_LOCAL_EXE.txt")
+    with open(readme_path, "w", encoding="utf-8") as readme_file:
+        readme_file.write("Run Pyleecan.exe from this folder.\n")
+        readme_file.write("Do not run executables from the PyInstaller build folder.\n")
+
+
+def clean_intermediate_build_exe(build_path, dist_path, portable_path):
+    """Remove the misleading intermediate EXE from the build folder and leave a note."""
+
+    if not isdir(build_path):
+        return
+
+    build_exe_path = join(build_path, "Pyleecan.exe")
+    if isfile(build_exe_path):
+        os.remove(build_exe_path)
+
+    readme_path = join(build_path, "README.txt")
+    with open(readme_path, "w", encoding="utf-8") as readme_file:
+        readme_file.write(
+            "This folder contains PyInstaller intermediate build files.\n"
+        )
+        readme_file.write("Do not run executables from here.\n")
+        readme_file.write("Use the final runnable bundle instead:\n")
+        readme_file.write("dist: " + dist_path + "\n")
+        readme_file.write("portable: " + portable_path + "\n")
 
 
 if __name__ == "__main__":
