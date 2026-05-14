@@ -6,7 +6,6 @@ from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg,
     NavigationToolbar2QT as NavigationToolbar,
 )
-from ezdxf import readfile
 from numpy import angle as np_angle
 from numpy import argmin, array, exp, angle
 from PySide6.QtCore import QSize, Qt, QUrl
@@ -155,6 +154,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         getLogger(GUI_LOG_NAME).debug("Reading dxf file: " + self.dxf_path)
         # Read the DXF file
         try:
+            from ezdxf import readfile
+
             document = readfile(self.dxf_path)
             modelspace = document.modelspace()
             # Convert DXF to pyleecan objects

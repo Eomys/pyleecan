@@ -52,21 +52,20 @@ def update_FEMM_simulation(
                     femm.mi_selectgroup(ind)
         femm.mi_moverotate(0, 0, 180 * angle_rotor[ii] / pi)
 
-    # Update currents
-    if Is is not None or Ir is not None:
-        circuits = FEMM_dict["circuits"]
-        for label in circuits:
-            if "Circs" in label and Is is not None:  # Stator
-                set_FEMM_circuit_prop(
-                    femm,
-                    circuits,
-                    label,
-                    Is[:, ii],
-                )
-            if "Circr" in label and Ir is not None:  # Rotor
-                set_FEMM_circuit_prop(
-                    femm,
-                    circuits,
-                    label,
-                    Ir[:, ii],
-                )
+    # Update currents. Passing None explicitly resets reused FEMM circuits to zero.
+    circuits = FEMM_dict["circuits"]
+    for label in circuits:
+        if "Circs" in label:  # Stator
+            set_FEMM_circuit_prop(
+                femm,
+                circuits,
+                label,
+                Is[:, ii] if Is is not None else None,
+            )
+        if "Circr" in label:  # Rotor
+            set_FEMM_circuit_prop(
+                femm,
+                circuits,
+                label,
+                Ir[:, ii] if Ir is not None else None,
+            )

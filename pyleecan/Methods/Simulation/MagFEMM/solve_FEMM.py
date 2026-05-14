@@ -1,5 +1,5 @@
 from os import remove, rename
-from os.path import isfile, splitext
+from os.path import isfile
 
 from numpy import pi, roll, sin, zeros, cos, all
 
@@ -89,6 +89,10 @@ def solve_FEMM(
 
     logger = self.get_logger()
     is_sliding_band = self.is_sliding_band
+    if is_sliding_band and self.is_set_previous:
+        logger.debug(
+            "Previous .ans reuse is disabled for sliding-band calculations."
+        )
 
     if filename is not None:
         # Open FEMM instance if filename is not None (parallel case)
@@ -106,15 +110,6 @@ def solve_FEMM(
     else:
         # FEMM instance and file is already open, get filename from output
         filename = self.get_path_save_fem(output)
-
-    if is_sliding_band and self.is_set_previous:
-        # Check result .ans file existence and delete it if it exists
-        ans_file = (
-            (splitext(filename)[0] + ".ans").replace("\\", "/").replace("//", "/")
-        )
-        if isfile(ans_file):
-            logger.debug("Delete existing result .ans file at: " + ans_file)
-            remove(ans_file)
 
     if not is_sliding_band:
         fileinit_fem = self.get_path_save_fem(output)
@@ -197,16 +192,8 @@ def solve_FEMM(
             ii=ii,
         )
 
-        # Check if there is a previous solution file to speed up non-linear iterations
-        if is_sliding_band and self.is_set_previous and ii > start_t:
-            if isfile(ans_file):
-                # Setup .ans file path in FEMM model
-                femm.mi_setprevious(ans_file, 0)
-            else:
-                logger.warning("Cannot reuse result .ans file: " + ans_file)
-        else:
-            # Make sure that no file path is filled in FEMM model
-            femm.mi_setprevious("", 0)
+        # Make sure that no previous solution path is filled in FEMM model.
+        femm.mi_setprevious("", 0)
 
         # Run the computation
         femm.mi_analyze()
