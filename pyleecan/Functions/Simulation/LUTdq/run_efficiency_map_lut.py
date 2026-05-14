@@ -2,6 +2,7 @@ import numpy as np
 
 from ....Classes.OPMatrix import OPMatrix
 from ._utils import (
+    LOSS_SERIES_KEYS,
     as_float_array,
     classify_control_regions,
     compute_base_speed,
@@ -161,6 +162,14 @@ def run_efficiency_map_lut(
     map_shape = (speed.size, load.size)
     map_data = _reshape_map(map_series, map_shape)
 
+    loss_maps = {}
+    for key in LOSS_SERIES_KEYS:
+        values = map_series.get(key)
+        if values is None:
+            continue
+        if np.any(np.isfinite(values)):
+            loss_maps[key] = np.asarray(values, dtype=float).reshape(map_shape)
+
     result = {
         "speed": speed,
         "load": load,
@@ -185,8 +194,7 @@ def run_efficiency_map_lut(
             map_shape
         ),
         "voltage_limited_mask": voltage_limited_mask.reshape(map_shape),
-        "current_limited_mask": current_limited_mask.reshape(map_shape),
-        "full_load_control_region": full_load_control_region,
+        "current_limited_mask": current_limited_mask.reshape(map_shape),        "full_load_control_region": full_load_control_region,
         "full_load_control_region_code": encode_control_regions(
             full_load_control_region
         ),
@@ -198,6 +206,11 @@ def run_efficiency_map_lut(
         "xoutput": torque_result["xoutput"],
         "OP_matrix": torque_result["OP_matrix"],
     }
+
+    if loss_maps:
+        result["loss_maps"] = loss_maps
+        for key, values in loss_maps.items():
+            result[key] = values
 
     if cache_path is not None:
         from .save_efficiency_map_cache import save_efficiency_map_cache

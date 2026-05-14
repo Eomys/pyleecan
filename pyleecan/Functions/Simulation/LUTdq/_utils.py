@@ -163,6 +163,192 @@ def compute_base_speed(speed, regions):
     return float(speed[limited_index[0]])
 
 
+LOSS_SERIES_KEYS = (
+    "P_jl_s",
+    "P_jl_r",
+    "P_jl",
+    "P_fe_s",
+    "P_fe_r",
+    "P_fe",
+    "P_mag",
+    "P_mech",
+    "P_loss_other",
+    "P_loss_total",
+)
+
+
+def _classify_loss_name(name):
+    """Return a coarse category for a loss-model name.
+
+    Categories follow the M1 LUT loss aggregation convention
+    (perf-roadmap-phase1):
+
+    - ``"joule_stator"`` / ``"joule_rotor"``: copper / squirrel-cage Joule losses
+    - ``"iron_stator"`` / ``"iron_rotor"``: laminated-core iron losses
+    - ``"magnet"``: permanent-magnet eddy-current losses
+    - ``"mech"``: bearing / friction / windage losses
+    - ``"other"``: anything else (e.g. proximity, converter)
+    """
+
+    if name is None:
+        return "other"
+    label = str(name).strip().lower()
+    if not label:
+        return "other"
+
+    is_stator = "stator" in label
+    is_rotor = "rotor" in label
+
+    if "joule" in label or "copper" in label or "winding" in label or "bar" in label:
+        if is_rotor:
+            return "joule_rotor"
+        return "joule_stator"
+    if "magnet" in label and "core" not in label and "iron" not in label:
+        return "magnet"
+    if "iron" in label or "core" in label or "lamination" in label:
+        if is_rotor:
+            return "iron_rotor"
+        return "iron_stator"
+    if "mech" in label or "friction" in label or "windage" in label or "bearing" in label:
+        return "mech"
+    return "other"
+
+
+def _loss_scalar_dict(output):
+    """Best-effort extraction of {model_name: scalar_loss_W} for one Output.
+
+    Uses ``OutLoss.get_power_dict`` when available; falls back to manual
+    iteration over ``loss_dict`` so the helper also works in unit tests where
+    the OutLoss has not been attached to a full pipeline yet.
+    """
+
+    loss = getattr(output, "loss", None)
+    if loss is None:
+        return None
+
+    # Preferred path: object-provided scalar dict.
+    get_power_dict = getattr(loss, "get_power_dict", None)
+    if callable(get_power_dict):
+        try:
+            power_dict = get_power_dict()
+        except Exception:
+            power_dict = None
+        if isinstance(power_dict, dict) and power_dict:
+            return {
+                str(k): v
+                for k, v in power_dict.items()
+                if k != "total_power"
+            }
+
+    # Fallback: iterate over loss_dict (works for partial / test fixtures).
+    loss_dict = getattr(loss, "loss_dict", None)
+    if not loss_dict:
+        return None
+
+    elec = getattr(output, "elec", None)
+    op = getattr(elec, "OP", None) if elec is not None else None
+    felec = getattr(op, "felec", None) if op is not None else None
+
+    result = {}
+    for key, model in loss_dict.items():
+        name = getattr(model, "name", None) or str(key)
+        value = None
+        getter = getattr(model, "get_loss_scalar", None)
+        if callable(getter):
+            try:
+                value = getter(felec) if felec is not None else getter()
+            except Exception:
+                value = getattr(model, "scalar_value", None)
+        else:
+            value = getattr(model, "scalar_value", None)
+        if value is None:
+            continue
+        try:
+            result[name] = float(value)
+        except (TypeError, ValueError):
+            continue
+    return result or None
+
+
+def _aggregate_loss_scalars(scalar_dict):
+    """Aggregate a {name: scalar} dict into the canonical M1 loss buckets."""
+
+    buckets = {key: 0.0 for key in LOSS_SERIES_KEYS}
+    seen = {key: False for key in LOSS_SERIES_KEYS}
+
+    if not scalar_dict:
+        return {key: np.nan for key in LOSS_SERIES_KEYS}
+
+    for name, value in scalar_dict.items():
+        try:
+            scalar = float(value)
+        except (TypeError, ValueError):
+            continue
+        if not np.isfinite(scalar):
+            continue
+
+        category = _classify_loss_name(name)
+        if category == "joule_stator":
+            buckets["P_jl_s"] += scalar
+            seen["P_jl_s"] = True
+        elif category == "joule_rotor":
+            buckets["P_jl_r"] += scalar
+            seen["P_jl_r"] = True
+        elif category == "iron_stator":
+            buckets["P_fe_s"] += scalar
+            seen["P_fe_s"] = True
+        elif category == "iron_rotor":
+            buckets["P_fe_r"] += scalar
+            seen["P_fe_r"] = True
+        elif category == "magnet":
+            buckets["P_mag"] += scalar
+            seen["P_mag"] = True
+        elif category == "mech":
+            buckets["P_mech"] += scalar
+            seen["P_mech"] = True
+        else:
+            buckets["P_loss_other"] += scalar
+            seen["P_loss_other"] = True
+        buckets["P_loss_total"] += scalar
+        seen["P_loss_total"] = True
+
+    buckets["P_jl"] = buckets["P_jl_s"] + buckets["P_jl_r"]
+    seen["P_jl"] = seen["P_jl_s"] or seen["P_jl_r"]
+    buckets["P_fe"] = buckets["P_fe_s"] + buckets["P_fe_r"]
+    seen["P_fe"] = seen["P_fe_s"] or seen["P_fe_r"]
+
+    return {key: (buckets[key] if seen[key] else np.nan) for key in LOSS_SERIES_KEYS}
+
+
+def extract_loss_series(outputs):
+    """Extract per-step loss scalars from a XOutput or output list.
+
+    Returns a dict of 1D ndarrays keyed by :data:`LOSS_SERIES_KEYS`. Missing
+    values are filled with ``NaN`` so callers can safely call
+    ``np.nansum``/``np.where``.
+    """
+
+    if hasattr(outputs, "output_list"):
+        output_list = list(outputs.output_list)
+    elif isinstance(outputs, (list, tuple)):
+        output_list = list(outputs)
+    else:
+        raise TypeError("outputs must be a XOutput, list, or tuple of Output objects")
+
+    step_count = len(output_list)
+    data = {key: np.full(step_count, np.nan) for key in LOSS_SERIES_KEYS}
+
+    for idx, output in enumerate(output_list):
+        scalar_dict = _loss_scalar_dict(output)
+        if not scalar_dict:
+            continue
+        buckets = _aggregate_loss_scalars(scalar_dict)
+        for key, value in buckets.items():
+            data[key][idx] = value
+
+    return data
+
+
 def extract_output_series(outputs):
     """Extract per-step electrical quantities from a XOutput or output list."""
 
@@ -190,6 +376,8 @@ def extract_output_series(outputs):
         "Ld": np.full(step_count, np.nan),
         "Lq": np.full(step_count, np.nan),
     }
+    for key in LOSS_SERIES_KEYS:
+        data[key] = np.full(step_count, np.nan)
 
     for idx, output in enumerate(output_list):
         elec = getattr(output, "elec", None)
@@ -227,5 +415,11 @@ def extract_output_series(outputs):
             and data["P_in"][idx] != 0
         ):
             data["efficiency"][idx] = data["P_out"][idx] / data["P_in"][idx]
+
+        scalar_dict = _loss_scalar_dict(output)
+        if scalar_dict:
+            buckets = _aggregate_loss_scalars(scalar_dict)
+            for key, value in buckets.items():
+                data[key][idx] = value
 
     return data

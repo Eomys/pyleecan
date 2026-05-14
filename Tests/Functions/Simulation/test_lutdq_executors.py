@@ -12,11 +12,15 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LUT import LUT
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.OutElec import OutElec
+from pyleecan.Classes.OutLoss import OutLoss
+from pyleecan.Classes.OutLossModel import OutLossModel
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.XOutput import XOutput
 from pyleecan.Functions.Simulation.LUTdq import (
+    LOSS_SERIES_KEYS,
+    extract_loss_series,
     load_efficiency_map_cache,
     load_inductance_map_cache,
     run_drive_cycle_lut,
@@ -71,6 +75,59 @@ def _fake_run(self):
                     P_out=power_out,
                     P_in=power_in,
                 )
+            )
+        )
+
+    return XOutput(simu=self, output_list=outputs)
+
+
+def _build_loss_outlossv(power_W, name):
+    """Return an OutLossModel pre-loaded with a scalar value."""
+    return OutLossModel(name=name, scalar_value=float(power_W))
+
+
+def _fake_run_with_losses(self):
+    """Variant of _fake_run that attaches a synthetic OutLoss to each step."""
+    if self.elec.LUT_enforced is None:
+        self.elec.LUT_enforced = LUT()
+
+    outputs = []
+    for op in self.var_simu.OP_matrix.get_OP_list():
+        torque = op.Tem_av_ref
+        if torque is None:
+            torque = self.elec.load_rate * op.N0 * 0.01
+
+        power_out = torque * 2 * np.pi * op.N0 / 60.0
+        power_in = power_out / 0.9 if power_out != 0 else 0.0
+
+        op_result = op.copy()
+        op_result.efficiency = 0.9
+        if op_result.Id_ref is None or op_result.Iq_ref is None:
+            op_result.set_Id_Iq(0.0, torque / 10.0)
+        if op_result.Ud_ref is None or op_result.Uq_ref is None:
+            op_result.set_Ud_Uq(0.0, torque / 5.0)
+
+        # Synthetic loss budget scaled by mechanical power.
+        Pmech = abs(power_out)
+        loss_dict = {
+            "stator winding Joule": _build_loss_outlossv(0.02 * Pmech, "stator winding Joule"),
+            "rotor cage Joule": _build_loss_outlossv(0.01 * Pmech, "rotor cage Joule"),
+            "stator core": _build_loss_outlossv(0.015 * Pmech, "stator core iron"),
+            "rotor core": _build_loss_outlossv(0.005 * Pmech, "rotor core iron"),
+            "magnet eddy": _build_loss_outlossv(0.003 * Pmech, "magnet eddy"),
+            "mech friction": _build_loss_outlossv(0.002 * Pmech, "mech friction"),
+            "stray": _build_loss_outlossv(0.001 * Pmech, "stray"),
+        }
+
+        outputs.append(
+            Output(
+                elec=OutElec(
+                    OP=op_result,
+                    Tem_av=torque,
+                    P_out=power_out,
+                    P_in=power_in,
+                ),
+                loss=OutLoss(loss_dict=loss_dict),
             )
         )
 
@@ -405,3 +462,101 @@ def test_build_region_segments_keeps_single_point_transitions_visible():
     assert np.allclose(segments["FW"][0][0], np.array([1750.0]))
     assert np.allclose(segments["FW"][0][1], np.array([102.0]))
     assert np.allclose(segments["MTPV"][0][0], np.array([2500.0]))
+
+
+# ---------------------------------------------------------------------------
+# M1 — LUT loss aggregation regression (perf-roadmap-phase1)
+# ---------------------------------------------------------------------------
+
+
+def test_extract_loss_series_returns_canonical_buckets():
+    from pyleecan.Classes.OPMatrix import OPMatrix
+
+    monkeypatched_simu = _build_test_simu()
+    monkeypatched_simu.var_simu.set_OP_array(
+        OPMatrix(N0=np.array([1000.0]), col_names=["N0"]),
+        is_update_input=True,
+        input_index=0,
+    )
+    xoutput = _fake_run_with_losses(monkeypatched_simu)
+
+    series = extract_loss_series(xoutput)
+
+    for key in LOSS_SERIES_KEYS:
+        assert key in series
+        assert series[key].shape == (1,)
+
+    # Synthetic budget: Pmech is the mechanical power for the single OP.
+    Pmech = abs(xoutput.output_list[0].elec.P_out)
+    assert series["P_jl_s"][0] == pytest.approx(0.02 * Pmech)
+    assert series["P_jl_r"][0] == pytest.approx(0.01 * Pmech)
+    assert series["P_jl"][0] == pytest.approx(0.03 * Pmech)
+    assert series["P_fe_s"][0] == pytest.approx(0.015 * Pmech)
+    assert series["P_fe_r"][0] == pytest.approx(0.005 * Pmech)
+    assert series["P_fe"][0] == pytest.approx(0.02 * Pmech)
+    assert series["P_mag"][0] == pytest.approx(0.003 * Pmech)
+    assert series["P_mech"][0] == pytest.approx(0.002 * Pmech)
+    assert series["P_loss_other"][0] == pytest.approx(0.001 * Pmech)
+    assert series["P_loss_total"][0] == pytest.approx(
+        (0.02 + 0.01 + 0.015 + 0.005 + 0.003 + 0.002 + 0.001) * Pmech
+    )
+
+
+def test_extract_loss_series_returns_nan_without_outloss():
+    from pyleecan.Classes.OPMatrix import OPMatrix
+
+    monkeypatched_simu = _build_test_simu()
+    monkeypatched_simu.var_simu.set_OP_array(
+        OPMatrix(N0=np.array([1000.0]), col_names=["N0"]),
+        is_update_input=True,
+        input_index=0,
+    )
+    xoutput = _fake_run(monkeypatched_simu)
+
+    series = extract_loss_series(xoutput)
+    for key in LOSS_SERIES_KEYS:
+        assert np.all(np.isnan(series[key]))
+
+
+def test_run_efficiency_map_lut_emits_loss_maps(monkeypatch):
+    monkeypatch.setattr(Simu1, "run", _fake_run_with_losses)
+
+    simu = _build_test_simu()
+    speeds = np.array([1000.0, 2000.0])
+    loads = np.array([0.5, 1.0])
+    result = run_efficiency_map_lut(simu, speed_vect=speeds, load_vect=loads)
+
+    assert "loss_maps" in result
+    for key in ("P_jl", "P_fe", "P_mag", "P_mech", "P_loss_total"):
+        assert key in result["loss_maps"]
+        assert result["loss_maps"][key].shape == (speeds.size, loads.size)
+        assert np.all(np.isfinite(result["loss_maps"][key]))
+        # Top-level alias must mirror loss_maps payload.
+        assert np.array_equal(result[key], result["loss_maps"][key])
+
+    # Loss budget must be strictly positive for non-zero torque cells.
+    assert np.all(result["P_loss_total"] > 0)
+    # Stator + rotor parts must sum to the aggregated bucket.
+    assert np.allclose(
+        result["loss_maps"]["P_jl"],
+        result["loss_maps"]["P_jl_s"] + result["loss_maps"]["P_jl_r"],
+    )
+    assert np.allclose(
+        result["loss_maps"]["P_fe"],
+        result["loss_maps"]["P_fe_s"] + result["loss_maps"]["P_fe_r"],
+    )
+
+
+def test_run_efficiency_map_lut_skips_loss_maps_without_outloss(monkeypatch):
+    monkeypatch.setattr(Simu1, "run", _fake_run)
+
+    simu = _build_test_simu()
+    result = run_efficiency_map_lut(
+        simu,
+        speed_vect=np.array([1000.0, 2000.0]),
+        load_vect=np.array([0.5, 1.0]),
+    )
+
+    assert "loss_maps" not in result
+    for key in LOSS_SERIES_KEYS:
+        assert key not in result

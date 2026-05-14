@@ -8,8 +8,11 @@ from .run_inductance_map_lut import run_inductance_map_lut
 from .run_op_matrix_lut import run_op_matrix_lut
 from .save_efficiency_map_cache import save_efficiency_map_cache
 from .save_inductance_map_cache import save_inductance_map_cache
+from ._utils import LOSS_SERIES_KEYS, extract_loss_series
 
 __all__ = [
+    "LOSS_SERIES_KEYS",
+    "extract_loss_series",
     "load_efficiency_map_cache",
     "load_inductance_map_cache",
     "plot_efficiency_map",
