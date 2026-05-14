@@ -2,7 +2,7 @@
 
 ## 1. 目标与适用范围
 
-自当前节点起，`pyleecan` 按开源项目方式进行管理。代码日常协作以阿里云 Codeup `origin` 为主仓库，公共开源对齐以 GitHub `upstream` 为参考上游。
+自当前节点起，`pyleecan` 按开源项目方式进行管理。代码日常协作以阿里云 Codeup `origin` 为主仓库，GitHub 侧默认以当前 fork（如 `magic-alt/pyleecan`）作为公开 PR 目标仓库，不再默认向 `Eomys/pyleecan` 发起 PR。
 
 本规范覆盖以下五类管理要求：
 

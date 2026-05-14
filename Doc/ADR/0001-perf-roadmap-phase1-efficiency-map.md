@@ -3,12 +3,12 @@
 - Status: Proposed
 - Date: 2026-05-14
 - Authors: pyleecan fork maintainers (magic-alt/pyleecan)
-- Related issue: upstream Eomys/pyleecan#214 “Roadmap for the performance optimization of electrical motors”
+- Reference issue: Eomys/pyleecan#214 “Roadmap for the performance optimization of electrical motors”
 - Branch: `feature/perf-roadmap-phase1-efficiency-map`
 
 ## Context
 
-上游 issue Eomys/pyleecan#214 给出了电机性能优化的长期路线图，覆盖以下方向：
+参考议题 Eomys/pyleecan#214 给出了电机性能优化的长期路线图，覆盖以下方向：
 
 1. 电磁性能（功率、转矩、转矩脉动）
 2. 损耗：Joule / 铁耗 / 磁体涡流损耗
@@ -24,7 +24,7 @@
 - PR #5：Elmer 验证资产（SimulationModels、Simu_ref/Femm、`Tests/Validation/Loss`、Prius/Nissan Leaf 文档）。
 - PR #6：FEMM/MagFEMM/DXF/SymPy 稳定性回归补丁。
 
-因此当前最具杠杆效应的入口是「LUTdq + DriveCycle」管线：上游 #214 中第 1、2、5、6 项都能在这里
+因此当前最具杠杆效应的入口是「LUTdq + DriveCycle」管线：参考议题 #214 中第 1、2、5、6 项都能在这里
 落地，并与 PR #5 的 FEMM/Elmer 损耗验证形成闭环。本 ADR 仅规划 Phase 1，不锁死后续阶段。
 
 ## Decision
@@ -75,7 +75,7 @@
 ## Consequences
 
 - 收益：把 PR #3 的 LUT 管线从「转矩查表」升级为「全损耗 + 控制 + 工况能耗」一体化，
-  与上游 #214 第 1/2/5/9 项对齐，且能直接复用 PR #5 的验证基准。
+  与参考议题 #214 第 1/2/5/9 项对齐，且能直接复用 PR #5 的验证基准。
 - 成本：需要扩展若干 Output 类与 LUT 数据结构，可能涉及 `Class_Dict.json` 重生成。
 - 风险：FEMM 损耗后处理在不同机型上数值稳定性需要回归测试，必须配套
   `Tests/Validation/Loss/` 中的算例（PR #5 已铺设）。
