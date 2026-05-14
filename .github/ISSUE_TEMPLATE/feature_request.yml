@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a new feature or significant improvement
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What user or engineering problem does this request solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the preferred direction and why it is the right fit.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Impacted modules and interfaces
+      description: List the affected modules, interfaces, data formats, or user workflows.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: Describe expected tests, benchmarks, or acceptance criteria.
+    validations:
+      required: false
