@@ -7,10 +7,17 @@ import sys
 import numpy as np
 import pytest
 
+from pyleecan.Classes.Conductor import Conductor
 from pyleecan.Classes.ElecLUTdq import ElecLUTdq
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LUT import LUT
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Magnet import Magnet
+from pyleecan.Classes.Material import Material
+from pyleecan.Classes.MatElectrical import MatElectrical
+from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.OPMatrix import OPMatrix
 from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutLoss import OutLoss
 from pyleecan.Classes.OutLossModel import OutLossModel
@@ -20,13 +27,18 @@ from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.XOutput import XOutput
 from pyleecan.Functions.Simulation.LUTdq import (
     LOSS_SERIES_KEYS,
+    apply_lut_temperature_context,
+    build_lut_temperature_context,
     extract_control_surface,
     extract_loss_series,
+    get_conductor_resistivity,
+    get_magnet_brm,
     load_efficiency_map_cache,
     load_inductance_map_cache,
     run_drive_cycle_lut,
     run_efficiency_map_lut,
     run_inductance_map_lut,
+    run_op_matrix_lut,
     save_efficiency_map_cache,
     save_inductance_map_cache,
 )
@@ -698,3 +710,115 @@ def test_extract_control_surface_raises_on_missing_required_map():
 
     with pytest.raises(KeyError, match="Tem_av"):
         extract_control_surface(result)
+
+
+# ---------------------------------------------------------------------------
+# M4 — LUT thermal hook placeholders (perf-roadmap-phase1)
+# ---------------------------------------------------------------------------
+
+
+def test_lut_temperature_callbacks_evaluate_material_laws():
+    conductor = Conductor(
+        cond_mat=Material(
+            elec=MatElectrical(rho=1.7e-8, alpha=0.0039),
+        )
+    )
+    magnet = Magnet(
+        mat_type=Material(
+            mag=MatMagnetics(Brm20=1.24, alpha_Br=-0.001),
+        )
+    )
+
+    assert get_conductor_resistivity(conductor, T_op=80.0) == pytest.approx(
+        1.7e-8 * (1 + 0.0039 * 60.0)
+    )
+    assert get_magnet_brm(magnet, T_op=80.0) == pytest.approx(1.24 * (1 - 0.001 * 60.0))
+
+
+def test_apply_lut_temperature_context_updates_simulation_copy():
+    simu = _build_real_lutdq_simu()
+    simu.mag = MagFEMM(T_mag=20.0)
+    simu.elec.Tsta = 90.0
+    simu.elec.Trot = 65.0
+
+    context = apply_lut_temperature_context(simu)
+
+    assert simu.elec.Tsta == pytest.approx(90.0)
+    assert simu.elec.Trot == pytest.approx(65.0)
+    assert simu.mag.T_mag == pytest.approx(65.0)
+    assert context["Tsta"] == pytest.approx(90.0)
+    assert context["Trot"] == pytest.approx(65.0)
+    assert context["Tmag"] == pytest.approx(65.0)
+    assert context["conductor_resistivity"]
+    assert context["magnet_Brm"]
+
+
+def test_build_lut_temperature_context_preserves_isothermal_default():
+    simu = _build_real_lutdq_simu()
+    context = build_lut_temperature_context(simu.machine)
+
+    assert context["Tsta"] == pytest.approx(20.0)
+    assert context["Trot"] == pytest.approx(20.0)
+    assert context["Tmag"] == pytest.approx(20.0)
+
+
+def test_run_op_matrix_lut_propagates_temperature_context(monkeypatch):
+    captured = {}
+
+    def _fake_run_capture_temperature(self):
+        captured["Tsta"] = self.elec.Tsta
+        captured["Trot"] = self.elec.Trot
+        captured["T_mag"] = self.mag.T_mag
+        return XOutput(simu=self, output_list=[])
+
+    monkeypatch.setattr(Simu1, "run", _fake_run_capture_temperature)
+
+    simu = _build_real_lutdq_simu()
+    simu.mag = MagFEMM(T_mag=20.0)
+    simu.elec.Tsta = 88.0
+    simu.elec.Trot = 61.0
+
+    run_op_matrix_lut(simu, OPMatrix(N0=np.array([1000.0]), col_names=["N0"]))
+
+    assert captured == {"Tsta": 88.0, "Trot": 61.0, "T_mag": 61.0}
+
+
+def test_comp_lutdq_propagates_temperature_context(monkeypatch):
+    captured = {}
+
+    def _fake_run_capture_temperature(self):
+        captured["Tsta"] = self.elec.Tsta
+        captured["Trot"] = self.elec.Trot
+        captured["T_mag"] = self.mag.T_mag
+        return XOutput(simu=self, output_list=[])
+
+    monkeypatch.setattr(Simu1, "run", _fake_run_capture_temperature)
+
+    machine = load(str(Path(DATA_DIR) / "Machine" / "Toyota_Prius.json"))
+    lut_simu = Simu1(
+        machine=machine,
+        input=InputCurrent(OP=OPdq(N0=1000.0, Id_ref=0.0, Iq_ref=0.0)),
+        elec=ElecLUTdq(Tsta=20.0, Trot=20.0),
+        mag=MagFEMM(T_mag=20.0),
+        var_simu=VarLoadCurrent(is_keep_all_output=True),
+    )
+    simu = Simu1(
+        machine=machine,
+        input=InputCurrent(OP=OPdq(N0=1000.0, Id_ref=0.0, Iq_ref=0.0)),
+        elec=ElecLUTdq(
+            LUT_simu=lut_simu,
+            Tsta=92.0,
+            Trot=67.0,
+            Irms_max=200.0,
+            n_Id=1,
+            n_Iq=1,
+            Id_min=0.0,
+            Id_max=0.0,
+            Iq_min=10.0,
+            Iq_max=10.0,
+        ),
+    )
+
+    simu.elec.comp_LUTdq()
+
+    assert captured == {"Tsta": 92.0, "Trot": 67.0, "T_mag": 67.0}

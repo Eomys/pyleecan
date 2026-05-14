@@ -1,6 +1,7 @@
 import numpy as np
 
 from ....Classes.VarLoadCurrent import VarLoadCurrent
+from .thermal_hooks import apply_lut_temperature_context
 
 
 CONTROL_REGION_TO_CODE = {
@@ -33,6 +34,7 @@ def prepare_lut_varload_simu(simu, op_matrix):
 
     simu_step.var_simu.is_keep_all_output = True
     simu_step.var_simu.set_OP_array(op_matrix, is_update_input=True, input_index=0)
+    apply_lut_temperature_context(simu_step, source_elec=getattr(simu, "elec", None))
 
     return simu_step
 
@@ -209,7 +211,12 @@ def _classify_loss_name(name):
         if is_rotor:
             return "iron_rotor"
         return "iron_stator"
-    if "mech" in label or "friction" in label or "windage" in label or "bearing" in label:
+    if (
+        "mech" in label
+        or "friction" in label
+        or "windage" in label
+        or "bearing" in label
+    ):
         return "mech"
     return "other"
 
@@ -234,11 +241,7 @@ def _loss_scalar_dict(output):
         except Exception:
             power_dict = None
         if isinstance(power_dict, dict) and power_dict:
-            return {
-                str(k): v
-                for k, v in power_dict.items()
-                if k != "total_power"
-            }
+            return {str(k): v for k, v in power_dict.items() if k != "total_power"}
 
     # Fallback: iterate over loss_dict (works for partial / test fixtures).
     loss_dict = getattr(loss, "loss_dict", None)

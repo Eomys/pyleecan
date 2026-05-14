@@ -10,11 +10,21 @@ from .run_op_matrix_lut import run_op_matrix_lut
 from .save_efficiency_map_cache import save_efficiency_map_cache
 from .save_inductance_map_cache import save_inductance_map_cache
 from ._utils import LOSS_SERIES_KEYS, extract_loss_series
+from .thermal_hooks import (
+    apply_lut_temperature_context,
+    build_lut_temperature_context,
+    get_conductor_resistivity,
+    get_magnet_brm,
+)
 
 __all__ = [
     "LOSS_SERIES_KEYS",
+    "apply_lut_temperature_context",
+    "build_lut_temperature_context",
     "extract_loss_series",
     "extract_control_surface",
+    "get_conductor_resistivity",
+    "get_magnet_brm",
     "load_efficiency_map_cache",
     "load_inductance_map_cache",
     "plot_efficiency_map",
