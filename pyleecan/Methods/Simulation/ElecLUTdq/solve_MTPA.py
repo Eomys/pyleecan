@@ -30,6 +30,10 @@ def solve_MTPA(self, LUT, Rs):
     Urms_max = self.Urms_max
     # Maximum current
     Irms_max = self.Irms_max
+    has_voltage_limit = Urms_max is not None and np.isfinite(Urms_max)
+    has_current_limit = Irms_max is not None and np.isfinite(Irms_max)
+    Urms_limit = float(Urms_max) if has_voltage_limit else np.inf
+    Irms_limit = float(Irms_max) if has_current_limit else np.inf
     # Electrical frequency
     felec = OP.get_felec()
     # Electrical pulsation
@@ -86,7 +90,7 @@ def solve_MTPA(self, LUT, Rs):
         Tem_interp = qs * p * (Phid * Iq - Phiq * Id)
 
         # Set maximum voltage condition
-        U_cond = Umax_interp <= Urms_max
+        U_cond = Umax_interp <= Urms_limit
 
         if is_loss_model:
             # Interpolate losses from LUT
@@ -109,6 +113,11 @@ def solve_MTPA(self, LUT, Rs):
         if self.load_rate == 0:
             # Finding indices of operating points satisfying voltage constraint for no torque production
             i0 = np.logical_and(U_cond, Iq == 0)
+            if not np.any(i0):
+                raise ValueError(
+                    "No feasible dq operating point found for no-load MTPA resolution "
+                    "within voltage constraints"
+                )
 
             # Finding index of operating point for lowest current
             imin = np.argmin(np.abs(Imax_interp[i0]))
@@ -118,10 +127,15 @@ def solve_MTPA(self, LUT, Rs):
 
         else:
             # Set maximum current condition
-            I_cond = Imax_interp <= Irms_max
+            I_cond = Imax_interp <= Irms_limit
 
             # Finding indices of operating points satisfying voltage and current constraints
             i0 = np.logical_and(U_cond, I_cond)
+            if not np.any(i0):
+                raise ValueError(
+                    "No feasible dq operating point found for MTPA resolution within "
+                    "current and voltage constraints"
+                )
 
             # Finding index of operating point giving maximum positive torque among feasible operating points
             imin = np.argmax(Tem_interp[i0])
@@ -162,10 +176,10 @@ def solve_MTPA(self, LUT, Rs):
         niter_Tem = niter_Tem + 1
 
     # Launch warnings
-    if Umax_interp[i0][imin] > Urms_max:
+    if has_voltage_limit and Umax_interp[i0][imin] > Urms_limit:
         self.get_logger().warning("Voltage constraint cannot be reached")
 
-    if Imax_interp[i0][imin] > Irms_max:
+    if has_current_limit and Imax_interp[i0][imin] > Irms_limit:
         self.get_logger().warning("Current constraint cannot be reached")
 
     out_dict = dict()
@@ -173,7 +187,7 @@ def solve_MTPA(self, LUT, Rs):
     # Calculate efficiency
     out_dict["P_in"] = P_in[i0][imin]
     out_dict["P_out"] = P_out[i0][imin]
-    eff = out_dict["P_out"] / out_dict["P_in"]
+    eff = 0 if out_dict["P_in"] == 0 else out_dict["P_out"] / out_dict["P_in"]
     out_dict["efficiency"] = eff if eff > 0 else 0
     # out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
 
@@ -185,6 +199,20 @@ def solve_MTPA(self, LUT, Rs):
     out_dict["Iq"] = Iq[i0][imin]
     out_dict["Ud"] = Ud[i0][imin]
     out_dict["Uq"] = Uq[i0][imin]
+    i_rms = np.sqrt(out_dict["Id"] ** 2 + out_dict["Iq"] ** 2)
+    u_rms = np.sqrt(out_dict["Ud"] ** 2 + out_dict["Uq"] ** 2)
+    out_dict["is_current_limited"] = bool(
+        Irms_max is not None and np.isfinite(Irms_max) and i_rms >= 0.98 * Irms_max
+    )
+    out_dict["is_voltage_limited"] = bool(
+        Urms_max is not None and np.isfinite(Urms_max) and u_rms >= 0.98 * Urms_max
+    )
+    if out_dict["is_voltage_limited"] and out_dict["is_current_limited"]:
+        out_dict["control_region"] = "FW"
+    elif out_dict["is_voltage_limited"]:
+        out_dict["control_region"] = "MTPV"
+    else:
+        out_dict["control_region"] = "MTPA"
 
     # Store dq fluxes
     out_dict["Phid"] = Phid[i0][imin]

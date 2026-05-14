@@ -180,15 +180,28 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
     for param_exp in paramexplorer_list:
         value = param_exp.get_value()[index]
         if isinstance(value, InputCurrent):
-            msg += "N0=" + format(value.OP.N0, ".6g") + " [rpm]"
-            msg += ", Id=" + format(value.OP.Id_ref, ".4g") + " [Arms]"
-            msg += ", Iq=" + format(value.OP.Iq_ref, ".4g") + " [Arms], "
+            msg += "N0=" + format_optional(value.OP.N0, ".6g") + " [rpm]"
+            if value.OP.Id_ref is not None or value.OP.Iq_ref is not None:
+                msg += ", Id=" + format_optional(value.OP.Id_ref, ".4g") + " [Arms]"
+                msg += ", Iq=" + format_optional(value.OP.Iq_ref, ".4g") + " [Arms], "
+            elif getattr(value.OP, "Tem_av_ref", None) is not None:
+                msg += (
+                    ", Tem=" + format_optional(value.OP.Tem_av_ref, ".4g") + " [N.m], "
+                )
+            elif getattr(value.OP, "Pem_av_ref", None) is not None:
+                msg += (
+                    ", Pout=" + format_optional(value.OP.Pem_av_ref, ".4g") + " [W], "
+                )
+            elif getattr(value.OP, "Pem_av_in", None) is not None:
+                msg += ", Pin=" + format_optional(value.OP.Pem_av_in, ".4g") + " [W], "
+            else:
+                msg += ", InputCurrent, "
         elif isinstance(value, InputVoltage):
-            msg += "N0=" + format(value.OP.N0, ".6g") + " [rpm]"
-            msg += ", U0=" + format(value.OP.U0_ref, ".4g") + " [Vrms]"
-            msg += ", UPhi0=" + format(value.OP.UPhi0_ref, ".4g") + " [rad], "
+            msg += "N0=" + format_optional(value.OP.N0, ".6g") + " [rpm]"
+            msg += ", U0=" + format_optional(value.OP.U0_ref, ".4g") + " [Vrms]"
+            msg += ", UPhi0=" + format_optional(value.OP.UPhi0_ref, ".4g") + " [rad], "
             if value.OP.slip_ref is not None:
-                msg += ", slip=" + format(value.OP.slip_ref, ".4g") + " [-], "
+                msg += ", slip=" + format_optional(value.OP.slip_ref, ".4g") + " [-], "
         elif isinstance(value, (list, np.ndarray)):
             msg += param_exp.symbol
             msg += "="
@@ -205,6 +218,17 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
             msg += ", "
     msg = msg[:-2]
     logger.info(msg)
+
+
+def format_optional(value, fmt, default="NA"):
+    """Format an optional scalar for progress logs."""
+
+    if value is None:
+        return default
+    try:
+        return format(value, fmt)
+    except Exception:
+        return default
 
 
 def print_progress_bar(Nsimu, index, layer):
