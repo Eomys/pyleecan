@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     solve_MTPA = error
 
+try:
+    from ..Methods.Simulation.ElecLUTdq.solve_torque import solve_torque
+except ImportError as error:
+    solve_torque = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -86,6 +91,17 @@ class ElecLUTdq(Electrical):
         )
     else:
         solve_MTPA = solve_MTPA
+    # cf Methods.Simulation.ElecLUTdq.solve_torque
+    if isinstance(solve_torque, ImportError):
+        solve_torque = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElecLUTdq method solve_torque: " + str(solve_torque)
+                )
+            )
+        )
+    else:
+        solve_torque = solve_torque
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

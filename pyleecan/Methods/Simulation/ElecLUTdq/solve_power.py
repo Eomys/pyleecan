@@ -30,6 +30,10 @@ def solve_power(self, LUT, Rs):
     Urms_max = self.Urms_max
     # Maximum current
     Irms_max = self.Irms_max
+    has_voltage_limit = Urms_max is not None and np.isfinite(Urms_max)
+    has_current_limit = Irms_max is not None and np.isfinite(Irms_max)
+    Urms_limit = float(Urms_max) if has_voltage_limit else np.inf
+    Irms_limit = float(Irms_max) if has_current_limit else np.inf
     # Electrical frequency
     felec = OP.get_felec()
     # Electrical pulsation
@@ -107,10 +111,10 @@ def solve_power(self, LUT, Rs):
             P_cond = P_in >= OP.Pem_av_in
 
         # Set maximum voltage condition
-        U_cond = Umax_interp <= Urms_max
+        U_cond = Umax_interp <= Urms_limit
 
         # Set maximum current condition
-        I_cond = Imax_interp <= Irms_max
+        I_cond = Imax_interp <= Irms_limit
 
         # Finding indices of operating points satisfying voltage, current and power conditions
         i0 = np.logical_and.reduce((U_cond, I_cond, P_cond))
@@ -164,7 +168,7 @@ def solve_power(self, LUT, Rs):
                     P_cond = P_out == P_min
                 else:
                     P_min = np.min(P_in[i0])
-                    P_cond = P_out == P_min
+                    P_cond = P_in == P_min
 
                 if np.where(P_cond)[0].size == 1:
                     # Take the only point that reaches requested power
@@ -203,7 +207,7 @@ def solve_power(self, LUT, Rs):
                     i0 = P_out == P_max
                 else:
                     P_max = np.max(P_in)
-                    i0 = P_out == P_max
+                    i0 = P_in == P_max
 
                 if np.where(i0)[0].size == 1:
                     # Take the closest point to requested power
@@ -226,16 +230,19 @@ def solve_power(self, LUT, Rs):
             "Input power cannot be reached within current and voltage constraints, taking maximum feasible power"
         )
 
-    if Umax_interp[i0][imin] > Urms_max:
+    if has_voltage_limit and Umax_interp[i0][imin] > Urms_limit:
         self.get_logger().warning("Voltage constraint cannot be reached")
 
-    if Imax_interp[i0][imin] > Irms_max:
+    if has_current_limit and Imax_interp[i0][imin] > Irms_limit:
         self.get_logger().warning("Current constraint cannot be reached")
 
     out_dict = dict()
     out_dict["P_in"] = P_in[i0][imin]
     out_dict["P_out"] = P_out[i0][imin]
-    out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
+    if out_dict["P_in"] == 0:
+        out_dict["efficiency"] = 0
+    else:
+        out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
     if output.simu.input.is_generator:
         # Calculate torque from input power
         out_dict["Tem_av"] = out_dict["P_in"] / (2 * np.pi * OP.N0 / 60)
@@ -248,6 +255,20 @@ def solve_power(self, LUT, Rs):
     out_dict["Iq"] = Iq[i0][imin]
     out_dict["Ud"] = Ud[i0][imin]
     out_dict["Uq"] = Uq[i0][imin]
+    i_rms = np.sqrt(out_dict["Id"] ** 2 + out_dict["Iq"] ** 2)
+    u_rms = np.sqrt(out_dict["Ud"] ** 2 + out_dict["Uq"] ** 2)
+    out_dict["is_current_limited"] = bool(
+        Irms_max is not None and np.isfinite(Irms_max) and i_rms >= 0.98 * Irms_max
+    )
+    out_dict["is_voltage_limited"] = bool(
+        Urms_max is not None and np.isfinite(Urms_max) and u_rms >= 0.98 * Urms_max
+    )
+    if out_dict["is_voltage_limited"] and out_dict["is_current_limited"]:
+        out_dict["control_region"] = "FW"
+    elif out_dict["is_voltage_limited"]:
+        out_dict["control_region"] = "MTPV"
+    else:
+        out_dict["control_region"] = "MTPA"
 
     # Store dq fluxes
     out_dict["Phid"] = Phid[i0][imin]
