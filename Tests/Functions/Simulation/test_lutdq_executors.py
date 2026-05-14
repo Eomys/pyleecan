@@ -10,6 +10,7 @@ import pytest
 from pyleecan.Classes.Conductor import Conductor
 from pyleecan.Classes.ElecLUTdq import ElecLUTdq
 from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LUT import LUT
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Magnet import Magnet
@@ -364,6 +365,27 @@ def test_save_and_load_efficiency_map_cache(monkeypatch, tmp_path):
     assert np.allclose(loaded["full_load"]["Tem_av"], result["full_load"]["Tem_av"])
 
 
+def test_save_and_load_efficiency_map_cache_preserves_loss_maps(monkeypatch, tmp_path):
+    monkeypatch.setattr(Simu1, "run", _fake_run_with_losses)
+
+    simu = _build_test_simu()
+    result = run_efficiency_map_lut(
+        simu,
+        speed_vect=np.array([1000.0, 2000.0]),
+        load_vect=np.array([0.25, 1.0]),
+    )
+
+    cache_paths = save_efficiency_map_cache(result, str(tmp_path / "eff_map_losses"))
+    loaded = load_efficiency_map_cache(cache_paths["npz_path"])
+
+    assert "loss_maps" in loaded
+    for key in ("P_jl", "P_fe", "P_mag", "P_mech", "P_loss_total"):
+        assert key in loaded
+        assert key in loaded["loss_maps"]
+        assert np.allclose(loaded[key], result[key])
+        assert np.allclose(loaded["loss_maps"][key], result["loss_maps"][key])
+
+
 def test_run_inductance_map_lut_returns_ld_lq_maps():
     simu = _build_test_simu()
     simu.elec.LUT_enforced = _FakeInductanceLUT()
@@ -704,6 +726,25 @@ def test_extract_control_surface_uses_nested_loss_maps():
     )
 
 
+def test_extract_control_surface_preserves_custom_loss_key():
+    result = _build_control_surface_fixture()
+    result["converter_loss"] = np.array([[12.0, 14.0, 16.0], [10.0, 18.0, 24.0]])
+
+    surface = extract_control_surface(
+        result,
+        Irms_max=150.0,
+        Urms_max=300.0,
+        loss_key="converter_loss",
+    )
+
+    assert np.allclose(surface["mtpa"]["converter_loss"], np.array([14.0, 10.0]))
+    assert np.allclose(surface["fw_boundary"]["converter_loss"], np.array([16.0, 18.0]))
+    assert np.allclose(
+        surface["fw_boundary"]["loss_per_torque"],
+        np.array([16.0 / 72.0, 18.0 / 48.0]),
+    )
+
+
 def test_extract_control_surface_raises_on_missing_required_map():
     result = _build_control_surface_fixture()
     result.pop("Tem_av")
@@ -738,19 +779,34 @@ def test_lut_temperature_callbacks_evaluate_material_laws():
 def test_apply_lut_temperature_context_updates_simulation_copy():
     simu = _build_real_lutdq_simu()
     simu.mag = MagFEMM(T_mag=20.0)
+    simu.loss = Loss(Tsta=20.0, Trot=20.0)
+    simu.elec.Tsta = 90.0
+    simu.elec.Trot = 65.0
+
+    context = apply_lut_temperature_context(simu, Tmag=70.0)
+
+    assert simu.elec.Tsta == pytest.approx(90.0)
+    assert simu.elec.Trot == pytest.approx(65.0)
+    assert simu.loss.Tsta == pytest.approx(90.0)
+    assert simu.loss.Trot == pytest.approx(65.0)
+    assert simu.mag.T_mag == pytest.approx(70.0)
+    assert context["Tsta"] == pytest.approx(90.0)
+    assert context["Trot"] == pytest.approx(65.0)
+    assert context["Tmag"] == pytest.approx(70.0)
+    assert context["conductor_resistivity"]
+    assert context["magnet_Brm"]
+
+
+def test_apply_lut_temperature_context_preserves_existing_magnet_temperature():
+    simu = _build_real_lutdq_simu()
+    simu.mag = MagFEMM(T_mag=54.0)
     simu.elec.Tsta = 90.0
     simu.elec.Trot = 65.0
 
     context = apply_lut_temperature_context(simu)
 
-    assert simu.elec.Tsta == pytest.approx(90.0)
-    assert simu.elec.Trot == pytest.approx(65.0)
-    assert simu.mag.T_mag == pytest.approx(65.0)
-    assert context["Tsta"] == pytest.approx(90.0)
-    assert context["Trot"] == pytest.approx(65.0)
-    assert context["Tmag"] == pytest.approx(65.0)
-    assert context["conductor_resistivity"]
-    assert context["magnet_Brm"]
+    assert simu.mag.T_mag == pytest.approx(54.0)
+    assert context["Tmag"] == pytest.approx(54.0)
 
 
 def test_build_lut_temperature_context_preserves_isothermal_default():

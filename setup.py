@@ -87,7 +87,7 @@ setuptools.setup(
     package_data={
         # Include any *.json files found in pyleecan:
         # '': ['*.json'],
-        "pyleecan": ["*.json"]
+        "pyleecan": ["*.json", "Data/DriveCycle/*.csv"]
     },
     include_package_data=True,
     classifiers=[

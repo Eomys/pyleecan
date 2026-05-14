@@ -194,7 +194,8 @@ def run_efficiency_map_lut(
             map_shape
         ),
         "voltage_limited_mask": voltage_limited_mask.reshape(map_shape),
-        "current_limited_mask": current_limited_mask.reshape(map_shape),        "full_load_control_region": full_load_control_region,
+        "current_limited_mask": current_limited_mask.reshape(map_shape),
+        "full_load_control_region": full_load_control_region,
         "full_load_control_region_code": encode_control_regions(
             full_load_control_region
         ),

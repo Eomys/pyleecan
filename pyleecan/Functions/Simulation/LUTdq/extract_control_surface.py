@@ -170,9 +170,7 @@ def _curve_from_indices(maps, regions, indices):
         "control_region": np.full(n_speed, "UNKNOWN", dtype="<U7"),
     }
 
-    for key, values in maps.items():
-        if key not in LOSS_SERIES_KEYS and key not in _CURVE_KEYS:
-            continue
+    for key in maps:
         curve[key] = np.full(n_speed, np.nan)
 
     for row, col in enumerate(indices):
@@ -180,10 +178,7 @@ def _curve_from_indices(maps, regions, indices):
             continue
         curve["control_region"][row] = str(regions[row, col])
         for key, values in maps.items():
-            if key in LOSS_SERIES_KEYS:
-                curve[key][row] = values[row, col]
-            elif key in _CURVE_KEYS:
-                curve[key][row] = values[row, col]
+            curve[key][row] = values[row, col]
 
     return curve
 

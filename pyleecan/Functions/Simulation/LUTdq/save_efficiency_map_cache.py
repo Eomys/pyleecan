@@ -5,6 +5,8 @@ from os import makedirs
 
 import numpy as np
 
+from ._utils import LOSS_SERIES_KEYS
+
 
 def _resolve_cache_paths(save_path):
     """Return normalized npz/json paths for an efficiency-map cache."""
@@ -72,6 +74,8 @@ def save_efficiency_map_cache(result, save_path):
         "full_load_voltage_limited_mask",
         "full_load_current_limited_mask",
     ]
+    loss_keys = [key for key in LOSS_SERIES_KEYS if key in result]
+    array_keys.extend(loss_keys)
 
     cache_arrays = dict()
     for key in array_keys:
@@ -91,7 +95,7 @@ def save_efficiency_map_cache(result, save_path):
 
     metadata = {
         "cache_format": "pyleecan_efficiency_map_npz",
-        "cache_version": 2,
+        "cache_version": 3,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "speed_count": int(np.asarray(result["speed"]).size),
         "load_count": int(np.asarray(result["load"]).size),
@@ -103,6 +107,7 @@ def save_efficiency_map_cache(result, save_path):
         ),
         "array_keys": array_keys,
         "full_load_keys": full_load_keys,
+        "loss_keys": loss_keys,
     }
 
     with open(json_path, "w", encoding="utf-8") as metadata_file:

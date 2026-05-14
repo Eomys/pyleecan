@@ -4,15 +4,39 @@ import numpy as np
 DEFAULT_REFERENCE_TEMPERATURE = 20.0
 
 
-def _as_temperature(value, fallback=DEFAULT_REFERENCE_TEMPERATURE):
-    if value is None:
-        return fallback
+def _get_optional_temperature(value):
     try:
         temperature = float(value)
     except (TypeError, ValueError):
-        return fallback
+        return None
     if not np.isfinite(temperature):
+        return None
+    return temperature
+
+
+def _as_temperature(value, fallback=DEFAULT_REFERENCE_TEMPERATURE):
+    temperature = _get_optional_temperature(value)
+    if temperature is not None:
+        return temperature
+
+    fallback_temperature = _get_optional_temperature(fallback)
+    if fallback_temperature is not None:
+        return fallback_temperature
+    return DEFAULT_REFERENCE_TEMPERATURE
+
+
+def _resolve_default_magnet_temperature(mag, fallback):
+    temperature = _get_optional_temperature(getattr(mag, "T_mag", None))
+    if temperature is None:
         return fallback
+
+    # Preserve a caller-provided magnet temperature, but still let the rotor
+    # temperature drive the common default 20 C placeholder.
+    if np.isclose(temperature, DEFAULT_REFERENCE_TEMPERATURE) and not np.isclose(
+        fallback, DEFAULT_REFERENCE_TEMPERATURE
+    ):
+        return fallback
+
     return temperature
 
 
@@ -110,7 +134,7 @@ def iter_machine_magnets(machine):
             yield label, magnet, getattr(lamination, "is_stator", False)
 
 
-def resolve_lut_temperatures(elec=None, Tsta=None, Trot=None, Tmag=None):
+def resolve_lut_temperatures(elec=None, mag=None, Tsta=None, Trot=None, Tmag=None):
     """Resolve LUT temperatures from explicit values or an Electrical object."""
 
     if elec is not None:
@@ -121,7 +145,8 @@ def resolve_lut_temperatures(elec=None, Tsta=None, Trot=None, Tmag=None):
 
     Tsta = _as_temperature(Tsta)
     Trot = _as_temperature(Trot)
-    Tmag = _as_temperature(Tmag, fallback=Trot)
+    default_tmag = _resolve_default_magnet_temperature(mag, fallback=Trot)
+    Tmag = _as_temperature(Tmag, fallback=default_tmag)
     return {"Tsta": Tsta, "Trot": Trot, "Tmag": Tmag}
 
 
@@ -161,7 +186,14 @@ def apply_lut_temperature_context(
     """Apply scalar LUT temperatures to a simulation copy and return hook values."""
 
     elec = source_elec if source_elec is not None else getattr(simu, "elec", None)
-    temperatures = resolve_lut_temperatures(elec=elec, Tsta=Tsta, Trot=Trot, Tmag=Tmag)
+    target_mag = getattr(simu, "mag", None)
+    temperatures = resolve_lut_temperatures(
+        elec=elec,
+        mag=target_mag,
+        Tsta=Tsta,
+        Trot=Trot,
+        Tmag=Tmag,
+    )
 
     target_elec = getattr(simu, "elec", None)
     if target_elec is not None:
@@ -170,9 +202,15 @@ def apply_lut_temperature_context(
         if hasattr(target_elec, "Trot"):
             target_elec.Trot = temperatures["Trot"]
 
-    target_mag = getattr(simu, "mag", None)
     if target_mag is not None and hasattr(target_mag, "T_mag"):
         target_mag.T_mag = temperatures["Tmag"]
+
+    target_loss = getattr(simu, "loss", None)
+    if target_loss is not None:
+        if hasattr(target_loss, "Tsta"):
+            target_loss.Tsta = temperatures["Tsta"]
+        if hasattr(target_loss, "Trot"):
+            target_loss.Trot = temperatures["Trot"]
 
     return build_lut_temperature_context(
         getattr(simu, "machine", None),

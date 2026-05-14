@@ -3,6 +3,7 @@ from os.path import abspath, exists, splitext
 
 import numpy as np
 
+from ._utils import LOSS_SERIES_KEYS
 from .save_efficiency_map_cache import _resolve_cache_paths
 
 
@@ -23,11 +24,18 @@ def load_efficiency_map_cache(load_path):
     if full_load:
         result["full_load"] = full_load
 
+    loss_maps = {key: result[key] for key in LOSS_SERIES_KEYS if key in result}
+    if loss_maps:
+        result["loss_maps"] = loss_maps
+
     if exists(json_path):
         with open(json_path, "r", encoding="utf-8") as metadata_file:
             result["metadata"] = json.load(metadata_file)
     else:
         result["metadata"] = None
 
-    result["cache_paths"] = {"npz_path": abspath(npz_path), "json_path": abspath(json_path)}
+    result["cache_paths"] = {
+        "npz_path": abspath(npz_path),
+        "json_path": abspath(json_path),
+    }
     return result
