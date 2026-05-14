@@ -245,6 +245,33 @@ def test_run_drive_cycle_lut_returns_summary(monkeypatch):
     assert result["summary"]["duration"] == 2.0
 
 
+def test_run_drive_cycle_lut_integrates_m1_loss_breakdown(monkeypatch):
+    monkeypatch.setattr(Simu1, "run", _fake_run_with_losses)
+
+    simu = _build_test_simu()
+    trajectory = {
+        "time": np.array([0.0, 1.0, 2.0]),
+        "N0": np.array([1000.0, 1000.0, 1000.0]),
+        "Tem_av": np.array([10.0, 10.0, 10.0]),
+    }
+
+    result = run_drive_cycle_lut(simu, trajectory, target="torque")
+    summary = result["summary"]
+    Pmech = abs(summary["P_out"][0])
+
+    assert np.allclose(summary["P_loss_total"], 0.056 * Pmech)
+    assert summary["energy_loss_J"] == pytest.approx(2.0 * 0.056 * Pmech)
+    assert summary["energy_loss_breakdown_J"]["P_jl"] == pytest.approx(
+        2.0 * 0.03 * Pmech
+    )
+    assert summary["energy_loss_breakdown_J"]["P_fe"] == pytest.approx(
+        2.0 * 0.02 * Pmech
+    )
+    assert summary["energy_loss_breakdown_J"]["P_mag"] == pytest.approx(
+        2.0 * 0.003 * Pmech
+    )
+
+
 def test_lut_default_simulation_uses_eight_femm_workers():
     machine = load(str(Path(DATA_DIR) / "Machine" / "Toyota_Prius.json"))
     lut = LUT()
