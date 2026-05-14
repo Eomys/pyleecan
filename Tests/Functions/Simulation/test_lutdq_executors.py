@@ -20,6 +20,7 @@ from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.XOutput import XOutput
 from pyleecan.Functions.Simulation.LUTdq import (
     LOSS_SERIES_KEYS,
+    extract_control_surface,
     extract_loss_series,
     load_efficiency_map_cache,
     load_inductance_map_cache,
@@ -110,7 +111,9 @@ def _fake_run_with_losses(self):
         # Synthetic loss budget scaled by mechanical power.
         Pmech = abs(power_out)
         loss_dict = {
-            "stator winding Joule": _build_loss_outlossv(0.02 * Pmech, "stator winding Joule"),
+            "stator winding Joule": _build_loss_outlossv(
+                0.02 * Pmech, "stator winding Joule"
+            ),
             "rotor cage Joule": _build_loss_outlossv(0.01 * Pmech, "rotor cage Joule"),
             "stator core": _build_loss_outlossv(0.015 * Pmech, "stator core iron"),
             "rotor core": _build_loss_outlossv(0.005 * Pmech, "rotor core iron"),
@@ -560,3 +563,111 @@ def test_run_efficiency_map_lut_skips_loss_maps_without_outloss(monkeypatch):
     assert "loss_maps" not in result
     for key in LOSS_SERIES_KEYS:
         assert key not in result
+
+
+# ---------------------------------------------------------------------------
+# M2 — LUT control-surface extraction (perf-roadmap-phase1)
+# ---------------------------------------------------------------------------
+
+
+def _build_control_surface_fixture():
+    speed = np.array([1000.0, 3000.0])
+    load = np.array([0.25, 0.50, 1.00])
+    N0 = speed[:, None] * np.ones((1, load.size))
+    load_grid = np.ones((speed.size, 1)) * load[None, :]
+    Tem_av = np.array(
+        [
+            [20.0, 42.0, 72.0],
+            [18.0, 48.0, 70.0],
+        ]
+    )
+    I_rms = np.array(
+        [
+            [40.0, 70.0, 140.0],
+            [32.0, 82.0, 132.0],
+        ]
+    )
+    U_rms = np.array(
+        [
+            [60.0, 150.0, 294.0],
+            [120.0, 292.0, 298.0],
+        ]
+    )
+    control_region = np.array(
+        [
+            ["MTPA", "MTPA", "FW"],
+            ["MTPA", "FW", "MTPV"],
+        ]
+    )
+
+    return {
+        "speed": speed,
+        "load": load,
+        "N0": N0,
+        "load_grid": load_grid,
+        "Tem_av": Tem_av,
+        "Id": -0.2 * I_rms,
+        "Iq": 0.98 * I_rms,
+        "I_rms": I_rms,
+        "Ud": np.zeros_like(U_rms),
+        "Uq": U_rms,
+        "U_rms": U_rms,
+        "efficiency": np.array([[0.88, 0.91, 0.89], [0.86, 0.90, 0.87]]),
+        "P_loss_total": np.array([[120.0, 140.0, 260.0], [110.0, 180.0, 330.0]]),
+        "P_jl": np.array([[60.0, 70.0, 120.0], [50.0, 88.0, 150.0]]),
+        "control_region": control_region,
+        "voltage_limited_mask": U_rms >= 0.98 * 300.0,
+        "current_limited_mask": I_rms >= 0.98 * 150.0,
+        "base_speed_rpm": 3000.0,
+    }
+
+
+def test_extract_control_surface_selects_mtpa_mtpv_and_fw_boundary():
+    result = _build_control_surface_fixture()
+
+    surface = extract_control_surface(result, Irms_max=150.0, Urms_max=300.0)
+
+    assert np.array_equal(
+        surface["control_region_code"], np.array([[0, 0, 1], [0, 1, 2]])
+    )
+    assert surface["base_speed_rpm"] == pytest.approx(3000.0)
+
+    # MTPA maximizes Tem / Irms within MTPA cells for each speed row.
+    assert np.array_equal(surface["mtpa"]["index"], np.array([1, 0]))
+    assert np.allclose(surface["mtpa"]["Tem_av"], np.array([42.0, 18.0]))
+    assert np.allclose(surface["mtpa"]["P_loss_total"], np.array([140.0, 110.0]))
+
+    # MTPV only exists on the second speed row in this fixture.
+    assert np.array_equal(surface["mtpv"]["index"], np.array([-1, 2]))
+    assert np.isnan(surface["mtpv"]["Tem_av"][0])
+    assert surface["mtpv"]["Tem_av"][1] == pytest.approx(70.0)
+    assert surface["mtpv"]["control_region"][1] == "MTPV"
+
+    # Field weakening starts at the first voltage-limited or non-MTPA point.
+    assert np.array_equal(surface["fw_boundary"]["index"], np.array([2, 1]))
+    assert np.allclose(surface["fw_boundary"]["load"], np.array([1.0, 0.5]))
+    assert np.allclose(
+        surface["fw_boundary"]["voltage_margin"],
+        np.array([(300.0 - 294.0) / 300.0, (300.0 - 292.0) / 300.0]),
+    )
+
+
+def test_extract_control_surface_uses_nested_loss_maps():
+    result = _build_control_surface_fixture()
+    result["loss_maps"] = {"P_loss_total": result.pop("P_loss_total")}
+
+    surface = extract_control_surface(result, Irms_max=150.0, Urms_max=300.0)
+
+    assert np.allclose(surface["mtpa"]["P_loss_total"], np.array([140.0, 110.0]))
+    assert np.allclose(
+        surface["fw_boundary"]["loss_per_torque"],
+        np.array([260.0 / 72.0, 180.0 / 48.0]),
+    )
+
+
+def test_extract_control_surface_raises_on_missing_required_map():
+    result = _build_control_surface_fixture()
+    result.pop("Tem_av")
+
+    with pytest.raises(KeyError, match="Tem_av"):
+        extract_control_surface(result)
