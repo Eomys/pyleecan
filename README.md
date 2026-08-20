@@ -1,8 +1,18 @@
-# <img alt="Pyleecan" src="https://www.pyleecan.org/_static/favicon.png" height="120">
+# <img alt="Pyleecan" src="pyleecan/GUI/Resources/images/icon/pyleecan_64.png" height="24"> PYLEECAN
 
 [![PyPI version](https://badge.fury.io/py/pyleecan.svg)](https://badge.fury.io/py/pyleecan)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+
+## ⚠️ Maintenance Notice ⚠️
+
+**Pyleecan is undergoing some maintenance.**
+
+The ~~[pyleecan.org](https://pyleecan.org)~~ website is currently unavailable. We are in the process of migrating and reorganizing the project documentation, which will be made available at a new location in the near future.
+
+**This is not the end of the Pyleecan project.** Once the migration is complete, Pyleecan will continue to be actively maintained and further developed. We are using this transition as an opportunity to improve the project infrastructure, documentation, and long-term maintainability.
+
+We appreciate your patience and understanding during this transition. Further information about the new documentation location and the next steps for the project will be announced here soon.
 
 ## Presentation
 PYLEECAN project provides a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives**.
@@ -18,7 +28,7 @@ For example, PhD students should start with PYLEECAN:
 To achieve all of that, Pyleecan is **open source** with a very permissive license (Apache V2 license).
 
 ## Getting Started
-The procedure to install and use Pyleecan is detailed on [pyleecan website](https://www.pyleecan.org/get.pyleecan.html)
+The procedure to install and use Pyleecan is detailed on ~~[pyleecan website](https://www.pyleecan.org/get.pyleecan.html)~~
 Warning: Pyleecan is not yet compatible with Python 3.11 due to PySide2. We plan to update pyleecan to 3.11 when we will have the time to do so. 
 
 ## Origin and Current Status of the Project
@@ -40,7 +50,7 @@ Warning: Pyleecan is not yet compatible with Python 3.11 due to PySide2. We plan
 - Star of Slot Winding (with [swat-em](https://swat-em.readthedocs.io/en/latest/)) and User Defined Winding
 - Generic Geometry modeler to draw complex machines in the software coupled with PYLEECAN
 - Notches (Yoke and Bore) / Uneven Bore or Yoke shape (compatible with slot/notches) / Machine with more than 2 laminations
-Examples can be found in the [gallery](https://pyleecan.org/gallery.html).
+Examples can be found in the ~~[gallery](https://pyleecan.org/gallery.html)~~.
 
 If you are interested by a topology or a specific model, you can [open an issue](https://github.com/Eomys/pyleecan/issues) or a [discussion](https://github.com/Eomys/pyleecan/discussions) on this Github repository to talk about it. We will gladly explain how to develop it yourself or we will add it to the development list. We are always looking for experimental data and model validation based on the last scientific research work. 
 Even if you don't have time to work on pyleecan, sharing your expertise will be valued by the community. 
@@ -49,7 +59,7 @@ Even if you don't have time to work on pyleecan, sharing your expertise will be 
 The mid/long term roadmap of the project is detailed [here](https://github.com/Eomys/pyleecan/issues/214)
 
 ## Documentation / Website
-All the information on the project are available at [www.pyleecan.org](http://www.pyleecan.org). In particular, the [media page](https://pyleecan.org/media.html) gathers the publications, video and screenshots of the project.
+All the information on the project are available at ~~[www.pyleecan.org](http://www.pyleecan.org)~~. In particular, the ~~[media page](https://pyleecan.org/media.html)~~ gathers the publications, video and screenshots of the project.
 
 ## Contact
 You can contact us:
@@ -57,6 +67,6 @@ You can contact us:
 * By sending an email at pyleecan(at)framalistes.org that redirect to all the maintainers.
 
 You can follow us:
-* On our [newsletter](https://pyleecan.org/)
+* On our ~~[newsletter](https://pyleecan.org/)~~
 * On [GFC youtube channel](https://www.youtube.com/channel/UCfp83IQbz9znqsU28keMjZw) (with webinars and tutorials video)
 * On [GFC Linkedin page](https://www.linkedin.com/company/greenforgecoop/)
