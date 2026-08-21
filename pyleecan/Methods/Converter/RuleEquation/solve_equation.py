@@ -1,7 +1,16 @@
-from sympy.solvers import solve
+import os
 
 
 def solve_equation(self, other_dict, machine, other_unit_dict, is_P_to_other):
+    try:
+        os.environ.setdefault("MPMATH_NOGMPY", "1")
+        os.environ.setdefault("SYMPY_GROUND_TYPES", "python")
+        from sympy.solvers import solve
+    except Exception as error:
+        raise ImportError(
+            "RuleEquation.solve_equation requires a working SymPy installation"
+        ) from error
+
     if is_P_to_other:
         name_var = "x"
     else:

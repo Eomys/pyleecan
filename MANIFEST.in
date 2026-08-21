@@ -6,4 +6,5 @@ prune pyleecan/Results
 global-exclude *.py[cod]
 global-exclude *.ui
 global-exclude *.csv
+recursive-include pyleecan/Data/DriveCycle *.csv
 prune pyleecan/Generator

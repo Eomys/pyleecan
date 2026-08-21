@@ -42,8 +42,6 @@ def run(self):
         Swire = machine.stator.winding.conductor.comp_surface_active()
         Npcp = machine.stator.winding.Npcp
         self.Irms_max = self.Jrms_max * Swire * Npcp
-    else:
-        self.Irms_max = output.simu.input.Irms_max
 
     if self.LUT_enforced is not None:
         # Take enforced LUT
@@ -90,6 +88,8 @@ def run(self):
 
     if OP.Pem_av_ref is not None or OP.Pem_av_in is not None:
         out_dict = self.solve_power(LUT, Rs)
+    elif getattr(OP, "Tem_av_ref", None) is not None:
+        out_dict = self.solve_torque(LUT, Rs)
     else:
         out_dict = self.solve_MTPA(LUT, Rs)
 
@@ -129,15 +129,11 @@ def run(self):
     if "Pjoule" in out_dict:
         output.elec.Pj_losses = out_dict["Pjoule"]
 
-    if "Pstator" in out_dict:
-        # Store losses
-        output.loss = OutLoss(
-            Pjoule=out_dict["Pjoule"],
-            Pstator=out_dict["Pstator"],
-            Pmagnet=out_dict["Pmagnet"],
-            Protor=out_dict["Protor"],
-            Pprox=out_dict["Pprox"],
-        )
+    if "Pstator" in out_dict and output.loss is None:
+        # ElecLUTdq currently returns scalar loss breakdown values, while OutLoss stores
+        # structured loss-model outputs. Keep the electrical power balance on OutElec and
+        # only attach an empty OutLoss container when no loss output exists yet.
+        output.loss = OutLoss()
 
     # Calculate slot current density
     output.elec.get_Jrms()

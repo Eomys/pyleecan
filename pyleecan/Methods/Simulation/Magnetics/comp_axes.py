@@ -22,12 +22,29 @@ def comp_axes(self, output):
     axes_dict_geo = outgeo.axes_dict
 
     # Add periodicities to time and angle axes
+    # Time anti-periodicity inferred from rotor spatial anti-periodicity is not
+    # generally valid for magnetic quantities in the stator frame: stator slots
+    # and enforced stator currents do not simply change sign when the rotor is
+    # advanced by an anti-period. Keep the time periodicity reduction, but force
+    # it to be a regular period so FEMM computes the complete magnetic waveform.
+    per_t = None
+    is_antiper_t = None
+    if self.is_periodicity_t is not False:
+        _, _, per_t_0, is_antiper_t_0 = output.get_machine_periodicity(
+            is_rotor_ref=self.is_periodicity_rotor
+        )
+        if is_antiper_t_0:
+            per_t = per_t_0
+            is_antiper_t = False
+
     axes_dict = output.simu.input.comp_axes(
         axes_list=["time", "angle"],
         axes_dict_in=axes_dict_geo,
         is_periodicity_a=self.is_periodicity_a,
         is_periodicity_t=self.is_periodicity_t,
         is_periodicity_rotor=self.is_periodicity_rotor,
+        per_t=per_t,
+        is_antiper_t=is_antiper_t,
     )
 
     # Check Time periodicities regarding Magnetics model input

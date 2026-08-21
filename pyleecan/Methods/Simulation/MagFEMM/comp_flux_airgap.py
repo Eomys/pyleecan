@@ -133,7 +133,13 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         out_dict.pop("Phi_wind")
 
     # Solve for all time step and store all the results in out_dict
-    if self.nb_worker > 1:
+    is_parallel = self.nb_worker > 1 and not self.is_sliding_band
+    if self.nb_worker > 1 and self.is_sliding_band:
+        logger.debug(
+            "FEMM parallelization is disabled for sliding-band calculations."
+        )
+
+    if is_parallel:
         # A Femm handler will be created for each worker
         femm.closefemm()
         output.mag.internal.handler_list.remove(femm)

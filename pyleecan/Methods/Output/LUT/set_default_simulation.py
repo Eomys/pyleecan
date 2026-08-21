@@ -44,7 +44,7 @@ def set_default_simulation(self, machine, OP_matrix=None, name=None):
         simu.var_simu.set_OP_matrix_obj(OP_matrix)
 
     # Define second simu for FEMM comparison
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=4)
+    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=8)
 
     # Postprocessing
     simu.var_simu.postproc_list = [PostLUT(is_save_LUT=True)]

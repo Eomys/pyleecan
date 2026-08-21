@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contribution Guide
+    url: https://github.com/Eomys/pyleecan/blob/master/CONTRIBUTING.md
+    about: Review the repository contribution and governance rules before opening a large change request.
+  - name: Project Governance
+    url: https://github.com/Eomys/pyleecan/blob/master/Doc/Open_Source_Project_Governance_CN.md
+    about: Review the documentation, interface, module, and PR management policy.

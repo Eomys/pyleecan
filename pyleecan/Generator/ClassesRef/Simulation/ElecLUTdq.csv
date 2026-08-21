@@ -18,3 +18,4 @@ Simulation,Electrical,run,VERSION,1,Electric module object for electrical equiva
 ,,comp_LUTdq,,,,
 ,,solve_power,,,,
 ,,solve_MTPA,,,,
+,,solve_torque,,,,
