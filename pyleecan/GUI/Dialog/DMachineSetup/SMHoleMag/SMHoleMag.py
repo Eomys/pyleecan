@@ -79,7 +79,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
 
         # Connect the slot
         self.tab_hole.tabCloseRequested.connect(self.s_remove)
-        self.b_add.clicked.connect(self.s_add)
+        self.b_add.clicked.connect(lambda: self.s_add(hole=None))
 
         self.b_plot.clicked.connect(self.s_plot)
 
@@ -110,7 +110,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
                 + " [rad]"
             )
 
-    def s_add(self, hole=False):
+    def s_add(self, hole=None):
         """Signal to add a new hole
 
         Parameters
@@ -127,7 +127,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         else:
             is_mag = True
         # Create a new hole if needed
-        if type(hole) is bool:
+        if hole is None:
             self.obj.hole.append(HoleM50())
             hole = self.obj.hole[-1]
             hole._set_None()

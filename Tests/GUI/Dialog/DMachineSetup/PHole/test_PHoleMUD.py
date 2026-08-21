@@ -70,9 +70,15 @@ class TestPHoleMUD(object):
         assert wid_hole.g_mat_layout.count() == 13
 
         for idx_mag_wid in range(1, wid_hole.g_mat_layout.count()):
-            idx_label = (
-                wid_hole.g_mat_layout.itemAt(idx_mag_wid)
-                .wid.in_mat_type.text()
-                .split(" ")[-1]
-            )
+            widget = wid_hole.g_mat_layout.itemAt(idx_mag_wid).widget()
+            idx_label = widget.in_mat_type.text().split(" ")[-1]
             assert int(idx_label) == idx_mag_wid - 1
+
+
+if __name__ == "__main__":
+    a = TestPHoleMUD()
+    a.setup_class()
+    a.setup_method()
+    a.test_load_dxf_11_magnets()
+
+    print("Done")
