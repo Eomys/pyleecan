@@ -304,5 +304,6 @@ if __name__ == "__main__":
     a.setup_class()
     a.setup_method()
     a.test_set_nb_worker()
+    a.test_simu()
 
     print("Done")

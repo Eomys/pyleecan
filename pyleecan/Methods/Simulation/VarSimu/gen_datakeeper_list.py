@@ -33,5 +33,7 @@ def gen_datakeeper_list(self, ref_simu):
         datakeeper_list.extend(
             self.get_force_datakeeper(symbol_list, is_multi=is_multi)
         )
+    if ref_simu.loss:
+        datakeeper_list.extend(self.get_loss_datakeeper(symbol_list, is_multi=is_multi))
 
     self.datakeeper_list.extend(datakeeper_list)

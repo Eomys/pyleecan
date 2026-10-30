@@ -18,6 +18,16 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Output.OutLoss.__getitem__ import __getitem__
+except ImportError as error:
+    __getitem__ = error
+
+try:
+    from ..Methods.Output.OutLoss.__len__ import __len__
+except ImportError as error:
+    __len__ = error
+
+try:
     from ..Methods.Output.OutLoss.get_loss_density_ag import get_loss_density_ag
 except ImportError as error:
     get_loss_density_ag = error
@@ -28,6 +38,11 @@ except ImportError as error:
     get_loss_overall = error
 
 try:
+    from ..Methods.Output.OutLoss.get_meshsolution import get_meshsolution
+except ImportError as error:
+    get_meshsolution = error
+
+try:
     from ..Methods.Output.OutLoss.get_power_dict import get_power_dict
 except ImportError as error:
     get_power_dict = error
@@ -36,16 +51,6 @@ try:
     from ..Methods.Output.OutLoss.plot_losses import plot_losses
 except ImportError as error:
     plot_losses = error
-
-try:
-    from ..Methods.Output.OutLoss.__getitem__ import __getitem__
-except ImportError as error:
-    __getitem__ = error
-
-try:
-    from ..Methods.Output.OutLoss.__len__ import __len__
-except ImportError as error:
-    __len__ = error
 
 
 from numpy import isnan
@@ -58,6 +63,24 @@ class OutLoss(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.OutLoss.__getitem__
+    if isinstance(__getitem__, ImportError):
+        __getitem__ = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLoss method __getitem__: " + str(__getitem__))
+            )
+        )
+    else:
+        __getitem__ = __getitem__
+    # cf Methods.Output.OutLoss.__len__
+    if isinstance(__len__, ImportError):
+        __len__ = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLoss method __len__: " + str(__len__))
+            )
+        )
+    else:
+        __len__ = __len__
     # cf Methods.Output.OutLoss.get_loss_density_ag
     if isinstance(get_loss_density_ag, ImportError):
         get_loss_density_ag = property(
@@ -82,6 +105,18 @@ class OutLoss(FrozenClass):
         )
     else:
         get_loss_overall = get_loss_overall
+    # cf Methods.Output.OutLoss.get_meshsolution
+    if isinstance(get_meshsolution, ImportError):
+        get_meshsolution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_meshsolution: "
+                    + str(get_meshsolution)
+                )
+            )
+        )
+    else:
+        get_meshsolution = get_meshsolution
     # cf Methods.Output.OutLoss.get_power_dict
     if isinstance(get_power_dict, ImportError):
         get_power_dict = property(
@@ -102,24 +137,6 @@ class OutLoss(FrozenClass):
         )
     else:
         plot_losses = plot_losses
-    # cf Methods.Output.OutLoss.__getitem__
-    if isinstance(__getitem__, ImportError):
-        __getitem__ = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutLoss method __getitem__: " + str(__getitem__))
-            )
-        )
-    else:
-        __getitem__ = __getitem__
-    # cf Methods.Output.OutLoss.__len__
-    if isinstance(__len__, ImportError):
-        __len__ = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutLoss method __len__: " + str(__len__))
-            )
-        )
-    else:
-        __len__ = __len__
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -130,6 +147,11 @@ class OutLoss(FrozenClass):
         axes_dict=None,
         loss_dict=-1,
         logger_name="Pyleecan.Loss",
+        meshsolution=None,
+        P_in=None,
+        P_out=None,
+        efficiency=None,
+        Tmech_av=None,
         init_dict=None,
         init_str=None,
     ):
@@ -154,11 +176,26 @@ class OutLoss(FrozenClass):
                 loss_dict = init_dict["loss_dict"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "meshsolution" in list(init_dict.keys()):
+                meshsolution = init_dict["meshsolution"]
+            if "P_in" in list(init_dict.keys()):
+                P_in = init_dict["P_in"]
+            if "P_out" in list(init_dict.keys()):
+                P_out = init_dict["P_out"]
+            if "efficiency" in list(init_dict.keys()):
+                efficiency = init_dict["efficiency"]
+            if "Tmech_av" in list(init_dict.keys()):
+                Tmech_av = init_dict["Tmech_av"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
         self.loss_dict = loss_dict
         self.logger_name = logger_name
+        self.meshsolution = meshsolution
+        self.P_in = P_in
+        self.P_out = P_out
+        self.efficiency = efficiency
+        self.Tmech_av = Tmech_av
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -180,6 +217,19 @@ class OutLoss(FrozenClass):
             )
             OutLoss_str += "loss_dict[" + key + "] =" + tmp + linesep + linesep
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        if self.meshsolution is not None:
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            OutLoss_str += "meshsolution = " + tmp
+        else:
+            OutLoss_str += "meshsolution = None" + linesep + linesep
+        OutLoss_str += "P_in = " + str(self.P_in) + linesep
+        OutLoss_str += "P_out = " + str(self.P_out) + linesep
+        OutLoss_str += "efficiency = " + str(self.efficiency) + linesep
+        OutLoss_str += "Tmech_av = " + str(self.Tmech_av) + linesep
         return OutLoss_str
 
     def __eq__(self, other):
@@ -192,6 +242,16 @@ class OutLoss(FrozenClass):
         if other.loss_dict != self.loss_dict:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.meshsolution != self.meshsolution:
+            return False
+        if other.P_in != self.P_in:
+            return False
+        if other.P_out != self.P_out:
+            return False
+        if other.efficiency != self.efficiency:
+            return False
+        if other.Tmech_av != self.Tmech_av:
             return False
         return True
 
@@ -251,6 +311,87 @@ class OutLoss(FrozenClass):
                 diff_list.append(name + ".logger_name" + val_str)
             else:
                 diff_list.append(name + ".logger_name")
+        if (other.meshsolution is None and self.meshsolution is not None) or (
+            other.meshsolution is not None and self.meshsolution is None
+        ):
+            diff_list.append(name + ".meshsolution None mismatch")
+        elif self.meshsolution is not None:
+            diff_list.extend(
+                self.meshsolution.compare(
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._P_in is not None
+            and self._P_in is not None
+            and isnan(other._P_in)
+            and isnan(self._P_in)
+        ):
+            pass
+        elif other._P_in != self._P_in:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._P_in) + ", other=" + str(other._P_in) + ")"
+                )
+                diff_list.append(name + ".P_in" + val_str)
+            else:
+                diff_list.append(name + ".P_in")
+        if (
+            other._P_out is not None
+            and self._P_out is not None
+            and isnan(other._P_out)
+            and isnan(self._P_out)
+        ):
+            pass
+        elif other._P_out != self._P_out:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._P_out) + ", other=" + str(other._P_out) + ")"
+                )
+                diff_list.append(name + ".P_out" + val_str)
+            else:
+                diff_list.append(name + ".P_out")
+        if (
+            other._efficiency is not None
+            and self._efficiency is not None
+            and isnan(other._efficiency)
+            and isnan(self._efficiency)
+        ):
+            pass
+        elif other._efficiency != self._efficiency:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._efficiency)
+                    + ", other="
+                    + str(other._efficiency)
+                    + ")"
+                )
+                diff_list.append(name + ".efficiency" + val_str)
+            else:
+                diff_list.append(name + ".efficiency")
+        if (
+            other._Tmech_av is not None
+            and self._Tmech_av is not None
+            and isnan(other._Tmech_av)
+            and isnan(self._Tmech_av)
+        ):
+            pass
+        elif other._Tmech_av != self._Tmech_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tmech_av)
+                    + ", other="
+                    + str(other._Tmech_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tmech_av" + val_str)
+            else:
+                diff_list.append(name + ".Tmech_av")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -266,6 +407,11 @@ class OutLoss(FrozenClass):
             for key, value in self.loss_dict.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.meshsolution)
+        S += getsizeof(self.P_in)
+        S += getsizeof(self.P_out)
+        S += getsizeof(self.efficiency)
+        S += getsizeof(self.Tmech_av)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -307,6 +453,18 @@ class OutLoss(FrozenClass):
                 else:
                     OutLoss_dict["loss_dict"][key] = None
         OutLoss_dict["logger_name"] = self.logger_name
+        if self.meshsolution is None:
+            OutLoss_dict["meshsolution"] = None
+        else:
+            OutLoss_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        OutLoss_dict["P_in"] = self.P_in
+        OutLoss_dict["P_out"] = self.P_out
+        OutLoss_dict["efficiency"] = self.efficiency
+        OutLoss_dict["Tmech_av"] = self.Tmech_av
         # The class name is added to the dict for deserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
         return OutLoss_dict
@@ -328,11 +486,24 @@ class OutLoss(FrozenClass):
             for key, obj in self.loss_dict.items():
                 loss_dict_val[key] = obj.copy()
         logger_name_val = self.logger_name
+        if self.meshsolution is None:
+            meshsolution_val = None
+        else:
+            meshsolution_val = self.meshsolution.copy()
+        P_in_val = self.P_in
+        P_out_val = self.P_out
+        efficiency_val = self.efficiency
+        Tmech_av_val = self.Tmech_av
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             axes_dict=axes_dict_val,
             loss_dict=loss_dict_val,
             logger_name=logger_name_val,
+            meshsolution=meshsolution_val,
+            P_in=P_in_val,
+            P_out=P_out_val,
+            efficiency=efficiency_val,
+            Tmech_av=Tmech_av_val,
         )
         return obj_copy
 
@@ -342,6 +513,12 @@ class OutLoss(FrozenClass):
         self.axes_dict = None
         self.loss_dict = None
         self.logger_name = None
+        if self.meshsolution is not None:
+            self.meshsolution._set_None()
+        self.P_in = None
+        self.P_out = None
+        self.efficiency = None
+        self.Tmech_av = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -417,7 +594,7 @@ class OutLoss(FrozenClass):
     loss_dict = property(
         fget=_get_loss_dict,
         fset=_set_loss_dict,
-        doc="""Dict containing OutLossModel obects for each type of loss
+        doc="""Dict containing OutLossModel objects for each type of loss
 
         :Type: {OutLossModel}
         """,
@@ -438,5 +615,116 @@ class OutLoss(FrozenClass):
         doc="""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_meshsolution(self):
+        """getter of meshsolution"""
+        return self._meshsolution
+
+    def _set_meshsolution(self, value):
+        """setter of meshsolution"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "meshsolution"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
+            value = MeshSolution()
+        check_var("meshsolution", value, "MeshSolution")
+        self._meshsolution = value
+
+        if self._meshsolution is not None:
+            self._meshsolution.parent = self
+
+    meshsolution = property(
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
+        doc="""FEA software mesh and solution
+
+        :Type: MeshSolution
+        """,
+    )
+
+    def _get_P_in(self):
+        """getter of P_in"""
+        return self._P_in
+
+    def _set_P_in(self, value):
+        """setter of P_in"""
+        check_var("P_in", value, "float")
+        self._P_in = value
+
+    P_in = property(
+        fget=_get_P_in,
+        fset=_set_P_in,
+        doc="""Input electric power used to calculate efficiency
+
+        :Type: float
+        """,
+    )
+
+    def _get_P_out(self):
+        """getter of P_out"""
+        return self._P_out
+
+    def _set_P_out(self, value):
+        """setter of P_out"""
+        check_var("P_out", value, "float")
+        self._P_out = value
+
+    P_out = property(
+        fget=_get_P_out,
+        fset=_set_P_out,
+        doc="""Output mechanical power used to calculate efficiency
+
+        :Type: float
+        """,
+    )
+
+    def _get_efficiency(self):
+        """getter of efficiency"""
+        return self._efficiency
+
+    def _set_efficiency(self, value):
+        """setter of efficiency"""
+        check_var("efficiency", value, "float")
+        self._efficiency = value
+
+    efficiency = property(
+        fget=_get_efficiency,
+        fset=_set_efficiency,
+        doc="""Efficiency (p.u)
+
+        :Type: float
+        """,
+    )
+
+    def _get_Tmech_av(self):
+        """getter of Tmech_av"""
+        return self._Tmech_av
+
+    def _set_Tmech_av(self, value):
+        """setter of Tmech_av"""
+        check_var("Tmech_av", value, "float")
+        self._Tmech_av = value
+
+    Tmech_av = property(
+        fget=_get_Tmech_av,
+        fset=_set_Tmech_av,
+        doc="""Average mechanical torque
+
+        :Type: float
         """,
     )

@@ -1,19 +1,16 @@
 # Load the machine
 from os.path import join
-from pyleecan.Classes.OPdq import OPdq
-from pyleecan.Functions.load import load
-from pyleecan.definitions import DATA_DIR
+
 import matplotlib.pyplot as plt
 import pytest
-from os.path import join
+from numpy import array, cos, linspace, ones, pi, sqrt, zeros
 
-from numpy import ones, pi, array, linspace, cos, sqrt, zeros
-
-from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.MagFEMM import MagFEMM
-
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 
 is_show_fig = False
 
@@ -113,7 +110,7 @@ def test_LSRPM_simulation():
     out_femm.mag.Tem.plot_2D_Data("time", is_show_fig=is_show_fig)
     print(out_femm.mag.Tem.values.shape)
     print(simu_femm.input.Nt_tot)
-    # out_femm.mag.meshsolution.plot_contour(label="B", group_names="stator core")
+    # out_femm.mag.get_meshsolution().plot_contour(label="B", group_names="stator core")
 
 
 if __name__ == "__main__":

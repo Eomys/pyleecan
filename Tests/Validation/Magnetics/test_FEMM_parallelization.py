@@ -181,17 +181,17 @@ def test_FEMM_parallelization_meshsolution():
 
     # %%
     # Plots solution computed without parallelization
-    out.mag.meshsolution.plot_mesh(
+    out.mag.get_meshsolution().plot_mesh(
         save_path=join(save_path, simu.name + "_mesh_not_parallel.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group("stator core").plot_mesh(
+    out.mag.get_meshsolution().get_group("stator core").plot_mesh(
         save_path=join(save_path, simu.name + "_mesh_stator_not_parallel.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(
+    out.mag.get_meshsolution().get_group(
         ["stator core", "/", "airgap", "stator winding"]
     ).plot_mesh(
         save_path=join(
@@ -201,17 +201,17 @@ def test_FEMM_parallelization_meshsolution():
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="\mu",
         save_path=join(save_path, simu.name + "_mu_not_parallel.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_path, simu.name + "_B_not_parallel.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="H",
         save_path=join(save_path, simu.name + "_H_not_parallel.png"),
         is_show_fig=False,
@@ -219,16 +219,16 @@ def test_FEMM_parallelization_meshsolution():
 
     # %%
     # Plots solution computed with parallelization
-    out2.mag.meshsolution.plot_mesh(
+    out2.mag.get_meshsolution().plot_mesh(
         save_path=join(save_path, simu.name + "_mesh_parallel.png"), is_show_fig=False
     )
 
-    out2.mag.meshsolution.get_group("stator core").plot_mesh(
+    out2.mag.get_meshsolution().get_group("stator core").plot_mesh(
         save_path=join(save_path, simu.name + "_mesh_stator_parallel.png"),
         is_show_fig=False,
     )
 
-    out2.mag.meshsolution.get_group(
+    out2.mag.get_meshsolution().get_group(
         ["stator core", "/", "airgap", "stator winding"]
     ).plot_mesh(
         save_path=join(
@@ -238,17 +238,17 @@ def test_FEMM_parallelization_meshsolution():
         is_show_fig=False,
     )
 
-    out2.mag.meshsolution.plot_contour(
+    out2.mag.get_meshsolution().plot_contour(
         label="\mu",
         save_path=join(save_path, simu.name + "_mu_parallel.png"),
         is_show_fig=False,
     )
-    out2.mag.meshsolution.plot_contour(
+    out2.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_path, simu.name + "_B_parallel.png"),
         is_show_fig=False,
     )
-    out2.mag.meshsolution.plot_contour(
+    out2.mag.get_meshsolution().plot_contour(
         label="H",
         save_path=join(save_path, simu.name + "_H_parallel.png"),
         is_show_fig=False,

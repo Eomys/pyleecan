@@ -1,8 +1,13 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-k_hy,W/kg,Hysteresis loss coefficient,0,float,None,,
-k_ed,W/kg,Eddy current loss coefficient,0,float,None,,
-k_ex,W/kg,Excess loss coefficient,0,float,None,,
-,
-Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Loss,LossModel,comp_coeff,VERSION,1,Bertotti Loss Model Class
-,,comp_loss,,,
+k_hy,W/kg,Hysteresis loss coefficient,0,float,None,,,
+k_ed,W/kg,Eddy current loss coefficient,0,float,None,,,
+k_ex,W/kg,Excess loss coefficient,0,float,None,,,
+is_stacking_factor,,True to consider lamination stacking factor when calculating core losses,,bool,0,,,
+alpha_B,,Hysteresis loss exponent,0,float,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Loss,LossModel,comp_coeff,VERSION,1,Bertotti Loss Model Class,,,
+,,comp_loss,,,,,,
+,,comp_loss_freq,,,,,,
+,,comp_loss_time,,,,,,
+,,plot_fitting,,,,,,

@@ -18,9 +18,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Loss.Loss.run import run
+    from ..Methods.Loss.Loss.comp_all_losses import comp_all_losses
 except ImportError as error:
-    run = error
+    comp_all_losses = error
 
 try:
     from ..Methods.Loss.Loss.comp_axes import comp_axes
@@ -28,9 +28,9 @@ except ImportError as error:
     comp_axes = error
 
 try:
-    from ..Methods.Loss.Loss.comp_all_losses import comp_all_losses
+    from ..Methods.Loss.Loss.run import run
 except ImportError as error:
-    comp_all_losses = error
+    run = error
 
 
 from numpy import isnan
@@ -43,22 +43,6 @@ class Loss(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Loss.Loss.run
-    if isinstance(run, ImportError):
-        run = property(
-            fget=lambda x: raise_(ImportError("Can't use Loss method run: " + str(run)))
-        )
-    else:
-        run = run
-    # cf Methods.Loss.Loss.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Loss method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # cf Methods.Loss.Loss.comp_all_losses
     if isinstance(comp_all_losses, ImportError):
         comp_all_losses = property(
@@ -70,6 +54,22 @@ class Loss(FrozenClass):
         )
     else:
         comp_all_losses = comp_all_losses
+    # cf Methods.Loss.Loss.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Loss method comp_axes: " + str(comp_axes))
+            )
+        )
+    else:
+        comp_axes = comp_axes
+    # cf Methods.Loss.Loss.run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(ImportError("Can't use Loss method run: " + str(run)))
+        )
+    else:
+        run = run
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -82,6 +82,7 @@ class Loss(FrozenClass):
         Tsta=20,
         Trot=20,
         is_get_meshsolution=False,
+        is_clean_magmesh=False,
         init_dict=None,
         init_str=None,
     ):
@@ -110,6 +111,8 @@ class Loss(FrozenClass):
                 Trot = init_dict["Trot"]
             if "is_get_meshsolution" in list(init_dict.keys()):
                 is_get_meshsolution = init_dict["is_get_meshsolution"]
+            if "is_clean_magmesh" in list(init_dict.keys()):
+                is_clean_magmesh = init_dict["is_clean_magmesh"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.logger_name = logger_name
@@ -117,6 +120,7 @@ class Loss(FrozenClass):
         self.Tsta = Tsta
         self.Trot = Trot
         self.is_get_meshsolution = is_get_meshsolution
+        self.is_clean_magmesh = is_clean_magmesh
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -141,6 +145,7 @@ class Loss(FrozenClass):
         Loss_str += "Tsta = " + str(self.Tsta) + linesep
         Loss_str += "Trot = " + str(self.Trot) + linesep
         Loss_str += "is_get_meshsolution = " + str(self.is_get_meshsolution) + linesep
+        Loss_str += "is_clean_magmesh = " + str(self.is_clean_magmesh) + linesep
         return Loss_str
 
     def __eq__(self, other):
@@ -157,6 +162,8 @@ class Loss(FrozenClass):
         if other.Trot != self.Trot:
             return False
         if other.is_get_meshsolution != self.is_get_meshsolution:
+            return False
+        if other.is_clean_magmesh != self.is_clean_magmesh:
             return False
         return True
 
@@ -240,6 +247,18 @@ class Loss(FrozenClass):
                 diff_list.append(name + ".is_get_meshsolution" + val_str)
             else:
                 diff_list.append(name + ".is_get_meshsolution")
+        if other._is_clean_magmesh != self._is_clean_magmesh:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_clean_magmesh)
+                    + ", other="
+                    + str(other._is_clean_magmesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_clean_magmesh" + val_str)
+            else:
+                diff_list.append(name + ".is_clean_magmesh")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -255,6 +274,7 @@ class Loss(FrozenClass):
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
         S += getsizeof(self.is_get_meshsolution)
+        S += getsizeof(self.is_clean_magmesh)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -286,6 +306,7 @@ class Loss(FrozenClass):
         Loss_dict["Tsta"] = self.Tsta
         Loss_dict["Trot"] = self.Trot
         Loss_dict["is_get_meshsolution"] = self.is_get_meshsolution
+        Loss_dict["is_clean_magmesh"] = self.is_clean_magmesh
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
@@ -304,6 +325,7 @@ class Loss(FrozenClass):
         Tsta_val = self.Tsta
         Trot_val = self.Trot
         is_get_meshsolution_val = self.is_get_meshsolution
+        is_clean_magmesh_val = self.is_clean_magmesh
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             logger_name=logger_name_val,
@@ -311,6 +333,7 @@ class Loss(FrozenClass):
             Tsta=Tsta_val,
             Trot=Trot_val,
             is_get_meshsolution=is_get_meshsolution_val,
+            is_clean_magmesh=is_clean_magmesh_val,
         )
         return obj_copy
 
@@ -322,6 +345,7 @@ class Loss(FrozenClass):
         self.Tsta = None
         self.Trot = None
         self.is_get_meshsolution = None
+        self.is_clean_magmesh = None
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -393,7 +417,7 @@ class Loss(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc="""Average stator temperature for Electrical calculation
+        doc="""Average stator temperature for Loss calculation
 
         :Type: float
         """,
@@ -411,7 +435,7 @@ class Loss(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc="""Average rotor temperature for Electrical calculation
+        doc="""Average rotor temperature for Loss calculation
 
         :Type: float
         """,
@@ -430,6 +454,24 @@ class Loss(FrozenClass):
         fget=_get_is_get_meshsolution,
         fset=_set_is_get_meshsolution,
         doc="""True to save loss density map as meshsolution
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_clean_magmesh(self):
+        """getter of is_clean_magmesh"""
+        return self._is_clean_magmesh
+
+    def _set_is_clean_magmesh(self, value):
+        """setter of is_clean_magmesh"""
+        check_var("is_clean_magmesh", value, "bool")
+        self._is_clean_magmesh = value
+
+    is_clean_magmesh = property(
+        fget=_get_is_clean_magmesh,
+        fset=_set_is_clean_magmesh,
+        doc="""True to clean meshsolution from OutMag after loss calculation
 
         :Type: bool
         """,

@@ -51,21 +51,19 @@ def test_SPMSM015_plot_contour_B_FEMM():
 
     out = simu.run()
 
-    out.mag.meshsolution.plot_contour(
-        is_show_fig=False, save_path=join(save_path, "plot_mesh.png")
-    )
-    out.mag.meshsolution.get_group("stator core").plot_contour(
+    mag_mesh = out.mag.get_meshsolution()
+
+    mag_mesh.plot_contour(is_show_fig=False, save_path=join(save_path, "plot_mesh.png"))
+    mag_mesh.get_group("stator core").plot_contour(
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )
-    # out.mag.meshsolution.plot_contour(
+    # out.mag.get_meshsolution().plot_contour(
     #     is_animated=True,
     #     group_names="stator core",
     #     is_show_fig=False,
     #     save_path=join(save_path, "plot_mesh_stator.gif"),
     # )
-
-    pass
 
 
 @pytest.mark.long_5s
@@ -105,12 +103,12 @@ def test_Benchmark_plot_contour_B_FEMM():
     #     save_path=join(save_path, "plot_B_mesh.gif"),
     # )
 
-    out.mag.meshsolution.get_group(["rotor magnets", "rotor core"]).plot_contour(
+    mag_mesh = out.mag.get_meshsolution()
+
+    mag_mesh.get_group(["rotor magnets", "rotor core"]).plot_contour(
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )
-
-    pass
 
 
 @pytest.mark.long_5s
@@ -158,16 +156,16 @@ def test_Benchmark_skew_plot_contour_B_FEMM():
     #     save_path=join(save_path, "plot_B_mesh.gif"),
     # )
 
-    out.mag.meshsolution.get_group(["rotor magnets", "rotor core"]).plot_contour(
+    mag_mesh = out.mag.get_meshsolution()
+
+    mag_mesh.get_group(["rotor magnets", "rotor core"]).plot_contour(
         is_show_fig=False,
         save_path=join(save_path, "plot_mesh_stator.png"),
     )
 
-    pass
-
 
 if __name__ == "__main__":
-    test_SPMSM015_plot_contour_B_FEMM()
-    test_Benchmark_plot_contour_B_FEMM()
+    # test_SPMSM015_plot_contour_B_FEMM()
+    # test_Benchmark_plot_contour_B_FEMM()
     test_Benchmark_skew_plot_contour_B_FEMM()
     print("Done")

@@ -26,7 +26,7 @@ def run_class_generator(argv):
 
     c.show()
 
-    exit(a.exec_())
+    exit(a.exec())
 
 
 if __name__ == "__main__":

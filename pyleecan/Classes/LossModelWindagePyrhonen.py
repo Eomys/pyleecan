@@ -22,6 +22,21 @@ try:
 except ImportError as error:
     comp_loss = error
 
+try:
+    from ..Methods.Loss.LossModelWindagePyrhonen.comp_loss_freq import comp_loss_freq
+except ImportError as error:
+    comp_loss_freq = error
+
+try:
+    from ..Methods.Loss.LossModelWindagePyrhonen.comp_loss_time import comp_loss_time
+except ImportError as error:
+    comp_loss_time = error
+
+try:
+    from ..Methods.Loss.LossModelWindagePyrhonen.comp_loss_value import comp_loss_value
+except ImportError as error:
+    comp_loss_value = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -32,6 +47,7 @@ class LossModelWindagePyrhonen(LossModel):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Loss.LossModelWindagePyrhonen.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
@@ -44,19 +60,49 @@ class LossModelWindagePyrhonen(LossModel):
         )
     else:
         comp_loss = comp_loss
+    # cf Methods.Loss.LossModelWindagePyrhonen.comp_loss_freq
+    if isinstance(comp_loss_freq, ImportError):
+        comp_loss_freq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelWindagePyrhonen method comp_loss_freq: "
+                    + str(comp_loss_freq)
+                )
+            )
+        )
+    else:
+        comp_loss_freq = comp_loss_freq
+    # cf Methods.Loss.LossModelWindagePyrhonen.comp_loss_time
+    if isinstance(comp_loss_time, ImportError):
+        comp_loss_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelWindagePyrhonen method comp_loss_time: "
+                    + str(comp_loss_time)
+                )
+            )
+        )
+    else:
+        comp_loss_time = comp_loss_time
+    # cf Methods.Loss.LossModelWindagePyrhonen.comp_loss_value
+    if isinstance(comp_loss_value, ImportError):
+        comp_loss_value = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelWindagePyrhonen method comp_loss_value: "
+                    + str(comp_loss_value)
+                )
+            )
+        )
+    else:
+        comp_loss_value = comp_loss_value
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self,
-        name="",
-        group="",
-        is_show_fig=False,
-        coeff_dict=None,
-        init_dict=None,
-        init_str=None,
+        self, name="", group="", coeff_dict=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -77,14 +123,12 @@ class LossModelWindagePyrhonen(LossModel):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         # Call LossModel init
         super(LossModelWindagePyrhonen, self).__init__(
-            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+            name=name, group=group, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
@@ -164,18 +208,12 @@ class LossModelWindagePyrhonen(LossModel):
         # Handle deepcopy of all the properties
         name_val = self.name
         group_val = self.group
-        is_show_fig_val = self.is_show_fig
         if self.coeff_dict is None:
             coeff_dict_val = None
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            name=name_val,
-            group=group_val,
-            is_show_fig=is_show_fig_val,
-            coeff_dict=coeff_dict_val,
-        )
+        obj_copy = type(self)(name=name_val, group=group_val, coeff_dict=coeff_dict_val)
         return obj_copy
 
     def _set_None(self):

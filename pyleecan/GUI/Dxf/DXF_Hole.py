@@ -667,7 +667,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         lf_off.validator().setTop(360)
         lf_off.setValue(0)
         # lf_off.setText("0")
-        lf_off.setEnabled(np.any(self.selected_line == 2))
+        lf_off.setEnabled(int(np.any(self.selected_line == 2)))
         self.w_surface_list.setCellWidget(
             nrows,
             OFF_COL,

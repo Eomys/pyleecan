@@ -1,14 +1,14 @@
+from multiprocessing import cpu_count
 from os.path import join
 
 import numpy as np
 import pytest
-from numpy.testing import assert_allclose, assert_almost_equal
-from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LossFEA import LossFEA
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.OutLoss import OutLoss
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
@@ -28,14 +28,14 @@ def test_LossFEA_SPMSM():
 
     machine = load(join(DATA_DIR, "Machine", "SPMSM_18s16p_loss.json"))
 
-    Ch = 0.00844 / 0.453592
-    Ce = 31.2e-6 / 0.453592
+    Ce = 0.530 / 7700
+    Ch = 143 / 7700
     Cprox = 4.1018  # sigma_w * cond.Hwire * cond.Wwire
 
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=16 * 20 * 10,
+        Nt_tot=16 * 10 * 2,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -45,7 +45,7 @@ def test_LossFEA_SPMSM():
     simu.mag = MagFEMM(
         is_periodicity_a=True,
         is_periodicity_t=True,
-        nb_worker=4,
+        nb_worker=cpu_count(),
         is_get_meshsolution=True,
         FEMM_dict_enforced={
             "mesh": {
@@ -54,19 +54,20 @@ def test_LossFEA_SPMSM():
                 "smart_mesh": 0,
             },
         },
-        is_fast_draw=True,
-        is_periodicity_rotor=True,
         is_calc_torque_energy=False,
-        # is_close_femm=False,
     )
 
     simu.loss = LossFEA(
-        k_hy=Ch,
-        k_ed=Ce,
-        k_p=Cprox,
+        k_hy_enforced=Ch,
+        k_ed_enforced=Ce,
+        k_p_enforced=Cprox,
         is_get_meshsolution=True,
         Tsta=120,
         type_skin_effect=0,
+        type_loss_model_core="Steinmetz",
+        alpha_f_enforced=1,
+        alpha_B_enforced=2,
+        is_stacking_factor=True,
     )
 
     out = simu.run()
@@ -74,8 +75,40 @@ def test_LossFEA_SPMSM():
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
+    # Check Power Dict
     power_dict = out.loss.get_power_dict()
-    print(power_dict)
+    exp_power_dict = {
+        "stator core": np.float64(3.3278595306143064),
+        "stator joule": np.float64(4.385847766901312),
+        "stator proximity": np.float64(0.05525019341272971),
+        "rotor core": np.float64(0.04407322797220236),
+        "rotor magnets": np.float64(1.2951002420384434),
+        "stator core + stator joule + stator proximity + rotor core + rotor magnets": np.float64(
+            9.108130960938993
+        ),
+        "total_power": np.float64(61.900931327124255),
+    }
+    assert len(power_dict.keys()) == len(exp_power_dict.keys())
+    for key in power_dict:
+        assert power_dict[key] == pytest.approx(exp_power_dict[key], rel=1e-2)
+
+    # Same with temporal approach
+    out_time = out.copy()
+    out_time.simu.loss = LossFEA(
+        is_get_meshsolution=True,
+        Tsta=100,
+        type_skin_effect=1,
+        type_loss_model_core="Steinmetz",
+        is_stacking_factor=True,
+        is_calc_windage_loss=True,
+        is_dynamic=True,
+    )
+
+    out_time.loss = OutLoss()
+    out_time.simu.loss.run()
+
+    # Check Power Dict
+    power_dict_t = out_time.loss.get_power_dict()
 
     power_dict_ref = {
         "mechanical power": 62.30,

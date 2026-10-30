@@ -27,6 +27,21 @@ try:
 except ImportError as error:
     comp_loss = error
 
+try:
+    from ..Methods.Loss.LossModelSteinmetz.comp_loss_freq import comp_loss_freq
+except ImportError as error:
+    comp_loss_freq = error
+
+try:
+    from ..Methods.Loss.LossModelSteinmetz.comp_loss_time import comp_loss_time
+except ImportError as error:
+    comp_loss_time = error
+
+try:
+    from ..Methods.Loss.LossModelSteinmetz.plot_fitting import plot_fitting
+except ImportError as error:
+    plot_fitting = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -60,6 +75,42 @@ class LossModelSteinmetz(LossModel):
         )
     else:
         comp_loss = comp_loss
+    # cf Methods.Loss.LossModelSteinmetz.comp_loss_freq
+    if isinstance(comp_loss_freq, ImportError):
+        comp_loss_freq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelSteinmetz method comp_loss_freq: "
+                    + str(comp_loss_freq)
+                )
+            )
+        )
+    else:
+        comp_loss_freq = comp_loss_freq
+    # cf Methods.Loss.LossModelSteinmetz.comp_loss_time
+    if isinstance(comp_loss_time, ImportError):
+        comp_loss_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelSteinmetz method comp_loss_time: "
+                    + str(comp_loss_time)
+                )
+            )
+        )
+    else:
+        comp_loss_time = comp_loss_time
+    # cf Methods.Loss.LossModelSteinmetz.plot_fitting
+    if isinstance(plot_fitting, ImportError):
+        plot_fitting = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelSteinmetz method plot_fitting: "
+                    + str(plot_fitting)
+                )
+            )
+        )
+    else:
+        plot_fitting = plot_fitting
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -71,9 +122,9 @@ class LossModelSteinmetz(LossModel):
         k_ed=None,
         alpha_f=None,
         alpha_B=None,
+        is_stacking_factor=False,
         name="",
         group="",
-        is_show_fig=False,
         coeff_dict=None,
         init_dict=None,
         init_str=None,
@@ -101,12 +152,12 @@ class LossModelSteinmetz(LossModel):
                 alpha_f = init_dict["alpha_f"]
             if "alpha_B" in list(init_dict.keys()):
                 alpha_B = init_dict["alpha_B"]
+            if "is_stacking_factor" in list(init_dict.keys()):
+                is_stacking_factor = init_dict["is_stacking_factor"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
@@ -114,9 +165,10 @@ class LossModelSteinmetz(LossModel):
         self.k_ed = k_ed
         self.alpha_f = alpha_f
         self.alpha_B = alpha_B
+        self.is_stacking_factor = is_stacking_factor
         # Call LossModel init
         super(LossModelSteinmetz, self).__init__(
-            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+            name=name, group=group, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
@@ -131,6 +183,9 @@ class LossModelSteinmetz(LossModel):
         LossModelSteinmetz_str += "k_ed = " + str(self.k_ed) + linesep
         LossModelSteinmetz_str += "alpha_f = " + str(self.alpha_f) + linesep
         LossModelSteinmetz_str += "alpha_B = " + str(self.alpha_B) + linesep
+        LossModelSteinmetz_str += (
+            "is_stacking_factor = " + str(self.is_stacking_factor) + linesep
+        )
         return LossModelSteinmetz_str
 
     def __eq__(self, other):
@@ -149,6 +204,8 @@ class LossModelSteinmetz(LossModel):
         if other.alpha_f != self.alpha_f:
             return False
         if other.alpha_B != self.alpha_B:
+            return False
+        if other.is_stacking_factor != self.is_stacking_factor:
             return False
         return True
 
@@ -235,6 +292,18 @@ class LossModelSteinmetz(LossModel):
                 diff_list.append(name + ".alpha_B" + val_str)
             else:
                 diff_list.append(name + ".alpha_B")
+        if other._is_stacking_factor != self._is_stacking_factor:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_stacking_factor)
+                    + ", other="
+                    + str(other._is_stacking_factor)
+                    + ")"
+                )
+                diff_list.append(name + ".is_stacking_factor" + val_str)
+            else:
+                diff_list.append(name + ".is_stacking_factor")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -250,6 +319,7 @@ class LossModelSteinmetz(LossModel):
         S += getsizeof(self.k_ed)
         S += getsizeof(self.alpha_f)
         S += getsizeof(self.alpha_B)
+        S += getsizeof(self.is_stacking_factor)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -273,6 +343,7 @@ class LossModelSteinmetz(LossModel):
         LossModelSteinmetz_dict["k_ed"] = self.k_ed
         LossModelSteinmetz_dict["alpha_f"] = self.alpha_f
         LossModelSteinmetz_dict["alpha_B"] = self.alpha_B
+        LossModelSteinmetz_dict["is_stacking_factor"] = self.is_stacking_factor
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelSteinmetz_dict["__class__"] = "LossModelSteinmetz"
@@ -286,9 +357,9 @@ class LossModelSteinmetz(LossModel):
         k_ed_val = self.k_ed
         alpha_f_val = self.alpha_f
         alpha_B_val = self.alpha_B
+        is_stacking_factor_val = self.is_stacking_factor
         name_val = self.name
         group_val = self.group
-        is_show_fig_val = self.is_show_fig
         if self.coeff_dict is None:
             coeff_dict_val = None
         else:
@@ -299,9 +370,9 @@ class LossModelSteinmetz(LossModel):
             k_ed=k_ed_val,
             alpha_f=alpha_f_val,
             alpha_B=alpha_B_val,
+            is_stacking_factor=is_stacking_factor_val,
             name=name_val,
             group=group_val,
-            is_show_fig=is_show_fig_val,
             coeff_dict=coeff_dict_val,
         )
         return obj_copy
@@ -313,6 +384,7 @@ class LossModelSteinmetz(LossModel):
         self.k_ed = None
         self.alpha_f = None
         self.alpha_B = None
+        self.is_stacking_factor = None
         # Set to None the properties inherited from LossModel
         super(LossModelSteinmetz, self)._set_None()
 
@@ -385,5 +457,23 @@ class LossModelSteinmetz(LossModel):
         doc="""Hysteresis loss power coefficient for the flux density magnitude
 
         :Type: float
+        """,
+    )
+
+    def _get_is_stacking_factor(self):
+        """getter of is_stacking_factor"""
+        return self._is_stacking_factor
+
+    def _set_is_stacking_factor(self, value):
+        """setter of is_stacking_factor"""
+        check_var("is_stacking_factor", value, "bool")
+        self._is_stacking_factor = value
+
+    is_stacking_factor = property(
+        fget=_get_is_stacking_factor,
+        fset=_set_is_stacking_factor,
+        doc="""True to consider lamination stacking factor when calculating core losses
+
+        :Type: bool
         """,
     )

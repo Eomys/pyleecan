@@ -375,7 +375,7 @@ class SSimu(Gen_SSimu, QWidget):
 
             # save mesh
             try:
-                out.mag.meshsolution.export_to_mat(
+                out.mag.get_meshsolution().export_to_mat(
                     save_path=(join(self.simu.path_result, "MagMeshSolution.mat")),
                 )
             except Exception as e:
@@ -389,7 +389,7 @@ class SSimu(Gen_SSimu, QWidget):
                 )
             # save mesh file vtk
             try:
-                out.mag.meshsolution.mesh.save_vtk(
+                out.mag.get_meshsolution().mesh.save_vtk(
                     save_path=(join(self.simu.path_result, "MagMesh.vtk")),
                 )
             except Exception as e:

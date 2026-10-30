@@ -1,4 +1,3 @@
-import numpy as np
 from SciDataTool import DataFreq
 
 from ....Classes.MeshSolution import MeshSolution
@@ -29,7 +28,46 @@ def get_mesh_solution(self):
     # global_loss_density = np.zeros((freqs.size, Nelem))
     # global_loss_density[If, Ie] += self.loss_density
 
-    ms_mag = output.mag.meshsolution
+    # TODO : Do time dependent version
+    # output = self.parent.parent
+    # axes_dict = self.parent.axes_dict
+
+    # for ms_mag in output.mag.meshsolution_dict.values():
+    #     if self.name in ms_mag.group:
+    #         Igrp = ms_mag.group[self.name]
+    #         break
+
+    # Indice = Data1D(
+    #     name="indice",
+    #     values=Igrp,
+    #     is_components=True,
+    #     is_overlay=False,
+    # )
+
+    # Loss_density_df = DataTime(
+    #     name=f"{self.name} loss density",
+    #     unit="W/m3",
+    #     symbol="L",
+    #     values=self.loss_density,
+    #     is_real=True,
+    #     axes=[axes_dict["time"], Indice],
+    # )
+
+    # Loss_density_sd = SolutionData(
+    #     label=Loss_density_df.name,
+    #     field=Loss_density_df,
+    #     unit=Loss_density_df.unit,
+    # )
+
+    # ms_loss = MeshSolution(
+    #     label=Loss_density_sd.label,
+    #     group=ms_mag.group,
+    #     mesh=ms_mag.mesh,
+    #     solution_dict={Loss_density_sd.label: Loss_density_sd},
+    #     dimension=2,
+    # )
+
+    ms_mag = output.mag.get_meshsolution()
 
     Loss_density_df = DataFreq(
         name=f"{self.name} loss density",

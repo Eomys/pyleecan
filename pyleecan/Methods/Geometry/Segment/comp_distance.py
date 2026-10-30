@@ -31,7 +31,7 @@ def comp_distance(self, Z):
         distance of a point to the Segment
     """
 
-    Z1 = array([self.begin.real, self.begin.imag])
-    Z2 = array([self.end.real, self.end.imag])
-    Z3 = array([Z.real, Z.imag])
+    Z1 = array([self.begin.real, self.begin.imag, 0])
+    Z2 = array([self.end.real, self.end.imag, 0])
+    Z3 = array([Z.real, Z.imag, 0])
     return distance_numpy(Z1, Z2, Z3)

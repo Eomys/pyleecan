@@ -27,6 +27,21 @@ try:
 except ImportError as error:
     comp_loss = error
 
+try:
+    from ..Methods.Loss.LossModelBertotti.comp_loss_freq import comp_loss_freq
+except ImportError as error:
+    comp_loss_freq = error
+
+try:
+    from ..Methods.Loss.LossModelBertotti.comp_loss_time import comp_loss_time
+except ImportError as error:
+    comp_loss_time = error
+
+try:
+    from ..Methods.Loss.LossModelBertotti.plot_fitting import plot_fitting
+except ImportError as error:
+    plot_fitting = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -60,6 +75,42 @@ class LossModelBertotti(LossModel):
         )
     else:
         comp_loss = comp_loss
+    # cf Methods.Loss.LossModelBertotti.comp_loss_freq
+    if isinstance(comp_loss_freq, ImportError):
+        comp_loss_freq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelBertotti method comp_loss_freq: "
+                    + str(comp_loss_freq)
+                )
+            )
+        )
+    else:
+        comp_loss_freq = comp_loss_freq
+    # cf Methods.Loss.LossModelBertotti.comp_loss_time
+    if isinstance(comp_loss_time, ImportError):
+        comp_loss_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelBertotti method comp_loss_time: "
+                    + str(comp_loss_time)
+                )
+            )
+        )
+    else:
+        comp_loss_time = comp_loss_time
+    # cf Methods.Loss.LossModelBertotti.plot_fitting
+    if isinstance(plot_fitting, ImportError):
+        plot_fitting = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelBertotti method plot_fitting: "
+                    + str(plot_fitting)
+                )
+            )
+        )
+    else:
+        plot_fitting = plot_fitting
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -70,9 +121,10 @@ class LossModelBertotti(LossModel):
         k_hy=None,
         k_ed=None,
         k_ex=None,
+        is_stacking_factor=False,
+        alpha_B=None,
         name="",
         group="",
-        is_show_fig=False,
         coeff_dict=None,
         init_dict=None,
         init_str=None,
@@ -98,21 +150,25 @@ class LossModelBertotti(LossModel):
                 k_ed = init_dict["k_ed"]
             if "k_ex" in list(init_dict.keys()):
                 k_ex = init_dict["k_ex"]
+            if "is_stacking_factor" in list(init_dict.keys()):
+                is_stacking_factor = init_dict["is_stacking_factor"]
+            if "alpha_B" in list(init_dict.keys()):
+                alpha_B = init_dict["alpha_B"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
         self.k_ex = k_ex
+        self.is_stacking_factor = is_stacking_factor
+        self.alpha_B = alpha_B
         # Call LossModel init
         super(LossModelBertotti, self).__init__(
-            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+            name=name, group=group, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
@@ -126,6 +182,10 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_str += "k_hy = " + str(self.k_hy) + linesep
         LossModelBertotti_str += "k_ed = " + str(self.k_ed) + linesep
         LossModelBertotti_str += "k_ex = " + str(self.k_ex) + linesep
+        LossModelBertotti_str += (
+            "is_stacking_factor = " + str(self.is_stacking_factor) + linesep
+        )
+        LossModelBertotti_str += "alpha_B = " + str(self.alpha_B) + linesep
         return LossModelBertotti_str
 
     def __eq__(self, other):
@@ -142,6 +202,10 @@ class LossModelBertotti(LossModel):
         if other.k_ed != self.k_ed:
             return False
         if other.k_ex != self.k_ex:
+            return False
+        if other.is_stacking_factor != self.is_stacking_factor:
+            return False
+        if other.alpha_B != self.alpha_B:
             return False
         return True
 
@@ -205,6 +269,37 @@ class LossModelBertotti(LossModel):
                 diff_list.append(name + ".k_ex" + val_str)
             else:
                 diff_list.append(name + ".k_ex")
+        if other._is_stacking_factor != self._is_stacking_factor:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_stacking_factor)
+                    + ", other="
+                    + str(other._is_stacking_factor)
+                    + ")"
+                )
+                diff_list.append(name + ".is_stacking_factor" + val_str)
+            else:
+                diff_list.append(name + ".is_stacking_factor")
+        if (
+            other._alpha_B is not None
+            and self._alpha_B is not None
+            and isnan(other._alpha_B)
+            and isnan(self._alpha_B)
+        ):
+            pass
+        elif other._alpha_B != self._alpha_B:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_B)
+                    + ", other="
+                    + str(other._alpha_B)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_B" + val_str)
+            else:
+                diff_list.append(name + ".alpha_B")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -219,6 +314,8 @@ class LossModelBertotti(LossModel):
         S += getsizeof(self.k_hy)
         S += getsizeof(self.k_ed)
         S += getsizeof(self.k_ex)
+        S += getsizeof(self.is_stacking_factor)
+        S += getsizeof(self.alpha_B)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -241,6 +338,8 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_dict["k_hy"] = self.k_hy
         LossModelBertotti_dict["k_ed"] = self.k_ed
         LossModelBertotti_dict["k_ex"] = self.k_ex
+        LossModelBertotti_dict["is_stacking_factor"] = self.is_stacking_factor
+        LossModelBertotti_dict["alpha_B"] = self.alpha_B
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
@@ -253,9 +352,10 @@ class LossModelBertotti(LossModel):
         k_hy_val = self.k_hy
         k_ed_val = self.k_ed
         k_ex_val = self.k_ex
+        is_stacking_factor_val = self.is_stacking_factor
+        alpha_B_val = self.alpha_B
         name_val = self.name
         group_val = self.group
-        is_show_fig_val = self.is_show_fig
         if self.coeff_dict is None:
             coeff_dict_val = None
         else:
@@ -265,9 +365,10 @@ class LossModelBertotti(LossModel):
             k_hy=k_hy_val,
             k_ed=k_ed_val,
             k_ex=k_ex_val,
+            is_stacking_factor=is_stacking_factor_val,
+            alpha_B=alpha_B_val,
             name=name_val,
             group=group_val,
-            is_show_fig=is_show_fig_val,
             coeff_dict=coeff_dict_val,
         )
         return obj_copy
@@ -278,6 +379,8 @@ class LossModelBertotti(LossModel):
         self.k_hy = None
         self.k_ed = None
         self.k_ex = None
+        self.is_stacking_factor = None
+        self.alpha_B = None
         # Set to None the properties inherited from LossModel
         super(LossModelBertotti, self)._set_None()
 
@@ -330,6 +433,42 @@ class LossModelBertotti(LossModel):
         fget=_get_k_ex,
         fset=_set_k_ex,
         doc="""Excess loss coefficient
+
+        :Type: float
+        """,
+    )
+
+    def _get_is_stacking_factor(self):
+        """getter of is_stacking_factor"""
+        return self._is_stacking_factor
+
+    def _set_is_stacking_factor(self, value):
+        """setter of is_stacking_factor"""
+        check_var("is_stacking_factor", value, "bool")
+        self._is_stacking_factor = value
+
+    is_stacking_factor = property(
+        fget=_get_is_stacking_factor,
+        fset=_set_is_stacking_factor,
+        doc="""True to consider lamination stacking factor when calculating core losses
+
+        :Type: bool
+        """,
+    )
+
+    def _get_alpha_B(self):
+        """getter of alpha_B"""
+        return self._alpha_B
+
+    def _set_alpha_B(self, value):
+        """setter of alpha_B"""
+        check_var("alpha_B", value, "float")
+        self._alpha_B = value
+
+    alpha_B = property(
+        fget=_get_alpha_B,
+        fset=_set_alpha_B,
+        doc="""Hysteresis loss exponent
 
         :Type: float
         """,

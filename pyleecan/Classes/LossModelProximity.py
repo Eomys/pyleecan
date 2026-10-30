@@ -27,6 +27,16 @@ try:
 except ImportError as error:
     comp_loss = error
 
+try:
+    from ..Methods.Loss.LossModelProximity.comp_loss_freq import comp_loss_freq
+except ImportError as error:
+    comp_loss_freq = error
+
+try:
+    from ..Methods.Loss.LossModelProximity.comp_loss_time import comp_loss_time
+except ImportError as error:
+    comp_loss_time = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -60,6 +70,30 @@ class LossModelProximity(LossModel):
         )
     else:
         comp_loss = comp_loss
+    # cf Methods.Loss.LossModelProximity.comp_loss_freq
+    if isinstance(comp_loss_freq, ImportError):
+        comp_loss_freq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelProximity method comp_loss_freq: "
+                    + str(comp_loss_freq)
+                )
+            )
+        )
+    else:
+        comp_loss_freq = comp_loss_freq
+    # cf Methods.Loss.LossModelProximity.comp_loss_time
+    if isinstance(comp_loss_time, ImportError):
+        comp_loss_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelProximity method comp_loss_time: "
+                    + str(comp_loss_time)
+                )
+            )
+        )
+    else:
+        comp_loss_time = comp_loss_time
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -70,7 +104,6 @@ class LossModelProximity(LossModel):
         k_p=None,
         name="",
         group="",
-        is_show_fig=False,
         coeff_dict=None,
         init_dict=None,
         init_str=None,
@@ -96,15 +129,13 @@ class LossModelProximity(LossModel):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.k_p = k_p
         # Call LossModel init
         super(LossModelProximity, self).__init__(
-            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+            name=name, group=group, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
@@ -205,18 +236,13 @@ class LossModelProximity(LossModel):
         k_p_val = self.k_p
         name_val = self.name
         group_val = self.group
-        is_show_fig_val = self.is_show_fig
         if self.coeff_dict is None:
             coeff_dict_val = None
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            k_p=k_p_val,
-            name=name_val,
-            group=group_val,
-            is_show_fig=is_show_fig_val,
-            coeff_dict=coeff_dict_val,
+            k_p=k_p_val, name=name_val, group=group_val, coeff_dict=coeff_dict_val
         )
         return obj_copy
 

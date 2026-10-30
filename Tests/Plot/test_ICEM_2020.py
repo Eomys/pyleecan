@@ -1,9 +1,9 @@
 from os import makedirs
-from os.path import join, isdir
-import pytest
+from os.path import isdir, join
 from shutil import copyfile
 
 import matplotlib.pyplot as plt
+import pytest
 from numpy import array, linspace, ones, pi, zeros
 
 from pyleecan.Classes.import_all import *
@@ -12,25 +12,25 @@ try:
     from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
 except ImportError as error:
     gen_3D_mesh = error
-from Tests import save_plot_path
-from Tests.Plot.LamWind import wind_mat
-from pyleecan.Functions.load import load
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.Output import Output
-from pyleecan.Classes.SlotUD2 import SlotUD2
-from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
-from pyleecan.Classes.OptiObjective import OptiObjective
-from pyleecan.Classes.OptiProblem import OptiProblem
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+import random
 
 import numpy as np
-import random
-from pyleecan.Functions.load import load
+
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
+from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Classes.OptiObjective import OptiObjective
+from pyleecan.Classes.OptiProblem import OptiProblem
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.SlotUD2 import SlotUD2
 from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
+from Tests import save_plot_path
+from Tests.Plot.LamWind import wind_mat
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
@@ -598,7 +598,7 @@ def test_ecc_FEMM():
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save
-    out.mag.meshsolution.plot_mesh(
+    out.mag.get_meshsolution().plot_mesh(
         save_path=join(save_path, "fig_19_transform_list.png"), is_show_fig=False
     )
 

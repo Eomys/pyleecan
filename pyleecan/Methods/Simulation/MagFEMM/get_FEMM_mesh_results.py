@@ -13,7 +13,7 @@ from ....definitions import MAIN_DIR
 from ....Functions.FEMM import FEMM_GROUPS
 
 
-def get_meshsolution(
+def get_FEMM_mesh_results(
     self, femm, FEMM_dict, save_path, j_t0, id_worker=0, is_get_mesh=False
 ):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
@@ -37,14 +37,18 @@ def get_meshsolution(
     -------
     mesh: MeshMat
         Object containing magnetic mesh
-    B: ndarray
-        3D Magnetic flux density for each element (Nelem, 3) [T]
+    B : ndarray
+            3D Magnetic flux density for each element (Nelem, 3) [T]
     H : ndarray
         3D Magnetic field for each element (Nelem, 3) [A/m]
     mu : ndarray
         Magnetic relative permeability for each element (Nelem,1) []
+    A : ndarray
+        Magnetic Vector Potential for each node (Nnode,1) []
     groups: dict
         Dict whose values are group label and values are array of indices of related elements
+    A_elem : ndarray
+        Magnetic Vector Potential for each elem (Nelem,1) []
 
     """
 

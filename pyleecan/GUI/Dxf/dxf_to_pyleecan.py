@@ -18,8 +18,8 @@ def dxf_to_pyleecan_list(entities):
         dxftype = entity.dxftype()
         dxf = entity.dxf
         if dxftype == "LINE":  # {"LINE", "XLINE", "RAY"}:
-            start = complex(*dxf.start[:-1])
-            end = complex(*dxf.end[:-1])
+            start = complex(*list(dxf.start)[:-1])
+            end = complex(*list(dxf.end)[:-1])
             obj_list.append(Segment(start, end))
         elif dxftype == "ARC":
             start_angle = dxf.start_angle / 180 * pi
@@ -28,16 +28,16 @@ def dxf_to_pyleecan_list(entities):
                 start_angle -= 2 * pi
             if end_angle > pi:
                 end_angle -= 2 * pi
-            center = complex(*dxf.center[:-1])
+            center = complex(*list(dxf.center)[:-1])
             begin = (
-                dxf.center[0]
+                center.real
                 + dxf.radius * cos(start_angle)
-                + 1j * (dxf.center[1] + dxf.radius * sin(start_angle))
+                + 1j * (center.imag + dxf.radius * sin(start_angle))
             )
             end = (
-                dxf.center[0]
+                center.real
                 + dxf.radius * cos(end_angle)
-                + 1j * (dxf.center[1] + dxf.radius * sin(end_angle))
+                + 1j * (center.imag + dxf.radius * sin(end_angle))
             )
             obj_list.append(
                 Arc1(begin=begin, end=end, radius=dxf.radius, is_trigo_direction=True)

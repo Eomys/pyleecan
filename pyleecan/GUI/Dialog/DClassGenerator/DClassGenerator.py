@@ -118,7 +118,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.treeView.clicked.connect(self.update_class_selected)
         self.treeView.customContextMenuRequested.connect(self.openContextMenu)
 
-        # Connect save class button
+        # Connect rename class field
         self.le_classname.editingFinished.connect(self.renameClass)
 
         # Connect save class button
@@ -474,7 +474,16 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             self.addRowButtonsProp(row + 1)
 
         # Adjust column width
-        self.table_prop.resizeColumnsToContents()
+        for col in range(len(self.list_prop)):
+            if col in [0, 2]:
+                self.table_prop.horizontalHeader().setSectionResizeMode(
+                    col, QHeaderView.ResizeMode.Stretch
+                )
+            else:
+                self.table_prop.horizontalHeader().setSectionResizeMode(
+                    col, QHeaderView.ResizeMode.ResizeToContents
+                )
+        # self.table_prop.resizeColumnsToContents()
 
     def addRowButtonsProp(self, row_index):
         """Delete row in table of properties given row index to delete
@@ -693,8 +702,14 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # Add open, duplicate and delete buttons
             self.addRowButtonsMethod(row)
 
-        # Adjust column width
-        self.table_meth.resizeColumnsToContents()
+        # Adjust columns width
+        self.table_meth.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeMode.Stretch
+        )
+        for col in range(1, 4):
+            self.table_meth.horizontalHeader().setSectionResizeMode(
+                col, QHeaderView.ResizeMode.ResizeToContents
+            )
 
         # Sort table of methods
         self.sortMethod()
@@ -1609,7 +1624,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                                             self.parent_dict[modified_class3]
                                         )
                                         for modified_class4 in self.parent_dict[
-                                            modified_class4
+                                            modified_class3
                                         ]:
                                             if modified_class4 in self.parent_dict:
                                                 children_list.extend(

@@ -70,7 +70,6 @@ class LossModelWinding(LossModel):
         type_skin_effect=1,
         name="",
         group="",
-        is_show_fig=False,
         coeff_dict=None,
         init_dict=None,
         init_str=None,
@@ -96,15 +95,13 @@ class LossModelWinding(LossModel):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.type_skin_effect = type_skin_effect
         # Call LossModel init
         super(LossModelWinding, self).__init__(
-            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+            name=name, group=group, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
@@ -204,7 +201,6 @@ class LossModelWinding(LossModel):
         type_skin_effect_val = self.type_skin_effect
         name_val = self.name
         group_val = self.group
-        is_show_fig_val = self.is_show_fig
         if self.coeff_dict is None:
             coeff_dict_val = None
         else:
@@ -214,7 +210,6 @@ class LossModelWinding(LossModel):
             type_skin_effect=type_skin_effect_val,
             name=name_val,
             group=group_val,
-            is_show_fig=is_show_fig_val,
             coeff_dict=coeff_dict_val,
         )
         return obj_copy

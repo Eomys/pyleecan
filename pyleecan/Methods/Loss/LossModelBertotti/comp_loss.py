@@ -41,11 +41,7 @@ def comp_loss(self):
     rho = lamination.mat_type.struct.rho
 
     # Compute the coefficients only if at least one is not provided
-    if None in [
-        self.k_hy,
-        self.k_ed,
-        self.k_ex,
-    ]:
+    if None in [self.k_hy, self.k_ed, self.k_ex]:
         material = lamination.mat_type
         self.comp_coeff(material)
 

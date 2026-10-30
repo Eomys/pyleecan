@@ -1,11 +1,8 @@
 from multiprocessing import cpu_count
 from os.path import join
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pytest
-from numpy.testing import assert_allclose, assert_almost_equal
-from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Loss import Loss
@@ -18,6 +15,7 @@ from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelWindagePyrhonen import LossModelWindagePyrhonen
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.OutLoss import OutLoss
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Skew import Skew
 from pyleecan.definitions import DATA_DIR
@@ -66,7 +64,7 @@ def test_FEMM_Loss_Prius():
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={
-            "stator core": LossModelSteinmetz(group="stator core", is_show_fig=True),
+            "stator core": LossModelSteinmetz(group="stator core"),
             "rotor core": LossModelSteinmetz(group="rotor core"),
             "joule": LossModelJoule(group="stator winding"),
             "proximity": LossModelProximity(group="stator winding"),
@@ -177,16 +175,16 @@ def test_FEMM_Loss_diff():
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={
-            "Stator core Bertotti": LossModelBertotti(
-                group="stator core", is_show_fig=True
-            ),
-            "Stator core Steinmetz": LossModelSteinmetz(
-                group="stator core", is_show_fig=True
-            ),
+            "Stator core Bertotti": LossModelBertotti(group="stator core"),
+            "Stator core Steinmetz": LossModelSteinmetz(group="stator core"),
         },
     )
 
     out = simu.run()
+
+    simu.loss.model["Stator core Bertotti"].plot_fitting(is_show_fig=True)
+
+    simu.loss.model["Stator core Steinmetz"].plot_fitting(is_show_fig=True)
 
     out.loss.loss_dict["Difference"] = (
         out.loss.loss_dict.values()[0] - out.loss.loss_dict.values()[1]
@@ -239,9 +237,15 @@ def test_LossFEMM_Prius():
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
-    Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
-    Cprox = 1  # sigma_w * cond.Hwire * cond.Wwire
+    material = machine.stator.mat_type
+
+    lm_steinmetz = LossModelSteinmetz()
+    lm_steinmetz.comp_coeff(material)
+    lm_steinmetz.plot_fitting(material, is_show_fig=True)
+
+    lm_bertotti = LossModelBertotti()
+    lm_bertotti.comp_coeff(material)
+    lm_bertotti.plot_fitting(material, is_show_fig=True)
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
@@ -262,49 +266,165 @@ def test_LossFEMM_Prius():
         is_get_meshsolution=True,
         is_fast_draw=True,
         is_calc_torque_energy=False,
+        type_meshsolution=0,
     )
 
-    simu.loss = LossFEA(is_get_meshsolution=True, Tsta=100, type_skin_effect=1)
-
-    # Same with linear skew
-    simu_skew = simu.copy()
-    simu_skew.name = simu_skew.name + "_Skew"
-    simu_skew.machine.rotor.skew = Skew(rate=1, type_skew="linear", Nstep=3)
-    # simu_skew.machine.rotor.skew.plot()
-    # plt.show()
+    simu.loss = LossFEA(
+        is_get_meshsolution=True,
+        Tsta=100,
+        type_skin_effect=1,
+        type_loss_model_core="Steinmetz",
+        is_stacking_factor=True,
+        is_calc_windage_loss=True,
+    )
 
     out = simu.run()
 
     # Check Power Dict
     power_dict = out.loss.get_power_dict()
     exp_power_dict = {
-        "stator core": 292.64240263817754,
-        "rotor core": 14.808165782336602,
-        "joule": 7579.031160511537,
-        "proximity": 16.826278397540907,
-        "magnets": 12.178782086036916,
-        "overall": 7915.486789415628,
-        "total_power": 54596.16442311069,
+        "stator core": np.float64(292.6424838992634),
+        "stator joule": np.float64(7579.031160511535),
+        "stator proximity": np.float64(16.826278591731466),
+        "rotor core": np.float64(14.808168474489523),
+        "rotor magnets": np.float64(12.178779821075157),
+        "airgap windage": 0.1650942739887786,
+        "stator core + stator joule + stator proximity + rotor core + rotor magnets + airgap windage": np.float64(
+            7915.651965572084
+        ),
+        "total_power": np.float64(54596.16438835998),
     }
+
     assert len(power_dict.keys()) == len(exp_power_dict.keys())
     for key in power_dict:
         assert power_dict[key] == pytest.approx(exp_power_dict[key], rel=1e-2)
+
+    # Same with temporal approach
+    out_time = out.copy()
+    out_time.simu.loss = LossFEA(
+        is_get_meshsolution=True,
+        Tsta=100,
+        type_skin_effect=1,
+        type_loss_model_core="Steinmetz",
+        is_stacking_factor=True,
+        is_calc_windage_loss=True,
+        is_dynamic=True,
+    )
+
+    out_time.loss = OutLoss()
+    out_time.simu.loss.run()
+
+    # Check Power Dict
+    power_dict_t = out_time.loss.get_power_dict()
+    exp_power_dict_t = {
+        "stator core": np.float64(2140.899349547698),
+        "stator joule": np.float64(7579.031160511535),
+        "stator proximity": np.float64(16.826278591731466),
+        "rotor core": np.float64(21.211897758961086),
+        "rotor magnets": np.float64(12.178779821075157),
+        "airgap windage": 0.1650942739887786,
+        "stator core + stator joule + stator proximity + rotor core + rotor magnets + airgap windage": np.float64(
+            9770.31256050499
+        ),
+        "total_power": np.float64(54596.16438835998),
+    }
+
+    assert len(power_dict_t.keys()) == len(exp_power_dict_t.keys())
+    for key in power_dict_t:
+        assert power_dict_t[key] == pytest.approx(exp_power_dict_t[key], rel=1e-2)
+
+    # Same with Bertotti skew
+    out1 = out.copy()
+    out1.simu.loss = LossFEA(
+        is_get_meshsolution=True,
+        Tsta=100,
+        type_skin_effect=1,
+        type_loss_model_core="Bertotti",
+        is_stacking_factor=True,
+        is_calc_windage_loss=True,
+    )
+
+    out1.loss = OutLoss()
+    out1.simu.loss.run()
+
+    # Check Power Dict
+    power_dict1 = out1.loss.get_power_dict()
+    exp_power_dict1 = {
+        "stator core": np.float64(2140.899349547698),
+        "stator joule": np.float64(7579.031160511535),
+        "stator proximity": np.float64(16.826278591731466),
+        "rotor core": np.float64(21.211897758961086),
+        "rotor magnets": np.float64(12.178779821075157),
+        "airgap windage": 0.1650942739887786,
+        "stator core + stator joule + stator proximity + rotor core + rotor magnets + airgap windage": np.float64(
+            9770.31256050499
+        ),
+        "total_power": np.float64(54596.16438835998),
+    }
+
+    assert len(power_dict1.keys()) == len(exp_power_dict1.keys())
+    for key in power_dict1:
+        assert power_dict1[key] == pytest.approx(exp_power_dict1[key], rel=1e-2)
+
+    # Same with linear skew
+    simu_skew = simu.copy()
+    simu_skew.mag.Slice_enforced = None
+    simu_skew.name = simu_skew.name + "_Skew"
+    simu_skew.machine.rotor.skew = Skew(rate=1, type_skew="linear", Nstep=3)
+    # simu_skew.machine.rotor.skew.plot()
+    # plt.show()
 
     out_skew = simu_skew.run()
     # Check Power Dict
     power_dict_skew = out_skew.loss.get_power_dict()
     exp_power_dict_skew = {
-        "stator core": 262.1429040501597,
-        "rotor core": 2.0164214385787242,
-        "joule": 7579.031160511537,
-        "proximity": 10.177251941106874,
-        "magnets": 6.810952030240605,
-        "overall": 7860.178689971623,
-        "total_power": 51908.33963148792,
+        "stator core": np.float64(843.9902596031727),
+        "stator joule": np.float64(7579.031160511535),
+        "stator proximity": np.float64(10.177251957104662),
+        "rotor core": np.float64(131.44773545261035),
+        "rotor magnets": np.float64(6.810951828576413),
+        "airgap windage": 0.1650942739887786,
+        "stator core + stator joule + stator proximity + rotor core + rotor magnets + airgap windage": np.float64(
+            8571.62245362699
+        ),
+        "total_power": np.float64(51908.33966357775),
     }
-    assert len(power_dict_skew.keys()) == len(exp_power_dict.keys())
+    assert len(power_dict_skew.keys()) == len(exp_power_dict_skew.keys())
     for key in power_dict_skew:
         assert power_dict_skew[key] == pytest.approx(exp_power_dict_skew[key], rel=1e-2)
+
+    # Same with Bertotti skew
+    out_skew1 = out_skew.copy()
+    out_skew1.simu.loss = LossFEA(
+        is_get_meshsolution=True,
+        Tsta=100,
+        type_skin_effect=1,
+        type_loss_model_core="Bertotti",
+        is_stacking_factor=True,
+        is_calc_windage_loss=True,
+    )
+
+    out_skew1.loss = OutLoss()
+    out_skew1.simu.loss.run()
+    # Check Power Dict
+    power_dict_skew1 = out_skew1.loss.get_power_dict()
+    exp_power_dict_skew1 = {
+        "stator core": np.float64(947.4377834715955),
+        "stator joule": np.float64(7579.031160511535),
+        "stator proximity": np.float64(10.177251957104662),
+        "rotor core": np.float64(62.9250367839353),
+        "rotor magnets": np.float64(6.810951828576413),
+        "airgap windage": 0.1650942739887786,
+        "stator core + stator joule + stator proximity + rotor core + rotor magnets + airgap windage": np.float64(
+            8606.547278826736
+        ),
+        "total_power": np.float64(51908.33966357775),
+    }
+    assert len(power_dict_skew1.keys()) == len(exp_power_dict_skew1.keys())
+    for key in power_dict_skew1:
+        assert power_dict_skew1[key] == pytest.approx(
+            exp_power_dict_skew1[key], rel=1e-2
+        )
 
     # Check Plot
     if is_show_fig:

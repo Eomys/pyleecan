@@ -18,16 +18,6 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutLossModel.get_mesh_solution import get_mesh_solution
-except ImportError as error:
-    get_mesh_solution = error
-
-try:
-    from ..Methods.Output.OutLossModel.get_loss_scalar import get_loss_scalar
-except ImportError as error:
-    get_loss_scalar = error
-
-try:
     from ..Methods.Output.OutLossModel.__add__ import __add__
 except ImportError as error:
     __add__ = error
@@ -38,14 +28,24 @@ except ImportError as error:
     __radd__ = error
 
 try:
+    from ..Methods.Output.OutLossModel.__rsub__ import __rsub__
+except ImportError as error:
+    __rsub__ = error
+
+try:
     from ..Methods.Output.OutLossModel.__sub__ import __sub__
 except ImportError as error:
     __sub__ = error
 
 try:
-    from ..Methods.Output.OutLossModel.__rsub__ import __rsub__
+    from ..Methods.Output.OutLossModel.get_loss_scalar import get_loss_scalar
 except ImportError as error:
-    __rsub__ = error
+    get_loss_scalar = error
+
+try:
+    from ..Methods.Output.OutLossModel.get_mesh_solution import get_mesh_solution
+except ImportError as error:
+    get_mesh_solution = error
 
 try:
     from ..Methods.Output.OutLossModel.plot_mesh import plot_mesh
@@ -64,30 +64,6 @@ class OutLossModel(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutLossModel.get_mesh_solution
-    if isinstance(get_mesh_solution, ImportError):
-        get_mesh_solution = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLossModel method get_mesh_solution: "
-                    + str(get_mesh_solution)
-                )
-            )
-        )
-    else:
-        get_mesh_solution = get_mesh_solution
-    # cf Methods.Output.OutLossModel.get_loss_scalar
-    if isinstance(get_loss_scalar, ImportError):
-        get_loss_scalar = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLossModel method get_loss_scalar: "
-                    + str(get_loss_scalar)
-                )
-            )
-        )
-    else:
-        get_loss_scalar = get_loss_scalar
     # cf Methods.Output.OutLossModel.__add__
     if isinstance(__add__, ImportError):
         __add__ = property(
@@ -106,15 +82,6 @@ class OutLossModel(FrozenClass):
         )
     else:
         __radd__ = __radd__
-    # cf Methods.Output.OutLossModel.__sub__
-    if isinstance(__sub__, ImportError):
-        __sub__ = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutLossModel method __sub__: " + str(__sub__))
-            )
-        )
-    else:
-        __sub__ = __sub__
     # cf Methods.Output.OutLossModel.__rsub__
     if isinstance(__rsub__, ImportError):
         __rsub__ = property(
@@ -124,6 +91,39 @@ class OutLossModel(FrozenClass):
         )
     else:
         __rsub__ = __rsub__
+    # cf Methods.Output.OutLossModel.__sub__
+    if isinstance(__sub__, ImportError):
+        __sub__ = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLossModel method __sub__: " + str(__sub__))
+            )
+        )
+    else:
+        __sub__ = __sub__
+    # cf Methods.Output.OutLossModel.get_loss_scalar
+    if isinstance(get_loss_scalar, ImportError):
+        get_loss_scalar = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLossModel method get_loss_scalar: "
+                    + str(get_loss_scalar)
+                )
+            )
+        )
+    else:
+        get_loss_scalar = get_loss_scalar
+    # cf Methods.Output.OutLossModel.get_mesh_solution
+    if isinstance(get_mesh_solution, ImportError):
+        get_mesh_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLossModel method get_mesh_solution: "
+                    + str(get_mesh_solution)
+                )
+            )
+        )
+    else:
+        get_mesh_solution = get_mesh_solution
     # cf Methods.Output.OutLossModel.plot_mesh
     if isinstance(plot_mesh, ImportError):
         plot_mesh = property(
@@ -148,6 +148,7 @@ class OutLossModel(FrozenClass):
         group=None,
         loss_model=None,
         scalar_value=None,
+        loss_data=None,
         init_dict=None,
         init_str=None,
     ):
@@ -178,6 +179,8 @@ class OutLossModel(FrozenClass):
                 loss_model = init_dict["loss_model"]
             if "scalar_value" in list(init_dict.keys()):
                 scalar_value = init_dict["scalar_value"]
+            if "loss_data" in list(init_dict.keys()):
+                loss_data = init_dict["loss_data"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -186,6 +189,7 @@ class OutLossModel(FrozenClass):
         self.group = group
         self.loss_model = loss_model
         self.scalar_value = scalar_value
+        self.loss_data = loss_data
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -212,6 +216,7 @@ class OutLossModel(FrozenClass):
         OutLossModel_str += 'group = "' + str(self.group) + '"' + linesep
         OutLossModel_str += 'loss_model = "' + str(self.loss_model) + '"' + linesep
         OutLossModel_str += "scalar_value = " + str(self.scalar_value) + linesep
+        OutLossModel_str += "loss_data = " + str(self.loss_data) + linesep + linesep
         return OutLossModel_str
 
     def __eq__(self, other):
@@ -230,6 +235,8 @@ class OutLossModel(FrozenClass):
         if other.loss_model != self.loss_model:
             return False
         if other.scalar_value != self.scalar_value:
+            return False
+        if other.loss_data != self.loss_data:
             return False
         return True
 
@@ -302,6 +309,19 @@ class OutLossModel(FrozenClass):
                 diff_list.append(name + ".scalar_value" + val_str)
             else:
                 diff_list.append(name + ".scalar_value")
+        if (other.loss_data is None and self.loss_data is not None) or (
+            other.loss_data is not None and self.loss_data is None
+        ):
+            diff_list.append(name + ".loss_data None mismatch")
+        elif self.loss_data is not None:
+            diff_list.extend(
+                self.loss_data.compare(
+                    other.loss_data,
+                    name=name + ".loss_data",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -318,6 +338,7 @@ class OutLossModel(FrozenClass):
         S += getsizeof(self.group)
         S += getsizeof(self.loss_model)
         S += getsizeof(self.scalar_value)
+        S += getsizeof(self.loss_data)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -352,6 +373,14 @@ class OutLossModel(FrozenClass):
         OutLossModel_dict["group"] = self.group
         OutLossModel_dict["loss_model"] = self.loss_model
         OutLossModel_dict["scalar_value"] = self.scalar_value
+        if self.loss_data is None:
+            OutLossModel_dict["loss_data"] = None
+        else:
+            OutLossModel_dict["loss_data"] = self.loss_data.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         OutLossModel_dict["__class__"] = "OutLossModel"
         return OutLossModel_dict
@@ -372,6 +401,10 @@ class OutLossModel(FrozenClass):
         group_val = self.group
         loss_model_val = self.loss_model
         scalar_value_val = self.scalar_value
+        if self.loss_data is None:
+            loss_data_val = None
+        else:
+            loss_data_val = self.loss_data.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             name=name_val,
@@ -380,6 +413,7 @@ class OutLossModel(FrozenClass):
             group=group_val,
             loss_model=loss_model_val,
             scalar_value=scalar_value_val,
+            loss_data=loss_data_val,
         )
         return obj_copy
 
@@ -392,6 +426,7 @@ class OutLossModel(FrozenClass):
         self.group = None
         self.loss_model = None
         self.scalar_value = None
+        self.loss_data = None
 
     def _get_name(self):
         """getter of name"""
@@ -507,5 +542,38 @@ class OutLossModel(FrozenClass):
         doc="""To store the value of get_loss_scalar (for scalar losses or with coeff_dict cleaned)
 
         :Type: float
+        """,
+    )
+
+    def _get_loss_data(self):
+        """getter of loss_data"""
+        return self._loss_data
+
+    def _set_loss_data(self, value):
+        """setter of loss_data"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "loss_data"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataND()
+        check_var("loss_data", value, "DataND")
+        self._loss_data = value
+
+    loss_data = property(
+        fget=_get_loss_data,
+        fset=_set_loss_data,
+        doc="""DataTime containing losses values over time and for each source of losses : core (hysteresis/eddy/excess) / Joule / proximity / Magnet / Windage
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )

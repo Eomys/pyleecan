@@ -18,14 +18,14 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Magnetics.run import run
-except ImportError as error:
-    run = error
-
-try:
     from ..Methods.Simulation.Magnetics.comp_axes import comp_axes
 except ImportError as error:
     comp_axes = error
+
+try:
+    from ..Methods.Simulation.Magnetics.comp_I_mag import comp_I_mag
+except ImportError as error:
+    comp_I_mag = error
 
 try:
     from ..Methods.Simulation.Magnetics.get_slice_model import get_slice_model
@@ -33,9 +33,9 @@ except ImportError as error:
     get_slice_model = error
 
 try:
-    from ..Methods.Simulation.Magnetics.comp_I_mag import comp_I_mag
+    from ..Methods.Simulation.Magnetics.run import run
 except ImportError as error:
-    comp_I_mag = error
+    run = error
 
 
 from numpy import isnan
@@ -48,15 +48,6 @@ class Magnetics(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Magnetics.run
-    if isinstance(run, ImportError):
-        run = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method run: " + str(run))
-            )
-        )
-    else:
-        run = run
     # cf Methods.Simulation.Magnetics.comp_axes
     if isinstance(comp_axes, ImportError):
         comp_axes = property(
@@ -66,6 +57,15 @@ class Magnetics(FrozenClass):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Simulation.Magnetics.comp_I_mag
+    if isinstance(comp_I_mag, ImportError):
+        comp_I_mag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Magnetics method comp_I_mag: " + str(comp_I_mag))
+            )
+        )
+    else:
+        comp_I_mag = comp_I_mag
     # cf Methods.Simulation.Magnetics.get_slice_model
     if isinstance(get_slice_model, ImportError):
         get_slice_model = property(
@@ -78,15 +78,15 @@ class Magnetics(FrozenClass):
         )
     else:
         get_slice_model = get_slice_model
-    # cf Methods.Simulation.Magnetics.comp_I_mag
-    if isinstance(comp_I_mag, ImportError):
-        comp_I_mag = property(
+    # cf Methods.Simulation.Magnetics.run
+    if isinstance(run, ImportError):
+        run = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Magnetics method comp_I_mag: " + str(comp_I_mag))
+                ImportError("Can't use Magnetics method run: " + str(run))
             )
         )
     else:
-        comp_I_mag = comp_I_mag
+        run = run
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -113,6 +113,8 @@ class Magnetics(FrozenClass):
         is_current_harm=True,
         T_mag=20,
         is_periodicity_rotor=False,
+        is_get_meshsolution=False,
+        type_meshsolution=0,
         init_dict=None,
         init_str=None,
     ):
@@ -169,6 +171,10 @@ class Magnetics(FrozenClass):
                 T_mag = init_dict["T_mag"]
             if "is_periodicity_rotor" in list(init_dict.keys()):
                 is_periodicity_rotor = init_dict["is_periodicity_rotor"]
+            if "is_get_meshsolution" in list(init_dict.keys()):
+                is_get_meshsolution = init_dict["is_get_meshsolution"]
+            if "type_meshsolution" in list(init_dict.keys()):
+                type_meshsolution = init_dict["type_meshsolution"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -190,6 +196,8 @@ class Magnetics(FrozenClass):
         self.is_current_harm = is_current_harm
         self.T_mag = T_mag
         self.is_periodicity_rotor = is_periodicity_rotor
+        self.is_get_meshsolution = is_get_meshsolution
+        self.type_meshsolution = type_meshsolution
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -238,6 +246,10 @@ class Magnetics(FrozenClass):
         Magnetics_str += (
             "is_periodicity_rotor = " + str(self.is_periodicity_rotor) + linesep
         )
+        Magnetics_str += (
+            "is_get_meshsolution = " + str(self.is_get_meshsolution) + linesep
+        )
+        Magnetics_str += "type_meshsolution = " + str(self.type_meshsolution) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -282,6 +294,10 @@ class Magnetics(FrozenClass):
         if other.T_mag != self.T_mag:
             return False
         if other.is_periodicity_rotor != self.is_periodicity_rotor:
+            return False
+        if other.is_get_meshsolution != self.is_get_meshsolution:
+            return False
+        if other.type_meshsolution != self.type_meshsolution:
             return False
         return True
 
@@ -539,6 +555,30 @@ class Magnetics(FrozenClass):
                 diff_list.append(name + ".is_periodicity_rotor" + val_str)
             else:
                 diff_list.append(name + ".is_periodicity_rotor")
+        if other._is_get_meshsolution != self._is_get_meshsolution:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".is_get_meshsolution")
+        if other._type_meshsolution != self._type_meshsolution:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_meshsolution)
+                    + ", other="
+                    + str(other._type_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".type_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".type_meshsolution")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -566,6 +606,8 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.is_current_harm)
         S += getsizeof(self.T_mag)
         S += getsizeof(self.is_periodicity_rotor)
+        S += getsizeof(self.is_get_meshsolution)
+        S += getsizeof(self.type_meshsolution)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -606,6 +648,8 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_current_harm"] = self.is_current_harm
         Magnetics_dict["T_mag"] = self.T_mag
         Magnetics_dict["is_periodicity_rotor"] = self.is_periodicity_rotor
+        Magnetics_dict["is_get_meshsolution"] = self.is_get_meshsolution
+        Magnetics_dict["type_meshsolution"] = self.type_meshsolution
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -636,6 +680,8 @@ class Magnetics(FrozenClass):
         is_current_harm_val = self.is_current_harm
         T_mag_val = self.T_mag
         is_periodicity_rotor_val = self.is_periodicity_rotor
+        is_get_meshsolution_val = self.is_get_meshsolution
+        type_meshsolution_val = self.type_meshsolution
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             is_remove_slotS=is_remove_slotS_val,
@@ -657,6 +703,8 @@ class Magnetics(FrozenClass):
             is_current_harm=is_current_harm_val,
             T_mag=T_mag_val,
             is_periodicity_rotor=is_periodicity_rotor_val,
+            is_get_meshsolution=is_get_meshsolution_val,
+            type_meshsolution=type_meshsolution_val,
         )
         return obj_copy
 
@@ -683,6 +731,8 @@ class Magnetics(FrozenClass):
         self.is_current_harm = None
         self.T_mag = None
         self.is_periodicity_rotor = None
+        self.is_get_meshsolution = None
+        self.type_meshsolution = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -1048,5 +1098,43 @@ class Magnetics(FrozenClass):
         doc="""True to consider rotor periodicity over time instead of stator
 
         :Type: bool
+        """,
+    )
+
+    def _get_is_get_meshsolution(self):
+        """getter of is_get_meshsolution"""
+        return self._is_get_meshsolution
+
+    def _set_is_get_meshsolution(self, value):
+        """setter of is_get_meshsolution"""
+        check_var("is_get_meshsolution", value, "bool")
+        self._is_get_meshsolution = value
+
+    is_get_meshsolution = property(
+        fget=_get_is_get_meshsolution,
+        fset=_set_is_get_meshsolution,
+        doc="""To save FEA and mesh for latter post-procesing 
+
+        :Type: bool
+        """,
+    )
+
+    def _get_type_meshsolution(self):
+        """getter of type_meshsolution"""
+        return self._type_meshsolution
+
+    def _set_type_meshsolution(self, value):
+        """setter of type_meshsolution"""
+        check_var("type_meshsolution", value, "int", Vmin=0, Vmax=1)
+        self._type_meshsolution = value
+
+    type_meshsolution = property(
+        fget=_get_type_meshsolution,
+        fset=_set_type_meshsolution,
+        doc="""0 to save all magnetic quantities in meshsolution, 1 to save only B and Az_elem for loss calculation to optimize memory
+
+        :Type: int
+        :min: 0
+        :max: 1
         """,
     )

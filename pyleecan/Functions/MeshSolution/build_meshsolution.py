@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 import numpy as np
 
 from ...Classes.Mesh import Mesh
@@ -8,11 +6,11 @@ from ...Classes.Solution import Solution
 
 
 def build_meshsolution(
-    solution_dict: Dict[str, Solution],
+    solution_dict: dict[str, Solution],
     mesh: Mesh,
     label: str = "",
     dimension: int = 2,
-    group: Optional[Dict[str, np.ndarray]] = None,
+    group: dict[str, np.ndarray] | None = None,
 ) -> MeshSolution:
     """Build the MeshSolution object from FEMM outputs.
 

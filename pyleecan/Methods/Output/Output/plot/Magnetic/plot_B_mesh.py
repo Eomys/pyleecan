@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from numpy import abs as np_abs
-from numpy import exp, linspace
+from numpy import exp, linspace, pi, real
 from numpy import max as np_max
 from numpy import min as np_min
-from numpy import pi, real
 from numpy.linalg import norm
 
 from pyleecan.definitions import config_dict
@@ -72,7 +71,7 @@ def plot_B_mesh(
     -------
 
     """
-    MS_B = self.mag.meshsolution
+    MS_B = self.mag.get_meshsolution()
 
     if group_names is not None:
         MS_B_plot = MS_B.get_group(group_names)

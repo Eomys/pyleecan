@@ -162,6 +162,8 @@ class MagElmer(Magnetics):
         is_current_harm=True,
         T_mag=20,
         is_periodicity_rotor=False,
+        is_get_meshsolution=False,
+        type_meshsolution=0,
         init_dict=None,
         init_str=None,
     ):
@@ -240,6 +242,10 @@ class MagElmer(Magnetics):
                 T_mag = init_dict["T_mag"]
             if "is_periodicity_rotor" in list(init_dict.keys()):
                 is_periodicity_rotor = init_dict["is_periodicity_rotor"]
+            if "is_get_meshsolution" in list(init_dict.keys()):
+                is_get_meshsolution = init_dict["is_get_meshsolution"]
+            if "type_meshsolution" in list(init_dict.keys()):
+                type_meshsolution = init_dict["type_meshsolution"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -273,6 +279,8 @@ class MagElmer(Magnetics):
             is_current_harm=is_current_harm,
             T_mag=T_mag,
             is_periodicity_rotor=is_periodicity_rotor,
+            is_get_meshsolution=is_get_meshsolution,
+            type_meshsolution=type_meshsolution,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -635,6 +643,8 @@ class MagElmer(Magnetics):
         is_current_harm_val = self.is_current_harm
         T_mag_val = self.T_mag
         is_periodicity_rotor_val = self.is_periodicity_rotor
+        is_get_meshsolution_val = self.is_get_meshsolution
+        type_meshsolution_val = self.type_meshsolution
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             Kmesh_fineness=Kmesh_fineness_val,
@@ -667,6 +677,8 @@ class MagElmer(Magnetics):
             is_current_harm=is_current_harm_val,
             T_mag=T_mag_val,
             is_periodicity_rotor=is_periodicity_rotor_val,
+            is_get_meshsolution=is_get_meshsolution_val,
+            type_meshsolution=type_meshsolution_val,
         )
         return obj_copy
 

@@ -421,7 +421,7 @@ class PostPlot(PostMethod):
     quantity = property(
         fget=_get_quantity,
         fset=_set_quantity,
-        doc="""Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.meshsolution)
+        doc="""Full path to the quantity to which apply the plot_method except Output (e.g. mag.B, elec.get_Is, mag.get_meshsolution)
 
         :Type: str
         """,

@@ -23,7 +23,7 @@ def comp_all_losses(
     if axes_dict is not None:
         out_loss.axes_dict = axes_dict
 
-    meshsol = output.mag.meshsolution
+    meshsol = output.mag.get_meshsolution()
     group = meshsol.group
     freqs = axes_dict["freqs"].get_values()
     Nelem = meshsol.mesh.element_dict["triangle"].nb_element

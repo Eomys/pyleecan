@@ -1,17 +1,17 @@
-from os import system
+import subprocess
 from sys import executable
 
 try:
     import setuptools
 except ImportError:  # Install setuptools if needed
     # run 'pip install setuptools'
-    system("{} -m pip install setuptools".format(executable))
+    subprocess.run("{} -m pip install setuptools".format(executable))
 
     import setuptools
 
 import platform
 
-system(
+subprocess.run(
     "{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable)
 )
 
@@ -26,9 +26,11 @@ system(
 
 PYLEECAN_VERSION = "1.5.2"
 
-
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+try:
+    with open("README.md", "r") as fh:
+        long_description = fh.read()
+except :
+    long_description = "Could not read README.md"
 
 python_requires = ">= 3.9"
 

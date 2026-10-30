@@ -165,5 +165,9 @@ def store(self, out_dict, axes_dict):
     if "meshsolution" in out_dict:
         self.meshsolution = out_dict.pop("meshsolution")
 
+    # Store MeshSolution dict object
+    if "meshsolution_dict" in out_dict:
+        self.meshsolution_dict = out_dict.pop("meshsolution_dict")
+
     if "Rag" in out_dict:
         self.Rag = out_dict.pop("Rag")

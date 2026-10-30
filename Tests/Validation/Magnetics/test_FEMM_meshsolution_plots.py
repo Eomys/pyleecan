@@ -78,54 +78,54 @@ def test_FEMM_meshsolution_plots_SPMSM():
     out = Output(simu=simu_sym)
     simu_sym.run()
 
-    out.mag.meshsolution.plot_mesh(
+    out.mag.get_meshsolution().plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh.png"), is_show_fig=False
     )
 
-    out.mag.meshsolution.get_group("stator core").plot_mesh(
+    out.mag.get_meshsolution().get_group("stator core").plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_stator.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(
+    out.mag.get_meshsolution().get_group(
         ["stator core", "/", "airgap", "stator winding"]
     ).plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_stator_interface.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_plot_path, simu.name + "_B.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group("stator core").plot_contour(
+    out.mag.get_meshsolution().get_group("stator core").plot_contour(
         label="H",
         save_path=join(save_plot_path, simu.name + "_H_stator.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         "time[2]",
         label="H",
         save_path=join(save_plot_path, simu.name + "_H_time2.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         "time[3]",
         label="H",
         save_path=join(save_plot_path, simu.name + "_H_time3.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         "freqs[1]",
         label="H",
         save_path=join(save_plot_path, simu.name + "_H_freqs1.png"),
@@ -170,42 +170,42 @@ def test_FEMM_meshsolution_plots_slotless():
 
     out = simu.run()
 
-    out.mag.meshsolution.plot_mesh(
+    out.mag.get_meshsolution().plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_save.png"), is_show_fig=False
     )
 
-    out.mag.meshsolution.get_group(["stator core", "airgap"]).plot_mesh(
+    out.mag.get_meshsolution().get_group(["stator core", "airgap"]).plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_stator_airgap_save.png"),
         is_show_fig=False,
     )
 
-    test_meshsol = out.mag.meshsolution.get_group(["stator core", "airgap"])
+    test_meshsol = out.mag.get_meshsolution().get_group(["stator core", "airgap"])
     test_meshsol.get_group("stator core").plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_stator_bis_save.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(["stator core", "/", "airgap"]).plot_mesh(
+    out.mag.get_meshsolution().get_group(["stator core", "/", "airgap"]).plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_interface_save.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_save.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_plot_path, simu.name + "_B_save.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="H",
         save_path=join(save_plot_path, simu.name + "_H_save.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.get_group("stator core").plot_contour(
+    out.mag.get_meshsolution().get_group("stator core").plot_contour(
         label="H",
         save_path=join(save_plot_path, simu.name + "_stator_save.png"),
         is_show_fig=False,
@@ -217,13 +217,13 @@ def test_FEMM_meshsolution_plots_slotless():
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(["stator core", "airgap"]).plot_contour(
+    out.mag.get_meshsolution().get_group(["stator core", "airgap"]).plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_stator_airgap_save.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
+    out.mag.get_meshsolution().get_group(["rotor core", "rotor magnets"]).plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_save.png"),
         is_show_fig=False,
@@ -240,17 +240,17 @@ def test_FEMM_meshsolution_plots_slotless():
     # TODO : out.compare(FEMM)
 
     # [Important] To test that fields are still working after saving and loading
-    FEMM.mag.meshsolution.plot_mesh(
+    FEMM.mag.get_meshsolution().plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_load.png"), is_show_fig=False
     )
 
-    FEMM.mag.meshsolution.plot_contour(
+    FEMM.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_plot_path, simu.name + "_B_load.png"),
         is_show_fig=False,
     )
 
-    FEMM.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
+    FEMM.mag.get_meshsolution().get_group(["rotor core", "rotor magnets"]).plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_load.png"),
         is_show_fig=False,
@@ -295,42 +295,42 @@ def test_FEMM_meshsolution_plots_Prius():
 
     out = simu.run()
 
-    out.mag.meshsolution.plot_mesh(
+    out.mag.get_meshsolution().plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_save.png"), is_show_fig=False
     )
 
-    out.mag.meshsolution.get_group(["stator core", "airgap"]).plot_mesh(
+    out.mag.get_meshsolution().get_group(["stator core", "airgap"]).plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_stator_airgap_save.png"),
         is_show_fig=False,
     )
 
-    test_meshsol = out.mag.meshsolution.get_group(["stator core", "airgap"])
+    test_meshsol = out.mag.get_meshsolution().get_group(["stator core", "airgap"])
     test_meshsol.get_group(["stator core"]).plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_stator_bis_save.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(["stator core", "/", "airgap"]).plot_mesh(
+    out.mag.get_meshsolution().get_group(["stator core", "/", "airgap"]).plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_interface_save.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_save.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_plot_path, simu.name + "_B_save.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.plot_contour(
+    out.mag.get_meshsolution().plot_contour(
         label="H",
         save_path=join(save_plot_path, simu.name + "_H_save.png"),
         is_show_fig=False,
     )
-    out.mag.meshsolution.get_group("stator core").plot_contour(
+    out.mag.get_meshsolution().get_group("stator core").plot_contour(
         label="H",
         save_path=join(save_plot_path, simu.name + "_stator_save.png"),
         is_show_fig=False,
@@ -342,13 +342,13 @@ def test_FEMM_meshsolution_plots_Prius():
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(["stator core", "airgap"]).plot_contour(
+    out.mag.get_meshsolution().get_group(["stator core", "airgap"]).plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_stator_airgap_save.png"),
         is_show_fig=False,
     )
 
-    out.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
+    out.mag.get_meshsolution().get_group(["rotor core", "rotor magnets"]).plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_save.png"),
         is_show_fig=False,
@@ -365,17 +365,17 @@ def test_FEMM_meshsolution_plots_Prius():
     # TODO : out.compare(FEMM)
 
     # [Important] To test that fields are still working after saving and loading
-    FEMM.mag.meshsolution.plot_mesh(
+    FEMM.mag.get_meshsolution().plot_mesh(
         save_path=join(save_plot_path, simu.name + "_mesh_load.png"), is_show_fig=False
     )
 
-    FEMM.mag.meshsolution.plot_contour(
+    FEMM.mag.get_meshsolution().plot_contour(
         label="B",
         save_path=join(save_plot_path, simu.name + "_B_load.png"),
         is_show_fig=False,
     )
 
-    FEMM.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
+    FEMM.mag.get_meshsolution().get_group(["rotor core", "rotor magnets"]).plot_contour(
         label="\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_load.png"),
         is_show_fig=False,

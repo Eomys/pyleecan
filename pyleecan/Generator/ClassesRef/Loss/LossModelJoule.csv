@@ -1,6 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-type_skin_effect,,"0 to ignore skin effect, 1 to consider it",,int,1,,
-,
-Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Loss,LossModel,comp_loss,VERSION,1,Joule loss model
-,,comp_coeff,,,
+type_skin_effect,,"0 to ignore skin effect, 1 to consider it",,int,1,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Loss,LossModel,comp_coeff,VERSION,1,Joule loss model,,,
+,,comp_loss,,,,,,
+,,comp_loss_freq,,,,,,
+,,comp_loss_time,,,,,,

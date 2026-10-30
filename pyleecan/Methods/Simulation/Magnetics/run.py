@@ -1,7 +1,6 @@
-from numpy import zeros, ndarray, iscomplexobj, tile
+from numpy import iscomplexobj, ndarray, zeros
 
-from pyleecan.Classes.MeshSolution import MeshSolution
-
+from ....Classes.MeshSolution import MeshSolution
 from ....Methods.Simulation.Input import InputError
 
 
@@ -129,7 +128,17 @@ def run(self):
                     out_dict[key][..., ii + 1] = out_dict_index[key]
                 elif isinstance(out_dict[key], dict):
                     for key2 in out_dict[key]:
-                        out_dict[key][key2][..., ii + 1] = out_dict_index[key][key2]
+                        if isinstance(out_dict[key][key2], MeshSolution):
+                            # handle meshsolution_dict
+                            out_dict[key][key2] = self.build_MS_sliced(
+                                out_dict[key][key2],
+                                out_dict_index[key][key2],
+                                axes_dict,
+                                Nslices,
+                                ii + 2,
+                            )
+                        else:
+                            out_dict[key][key2][..., ii + 1] = out_dict_index[key][key2]
                 elif isinstance(out_dict[key], MeshSolution):
                     out_dict[key] = self.build_MS_sliced(
                         out_dict[key], out_dict_index[key], axes_dict, Nslices, ii + 2
@@ -137,6 +146,10 @@ def run(self):
                 else:
                     # TODO store other outputs in lists
                     out_dict[key] = out_dict_index[key]
+
+    if self.is_get_meshsolution and self.is_periodicity_t and "time_S" in axes_dict:
+        # Revert time axis to stator referential
+        axes_dict["time"] = axes_dict["time_S"].copy()
 
     # Store magnetic quantities contained in out_dict in OutMag, as Data object if necessary
     output.mag.store(out_dict, axes_dict)

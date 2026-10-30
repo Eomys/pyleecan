@@ -186,4 +186,4 @@ def run_generate_classes(
 
 
 if __name__ == "__main__":
-    run_generate_classes()
+    run_generate_classes(class_list=["PostPlot.csv"])

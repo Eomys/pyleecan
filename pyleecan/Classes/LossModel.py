@@ -30,13 +30,7 @@ class LossModel(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self,
-        name="",
-        group="",
-        is_show_fig=False,
-        coeff_dict=None,
-        init_dict=None,
-        init_str=None,
+        self, name="", group="", coeff_dict=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -57,15 +51,12 @@ class LossModel(FrozenClass):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "is_show_fig" in list(init_dict.keys()):
-                is_show_fig = init_dict["is_show_fig"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.group = group
-        self.is_show_fig = is_show_fig
         self.coeff_dict = coeff_dict
 
         # The class is frozen, for now it's impossible to add new properties
@@ -81,7 +72,6 @@ class LossModel(FrozenClass):
             LossModel_str += "parent = " + str(type(self.parent)) + " object" + linesep
         LossModel_str += 'name = "' + str(self.name) + '"' + linesep
         LossModel_str += 'group = "' + str(self.group) + '"' + linesep
-        LossModel_str += "is_show_fig = " + str(self.is_show_fig) + linesep
         LossModel_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         return LossModel_str
 
@@ -93,8 +83,6 @@ class LossModel(FrozenClass):
         if other.name != self.name:
             return False
         if other.group != self.group:
-            return False
-        if other.is_show_fig != self.is_show_fig:
             return False
         if other.coeff_dict != self.coeff_dict:
             return False
@@ -124,18 +112,6 @@ class LossModel(FrozenClass):
                 diff_list.append(name + ".group" + val_str)
             else:
                 diff_list.append(name + ".group")
-        if other._is_show_fig != self._is_show_fig:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_show_fig)
-                    + ", other="
-                    + str(other._is_show_fig)
-                    + ")"
-                )
-                diff_list.append(name + ".is_show_fig" + val_str)
-            else:
-                diff_list.append(name + ".is_show_fig")
         if other._coeff_dict != self._coeff_dict:
             if is_add_value:
                 val_str = (
@@ -158,7 +134,6 @@ class LossModel(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.name)
         S += getsizeof(self.group)
-        S += getsizeof(self.is_show_fig)
         if self.coeff_dict is not None:
             for key, value in self.coeff_dict.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -178,7 +153,6 @@ class LossModel(FrozenClass):
         LossModel_dict = dict()
         LossModel_dict["name"] = self.name
         LossModel_dict["group"] = self.group
-        LossModel_dict["is_show_fig"] = self.is_show_fig
         LossModel_dict["coeff_dict"] = (
             self.coeff_dict.copy() if self.coeff_dict is not None else None
         )
@@ -192,18 +166,12 @@ class LossModel(FrozenClass):
         # Handle deepcopy of all the properties
         name_val = self.name
         group_val = self.group
-        is_show_fig_val = self.is_show_fig
         if self.coeff_dict is None:
             coeff_dict_val = None
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            name=name_val,
-            group=group_val,
-            is_show_fig=is_show_fig_val,
-            coeff_dict=coeff_dict_val,
-        )
+        obj_copy = type(self)(name=name_val, group=group_val, coeff_dict=coeff_dict_val)
         return obj_copy
 
     def _set_None(self):
@@ -211,7 +179,6 @@ class LossModel(FrozenClass):
 
         self.name = None
         self.group = None
-        self.is_show_fig = None
         self.coeff_dict = None
 
     def _get_name(self):
@@ -247,24 +214,6 @@ class LossModel(FrozenClass):
         doc="""Group in which the loss will be computed
 
         :Type: str
-        """,
-    )
-
-    def _get_is_show_fig(self):
-        """getter of is_show_fig"""
-        return self._is_show_fig
-
-    def _set_is_show_fig(self, value):
-        """setter of is_show_fig"""
-        check_var("is_show_fig", value, "bool")
-        self._is_show_fig = value
-
-    is_show_fig = property(
-        fget=_get_is_show_fig,
-        fset=_set_is_show_fig,
-        doc="""True to show the plot of the curve fitting
-
-        :Type: bool
         """,
     )
 

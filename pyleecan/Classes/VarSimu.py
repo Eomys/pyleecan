@@ -18,19 +18,14 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.VarSimu.run import run
-except ImportError as error:
-    run = error
-
-try:
-    from ..Methods.Simulation.VarSimu.set_reused_data import set_reused_data
-except ImportError as error:
-    set_reused_data = error
-
-try:
     from ..Methods.Simulation.VarSimu.check_param import check_param
 except ImportError as error:
     check_param = error
+
+try:
+    from ..Methods.Simulation.VarSimu.gen_datakeeper_list import gen_datakeeper_list
+except ImportError as error:
+    gen_datakeeper_list = error
 
 try:
     from ..Methods.Simulation.VarSimu.generate_simulation_list import (
@@ -40,19 +35,9 @@ except ImportError as error:
     generate_simulation_list = error
 
 try:
-    from ..Methods.Simulation.VarSimu.gen_datakeeper_list import gen_datakeeper_list
-except ImportError as error:
-    gen_datakeeper_list = error
-
-try:
     from ..Methods.Simulation.VarSimu.get_elec_datakeeper import get_elec_datakeeper
 except ImportError as error:
     get_elec_datakeeper = error
-
-try:
-    from ..Methods.Simulation.VarSimu.get_mag_datakeeper import get_mag_datakeeper
-except ImportError as error:
-    get_mag_datakeeper = error
 
 try:
     from ..Methods.Simulation.VarSimu.get_force_datakeeper import get_force_datakeeper
@@ -60,9 +45,29 @@ except ImportError as error:
     get_force_datakeeper = error
 
 try:
+    from ..Methods.Simulation.VarSimu.get_loss_datakeeper import get_loss_datakeeper
+except ImportError as error:
+    get_loss_datakeeper = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_mag_datakeeper import get_mag_datakeeper
+except ImportError as error:
+    get_mag_datakeeper = error
+
+try:
     from ..Methods.Simulation.VarSimu.get_ref_simu_index import get_ref_simu_index
 except ImportError as error:
     get_ref_simu_index = error
+
+try:
+    from ..Methods.Simulation.VarSimu.run import run
+except ImportError as error:
+    run = error
+
+try:
+    from ..Methods.Simulation.VarSimu.set_reused_data import set_reused_data
+except ImportError as error:
+    set_reused_data = error
 
 
 from numpy import isnan
@@ -75,6 +80,99 @@ class VarSimu(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.VarSimu.check_param
+    if isinstance(check_param, ImportError):
+        check_param = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use VarSimu method check_param: " + str(check_param))
+            )
+        )
+    else:
+        check_param = check_param
+    # cf Methods.Simulation.VarSimu.gen_datakeeper_list
+    if isinstance(gen_datakeeper_list, ImportError):
+        gen_datakeeper_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method gen_datakeeper_list: "
+                    + str(gen_datakeeper_list)
+                )
+            )
+        )
+    else:
+        gen_datakeeper_list = gen_datakeeper_list
+    # cf Methods.Simulation.VarSimu.generate_simulation_list
+    if isinstance(generate_simulation_list, ImportError):
+        generate_simulation_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method generate_simulation_list: "
+                    + str(generate_simulation_list)
+                )
+            )
+        )
+    else:
+        generate_simulation_list = generate_simulation_list
+    # cf Methods.Simulation.VarSimu.get_elec_datakeeper
+    if isinstance(get_elec_datakeeper, ImportError):
+        get_elec_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_elec_datakeeper: "
+                    + str(get_elec_datakeeper)
+                )
+            )
+        )
+    else:
+        get_elec_datakeeper = get_elec_datakeeper
+    # cf Methods.Simulation.VarSimu.get_force_datakeeper
+    if isinstance(get_force_datakeeper, ImportError):
+        get_force_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_force_datakeeper: "
+                    + str(get_force_datakeeper)
+                )
+            )
+        )
+    else:
+        get_force_datakeeper = get_force_datakeeper
+    # cf Methods.Simulation.VarSimu.get_loss_datakeeper
+    if isinstance(get_loss_datakeeper, ImportError):
+        get_loss_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_loss_datakeeper: "
+                    + str(get_loss_datakeeper)
+                )
+            )
+        )
+    else:
+        get_loss_datakeeper = get_loss_datakeeper
+    # cf Methods.Simulation.VarSimu.get_mag_datakeeper
+    if isinstance(get_mag_datakeeper, ImportError):
+        get_mag_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_mag_datakeeper: "
+                    + str(get_mag_datakeeper)
+                )
+            )
+        )
+    else:
+        get_mag_datakeeper = get_mag_datakeeper
+    # cf Methods.Simulation.VarSimu.get_ref_simu_index
+    if isinstance(get_ref_simu_index, ImportError):
+        get_ref_simu_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_ref_simu_index: "
+                    + str(get_ref_simu_index)
+                )
+            )
+        )
+    else:
+        get_ref_simu_index = get_ref_simu_index
     # cf Methods.Simulation.VarSimu.run
     if isinstance(run, ImportError):
         run = property(
@@ -95,87 +193,6 @@ class VarSimu(FrozenClass):
         )
     else:
         set_reused_data = set_reused_data
-    # cf Methods.Simulation.VarSimu.check_param
-    if isinstance(check_param, ImportError):
-        check_param = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use VarSimu method check_param: " + str(check_param))
-            )
-        )
-    else:
-        check_param = check_param
-    # cf Methods.Simulation.VarSimu.generate_simulation_list
-    if isinstance(generate_simulation_list, ImportError):
-        generate_simulation_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarSimu method generate_simulation_list: "
-                    + str(generate_simulation_list)
-                )
-            )
-        )
-    else:
-        generate_simulation_list = generate_simulation_list
-    # cf Methods.Simulation.VarSimu.gen_datakeeper_list
-    if isinstance(gen_datakeeper_list, ImportError):
-        gen_datakeeper_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarSimu method gen_datakeeper_list: "
-                    + str(gen_datakeeper_list)
-                )
-            )
-        )
-    else:
-        gen_datakeeper_list = gen_datakeeper_list
-    # cf Methods.Simulation.VarSimu.get_elec_datakeeper
-    if isinstance(get_elec_datakeeper, ImportError):
-        get_elec_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarSimu method get_elec_datakeeper: "
-                    + str(get_elec_datakeeper)
-                )
-            )
-        )
-    else:
-        get_elec_datakeeper = get_elec_datakeeper
-    # cf Methods.Simulation.VarSimu.get_mag_datakeeper
-    if isinstance(get_mag_datakeeper, ImportError):
-        get_mag_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarSimu method get_mag_datakeeper: "
-                    + str(get_mag_datakeeper)
-                )
-            )
-        )
-    else:
-        get_mag_datakeeper = get_mag_datakeeper
-    # cf Methods.Simulation.VarSimu.get_force_datakeeper
-    if isinstance(get_force_datakeeper, ImportError):
-        get_force_datakeeper = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarSimu method get_force_datakeeper: "
-                    + str(get_force_datakeeper)
-                )
-            )
-        )
-    else:
-        get_force_datakeeper = get_force_datakeeper
-    # cf Methods.Simulation.VarSimu.get_ref_simu_index
-    if isinstance(get_ref_simu_index, ImportError):
-        get_ref_simu_index = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarSimu method get_ref_simu_index: "
-                    + str(get_ref_simu_index)
-                )
-            )
-        )
-    else:
-        get_ref_simu_index = get_ref_simu_index
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
