@@ -785,7 +785,9 @@ class TestNewMachineZoe(object):
         self.widget.w_step.lf_I2.setValue(80)
         self.widget.w_step.lf_I2.editingFinished.emit()
 
-        ## Run
+        ## Run (FEMM coupling is Windows only: elsewhere pyfemm waits forever)
+        if sys.platform != "win32":
+            return
         assert len(listdir(res_path)) == 0
         with mock.patch("PySide6.QtWidgets.QMessageBox.information", return_value=None):
             self.widget.w_step.b_next.clicked.emit()

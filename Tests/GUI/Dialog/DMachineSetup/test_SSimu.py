@@ -243,6 +243,10 @@ class TestSSimu(object):
         assert self.widget.w_path_result.le_path.text() == res_path
 
         assert self.widget.test_err_msg is None
+        # Run (FEMM coupling is Windows only: elsewhere SSimu.run shows a modal
+        # "FEMM required" warning that blocks an offscreen test forever)
+        if sys.platform != "win32":
+            return
         with mock.patch(
             "PySide6.QtWidgets.QMessageBox.information",
             return_value=QtWidgets.QMessageBox.Ok,

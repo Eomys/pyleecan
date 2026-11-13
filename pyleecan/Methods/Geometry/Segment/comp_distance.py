@@ -12,7 +12,9 @@ def distance_numpy(A, B, P):
         return norm(P - A)
     if arccos(dot((P - B) / norm(P - B), (A - B) / norm(A - B))) > pi / 2:
         return norm(P - B)
-    return norm(cross(A - B, A - P)) / norm(B - A)
+    # z component of the 2-D cross product (numpy 2 removed np.cross for 2-D vectors)
+    u, v = A - B, A - P
+    return abs(u[0] * v[1] - u[1] * v[0]) / norm(B - A)
 
 
 def comp_distance(self, Z):

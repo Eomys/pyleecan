@@ -140,7 +140,7 @@ class Test_HoleM53_meth(object):
             )
         )
         a = test_obj2.hole[0].comp_W5()
-        assert -0.0014380265690122837 == a
+        assert a == pytest.approx(-0.0014380265690122837, rel=1e-12)
 
     @pytest.mark.parametrize("test_dict", HoleM53_test)
     def test_build_geometry(self, test_dict):

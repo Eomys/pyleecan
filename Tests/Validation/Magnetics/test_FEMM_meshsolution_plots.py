@@ -95,7 +95,7 @@ def test_FEMM_meshsolution_plots_SPMSM():
     )
 
     out.mag.meshsolution.plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu.png"),
         is_show_fig=False,
     )
@@ -191,7 +191,7 @@ def test_FEMM_meshsolution_plots_slotless():
     )
 
     out.mag.meshsolution.plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_save.png"),
         is_show_fig=False,
     )
@@ -218,13 +218,13 @@ def test_FEMM_meshsolution_plots_slotless():
     )
 
     out.mag.meshsolution.get_group(["stator core", "airgap"]).plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_stator_airgap_save.png"),
         is_show_fig=False,
     )
 
     out.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_save.png"),
         is_show_fig=False,
     )
@@ -251,7 +251,7 @@ def test_FEMM_meshsolution_plots_slotless():
     )
 
     FEMM.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_load.png"),
         is_show_fig=False,
     )
@@ -316,7 +316,7 @@ def test_FEMM_meshsolution_plots_Prius():
     )
 
     out.mag.meshsolution.plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_save.png"),
         is_show_fig=False,
     )
@@ -343,13 +343,13 @@ def test_FEMM_meshsolution_plots_Prius():
     )
 
     out.mag.meshsolution.get_group(["stator core", "airgap"]).plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_stator_airgap_save.png"),
         is_show_fig=False,
     )
 
     out.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_save.png"),
         is_show_fig=False,
     )
@@ -376,7 +376,7 @@ def test_FEMM_meshsolution_plots_Prius():
     )
 
     FEMM.mag.meshsolution.get_group(["rotor core", "rotor magnets"]).plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_plot_path, simu.name + "_mu_rotor_load.png"),
         is_show_fig=False,
     )
