@@ -519,6 +519,8 @@ def test_FEMM_periodicity_angle():
     assert_array_almost_equal(Brad, Brad2, decimal=1)
 
 
+@pytest.mark.long_5s
+@pytest.mark.MagFEMM
 def test_Bore_sym():
     """Check that angular periodicity can be applied on Bore shape"""
     res_path = join(save_path, "test_Bore_sym")
@@ -774,6 +776,8 @@ def test_Ring_Magnet():
     assert_array_almost_equal(time, time2, decimal=6)
 
 
+@pytest.mark.long_5s
+@pytest.mark.MagFEMM
 def test_Ring_Magnet_2():
     """Check that a machine with 2 Ring magnet can be simulated with sym"""
     machine = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))

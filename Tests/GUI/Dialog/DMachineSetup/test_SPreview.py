@@ -107,7 +107,10 @@ class TestSPreview(object):
                 self.widget.w_step.tab_machine.tab_param.item(ii, 1).text()
                 == content[1]
             )
-        # Check Draw FEMM
+        # Check Draw FEMM (the FEMM coupling is Windows only: elsewhere pyfemm
+        # falls back to file I/O and waits forever for a FEMM process)
+        if sys.platform != "win32":
+            return
         FEMM_dir = join(save_gui_path, "Draw_FEMM")
         if not isdir(FEMM_dir):
             makedirs(FEMM_dir)

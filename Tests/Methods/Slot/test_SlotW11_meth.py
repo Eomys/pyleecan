@@ -380,8 +380,8 @@ class Test_SlotW11_meth(object):
             is_cstt_tooth=True,
         )
         lam.slot._comp_W()
-        assert lam.slot.W1 == 0.012696891826464714
-        assert lam.slot.W2 == 0.027687125704690535
+        assert lam.slot.W1 == pytest.approx(0.012696891826464714, rel=1e-12)
+        assert lam.slot.W2 == pytest.approx(0.027687125704690535, rel=1e-12)
 
         lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
         lam.slot = SlotW11(
@@ -395,8 +395,8 @@ class Test_SlotW11_meth(object):
             is_cstt_tooth=True,
         )
         lam.slot._comp_W()
-        assert lam.slot.W1 == 0.01733037811046905
-        assert lam.slot.W2 == 0.02239963613011551
+        assert lam.slot.W1 == pytest.approx(0.01733037811046905, rel=1e-12)
+        assert lam.slot.W2 == pytest.approx(0.02239963613011551, rel=1e-12)
 
     def test_comp_surface_change_W3(self):
         # Check surface, change, W3, check surface again

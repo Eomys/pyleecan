@@ -338,8 +338,17 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         step_list.append(SSimu)
         is_stator = "Stator" in self.nav_step.currentItem().text()
 
-        # Regenerate the step with the current values
-        self.w_step.setParent(None)
+        # Regenerate the step with the current values.
+        # set_nav can run inside a signal emitted by a child of the current
+        # step (e.g. the machine type combobox in SMachineType). Deleting the
+        # step right away (setParent(None) + dropping the last Python
+        # reference) frees that child while Qt is still inside its method,
+        # which segfaults with PySide6 (issue #750). Detach it now and let Qt
+        # delete it once control is back in the event loop.
+        old_step = self.w_step
+        self.main_layout.removeWidget(old_step)
+        old_step.hide()
+        old_step.deleteLater()
         self.w_step = step_list[index](
             machine=self.machine, material_dict=self.material_dict, is_stator=is_stator
         )

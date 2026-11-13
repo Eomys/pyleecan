@@ -240,7 +240,7 @@ def generate_executable(
             "^LicenseFile=",
             "LicenseFile=" + license_path,
         )
-        files_str = 'Source: "{#MainPath}\*"; DestDir: "{app}"; Flags: ignoreversion\n'
+        files_str = 'Source: "{#MainPath}\\*"; DestDir: "{app}"; Flags: ignoreversion\n'
         for name in os.listdir(dist_path):
             if isdir(join(dist_path, name)):
                 files_str += (
@@ -252,7 +252,7 @@ def generate_executable(
                 )
         edit_line_in_file(
             install_path_2,
-            "^\[Files\]",
+            "^\\[Files\\]",
             "[Files]\n" + files_str,
         )
 

@@ -171,8 +171,11 @@ def load_matlib_folder(matlib_path):
     # Get and Read all the file to create a list dictionary : variable name <=> value
     material_list = list()
     Material = import_class("pyleecan.Classes", "Material")
-    for dirpath, _, filenames in walk(matlib_path):
-        for file_name in filenames:
+    for dirpath, dirnames, filenames in walk(matlib_path):
+        # os.walk order is filesystem dependent (sorted on NTFS, not on APFS or
+        # ext4): sort so the material list is the same on every platform
+        dirnames.sort()
+        for file_name in sorted(filenames):
             # For all json file in the folder and subfolder
             if file_name.endswith(".json") or file_name.endswith(".h5"):
                 file_path = join(dirpath, file_name).replace("\\", "/")
