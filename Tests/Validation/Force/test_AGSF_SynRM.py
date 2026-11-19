@@ -80,7 +80,7 @@ def test_AGSF_SynRM(nb_worker=int(cpu_count() / 2)):
     out = simu.run()
 
     # Test save with MeshSolution object in out
-    out.save(save_path=save_path + "\Output.json")
+    out.save(save_path=save_path + "\\Output.json")
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78

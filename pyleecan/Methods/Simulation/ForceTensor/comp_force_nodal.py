@@ -41,7 +41,7 @@ def comp_force_nodal(self, output, axes_dict):
     # Load magnetic flux B and H and mu objects
     B_sol = meshsolution_group.get_solution(label="B")
     H_sol = meshsolution_group.get_solution(label="H")
-    mu_sol = meshsolution_group.get_solution(label="\mu")
+    mu_sol = meshsolution_group.get_solution(label="\\mu")
 
     # Import time vector from Time Data object
     if self.is_periodicity_t is not None:

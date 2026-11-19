@@ -35,7 +35,7 @@ python_requires = ">= 3.9"
 # Pyleecan main dependancies
 install_requires = [
     "cloudpickle>=1.3.0",
-    "ezdxf==0.14.2",
+    "ezdxf>=0.14.3",  # matches requirements.txt; 0.14.2 has no wheels for current Python
     "h5py>=3.2.1",
     "matplotlib>=3.3.2",
     "meshio>=4.0.15",

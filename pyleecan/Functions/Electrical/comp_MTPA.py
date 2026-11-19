@@ -236,7 +236,7 @@ def comp_MTPA(
         # Plot Phi_d map
         plot_3D(
             Zdata=eec_param["Phid"].reshape((n_Iq, n_Id)).T,
-            zlabel="$\Phi_d$ [Wb]",
+            zlabel="$\\Phi_d$ [Wb]",
             title="Flux linkage map in dq plane (d-axis)",
             **dict_map,
         )
@@ -244,7 +244,7 @@ def comp_MTPA(
         # Plot Phi_q map
         plot_3D(
             Zdata=eec_param["Phiq"].reshape((n_Iq, n_Id)).T,
-            zlabel="$\Phi_q$ [Wb]",
+            zlabel="$\\Phi_q$ [Wb]",
             title="Flux linkage map in dq plane (q-axis)",
             **dict_map,
         )

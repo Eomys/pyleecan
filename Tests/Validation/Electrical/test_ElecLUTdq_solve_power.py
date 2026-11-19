@@ -125,7 +125,7 @@ def test_ElecLUTdq_solve_power():
     # Plot Phi_d map
     plot_3D(
         Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
-        zlabel="$\Phi_d$ [Wb]",
+        zlabel="$\\Phi_d$ [Wb]",
         title="Flux linkage map in dq plane (d-axis)",
         **dict_map,
     )
@@ -133,7 +133,7 @@ def test_ElecLUTdq_solve_power():
     # Plot Phi_q map
     plot_3D(
         Zdata=Phi_dqh_grid[1, :].reshape((nd, nq)).T,
-        zlabel="$\Phi_q$ [Wb]",
+        zlabel="$\\Phi_q$ [Wb]",
         title="Flux linkage map in dq plane (q-axis)",
         **dict_map,
     )

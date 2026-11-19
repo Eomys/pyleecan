@@ -69,10 +69,10 @@ if __name__ == "__main__":
 
     from ..definitions import MATLIB_DIR
 
-    file = "<MATLIB_DIR>\Magnet1.json"
+    file = "<MATLIB_DIR>\\Magnet1.json"
     print(abs_file_path(file, is_check=False))
 
-    file = "MATLIB_DIR>\Magnet1.json"
+    file = "MATLIB_DIR>\\Magnet1.json"
     print(abs_file_path(file, is_check=False))
 
     file = join(MATLIB_DIR, "test.json")

@@ -202,7 +202,7 @@ def test_FEMM_parallelization_meshsolution():
     )
 
     out.mag.meshsolution.plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_path, simu.name + "_mu_not_parallel.png"),
         is_show_fig=False,
     )
@@ -239,7 +239,7 @@ def test_FEMM_parallelization_meshsolution():
     )
 
     out2.mag.meshsolution.plot_contour(
-        label="\mu",
+        label="\\mu",
         save_path=join(save_path, simu.name + "_mu_parallel.png"),
         is_show_fig=False,
     )

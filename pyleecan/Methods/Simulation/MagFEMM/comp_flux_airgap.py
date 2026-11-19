@@ -214,7 +214,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             field=mu_elem[:, :, None],
             axis_list=axis_list,
             name="Magnetic Permeability",
-            symbol="\mu",
+            symbol="\\mu",
             unit="H/m",
         )
         Ae_sol = build_solution_data(
