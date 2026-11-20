@@ -578,5 +578,5 @@ if __name__ == "__main__":
     # a.test_notch_addition_without_input()
     # a.test_notch_addition_wrong_input()
     # a.test_set_empty_floatedit()
-    a.teardown_class()
+    # a.teardown_class()
     print("Done")

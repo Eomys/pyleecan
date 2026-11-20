@@ -44,7 +44,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
         # Set Help URL
         self.b_help.hide()
 
-        self.b_new.clicked.connect(self.s_add)
+        self.b_new.clicked.connect(lambda: self.s_add(vent=None, idx_vent=None))
         self.tab_vent.tabCloseRequested.connect(self.s_remove)
         self.b_plot.clicked.connect(self.plot)
         self.b_cancel.clicked.connect(self.reject)
@@ -55,7 +55,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
             self.valid_vent()
         event.accept()
 
-    def s_add(self, vent=False, idx_vent=None):
+    def s_add(self, vent=None, idx_vent=None):
         """Signal to add a new hole
 
         Parameters
@@ -66,7 +66,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
             The ventilation to init the GUI with
         """
         # Create a new hole if needed
-        if type(vent) is bool:
+        if vent is None:
             # Default Hole is Circular
             vent_obj = VentilationCirc()
             vent_obj._set_None()
