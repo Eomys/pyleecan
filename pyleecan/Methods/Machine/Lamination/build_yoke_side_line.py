@@ -106,6 +106,13 @@ def merge_line_list(Z1, Z2, label, inter_list):
         )
         ii += 1
         line.prop_dict[BOUNDARY_PROP_LAB] = label + "-" + str(ii)
+        line_list.append(
+            Segment(
+                line.get_begin(),
+                line.get_end(),
+                prop_dict={BOUNDARY_PROP_LAB: label + "-" + str(ii)},
+            )
+        )
         ii += 1
         Zb = line.get_end()
     # Add last line (or Z1 to Z2 if no intersection)

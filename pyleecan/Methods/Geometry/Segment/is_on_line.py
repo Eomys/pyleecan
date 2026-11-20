@@ -2,7 +2,7 @@
 
 
 def is_on_line(self, Z):
-    """Check is a point defined by its complex coordinate is on the segment
+    """Check if a point defined by its complex coordinate is on the segment
 
     Parameters
     ----------
@@ -26,6 +26,7 @@ def is_on_line(self, Z):
     if abs(Z12.real * Z13.imag - Z12.imag * Z13.real) < 1e-10:
         K13 = Z12.real * Z13.real + Z12.imag * Z13.imag
         K12 = Z12.real * Z12.real + Z12.imag * Z12.imag
-        if K13 >= 0 and K13 <= K12:
+        eps = 1e-12
+        if K13 >= -eps and K13 <= K12 + eps:
             return True
     return False
