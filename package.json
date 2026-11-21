@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/Eomys/pyleecan#readme",
   "dependencies": {
-    "@mermaid-js/mermaid-cli": "^9.0.0"
+    "@mermaid-js/mermaid-cli": "^9.4.0"
   }
 }
