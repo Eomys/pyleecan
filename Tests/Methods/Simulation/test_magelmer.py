@@ -45,8 +45,6 @@ mesh_dict = {
 @pytest.mark.IPMSM
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
-@pytest.mark.failed
-@pytest.mark.skip(reason="Test Failed: Need further investigation")
 def test_ipm_Elmer():
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
@@ -103,8 +101,11 @@ def test_ipm_Elmer():
     simu.force = None
     simu.struct = None
     # Run simulation
-    outp = Output(simu=simu)
-    simu.run()
+    outp = simu.run()
+    # Reference: same machine, same currents with MagFEMM (FEMM 4.2 and 5 agree
+    # within 0.2 %): mean torque about -360 N.m, peak-to-peak ripple about 78 N.m.
+    assert outp.mag.Tem_av == pytest.approx(-360, rel=0.05)
+    assert outp.mag.Tem_rip_pp == pytest.approx(78, rel=0.25)
     # outp.mag.Tem.plot_2D_Data("time", **dict_2D)
     # outp.elec.get_Is().plot_2D_Data("time", "phase", **dict_2D)
     # outp.mag.Tem.plot_2D_Data("time[smallestperiod]", **dict_2D)
