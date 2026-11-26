@@ -389,6 +389,12 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         fo.write("$ StepDegrees = {0}       !\n".format(degrees_step))
         fo.write("$ DegreesPerSec = WM*180.0/pi  !\n")
         fo.write("$ RotorInitPos = {}!\n".format(round(rotor_init_pos * 180.0 / pi, 2)))
+        # Rotation direction of the rotor mesh (the "Mesh Rotate" table built from angle_rotor).
+        # The magnetization must turn with the mesh: with +WM it drifted by 2*WM*t relative to
+        # the magnets whenever angle_rotor decreases (rot_dir = -1, e.g. Toyota Prius), and the
+        # torque and field energy drifted from one time step to the next.
+        rot_dir_elmer = 1 if len(angle_rotor) < 2 or angle_rotor[-1] >= angle_rotor[0] else -1
+        fo.write("$ RotDir = {}            ! Rotation direction of the rotor mesh\n".format(rot_dir_elmer))
 
         fo.write(
             "\nHeader\n"
@@ -459,8 +465,11 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
             '\tName = "Copper"\n'
             "\tRelative Permeability = 1\n"
             "\tElectric Conductivity = {0}\n"
-            "End\n".format(round(conductivity, 2))
+            "End\n".format(0)  # stranded winding with imposed current density: no induced currents
         )
+        # Magnets are conductive only when their eddy currents are wanted (magnet losses)
+        if not getattr(self, "is_PM_eddy", False):
+            conductivity_m = 0.0
 
         magnets_per_pole = No_Magnets  # TO-DO: Assumes only one pole drawn
         for m in range(1, magnets_per_pole + 1):
@@ -471,9 +480,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                     '\tName = "PM_{1}"\n'
                     "\tRelative Permeability = {2}\n"
                     "\tMagnetization 1 = Variable time, timestep size\n"
-                    '\t\tReal MATC  "H_PM*cos(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)"\n'
+                    '\t\tReal MATC  "H_PM*cos(RotDir*WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)"\n'
                     "\tMagnetization 2 = Variable time, timestep size\n"
-                    '\t\tReal MATC "H_PM*sin(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)"\n'
+                    '\t\tReal MATC "H_PM*sin(RotDir*WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + (RotorInitPos + Mangle{1})*pi/180)"\n'
                     "\tElectric Conductivity = {4}\n"
                     "End\n".format(
                         mat_number,
@@ -507,9 +516,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
                     '\tName = "PM_{1}"\n'
                     "\tRelative Permeability = {2}\n"
                     "\tMagnetization 1 = Variable time, timestep size\n"
-                    '\t\tReal MATC  "H_PM*cos(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + Aaxis*pi/180 + (Mangle{1}*pi/180))"\n'
+                    '\t\tReal MATC  "H_PM*cos(RotDir*WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + Aaxis*pi/180 + (Mangle{1}*pi/180))"\n'
                     "\tMagnetization 2 = Variable time, timestep size\n"
-                    '\t\tReal MATC "H_PM*sin(WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + Aaxis*pi/180 + (Mangle{1}*pi/180))"\n'
+                    '\t\tReal MATC "H_PM*sin(RotDir*WM*(tx(0)-tx(1)) + {3}*pi/PP + {3}*pi + Aaxis*pi/180 + (Mangle{1}*pi/180))"\n'
                     "\tElectric Conductivity = {4}\n"
                     "End\n".format(
                         mat_number,
@@ -998,7 +1007,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
     Br = zeros((Nt, Na))
     Bt = zeros((Nt, Na))
     Bz = zeros((Nt, Na))
-    Tem = tq * sym * L1
+    # Torque per unit length, as in MagFEMM: OutMag.store then integrates along z (x L1).
+    # ("tq * sym * L1" applied the stack length twice)
+    Tem = tq * sym
 
     # Phi_wind_stator = zeros((Nt, qs))
 
