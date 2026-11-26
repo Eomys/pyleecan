@@ -184,7 +184,7 @@ class _FEMMHandler(object):
         if is_windows_os:
             self.openfemm_Windows(*arg)
         else:
-            self.openfemm_Linux(*arg, winepath="", femmpath="")
+            self.openfemm_Linux(*arg, winepath=winepath, femmpath=femmpath)
 
     def closefemm_Windows(self):
         self.HandleToFEMM = None  # no reference to the handler, femm is closed
